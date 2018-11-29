@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript" src="../javascript/login.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<title>Prijavljivanje korisnika</title>
+</head>
+<body>
+	<div class="container">
+  				<h2>Prijavljivanje</h2>
+			  <form method="post" class="registracija" onsubmit="return validacija(this)">
+				    <div class="form-group row">
+				       <div class="col-xs-6"> 
+					      <label for="email">Email:</label>
+					      <input type="email" class="form-control" id="mail" placeholder="Unesite email" name="email">
+					   	  <div id= "mailError"></div>
+					   	</div>
+				    </div>
+				    <div class="form-group row">
+					   <div class="col-xs-6">
+						  <label for="pwd">Lozinka:</label>
+						  <input type="password" class="form-control" id="lozinka1" placeholder="Unesite lozniku" name="loz1">
+						  <div id= "lozinkaError"></div>
+				  	  </div>
+				    </div>    				    
+			    <button type="submit" id="potvrdiBtn" class="btn btn-default">Potvrdi</button>
+			  </form>
+	</div>
+
+
+</body>
+</html>
