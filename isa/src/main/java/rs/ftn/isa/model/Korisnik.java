@@ -21,26 +21,66 @@ public class Korisnik {
 	
 	@Column(name = "mail", nullable = false)
 	private String mail;
+	
+	@Column(name="telefon", nullable = false)
+	private int telefon;
+	
+	@Column(name="grad", nullable= false)
+	private String grad;
+	
+	@Column(name="verifikovan")
+	private String verifikovan;
 
 	
 	public Korisnik() {
 		super();
 	}
 
-	public Korisnik(String ime, String prezime, String mail) {
+	
+	public Korisnik(Long id, String ime, String prezime, String mail, int telefon, String grad, String verifikovan) {
 		super();
+		this.id = id;
 		this.ime = ime;
 		this.prezime = prezime;
 		this.mail = mail;
+		this.telefon = telefon;
+		this.grad = grad;
+		this.verifikovan= verifikovan; //inicijalno je false dok ne prihvati mail
 	}
 
-	public Korisnik( Long id, String ime, String prezime, String mail) {
-		super();
-		this.id=id;
-		this.ime = ime;
-		this.prezime = prezime;
-		this.mail = mail;
+	
+	
+	public int getTelefon() {
+		return telefon;
 	}
+
+
+	public void setTelefon(int telefon) {
+		this.telefon = telefon;
+	}
+
+
+	public String getGrad() {
+		return grad;
+	}
+
+
+	public void setGrad(String grad) {
+		this.grad = grad;
+	}
+
+
+
+
+	public String getVerifikovan() {
+		return verifikovan;
+	}
+
+
+	public void setVerifikovan(String verifikovan) {
+		this.verifikovan = verifikovan;
+	}
+
 
 	public Long getId() {
 		return id;
