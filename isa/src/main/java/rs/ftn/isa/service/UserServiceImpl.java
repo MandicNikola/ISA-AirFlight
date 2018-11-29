@@ -23,20 +23,22 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User findKorisnikByMail( String mail) {
+	public User findUserByMail( String mail) {
 		// TODO Auto-generated method stub
+		System.out.println("Usao u findUserbyMail");
 		return repozitorijum.findOneByMail(mail);
 	}
 
 
 	@Override
-	public User saveKorisnika(User korisnik) {
+	public User saveUser(User korisnik) {
 		// TODO Auto-generated method stub
+		System.out.println("Usao u saveUser");
 		return repozitorijum.save(korisnik);
 	}
 
 	@Override
-	public void removeKorisnika(Long id) {
+	public void removeUser(Long id) {
 		// TODO Auto-generated method stub
 		repozitorijum.deleteById(id);
 	}

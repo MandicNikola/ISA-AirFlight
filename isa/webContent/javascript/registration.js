@@ -7,10 +7,10 @@ $(document).on('submit','.registracija',function(e){
 		dataType : "json",
 		data:formToJSON(),
 		success : function(data) {
-			if(data==null){
-				alert("Mail je zauzet");
+			if(data==null){				
+				alert("Mail je zauzet.");
 			}else {
-				alert('Uspesno dodat korisnik');
+				alert('Uspesno ste se registrovali');
 			}
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
@@ -26,6 +26,16 @@ function formToJSON() {
 		"mail" : $('#mail').val(),
 		"telefon" : $('#telefon').val(),
 		"grad" : $('#grad').val(),
-		"lozinka" : $('#lozinka').val()
+		"lozinka" : $('#lozinka1').val()
 	});
 }
+
+$('#lozinka1, #lozinka2').on('keyup', function () {
+	  if ($('#lozinka1').val() == $('#lozinka2').val()) {
+		  $('#potvrdiBtn').prop('disabled', false);
+		  $('#poruka').html('Ispravno uneto').css('color', 'green');
+	  } else {
+        $('#potvrdiBtn').prop('disabled', true);
+	    $('#poruka').html('Ne podudaraju se').css('color', 'red');
+	  }
+});

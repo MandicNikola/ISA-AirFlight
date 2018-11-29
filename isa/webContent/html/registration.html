@@ -14,34 +14,36 @@
 			  <form method="post" class="registracija">
 				    <div class="form-group">
 				      <label for="ime">Ime:</label>
-				      <input type="text" class="form-control" id="imeKorisnika" placeholder="Unesite ime" >
+				      <input type="text" class="form-control" id="ime" placeholder="Unesite ime" >
 				    </div>
 				    <div class="form-group">
 				      <label for="prezime">Prezime:</label>
-				      <input type="text" class="form-control" id="przKorisnika" placeholder="Unesite prezime">
+				      <input type="text" class="form-control" id="prezime" placeholder="Unesite prezime">
 				    </div>
 			    	<div class="form-group">
 				      <label for="broj">Broj telefona:</label>
-				      <input type="number" class="form-control" id="brojKorisnika" placeholder="Unesite broj telefona" >
+				      <input type="number" class="form-control" id="broj" placeholder="Unesite broj telefona" >
 				    </div>
 				    <div class="form-group">
 				      <label for="grad">Grad:</label>
-				      <input type="text" class="form-control" id="gradKorisnika" placeholder="Unesite grad">
+				      <input type="text" class="form-control" id="grad" placeholder="Unesite grad">
 				    </div>
 			    	<div class="form-group">
 				      <label for="email">Email:</label>
-				      <input type="email" class="form-control" id="email" placeholder="Unesite email" name="email">
+				      <input type="email" class="form-control" id="mail" placeholder="Unesite email" name="email">
 				    </div>
 				    <div class="form-group">
 				      <label for="pwd">Lozinka:</label>
 				      <input type="password" class="form-control" id="lozinka1" placeholder="Unesite lozniku" name="loz1">
 				    </div>
-						<div class="form-group">
+					<div class="form-group">
 				      <label for="pwd">Ponovite lozinku:</label>
 				      <input type="password" class="form-control" id="lozinka2" placeholder="Ponovite lozinku" name="loz2">
+				      <span id='poruka'></span>
+				      
 				    </div>		    	
 			    
-			    <button type="submit" class="btn btn-default">Potvrdi</button>
+			    <button type="submit" id="potvrdiBtn" class="btn btn-default">Potvrdi</button>
 			  </form>
 	</div>
 
