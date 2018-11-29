@@ -5,6 +5,6 @@ import java.util.List;
 import rs.ftn.isa.model.Hotel;
 
 
-public interface HotelServis {
+public interface HotelService {
 	List<Hotel> findAll();
 }

@@ -8,13 +8,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.model.Hotel;
-import rs.ftn.isa.service.HotelServis;
-
+import rs.ftn.isa.service.HotelService;
 @RestController
 @RequestMapping(value="api/hoteli")
-public class HotelKontroler {
+public class HotelController {
 		@Autowired
-		private HotelServis servis;
+		private HotelService servis;
 		
 		@RequestMapping(value="/all", method = RequestMethod.GET)
 		public List<Hotel> getAllHoteli(){		

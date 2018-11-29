@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import rs.ftn.isa.model.Hotel;
 import rs.ftn.isa.repository.HotelRepository;
 @Service
-public class HotelServisImpl implements HotelServis {
+public class HotelServiceImpl implements HotelService {
 	
 	@Autowired
 	private HotelRepository hotelRepozitorijum;

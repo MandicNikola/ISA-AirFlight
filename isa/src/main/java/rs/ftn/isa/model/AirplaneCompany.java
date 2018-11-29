@@ -8,7 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class AvioKompanija {
+public class AirplaneCompany {
 
 	
 	@Id
@@ -25,10 +25,10 @@ public class AvioKompanija {
 	private String opis;
 
 	
-	public AvioKompanija() {
+	public AirplaneCompany() {
 		super();
 	}
-	public AvioKompanija(Long id,String naziv, String adresa, String opis) {
+	public AirplaneCompany(Long id,String naziv, String adresa, String opis) {
 		super();
 		this.id=id;
 		this.naziv = naziv;

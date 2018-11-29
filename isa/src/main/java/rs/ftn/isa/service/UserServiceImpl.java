@@ -5,37 +5,37 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import rs.ftn.isa.model.Korisnik;
-import rs.ftn.isa.repository.KorisnikRepository;
+import rs.ftn.isa.model.User;
+import rs.ftn.isa.repository.UserRepository;
 
 
 @Service
-public class KorisnikServisImpl implements KorisnikServis {
+public class UserServiceImpl implements UserService {
 
 	@Autowired
-	private KorisnikRepository repozitorijum;
+	private UserRepository repozitorijum;
 	
 	@Override
-	public List<Korisnik> findAll() {
+	public List<User> findAll() {
 		// TODO Auto-generated method stub
 		
 		return repozitorijum.findAll();
 	}
 
 	@Override
-	public Korisnik findKorisnikByMail( String mail) {
+	public User findKorisnikByMail( String mail) {
 		// TODO Auto-generated method stub
 		return repozitorijum.findOneByMail(mail);
 	}
 
 	@Override
-	public Korisnik findKorisnikById(Long id) {
+	public User findKorisnikById(Long id) {
 		// TODO Auto-generated method stub
 		return repozitorijum.findOneById(id);
 	}
 
 	@Override
-	public Korisnik saveKorisnika(Korisnik korisnik) {
+	public User saveKorisnika(User korisnik) {
 		// TODO Auto-generated method stub
 		return repozitorijum.save(korisnik);
 	}

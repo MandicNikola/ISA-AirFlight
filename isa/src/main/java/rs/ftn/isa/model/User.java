@@ -7,7 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Korisnik {
+public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,12 +32,12 @@ public class Korisnik {
 	private String verifikovan;
 
 	
-	public Korisnik() {
+	public User() {
 		super();
 	}
 
 	
-	public Korisnik(Long id, String ime, String prezime, String mail, int telefon, String grad, String verifikovan) {
+	public User(Long id, String ime, String prezime, String mail, int telefon, String grad, String verifikovan) {
 		super();
 		this.id = id;
 		this.ime = ime;
