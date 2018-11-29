@@ -6,7 +6,7 @@ import rs.ftn.isa.model.*;
 public interface UserService {
 //sve metode koje cemo koristiti u korisniku
 		List<User> findAll();
-		
+		//aaa
 		User findKorisnikByMail(String mail);
 		User findKorisnikById(Long id);
 		User saveKorisnika(User korisnik);

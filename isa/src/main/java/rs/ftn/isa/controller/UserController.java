@@ -16,7 +16,7 @@ public class UserController {
 	
 	@Autowired
 	private UserService servis;
-	
+	//ssss
 	@RequestMapping(value="/all", method = RequestMethod.GET)
 	public List<User> getAllKorisnici(){		
 		return  servis.findAll();
