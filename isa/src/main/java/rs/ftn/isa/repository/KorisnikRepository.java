@@ -8,5 +8,7 @@ import rs.ftn.isa.model.Korisnik;
 @Repository
 public interface KorisnikRepository extends JpaRepository<Korisnik,Long> {
 //bice sve metode koje su napravljene vec za nas
+	Korisnik findOneById(Long id);	
+	Korisnik findOneByMail(String mail);
 	
 }

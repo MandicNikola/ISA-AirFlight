@@ -21,6 +21,30 @@ public class KorisnikServisImpl implements KorisnikServis {
 		
 		return repozitorijum.findAll();
 	}
+
+	@Override
+	public Korisnik findKorisnikByMail( String mail) {
+		// TODO Auto-generated method stub
+		return repozitorijum.findOneByMail(mail);
+	}
+
+	@Override
+	public Korisnik findKorisnikById(Long id) {
+		// TODO Auto-generated method stub
+		return repozitorijum.findOneById(id);
+	}
+
+	@Override
+	public Korisnik saveKorisnika(Korisnik korisnik) {
+		// TODO Auto-generated method stub
+		return repozitorijum.save(korisnik);
+	}
+
+	@Override
+	public void removeKorisnika(Long id) {
+		// TODO Auto-generated method stub
+		repozitorijum.deleteById(id);
+	}
 	
 
 }
