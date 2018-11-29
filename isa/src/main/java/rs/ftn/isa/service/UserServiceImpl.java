@@ -28,11 +28,6 @@ public class UserServiceImpl implements UserService {
 		return repozitorijum.findOneByMail(mail);
 	}
 
-	@Override
-	public User findKorisnikById(Long id) {
-		// TODO Auto-generated method stub
-		return repozitorijum.findOneById(id);
-	}
 
 	@Override
 	public User saveKorisnika(User korisnik) {
@@ -45,6 +40,5 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		repozitorijum.deleteById(id);
 	}
-	
 
 }

@@ -31,13 +31,17 @@ public class User {
 	@Column(name="verifikovan")
 	private String verifikovan;
 
+	@Column(name="lozinka")
+	private String lozinka;
+
 	
 	public User() {
 		super();
 	}
 
-	
-	public User(Long id, String ime, String prezime, String mail, int telefon, String grad, String verifikovan) {
+		
+	public User(Long id, String ime, String prezime, String mail, int telefon, String grad, String verifikovan,
+			String lozinka) {
 		super();
 		this.id = id;
 		this.ime = ime;
@@ -45,11 +49,27 @@ public class User {
 		this.mail = mail;
 		this.telefon = telefon;
 		this.grad = grad;
-		this.verifikovan= verifikovan; //inicijalno je false dok ne prihvati mail
+		this.verifikovan = verifikovan;
+		this.lozinka = lozinka;
 	}
 
-	
-	
+
+	public String getLozinka() {
+		return lozinka;
+	}
+
+
+
+
+
+	public void setLozinka(String lozinka) {
+		this.lozinka = lozinka;
+	}
+
+
+
+
+
 	public int getTelefon() {
 		return telefon;
 	}

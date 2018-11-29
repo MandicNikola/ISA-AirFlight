@@ -8,7 +8,6 @@ public interface UserService {
 		List<User> findAll();
 		//aaa
 		User findKorisnikByMail(String mail);
-		User findKorisnikById(Long id);
 		User saveKorisnika(User korisnik);
 		void removeKorisnika(Long id);
 				
