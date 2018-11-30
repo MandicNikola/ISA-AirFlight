@@ -1,14 +1,22 @@
 package rs.ftn.isa.controller;
 
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.*;
+
+import javax.ws.rs.core.Context;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -83,6 +91,54 @@ public class UserController {
 		}
 
 		return "success";
+	}
+
+	@RequestMapping(value="/aktiviraj/{mail}",
+				method = RequestMethod.GET)
+	public String activateUser(@PathVariable String mail){
+	
+		User user = servis.findUserByMail(mail);
+		//slanje emaila
+		user.setVerifikovan("da");	
+	    servis.removeUser(user.getId());
+	    
+	    servis.saveUser(user);
+		//servis.verifikujKorisnika("da", mail);
+		return "Verifikovali ste mail, mozete posetiti sajt.";
+	}
+
+	@RequestMapping(value="/logovanje",
+					method = RequestMethod.GET,
+					produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody User loginUser(@RequestParam String mail,@RequestParam String lozinka ,@Context HttpServletRequest request){
+		
+		User user = servis.findUserByMail(mail);
+		
+		if(user == null) {
+			//nije pronadjen mail u bazi
+			user = new User();
+			user.setVerifikovan("null");
+			return user;
+		}
+		
+		if(user.getVerifikovan().equals("ne")) { //korisnik nije aktivirao profil
+				user.setVerifikovan("aktivacija");
+				return user;
+		}
+		
+		
+		if(!user.getLozinka().equals(lozinka)) {
+			//moraju se poklapati unesena lozinka i lozinka od korisnika sa unetim mailom 
+				user.setVerifikovan("");
+				return user;
+		}
+		
+		HttpSession session = request.getSession();
+		session.setAttribute("ulogovan", user);
+		
+		System.out.println("Ulogovan je korisnik "+ user.getIme());
+		
+		return user;
 	}
 
 }

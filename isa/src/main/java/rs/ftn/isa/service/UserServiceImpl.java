@@ -42,5 +42,13 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		repozitorijum.deleteById(id);
 	}
+/*
+	@Override
+	public void verifikujKorisnika(String verifikovan, String mail) {
+		
+		repozitorijum.updateUserInfoByMail(verifikovan, mail);
+	}
+*/
 
+	
 }
