@@ -1,14 +1,37 @@
 $(document).on('submit','.registracija',function(e){
 	e.preventDefault();	
 	console.log('sadas');
+
+	var imek=$('#ime').val();
+	var przk= $('#prezime').val();
+	var mailk=$('#mail').val();
+	var telk=$('#telefon').val();
+	var gradk= $('#grad').val();
+	var lozinkak = $('#lozinka1').val();
+	
+	console.log('ime ' + imek + 'prezime ' + przk + 'mail ' + mailk);
+	console.log('telefon ' + telk + 'grad ' + gradk + 'lozinka '+lozinkak);
+	
+	var newuser={
+					ime : imek,
+					prezime : przk,
+					mail : mailk,
+					telefon : telk,
+					grad : gradk,
+					verifikovan : 'ne',
+					lozinka : lozinkak				
+	}
+	console.log('user je ' +JSON.stringify(newuser));
+	 
+	senduser= JSON.stringify(newuser);
 	$.ajax({
 		type : 'POST',
 		url : "../isa/rest/api/korisnici/registracija",
 		contentType : 'application/json',
 		dataType : "json",
-		data: formToJSON(),
-		success : function(data) {
-			if(data==null){				
+		data: senduser,
+		success : function(pov) {
+			if(pov==null){				
 				alert("Mail je zauzet.");
 			}else {
 				alert('Uspesno ste se registrovali');
@@ -20,26 +43,11 @@ $(document).on('submit','.registracija',function(e){
 	});
 });
 
-function formToJSON() {
-	console.log('Usao u formToJSON');
-	return JSON.stringify({
-		"id": 5,
-		"ime" : $('#ime').val(),
-		"prezime" : $('#prezime').val(),
-		"mail" : $('#mail').val(),
-		"telefon" : $('#broj').val(),
-		"grad" : $('#grad').val(),
-		"verifikovan":  $('#lozinka2').val() ,
-		"lozinka" : $('#lozinka1').val()
-	});
-}
-
-	
-	function validation(forma){
+function validation(forma){
 		let ime = $('#ime').val();
 		let prezime= $('#prezime').val();
 		let mail =  $('#mail').val();
-		let telefon = $('#broj').val();
+		let telefon = $('#telefon').val();
 		let grad = $('#grad').val();
 		let loz1 = $('#lozinka1').val();
 		let loz2 = $('#lozinka2').val();
