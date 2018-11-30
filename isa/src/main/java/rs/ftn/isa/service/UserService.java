@@ -13,7 +13,4 @@ public interface UserService {
 		User findUserByMail(String mail);
 		User saveUser(User korisnik);
 		void removeUser(Long id);
-		
-		//void verifikujKorisnika(String verifikovan, String mail);
-				
 }
