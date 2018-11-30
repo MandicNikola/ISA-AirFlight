@@ -37,6 +37,14 @@ public class Hotel {
 		this.opis = opis;
 		this.ocena = ocena;
 	}
+	
+	public Hotel(String naziv, String adresa, String opis,double ocena) {
+		super();
+		this.naziv = naziv;
+		this.adresa = adresa;
+		this.opis = opis;
+		this.ocena = ocena;
+	}
 	public Long getId() {
 		return id;
 	}
