@@ -1,25 +1,12 @@
 
 function sendMail(korisnik){
 	
-var newuser={
-			ime : korisnik.ime,
-			prezime : korisnik.prezime,
-			mail : korisnik.mail,
-			telefon : korisnik.telefon,
-			grad : korisnik.grad,
-			lozinka : korisnik.lozinka				
-};
-console.log('pre   '+ newuser);
-
-var sending= JSON.stringify(newuser);
-console.log('  nakon '+sending);
+var mail = korisnik.mail;
+console.log('mail korisnika je '+ mail);
 
 	$.ajax({
 		type : 'GET',
-		url : "/api/korisnici/verifikacija",
-		contentType : "application/json",
-		data: newuser,
-		dataType : 'json',
+		url : "/api/korisnici/verifikacija/"+mail,
 		success : function(pov) {
 			alert('Uspesno');
 		},
@@ -31,101 +18,90 @@ console.log('  nakon '+sending);
 
 $(document).on('submit','.registracija',function(e){
 	e.preventDefault();	
-	console.log('sadas');
-
-	var imek=$('#ime').val();
-	var przk= $('#prezime').val();
-	var mailk=$('#mail').val();
-	var telk=$('#telefon').val();
-	var gradk= $('#grad').val();
-	var lozinkak = $('#lozinka1').val();
 	
-	console.log('ime ' + imek + 'prezime ' + przk + 'mail ' + mailk);
-	console.log('telefon ' + telk + 'grad ' + gradk + 'lozinka '+lozinkak);
+	var ime = $('#ime').val();
+	var prezime= $('#prezime').val();
+	var mail =  $('#mail').val();
+	var telefon = $('#telefon').val();
+	var grad = $('#grad').val();
+	var loz1 = $('#lozinka1').val();
+	var loz2 = $('#lozinka2').val();
+	var ispravno = true;
 	
-	var newuser={
-					ime : imek,
-					prezime : przk,
-					mail : mailk,
-					telefon : telk,
-					grad : gradk,
-					lozinka : lozinkak				
+	  $('#imeError').html('');
+	  $('#prezimeError').html('');
+	  $('#mailError').html('');
+	  $('#brojError').html('');
+	  $('#gradError').html('');
+	  $('#lozinkaError').html('');
+	  $('#poruka').html('');
+	
+	if (!ime) {
+		  $('#imeError').html('Popunite polje').css('color', 'red');
+		  ispravno = false;
 	}
 	
-	senduser= JSON.stringify(newuser);
+	if (!prezime) {
+		  $('#prezimeError').html('Popunite polje').css('color', 'red');
+		  ispravno = false;
+	}
+	if (!mail) {
+		  $('#mailError').html('Popunite polje').css('color', 'red');
+		  ispravno = false;
+	}
+	if (!telefon) {
+		  $('#brojError').html('Popunite polje').css('color', 'red');
+		  ispravno = false;
+	}
+	if (!grad) {
+		  $('#gradError').html('Popunite polje').css('color', 'red');
+		  ispravno = false;
+	}
+	if (!loz1) {
+		  $('#lozinkaError').html('Popunite polje').css('color', 'red');
+		  ispravno = false;
+	}
+	if (!loz2) {
+		  $('#poruka').html('Popunite polje').css('color', 'red');
+		  ispravno = false;
+	}
 	
-	console.log('user je ' + senduser);
-	 
-	$.ajax({
-		type : 'POST',
-		url : "/api/korisnici/registracija",
-		contentType : "application/json",
-		data: senduser,
-		dataType : 'json',
-		success : function(pov) {
-			if( pov.verifikovan == "null"){	
-				 alert("Mail je zauzet.");
-			}else{
-				sendMail(pov);
-				alert('Uspesno ste se registrovali');
-			}
-		},
-		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			//alert("greskaa");
+	console.log(ispravno);
+		
+	if(ispravno == true){
+			
+				var newuser={
+								ime : $('#ime').val(),
+								prezime : $('#prezime').val(),
+								mail : $('#mail').val(),
+								telefon : $('#telefon').val(),
+								grad :  $('#grad').val(),
+								lozinka : $('#lozinka1').val()				
+				}
+				
+				senduser= JSON.stringify(newuser);			
+				console.log('user je ' + senduser);
+				 
+				$.ajax({
+					type : 'POST',
+					url : "/api/korisnici/registracija",
+					contentType : "application/json",
+					data: senduser,
+					dataType : 'json',
+					success : function(pov) {
+						if( pov.verifikovan == "null"){	
+							 alert("Mail je zauzet.");
+						}else{
+							sendMail(pov);
+							alert('Uspesno ste se registrovali');
+						}
+					},
+					error: function(XMLHttpRequest, textStatus, errorThrown){
+						alert('greska');
+					}
+				});
 		}
 	});
-});
-
-
-function validation(forma){
-		let ime = $('#ime').val();
-		let prezime= $('#prezime').val();
-		let mail =  $('#mail').val();
-		let telefon = $('#telefon').val();
-		let grad = $('#grad').val();
-		let loz1 = $('#lozinka1').val();
-		let loz2 = $('#lozinka2').val();
-		var ispravno = true;
-		
-		  $('#imeError').html('');
-		  $('#prezimeError').html('');
-		  $('#mailError').html('');
-		  $('#brojError').html('');
-		  $('#gradError').html('');
-		  $('#lozinkaError').html('');
-		  $('#poruka').html('');
-		
-		if (!ime) {
-			  $('#imeError').html('Popunite polje').css('color', 'red');
-			  ispravno = false;
-		}
-		
-		if (!prezime) {
-			  $('#prezimeError').html('Popunite polje').css('color', 'red');
-			  ispravno = false;
-		}
-		if (!mail) {
-			  $('#mailError').html('Popunite polje').css('color', 'red');
-			  ispravno = false;
-		}
-		if (!telefon) {
-			  $('#brojError').html('Popunite polje').css('color', 'red');
-			  ispravno = false;
-		}
-		if (!grad) {
-			  $('#gradError').html('Popunite polje').css('color', 'red');
-			  ispravno = false;
-		}
-		if (!loz1) {
-			  $('#lozinkaError').html('Popunite polje').css('color', 'red');
-			  ispravno = false;
-		}
-		if (!loz2) {
-			  $('#poruka').html('Popunite polje').css('color', 'red');
-			  ispravno = false;
-		}
-		return ispravno;
-	}
 
 $( document ).ready(function() {
 		
