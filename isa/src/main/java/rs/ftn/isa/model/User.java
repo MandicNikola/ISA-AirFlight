@@ -33,15 +33,19 @@ public class User {
 
 	@Column(name="lozinka")
 	private String lozinka;
+	
+	@Column(name="tip")
+	private String tip;
 
 	
 	public User() {
 		super();
 	}
 
-		
+
+
 	public User(Long id, String ime, String prezime, String mail, int telefon, String grad, String verifikovan,
-			String lozinka) {
+			String lozinka, String tip) {
 		super();
 		this.id = id;
 		this.ime = ime;
@@ -51,7 +55,9 @@ public class User {
 		this.grad = grad;
 		this.verifikovan = verifikovan;
 		this.lozinka = lozinka;
+		this.tip = tip;
 	}
+
 
 
 	public User(String ime, String prezime, String mail, int telefon, String grad, String lozinka) {
@@ -62,7 +68,20 @@ public class User {
 		this.telefon = telefon;
 		this.grad = grad;
 		this.lozinka = lozinka;
+		this.tip = "nereg";
 	}
+
+
+	public String getTip() {
+		return tip;
+	}
+
+
+
+	public void setTip(String tip) {
+		this.tip = tip;
+	}
+
 
 
 	public String getLozinka() {
