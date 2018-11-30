@@ -20,19 +20,21 @@ $(document).on('submit','.registracija',function(e){
 					grad : gradk,
 					lozinka : lozinkak				
 	}
-	console.log('user je ' +JSON.stringify(newuser));
-	 
+	
 	senduser= JSON.stringify(newuser);
+	
+	console.log('user je ' + senduser);
+	 
 	$.ajax({
 		type : 'POST',
-		url : "../isa/rest/api/korisnici/registracija",
-		contentType : 'application/json',
-		dataType : "json",
+		url : "/api/korisnici/registracija",
+		contentType : "application/json",
 		data: senduser,
+		dataType : 'json',
 		success : function(pov) {
-			if(pov==null){				
-				alert("Mail je zauzet.");
-			}else {
+			if( pov.verifikovan == "null"){	
+				 alert("Mail je zauzet.");
+			}else{
 				alert('Uspesno ste se registrovali');
 			}
 		},

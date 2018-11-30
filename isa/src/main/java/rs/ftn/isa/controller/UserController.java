@@ -33,11 +33,12 @@ public class UserController {
 		return "Uspesno";
 	}	
 	
+
 	@RequestMapping(value="/registracija", 
 					method = RequestMethod.POST,
 					consumes = MediaType.APPLICATION_JSON_VALUE,
 					produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody UserDTO registrujKorisnika(@RequestBody UserDTO novi){		
+	public @ResponseBody User registrujKorisnika(@RequestBody UserDTO novi){		
 		
 		System.out.println("Usao u registraciju, mail je "+ novi.getMail());
 	
@@ -52,12 +53,12 @@ public class UserController {
 			servis.saveUser(newUser);
 			
 			System.out.println("Sacuvao korisnika");
+			return newUser;
 		}else {
 			System.out.println("Null vratio");
-			return null;
+			provera.setVerifikovan("null");
+			return provera;
 		}
-		return novi;
-	}
-	
+	}	
 	
 }
