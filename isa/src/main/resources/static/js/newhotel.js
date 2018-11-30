@@ -2,30 +2,31 @@
  * 
  */
 
-function newHotel(forma){
-	let naziv = $('#naziv').value;
-	let adresa = $('#adr').value;
+
+
+$(document).on('submit','.hotel',function(e){
+	e.preventDefault();	
+	
+	let naziv = $('#naziv').val();
+	let adresa = $('#adr').val();
 	let ispravno = true;
 	
 	 $("#greskaNaziv").html('');
 	  $("#greskaAdresa").html('');
 	 
 	if(!naziv){
-		$("#greskaNaziv").html('Naziv hotela je obavezan.').css('color':'red');
+		console.log('usao u neispravan naziv'+naziv);
+		
+		$("#greskaNaziv").html('Naziv hotela je obavezan.').css('color','red');
 		ispravno = false;
 	}
 	if(!adresa){
-		$("#greskaAdresa").html('Adresa hotela je obavena.').css('color':'red');
+		console.log('usao u neispravnu adresu');
+		$("#greskaAdresa").html('Adresa hotela je obavezna.').css('color','red');
 		ispravno = false;		
 	}
-	return ispravno;
-}
-
-
-$(document).on('submit','.hotel',function(e){
-	e.preventDefault();	
 	
-	
+	if(ispravno == true){
 	$.ajax({
 		type : 'POST',
 		url : "/api/hoteli/newhotel",
@@ -33,13 +34,11 @@ $(document).on('submit','.hotel',function(e){
 		dataType : "json",
 		data:formToJSON(),
 		success : function(data) {
-				if(data != null){
+				if(data.naziv != null){
 					console.log('uspjesno ste dodali hotel');					
 					alert('dodavanje super');
 				}else{
-					alert('dodavanje nije super');
-					
-					
+					alert('dodavanje nije super');	
 				}	
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
@@ -47,7 +46,7 @@ $(document).on('submit','.hotel',function(e){
 			   
 		}
 	});
-
+	}
 });
 function formToJSON() {
 	return JSON.stringify({

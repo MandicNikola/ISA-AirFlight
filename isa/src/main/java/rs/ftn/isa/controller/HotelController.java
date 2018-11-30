@@ -39,7 +39,8 @@ public class HotelController {
 				 servis.saveHotel(newHotel);
 				 return newHotel; 
 			 }else {
-				 return null;
+				Hotel povratna = new Hotel(); 
+				 return povratna;
 				 
 			 }
 	
