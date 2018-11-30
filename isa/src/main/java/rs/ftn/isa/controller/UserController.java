@@ -85,4 +85,17 @@ public class UserController {
 		return "success";
 	}
 
+@RequestMapping(value="/aktiviraj/{mail}",
+				method = RequestMethod.GET)
+public String activateUser(@PathVariable String mail){
+
+	User user = servis.findUserByMail(mail);
+	//slanje emaila
+	user.setVerifikovan("da");	
+    servis.removeUser(user.getId());
+    
+    servis.saveUser(user);
+	//servis.verifikujKorisnika("da", mail);
+	return "Verifikovali ste mail, mozete posetiti sajt.";
+}
 }
