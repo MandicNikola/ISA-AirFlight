@@ -1,7 +1,8 @@
 package rs.ftn.isa.controller;
 
 import java.util.List;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,15 +13,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.UserDTO;
 import rs.ftn.isa.model.*;
+import rs.ftn.isa.service.EmailService;
 import rs.ftn.isa.service.UserService;
 
 @RestController
 @RequestMapping(value="api/korisnici")
 public class UserController {
 	
+
+	private Logger logger = LoggerFactory.getLogger(UserController.class);
+	
 	@Autowired
 	private UserService servis;
-
+	
+	@Autowired
+	private EmailService emailService;
+	
 	
 	@RequestMapping(value="/all", method = RequestMethod.GET)
 	public List<User> getAllKorisnici(){		
@@ -61,4 +69,19 @@ public class UserController {
 		}
 	}	
 	
+	@RequestMapping(value="/verifikacija",
+				method = RequestMethod.GET,
+				consumes = MediaType.APPLICATION_JSON_VALUE)
+	public String signUpAsync(@RequestBody UserDTO user){
+
+		//slanje emaila
+		try {
+			emailService.sendNotificaitionAsync(user);
+		}catch( Exception e ){
+			logger.info("Greska prilikom slanja emaila: " + e.getMessage());
+		}
+
+		return "success";
+	}
+
 }

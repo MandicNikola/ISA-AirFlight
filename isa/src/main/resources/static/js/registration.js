@@ -1,3 +1,34 @@
+
+function sendMail(korisnik){
+	
+var newuser={
+			ime : korisnik.ime,
+			prezime : korisnik.prezime,
+			mail : korisnik.mail,
+			telefon : korisnik.telefon,
+			grad : korisnik.grad,
+			lozinka : korisnik.lozinka				
+};
+console.log('pre   '+ newuser);
+
+var sending= JSON.stringify(newuser);
+console.log('  nakon '+sending);
+
+	$.ajax({
+		type : 'GET',
+		url : "/api/korisnici/verifikacija",
+		contentType : "application/json",
+		data: newuser,
+		dataType : 'json',
+		success : function(pov) {
+			alert('Uspesno');
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			//alert("greskaa");
+		}
+	});
+}
+
 $(document).on('submit','.registracija',function(e){
 	e.preventDefault();	
 	console.log('sadas');
@@ -35,6 +66,7 @@ $(document).on('submit','.registracija',function(e){
 			if( pov.verifikovan == "null"){	
 				 alert("Mail je zauzet.");
 			}else{
+				sendMail(pov);
 				alert('Uspesno ste se registrovali');
 			}
 		},
@@ -43,6 +75,7 @@ $(document).on('submit','.registracija',function(e){
 		}
 	});
 });
+
 
 function validation(forma){
 		let ime = $('#ime').val();
