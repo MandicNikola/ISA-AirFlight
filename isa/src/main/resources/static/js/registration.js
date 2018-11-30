@@ -18,7 +18,6 @@ $(document).on('submit','.registracija',function(e){
 					mail : mailk,
 					telefon : telk,
 					grad : gradk,
-					verifikovan : 'ne',
 					lozinka : lozinkak				
 	}
 	console.log('user je ' +JSON.stringify(newuser));

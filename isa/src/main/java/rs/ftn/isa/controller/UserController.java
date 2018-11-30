@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import rs.ftn.isa.dto.UserDTO;
 import rs.ftn.isa.model.*;
 import rs.ftn.isa.service.UserService;
 
@@ -35,16 +37,20 @@ public class UserController {
 					method = RequestMethod.POST,
 					consumes = MediaType.APPLICATION_JSON_VALUE,
 					produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody User registrujKorisnika(@RequestBody User novi){		
+	public @ResponseBody UserDTO registrujKorisnika(@RequestBody UserDTO novi){		
 		
 		System.out.println("Usao u registraciju, mail je "+ novi.getMail());
 	
 		//provera da li je mail jedinstven
 		User provera = servis.findUserByMail(novi.getMail());
 		
-		if(provera==null) {	
+		
+		if(provera == null) {	
 			System.out.println("Provera je null");
-			servis.saveUser(novi);
+		    User newUser= new User(novi.getIme(),novi.getPrezime(), novi.getMail(), novi.getTelefon(),novi.getGrad(),novi.getLozinka());
+		    newUser.setVerifikovan("ne");
+			servis.saveUser(newUser);
+			
 			System.out.println("Sacuvao korisnika");
 		}else {
 			System.out.println("Null vratio");

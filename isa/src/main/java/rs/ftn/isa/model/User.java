@@ -54,6 +54,17 @@ public class User {
 	}
 
 
+	public User(String ime, String prezime, String mail, int telefon, String grad, String lozinka) {
+		super();
+		this.ime = ime;
+		this.prezime = prezime;
+		this.mail = mail;
+		this.telefon = telefon;
+		this.grad = grad;
+		this.lozinka = lozinka;
+	}
+
+
 	public String getLozinka() {
 		return lozinka;
 	}
