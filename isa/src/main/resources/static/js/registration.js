@@ -1,25 +1,12 @@
 
 function sendMail(korisnik){
 	
-var newuser={
-			ime : korisnik.ime,
-			prezime : korisnik.prezime,
-			mail : korisnik.mail,
-			telefon : korisnik.telefon,
-			grad : korisnik.grad,
-			lozinka : korisnik.lozinka				
-};
-console.log('pre   '+ newuser);
-
-var sending= JSON.stringify(newuser);
-console.log('  nakon '+sending);
+var mail = korisnik.mail;
+console.log('mail korisnika je '+ mail);
 
 	$.ajax({
 		type : 'GET',
-		url : "/api/korisnici/verifikacija",
-		contentType : "application/json",
-		data: newuser,
-		dataType : 'json',
+		url : "/api/korisnici/verifikacija/"+mail,
 		success : function(pov) {
 			alert('Uspesno');
 		},
