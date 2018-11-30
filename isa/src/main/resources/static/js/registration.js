@@ -1,11 +1,12 @@
 $(document).on('submit','.registracija',function(e){
 	e.preventDefault();	
+	console.log('sadas');
 	$.ajax({
 		type : 'POST',
 		url : "../isa/rest/api/korisnici/registracija",
 		contentType : 'application/json',
 		dataType : "json",
-		data:formToJSON(),
+		data: formToJSON(),
 		success : function(data) {
 			if(data==null){				
 				alert("Mail je zauzet.");
@@ -20,19 +21,21 @@ $(document).on('submit','.registracija',function(e){
 });
 
 function formToJSON() {
+	console.log('Usao u formToJSON');
 	return JSON.stringify({
+		"id": 5,
 		"ime" : $('#ime').val(),
 		"prezime" : $('#prezime').val(),
 		"mail" : $('#mail').val(),
 		"telefon" : $('#broj').val(),
 		"grad" : $('#grad').val(),
+		"verifikovan":  $('#lozinka2').val() ,
 		"lozinka" : $('#lozinka1').val()
 	});
 }
 
-$(document).ready(function(){
 	
-	function validacija(forma){
+	function validation(forma){
 		let ime = $('#ime').val();
 		let prezime= $('#prezime').val();
 		let mail =  $('#mail').val();
@@ -40,7 +43,7 @@ $(document).ready(function(){
 		let grad = $('#grad').val();
 		let loz1 = $('#lozinka1').val();
 		let loz2 = $('#lozinka2').val();
-		let ispravno = true;
+		var ispravno = true;
 		
 		  $('#imeError').html('');
 		  $('#prezimeError').html('');
@@ -81,15 +84,19 @@ $(document).ready(function(){
 		}
 		return ispravno;
 	}
-	
-	$('#lozinka1, #lozinka2').on('keyup', function () {
-		  if ($('#lozinka1').val() == $('#lozinka2').val()) {
-			  $('#potvrdiBtn').prop('disabled', false);
-			  $('#poruka').html('Ispravno uneto').css('color', 'green');
-		  } else {
-	        $('#potvrdiBtn').prop('disabled', true);
-		    $('#poruka').html('Ne podudaraju se').css('color', 'red');
-		  }
-	});
 
-}
+$( document ).ready(function() {
+		
+   $('#lozinka1, #lozinka2').on('keyup', function () {
+    	
+			  if ($('#lozinka1').val() == $('#lozinka2').val()) {
+				  $('#potvrdiBtn').prop('disabled', false);
+				  $('#poruka').html('Ispravno uneto').css('color', 'green');
+			  } else {
+		        $('#potvrdiBtn').prop('disabled', true);
+			    $('#poruka').html('Ne podudaraju se').css('color', 'red');
+			  }
+	
+	});
+});
+
