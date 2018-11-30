@@ -11,21 +11,28 @@
 <body>
   <div class="container">
     <h2>Unos hotela</h2>
-    	<form >
+    	<form method="post" class="hotel" onsubmit= "return newHotel(this)">
+		  
 		    <div class="form-group">
 		      <label for="naziv">Naziv:</label>
 		      <input  type = "text" class="form-control" id="naziv" placeholder="Naziv hotela" >
+		     <div id="greskaNaziv"></div>	
 		    </div>
+		    
 		    <div class="form-group">
 		      <label for="adr">Adresa:</label>
 		      <input type="text" class="form-control" id="adr" placeholder="Adresa hotela" >
+		   	 <div id="greskaAdresa"></div>
+		    	
 		    </div>
+		    
 		    <div class="form-group">
 		   	 <label for="opis">Opis:</label>
 		      <input type="text" class="form-control" id="opis" placeholder="Promotivni opis hotela" >
-		   
 		    </div>
+		    
 		    <button type="submit" class="btn btn-default">Dodaj</button>
+		  
 		  </form>
 </div>
    
