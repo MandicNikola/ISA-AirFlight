@@ -6,33 +6,59 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script type="text/javascript"  src="/js/newhotel.js"></script>
-  	
-<title>Registruj hotel</title>
+  <style>
+  	div{
+  		width:250px;
+  	}
+  	body{
+  	 background: linear-gradient(to bottom left, #99ccff 0%, #ffccff 100%); 
+	 background-size: cover;      
+     text-align: center;
+  	}
+  	form {
+	 	text-align: center;
+	    display: inline-block;
+	}
+	.form-group{
+			text-align: left;
+		}
+  	#unos{
+  		
+  	}
+  	button{
+  		margin-top:5px;
+  		border-radius: 2px;
+  	}
+  	h2{
+  		margin:45px 0px;
+  	}
+  </style>	
+<title>Hotel register</title>
 </head>
 <body>
   <div class="container">
-    <h2>Registruj hotel</h2>
-    	<form method="post" class="hotel" >
-		  
+    <h2>Hotel register</h2>
+    	<form method="post" class="hotel" id="unos" >	
 		    <div class="form-group">
-		      <label for="naziv">Naziv:</label>
-		      <input  type = "text" class="form-control" id="naziv" placeholder="Naziv hotela" >
-		       <div id="greskaNaziv"></div>	
+		      <i class="glyphicon glyphicon-bed"></i> <label for="naziv">Name:</label>
+		      <input  type = "text" class="form-control" id="naziv" placeholder="Hotel name" >
+		      <div id="greskaNaziv"></div>	
 		    </div>
 		    
 		    <div class="form-group">
-		      <label for="adr">Adresa:</label>
-		      <input type="text" class="form-control" id="adr" placeholder="Adresa hotela" >
+		    <i class="glyphicon glyphicon-map-marker"></i> <label for="address">Address:</label>
+		      <input type="text" class="form-control" id="adr" placeholder="Hotel address" >
 		   	 <div id="greskaAdresa"></div>
 		    	
 		    </div>
 		    
 		    <div class="form-group">
-		   	 <label for="opis">Opis:</label>
-		      <input type="text" class="form-control" id="opis" placeholder="Promotivni opis hotela" >
+		   	<i class=" glyphicon glyphicon-comment"></i> <label for="opis">Promotional description:</label>
+		    	
+		      <input type="text" class="form-control" id="opis" placeholder="Promotional description" >
 		    </div>
 		    
-		    <button type="submit" class="btn btn-default">Dodaj</button>
+		    <button type="submit" class="btn btn-default">Add</button>
 		  
 		  </form>
 </div>
