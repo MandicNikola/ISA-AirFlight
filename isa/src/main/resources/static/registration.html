@@ -7,68 +7,119 @@
   <script type="text/javascript" src="/js/registration.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <title>Registracija Korisnika</title>
+<style>
+		header{
+ 	 	margin-top:2%;
+ 	 	text-align: center !important;
+ 	 	font-size: 50px;
+ 	 	font-weight: bold;
+ 	 	font-family: "Comic Sans MS", cursive, sans-serif	
+ 	 	
+ 	 	}
+ 	   body{
+			background-color: #ffffcc; /* For browsers that do not support gradients */
+   			width:100%;
+			height:100%;			
+			background-size:cover;
+			color: #666;
+  		    font-family: 'Lato', sans-serif;    
+  		    font-size: 16px;
+ 	   }
+ 	   .col-xs-6{
+ 	 			margin-left:25%;
+ 	 			margin-right:25%;
+ 	 }
+ 	 h2{
+ 	 			text-align: center;
+ 	 			
+ 	 }
+ 	 #polje{
+ 	 		padding: 2%;
+ 	 		margin-top: 1%;
+ 	 		max-width: 600px;
+ 	 	 	background-color: rgba(255,255,255,0.8);
+ 	 	 	position: relative !important;
+    		float: none !important;
+  		    margin-left: auto !important;
+    		margin-right: auto !important;
+    		border: 3px solid #666;
+   		     border-radius: 8px;
+ 	 }
+ 	 #potvrdiBtn{
+ 	 			padding : 10px;
+ 	 }
+  	form{
+ 	 		text-align: center;
+ 	 	}
+ 	.form-group{
+			text-align: left;
+ 	 }
+</style>
 </head>
 <body>
-		<div class="container">
-  				<h2>Registracija</h2>
+		<header>
+				<p>AirFinity</p>
+		</header>
+		<div class="container" id="polje">
+  				<h2>Register</h2>
 			  <form method="post" class="registracija">
 				    <div class="form-group row ">				      	
 				        <div class="col-xs-6">
 						       <i class="glyphicon glyphicon-user"></i>
-						      <label for="ime"><span > </span>Ime:</label>
-						      <input type="text" class="form-control" id="ime" placeholder="Unesite ime" >
+						      <label for="ime"><span > </span>Name:</label>
+						      <input type="text" class="form-control" id="ime" placeholder="Enter your name" >
 						   	  <div id= "imeError"></div>
 				   		</div>
 				    </div>
 				    <div class="form-group row">
 				      <div class="col-xs-6">
 				       		  <i class="glyphicon glyphicon-user"></i>
-						      <label for="prezime">Prezime:</label>
-						      <input type="text" class="form-control" id="prezime" placeholder="Unesite prezime">
+						      <label for="prezime">Surname:</label>
+						      <input type="text" class="form-control" id="prezime" placeholder="Enter your surname">
 						      <div id= "prezimeError"></div>
 				      </div>
 				    </div>
 			    	<div class="form-group row">			    	
 				        <div class="col-xs-6">
 				              <i class="glyphicon glyphicon-phone"></i>
-				              <label for="broj">Broj telefona:</label>
-						      <input type="number" class="form-control" id="telefon" placeholder="Unesite broj telefona" >
+				              <label for="broj">Number:</label>
+						      <input type="number" class="form-control" id="telefon" placeholder="Enter your number" >
 						      <div id= "brojError"></div>
 				    	</div>
 				    </div>
 				    <div class="form-group row">				    
 				        <div class="col-xs-6">	
 				           	 <i class="glyphicon glyphicon-map-marker"></i>
-				              <label for="grad">Grad:</label>
-						      <input type="text" class="form-control" id="grad" placeholder="Unesite grad">
+				              <label for="grad">City:</label>
+						      <input type="text" class="form-control" id="grad" placeholder="Enter your city">
 						      <div id= "gradError"></div>
 				    	</div>
 				    </div>
 			    	<div class="form-group row">
 			    		 <div class="col-xs-6">	
 			    	     	 <i class="glyphicon glyphicon-envelope"></i>
-						      <label for="email">Email:</label>
-						      <input type="email" class="form-control" id="mail" placeholder="Unesite email" name="email">
+						      <label for="email">E-mail:</label>
+						      <input type="email" class="form-control" id="mail" placeholder="Enter your e-mail" name="email">
 						   	  <div id= "mailError"></div>
 						 </div>
 				    </div>
 				    <div class="form-group row">
 				        <div class="col-xs-6">	
 				            <i class="glyphicon glyphicon-eye-close"></i>
-				            <label for="pwd">Lozinka:</label>
-					        <input type="password" class="form-control" id="lozinka1" placeholder="Unesite lozniku" name="loz1">
+				            <label for="pwd">Password:</label>
+					        <input type="password" class="form-control" id="lozinka1" placeholder="Enter your password" name="loz1">
 					  	    <div id= "lozinkaError"></div>
 				        </div>
 				    </div>
 					<div class="form-group row">
 					      <div class="col-xs-6">
 						      <i class="glyphicon glyphicon-eye-close"></i>
-				              <label for="pwd">Ponovite lozinku:</label>
-						      <input type="password" class="form-control" id="lozinka2" placeholder="Ponovite lozinku" name="loz2">
+				              <label for="pwd">Password:</label>
+						      <input type="password" class="form-control" id="lozinka2" placeholder="Repeat password" name="loz2">
 						      <div id='poruka'></div>	
 						  </div>			      
 				    </div>		    				    
-			    <button type="submit" id="potvrdiBtn" class="btn btn-default">Potvrdi</button>
+			    <button type="submit" id="potvrdiBtn" class="btn btn-default">Register</button>
 			  </form>
 	</div>
 
