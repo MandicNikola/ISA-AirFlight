@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Theme Made By www.w3schools.com - No Copyright -->
-  <title>Bootstrap Theme Company Page</title>
+  <title>Airflight</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -20,11 +19,11 @@
       color: #fff;
       padding: 100px 25px;
   }
-  .container {
+  .container-fluid {
       padding: 0px 0px;
       margin-left:0px;      
       margin-right:0px;
-    background-color:#fff;
+    background-color:#fff !important;
   	
   }
   .Ikonice {
@@ -33,25 +32,29 @@
   
   }
  
- 
+ #listanav{
+	margin-right:0px !important;
+ 	padding-right: 0px !important;
+ }
  
   </style>
 </head>
 <body>
 
 <nav class="navbar navbar-default navbar-fixed-top">
-  <div class="container">
+  <div class="container-fluid">
     <div class="navbar-header">
           <span><img src="\img\logo.png" alt="HTML5 Icon" ></span>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav navbar-right" id="listanav">
         
         <li class="Ikonice"><a href="#about"><span class="glyphicon glyphicon-plane"></span>
   Flights</a></li>
         <li class="Ikonice"><a href="#services"><span class="glyphicon glyphicon-bed"></span>
   Hotels</a></li>
         <li class="Ikonice"><a href="#portfolio"><span class="glyphicon glyphicon-road"></span>Car hire</a></li>
+        <li class="Ikonice"><a href="login.html"><span class="glyphicon glyphicon-user"></span>Sign in</a></li>
       </ul>
     </div>
   </div>
