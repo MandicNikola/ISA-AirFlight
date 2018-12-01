@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script type="text/javascript"  src="/js/mainPage.js"></script>
+  
   <style>
   
   nav {
@@ -17,12 +19,25 @@
   .jumbotron {
       color: #fff;
       padding: 220px 25px;
+		
     }
   #pozadinaAuto{
     background-image: url(img/rentcar.jpg);  
 	  background-size: cover;      
   
   }
+  
+  #pozadinaHotel{
+    background-image: url(img/hotelDiv.jpg);  
+	background-size: cover;      
+  
+  }
+  #pozadinaAvion{
+    background-image: url(img/airplane2.jpg);  
+	background-size: cover;      
+  	color:#fff;
+  } 
+  
   .container-fluid {
       padding: 0px 0px;
       margin-left:0px;      
@@ -31,9 +46,7 @@
   	
   }
   .Ikonice {
-  		
    	font-size:20px;
-  
   }
  
  #listanav{
@@ -64,22 +77,22 @@
   </div>
 </nav>
 
-<<<<<<< HEAD
-<div class="jumbotron text-center" >
-  <h1>Airflight</h1> 
-  <p>It's easy to travel with us</p> 
+<div class="jumbotron text-left" id = "pozadinaAvion" >
+  <h1>Airflights</h1> 
+  <p>Travel is the only thing you buy that makes you rich.</p>
+  
+  <p>So let's fly together!</p> 
 </div>
-=======
+
 <div class="jumbotron text-left" id="pozadinaAuto">
   <h1>Rent-a-car</h1> 
   <h3>We are waiting for you.</h3> 
  </div>
->>>>>>> ac842a4f6854ec162475f895280e0c1782de8828
 
-<div class="jumbotron text-center" >
-  <h1>Airflight</h1> 
-  <p>It's easy to travel with us</p> 
-</div>
+<div class="jumbotron text-left" id="pozadinaHotel">
+  <h1>Hotels</h1> 
+  <h3>Stay with us, and feel like home…</h3> 
+ </div>
 
 
 </body>
