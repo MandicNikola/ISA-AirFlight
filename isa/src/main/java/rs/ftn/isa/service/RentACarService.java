@@ -1,9 +1,12 @@
 package rs.ftn.isa.service;
 
+import java.util.List;
+
 import rs.ftn.isa.model.RentACar;
 
 public interface RentACarService{
 
+	List<RentACar> findAll();
 	RentACar findOneByNaziv(String name);
 	RentACar saveRentACar(RentACar rentACar);
 }
