@@ -22,13 +22,12 @@ function hotelShow(){
 	
 	$.ajax({
 		method:'GET',
-		url: "../restorani/vratiDostava",
+		url: "/api/hotels/all",
 		success: function(lista){
 			if(lista == null){
 				nemaPor();
 				
 			}else{
-				ispisiDostavu(lista);
 				
 				
 			}
@@ -44,19 +43,25 @@ function carShow(){
 	
 	$.ajax({
 		method:'GET',
-		url: "/api/rents/",
+		url: "/api/rents/all",
 		success: function(lista){
 			if(lista == null){
-				console.log('Nema auta')
+				console.log('Nema servise')
 			}else{
-				ispisiAuta(lista);
-				
+				ispisiAutoservise(lista);
 				
 			}
 		}
 	});
 }
-function ispisiAuta(lista){
-	
-	
+function ispisiAutoservise(lista){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	 $("#ispisiTabelu").empty();
+	 $("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaRent\" ><tr><th> Name </th><th> Promotional description</th></tr>");
+		
+		$.each(pom, function(index, servis) {
+			$("#tabelaRent").append("<tr><td >"+servis.naziv+"</td><td > "+servis.opis+"</td></tr>");
+			
+		});
+	 $("#ispisiTabelu").append("</table>");
 }

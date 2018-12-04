@@ -13,14 +13,14 @@ public class Filijala {
 		private int id;		
 		private String grad;
 		private String ulica;
-		
+		/*
 		@ManyToMany
 	    @JoinTable(name = "pripadafilijali",
 	               joinColumns = @JoinColumn(name="filijala_id", referencedColumnName="id"),
 	               inverseJoinColumns = @JoinColumn(name="vehicle_id", referencedColumnName="id"))
 		private Set<Vehicle> vehicles = new HashSet<Vehicle>();
 		
-
+*/
 		
 		
 		public Filijala() {}
@@ -30,24 +30,25 @@ public class Filijala {
 			super();
 			this.grad = grad;
 			this.ulica = ulica;
-			this.vehicles = vehicles;
+			//this.vehicles = vehicles;
 		}
 		public Filijala(int id, String grad, String ulica, Set<Vehicle> vehicles) {
 			super();
 			this.id = id;
 			this.grad = grad;
 			this.ulica = ulica;
-			this.vehicles = vehicles;
+			//this.vehicles = vehicles;
 		}
 		
 		
-		
+		/*
 		public Set<Vehicle> getVehicles() {
 			return vehicles;
 		}
 		public void setVehicles(Set<Vehicle> vehicles) {
 			this.vehicles = vehicles;
 		}
+		*/
 		public int getId() {
 			return id;
 		}
