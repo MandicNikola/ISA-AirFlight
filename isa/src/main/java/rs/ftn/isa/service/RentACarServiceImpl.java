@@ -1,5 +1,7 @@
 package rs.ftn.isa.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +23,11 @@ public class RentACarServiceImpl implements RentACarService {
 		
 		return repozitorijum.save(rentACar);
 	
+	}
+
+	@Override
+	public List<RentACar> findAll() {
+		// TODO Auto-generated method stub
+		return repozitorijum.findAll();
 	}
 }

@@ -20,6 +20,7 @@ public class Filijala {
 	               inverseJoinColumns = @JoinColumn(name="vehicle_id", referencedColumnName="id"))
 		private Set<Vehicle> vehicles = new HashSet<Vehicle>();
 		
+
 		
 		
 		public Filijala() {}
