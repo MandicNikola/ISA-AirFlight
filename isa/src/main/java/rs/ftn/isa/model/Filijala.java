@@ -14,6 +14,12 @@ public class Filijala {
 		private String grad;
 		private String ulica;
 		
+		@ManyToMany
+	    @JoinTable(name = "pripadafilijali",
+	               joinColumns = @JoinColumn(name="filijala_id", referencedColumnName="id"),
+	               inverseJoinColumns = @JoinColumn(name="vehicle_id", referencedColumnName="id"))
+		private Set<Vehicle> vehicles = new HashSet<Vehicle>();
+		
 		
 		
 		public Filijala() {}
@@ -33,11 +39,6 @@ public class Filijala {
 			this.vehicles = vehicles;
 		}
 		
-		@ManyToMany
-	    @JoinTable(name = "pripadafilijali",
-	               joinColumns = @JoinColumn(name="filijala_id", referencedColumnName="id"),
-	               inverseJoinColumns = @JoinColumn(name="vehicle_id", referencedColumnName="id"))
-		private Set<Vehicle> vehicles = new HashSet<Vehicle>();
 		
 		
 		public Set<Vehicle> getVehicles() {
