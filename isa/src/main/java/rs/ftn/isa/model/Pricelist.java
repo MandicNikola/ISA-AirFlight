@@ -17,8 +17,9 @@ public class Pricelist {
 	@OneToMany(mappedBy = "Pricelist", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Service> usluge = new HashSet<Service>();
 
-	public Pricelist(Date datum_pocetka, Date datum_isteka) {
+	public Pricelist(int id,Date datum_pocetka, Date datum_isteka) {
 		super();
+		this.id = id;
 		this.datum_pocetka = datum_pocetka;
 		this.datum_isteka = datum_isteka;
 	}
@@ -45,6 +46,14 @@ public class Pricelist {
 
 	public void setUsluge(Set<Service> usluge) {
 		this.usluge = usluge;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	
