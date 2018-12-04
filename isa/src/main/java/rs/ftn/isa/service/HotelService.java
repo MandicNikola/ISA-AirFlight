@@ -8,9 +8,8 @@ import rs.ftn.isa.model.User;
 
 public interface HotelService {
 	List<Hotel> findAll();
-	
-	Hotel findHotelByNaziv(String naziv);
 
+	Hotel findHotelByNaziv(String naziv);
 	Hotel saveHotel(Hotel hotel);
-	
+	 
 }

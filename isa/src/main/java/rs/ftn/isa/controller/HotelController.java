@@ -43,9 +43,12 @@ public class HotelController {
 				 return povratna;
 				 
 			 }
+		}
 	
-}
-		
+		@RequestMapping(value="/all")
+		public List<Hotel> getAllKorisnici(){		
+			return  servis.findAll();
+		}
 		@RequestMapping(value="/test")
 		public String vrati() {
 			
