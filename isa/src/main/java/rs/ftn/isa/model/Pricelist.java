@@ -10,35 +10,28 @@ import javax.persistence.OneToMany;
 
 public class Pricelist {
 	private int id;
-	private Date datum_pocetka;
-	private Date datum_isteka;
+	private Date datum_primene;
 	
 	//cijenovnik ima vise usluga
 	@OneToMany(mappedBy = "Pricelist", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Service> usluge = new HashSet<Service>();
 
-	public Pricelist(int id,Date datum_pocetka, Date datum_isteka) {
+	public Pricelist(int id,Date datum_primene) {
 		super();
 		this.id = id;
-		this.datum_pocetka = datum_pocetka;
-		this.datum_isteka = datum_isteka;
+		this.datum_primene=datum_primene;
 	}
 
-	public Date getDatum_pocetka() {
-		return datum_pocetka;
+	
+	public Date getDatum_primene() {
+		return datum_primene;
 	}
 
-	public void setDatum_pocetka(Date datum_pocetka) {
-		this.datum_pocetka = datum_pocetka;
+
+	public void setDatum_primene(Date datum_primene) {
+		this.datum_primene = datum_primene;
 	}
 
-	public Date getDatum_isteka() {
-		return datum_isteka;
-	}
-
-	public void setDatum_isteka(Date datum_isteka) {
-		this.datum_isteka = datum_isteka;
-	}
 
 	public Set<Service> getUsluge() {
 		return usluge;

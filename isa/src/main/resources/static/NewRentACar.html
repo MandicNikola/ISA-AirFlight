@@ -8,13 +8,52 @@
 	<script type="text/javascript"  src="/js/newrentacar.js"></script>
   	
 <title>Register Rent-a-Car service</title>
+<style>
+   body{
+			background-color: #fdecd5;
+   			width:100%;
+			height:100%;			
+			background-size:cover;
+			color: #666;
+  		    font-family: 'Lato', sans-serif;    
+  		    font-size: 16px;
+ 	   }
+ 	   .col-xs-6{
+ 	 			margin-left:25%;
+ 	 			margin-right:25%;
+ 	 }
+ 	 h2{
+ 	 			text-align: center;
+ 	 			
+ 	 }
+ 	 #polje{
+ 	 		padding: 2%;
+ 	 		margin-top: 1%;
+ 	 		max-width: 600px;
+ 	 	 	background-color: rgba(255,255,255,0.8);
+ 	 	 	
+    		border: 3px solid #666;
+   		     border-radius: 8px;
+ 	 }
+ 	 #potvrdiBtn{
+ 	 			width : 10%;
+ 	 			padding : 10px;
+ 	 }
+  	form{
+ 	 		text-align: center;
+ 	 	}
+ 	.form-group{
+			text-align: left;
+ 	 }
+</style>
 </head>
 <body>
-  <div class="container">
+  <div class="container" id="polje">
     <h2>Register Rent-a-Car servise</h2>
-    	<form method="post" class="rentacar" >
+    
+    	<form method="post" class="rentacar">
 		  
-		    <div class="form-group">
+		   <div class="form-group row">
 		      <div class="col-xs-6">
 				  <i class="glyphicon glyphicon-pencil"></i>
 			   	  <label for="naziv">Title:</label>
@@ -23,7 +62,7 @@
 			  </div>
 			</div>
 		    
-		    <div class="form-group">
+		    <div class="form-group row">
 		        <div class="col-xs-6">
 			    	<i class="glyphicon glyphicon-map-marker"></i>
 			      	<label for="adr">Address:</label>
@@ -32,14 +71,16 @@
 		   	    </div>
 		    </div>
 		    
-		    <div class="form-group">	
-		   		<i class="glyphicon glyphicon-comment"></i> 		
-		   	 	<label for="opis">Description:</label>
-		      	<input type="text" class="form-control" id="opis" placeholder="Promotional description" >
+		    <div class="form-group row">	
+		    	 <div class="col-xs-6">
+				   	<i class="glyphicon glyphicon-comment"></i> 		
+				  	<label for="opis">Description:</label>
+				   	<input type="text" class="form-control" id="opis" placeholder="Promotional description" >
+		   		</div>
 		    </div>
-		    
-		    <button type="submit" class="btn btn-default">Add</button>
-		  
+		    <div>
+		    <button type="submit" class="btn btn-default" id="potvrdiBtn">Add</button>
+		  	</div>
 		  </form>
 </div>
    
