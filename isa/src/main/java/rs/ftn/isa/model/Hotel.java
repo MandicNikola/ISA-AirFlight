@@ -26,6 +26,7 @@ public class Hotel {
 	
 	//nedostaje kofiguracija soba i cenovnik usluga
 
+	
 	public Hotel() {
 		super();
 	}
