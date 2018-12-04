@@ -1,10 +1,17 @@
 package rs.ftn.isa.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
 
 @Entity
 public class Hotel {
@@ -25,7 +32,9 @@ public class Hotel {
 	private double ocena;
 	
 	//nedostaje kofiguracija soba i cenovnik usluga
-
+	//jedan hotel ima vise soba
+		@OneToMany(mappedBy = "Hotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+		private Set<Room> sobe = new HashSet<Room>();
 	
 	public Hotel() {
 		super();
@@ -81,8 +90,6 @@ public class Hotel {
 		return "Hotel [id=" + id + ", naziv=" + naziv + ", adresa=" + adresa + ", opis=" + opis + ", ocena=" + ocena
 				+ "]";
 	}
-	
-	
 	
 	
 	

@@ -1,10 +1,13 @@
 package rs.ftn.isa.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Room {
@@ -23,10 +26,16 @@ public class Room {
 	
 	@Column(name = "sprat", nullable = false)	
 	private int sprat;
-	
+	//cijena za noc
 	@Column(name = "cijena", nullable = false)	
 	private double cijena;
-
+	//jedna soba pripada jednog hotelu.
+	 @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	 private Hotel hotel;
+	 
+	public Room() {
+		super();
+	} 
 	public Room(Long id, String tip, double ocjena, int kreveti, int sprat, double cijena) {
 		super();
 		this.id = id;
@@ -94,9 +103,6 @@ public class Room {
 		this.cijena = cijena;
 	}
 	
-	
-	
-	
-	
+
 
 }
