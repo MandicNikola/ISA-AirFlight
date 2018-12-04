@@ -102,6 +102,12 @@ public class Room {
 	public void setCijena(double cijena) {
 		this.cijena = cijena;
 	}
+	public Hotel getHotel() {
+		return hotel;
+	}
+	public void setHotel(Hotel hotel) {
+		this.hotel = hotel;
+	}
 	
 
 

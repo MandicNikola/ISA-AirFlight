@@ -90,6 +90,12 @@ public class Hotel {
 		return "Hotel [id=" + id + ", naziv=" + naziv + ", adresa=" + adresa + ", opis=" + opis + ", ocena=" + ocena
 				+ "]";
 	}
+	public Set<Room> getSobe() {
+		return sobe;
+	}
+	public void setSobe(Set<Room> sobe) {
+		this.sobe = sobe;
+	}
 	
 	
 	
