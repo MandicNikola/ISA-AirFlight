@@ -6,31 +6,40 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity
+
 public class Service {
 
 //klasa za usluge
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
-	@Column(name = "naziv", nullable = false)
 	private String naziv;
+	private int cena;
 	
 	public Service() {}
 
 	
-	public Service(String naziv) {
+	public Service(String naziv, int cena) {
 		super();
 		this.naziv = naziv;
+		this.cena= cena;
 	}
 
 
-	public Service(Long id, String naziv) {
+	public Service(Long id, String naziv, int cena) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
+		this.cena= cena;
+	}
+
+
+	public int getCena() {
+		return cena;
+	}
+
+
+	public void setCena(int cena) {
+		this.cena = cena;
 	}
 
 
