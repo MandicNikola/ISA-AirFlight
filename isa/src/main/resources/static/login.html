@@ -10,10 +10,7 @@
 <style>
 
 	body{
-			background-color: #C3C3C3;
-   			width:100%;
-			height:100%;			
-			background-size:cover;
+			background-color: #fdecd5;
 			color: #666;
   		    font-family: 'Lato', sans-serif;    
   		    font-size: 16px;
@@ -22,12 +19,8 @@
  	 		padding: 3%;
  	 		margin-top: 3%;
  	 		max-width: 400px;
- 	 	 	background-color: rgba(239,239,239,0.7);
- 	 	 	position: relative !important;
-    		float: none !important;
-  		    margin-left: auto !important;
-    		margin-right: auto !important;
-    		border: 3px solid #FF3B3F;
+ 			background-color: rgba(255,255,255,0.8);
+ 	 	 	border: 3px solid #666;
    		     border-radius: 8px;
  	 }
  	 
@@ -37,7 +30,6 @@
  	 	font-size: 50px;
  	 	font-weight: bold;
  	 	font-family: "Comic Sans MS", cursive, sans-serif;
- 	 	color : rgb(239,239,239);
  	 	}
  	 	form{	 		
  	 		text-align: center;
@@ -48,9 +40,9 @@
  	 #potvrdiBtn{
  	 	padding : 10px;
  	 }
- 	 .col-xs-6{
- 	 			margin-left:25%;
- 	 			margin-right:25%;
+ 	 .col-xs-8{
+ 	 			margin-left:20%;
+ 	 			margin-right:20%;
  	 }
  </style>
 </head>
@@ -59,9 +51,9 @@
 		<p>AirFinity</p>
 </header>
 	<div class="container" id="polje">
-  				<form method="post" class="logovanje" >
+  				<form method="post" class="logovanje" >  					
 				    <div class="form-group row">
-				       <div class="col-xs-6" > 
+				       <div class="col-xs-8" > 
 					      <i class="glyphicon glyphicon-envelope"></i>
 					      <label for="email">E-mail:</label>
 					      <input type="email" class="form-control" id="mail" placeholder="Enter e-mail" name="email">
@@ -69,14 +61,14 @@
 					   	</div>
 				    </div>
 				    <div class="form-group row" >
-					   <div class="col-xs-6">
+					   <div class="col-xs-8">
 					     <i class="glyphicon glyphicon-eye-close"></i>
 						  <label for="pwd">Password:</label>
 						  <input type="password" class="form-control" id="lozinka" placeholder="Enter password" name="loz1">
 						  <div id= "lozinkaError"></div>
 				  	  </div>
 				    </div>    				    
-			    <button type="submit" id="potvrdiBtn" class="btn btn-default">Log in</button>
+			    <button type="submit" id="potvrdiBtn" class="btn btn-default btn-lg">Log in</button>
 			  </form>
 			  <p>If you don't have account <a href="registration.html">register</a></p>
 	</div>
