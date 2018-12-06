@@ -71,11 +71,31 @@ function carShow(){
 function ispisiAutoservise(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#ispisiTabelu").empty();
-	 $("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaRent\" ><tr><th> Name </th><th> Promotional description</th></tr>");
+	 $("#ispisiTabelu").append("<table class=\"table table-striped table-hover\" id=\"tabelaRent\" ><tr><th> Name </th><th> Promotional description</th></tr>");
 		
 		$.each(pom, function(index, servis) {
-			$("#tabelaRent").append("<tr><td >"+servis.naziv+"</td><td > "+servis.opis+"</td></tr>");
+			$("#tabelaRent").append("<tr><td class=\"hoverName\" onclick=\"visitCar('"+servis.id+"')\">"+servis.naziv+"</td><td > "+servis.opis+"</td></tr>");
 			
 		});
 	 $("#ispisiTabelu").append("</table>");
+	 
+	 $(".hoverName:hover").css("color", "green");
+
+}
+$(document).on("mouseenter", ".hoverName",function(){
+			
+    $(this).css("color", "purple");
+		
+	
+});
+$(document).on("mouseleave", ".hoverName",function(){
+	
+    $(this).css("color", "black");
+		
+	
+});
+function visitCar(id){
+	console.log('Usao u visitCar, dobio id: '+id);
+	
+	window.location="profileCar.html?id="+id;
 }
