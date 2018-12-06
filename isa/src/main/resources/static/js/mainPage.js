@@ -42,8 +42,7 @@ function ispisiHotele(lista){
 	$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaHotel\" ><tr><th> Name </th><th> Promotional description</th><th>Grade</th></tr>");
 		
 		$.each(pom, function(index, servis) {
-			$("#tabelaHotel").append("<tr><td >"+servis.naziv+"</td><td > "+servis.opis+"</td><td > "+servis.ocena+"</td></tr>");
-			
+			$("#tabelaHotel").append("<tr><td class=\"hoverName\" onclick=\"hotelProfil('"+servis.id+"')>"+servis.naziv+"</td><td > "+servis.opis+"</td><td > "+servis.ocena+"</td></tr>");
 		});
 	 $("#ispisiTabelu").append("</table>");
 }
@@ -79,8 +78,7 @@ function ispisiAutoservise(lista){
 		});
 	 $("#ispisiTabelu").append("</table>");
 	 
-	 $(".hoverName:hover").css("color", "green");
-
+	
 }
 $(document).on("mouseenter", ".hoverName",function(){
 			
@@ -98,4 +96,7 @@ function visitCar(id){
 	console.log('Usao u visitCar, dobio id: '+id);
 	
 	window.location="profileCar.html?id="+id;
+}
+function hotelProfil(id){
+	window.location.href = "profileHotel.html?id="+id;
 }
