@@ -41,10 +41,10 @@ public class Vehicle {
 	
 	@Column(name = "ocena", nullable = false)
 	private double ocena;
-	/*
-	@ManyToMany(mappedBy = "pripadafilijali")
+	
+	@ManyToMany(mappedBy = "vehicles")
 	private Set<Filijala> filijale = new HashSet<Filijala>();
-*/
+
 	
 	public Vehicle() {}
 

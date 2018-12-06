@@ -33,9 +33,9 @@ public class Hotel {
 	
 	//nedostaje kofiguracija soba i cenovnik usluga
 	//jedan hotel ima vise soba
-	/*	@OneToMany(mappedBy = "Hotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+		@OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 		private Set<Room> sobe = new HashSet<Room>();
-	*/
+	
 	public Hotel() {
 		super();
 	}
@@ -90,7 +90,7 @@ public class Hotel {
 		return "Hotel [id=" + id + ", naziv=" + naziv + ", adresa=" + adresa + ", opis=" + opis + ", ocena=" + ocena
 				+ "]";
 	}
-	/*
+	
 	public Set<Room> getSobe() {
 		return sobe;
 	}
@@ -98,6 +98,6 @@ public class Hotel {
 		this.sobe = sobe;
 	}
 	
-	*/
+	
 	
 }

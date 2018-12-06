@@ -5,56 +5,58 @@ import java.util.Set;
 
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 
-
+@Entity
 public class Filijala {
-		
-		private int id;		
+		@Id
+		@GeneratedValue(strategy = GenerationType.AUTO)
+		private Long id;
 		private String grad;
 		private String ulica;
-		/*
 		@ManyToMany
 	    @JoinTable(name = "pripadafilijali",
 	               joinColumns = @JoinColumn(name="filijala_id", referencedColumnName="id"),
 	               inverseJoinColumns = @JoinColumn(name="vehicle_id", referencedColumnName="id"))
 		private Set<Vehicle> vehicles = new HashSet<Vehicle>();
-		
-*/
-		
-		
+				
 		public Filijala() {}
 		
-
-		public Filijala(String grad, String ulica, Set<Vehicle> vehicles) {
+		public Filijala( String grad, String ulica) {
 			super();
 			this.grad = grad;
 			this.ulica = ulica;
-			//this.vehicles = vehicles;
+		
 		}
-		public Filijala(int id, String grad, String ulica, Set<Vehicle> vehicles) {
+		public Filijala(Long id, String grad, String ulica) {
 			super();
 			this.id = id;
 			this.grad = grad;
 			this.ulica = ulica;
-			//this.vehicles = vehicles;
 		}
-		
-		
-		/*
+
+
+
 		public Set<Vehicle> getVehicles() {
 			return vehicles;
 		}
 		public void setVehicles(Set<Vehicle> vehicles) {
 			this.vehicles = vehicles;
 		}
-		*/
-		public int getId() {
+		
+		
+		public Long getId() {
 			return id;
 		}
-		public void setId(int id) {
+
+		public void setId(Long id) {
 			this.id = id;
 		}
+
 		public String getGrad() {
 			return grad;
 		}
