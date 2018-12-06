@@ -30,4 +30,10 @@ public class RentACarServiceImpl implements RentACarService {
 		// TODO Auto-generated method stub
 		return repozitorijum.findAll();
 	}
+
+	@Override
+	public RentACar findOneById(Long id) {
+		// TODO Auto-generated method stub
+		return repozitorijum.findOneById(id);
+	}
 }
