@@ -2,9 +2,62 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript" src="/js/profileCar.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <title>Profile</title>
+<style>
+	header{
+			background-color: white;
+   			font-size: 36px;
+   			font-weight: bold;
+ 		 	font-family: "Comic Sans MS", cursive, serif;
+		    border-bottom: 2px solid #C3C3C3;
+		    padding: 4px;
+ 	}
+	body{
+			background-color: #EFEFEF;
+			color: #666;
+  		    font-family: 'Lato', sans-serif;    
+  		    font-size: 16px;
+ 	 }
+ 	 section{
+ 	 	background-color: white;
+ 	 	border: 2px solid #C3C3C3;
+ 	 	border-radius: 5px;
+ 	 	padding: 10px;
+ 	 }
+ 	 .jumbotron{
+ 	 	border: 2px solid #C3C3C3;
+ 	 	border-radius: 5px;
+ 	 	padding-left: 15px;
+ 	 }
+ 	 
+ 	 
+ </style>
 </head>
-<body>
-
+<body onload="loadPodatke()">
+	<header> AirFinity</header>
+	<div class="jumbotron">
+			<h2 id="naslov"></h2>
+			<p>On this page you can find out what kind of services we offer and where you can find us.<br> 
+				There is a list of vehicles which are available in our company.</p>
+			<p>We are here for you 24/7, at any moment you have our full support. <br>
+			   Let us make your business trip or holiday goes without stress and worries.
+			   Choose the appropriate car and relax.
+			</p>
+	</div>
+	<section id="informacije">
+			<p id="opis"> </p>
+			<p id="adresa"><i class="glyphicon glyphicon-home"></i>Headquarters of company is in </p>
+	</section>
+	<section id="vozila">
+		<p></p>
+	</section>
+	<section id="filijale">
+		<p>You can find us in these cities <i class="glyphicon glyphicon-arrow-down"> </i></p>
+	</section>
+	
 </body>
 </html>

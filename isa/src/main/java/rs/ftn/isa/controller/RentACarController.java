@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.RentACarDTO;
 import rs.ftn.isa.model.RentACar;
+import rs.ftn.isa.model.User;
 import rs.ftn.isa.service.RentACarServiceImpl;
 
 @RestController
@@ -43,6 +45,15 @@ public class RentACarController {
 		}
 	}	
 		
+	@RequestMapping(value="/vratiRentId/{id}",
+			method = RequestMethod.GET)
+	public @ResponseBody RentACar getRentId(@PathVariable Long id){
 	
+		RentACar rentServis = servis.findOneById(id);
+		System.out.println("Pronadjen je "+ rentServis.getNaziv());
+		return rentServis;
+	}
+
+
 	
 }

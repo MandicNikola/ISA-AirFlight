@@ -8,5 +8,6 @@ public interface RentACarService{
 
 	List<RentACar> findAll();
 	RentACar findOneByNaziv(String name);
+	RentACar findOneById(Long id);	
 	RentACar saveRentACar(RentACar rentACar);
 }
