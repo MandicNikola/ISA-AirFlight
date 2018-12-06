@@ -6,9 +6,6 @@ function loadPodatke(){
 	var id= niz[1];
 	console.log("id servisa je "+id);
 
-	
-	
-
 	$.ajax({
 			  url : "/api/rents/vratiRentId/"+id,
 			  type: 'get',

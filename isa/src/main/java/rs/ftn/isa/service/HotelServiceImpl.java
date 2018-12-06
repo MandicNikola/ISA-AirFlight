@@ -31,4 +31,11 @@ public class HotelServiceImpl implements HotelService {
 		// TODO Auto-generated method stub
 			return hotelRepozitorijum.save(hotel);
 	}
+
+
+	@Override
+	public Hotel findHotelById(Long id) {
+		// TODO Auto-generated method stub
+		return hotelRepozitorijum.findOneById(id);
+	}
 }

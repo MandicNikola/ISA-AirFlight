@@ -37,12 +37,13 @@ function hotelShow(){
 }
 
 function ispisiHotele(lista){
+	console.log('usao u ispisi hotele u js');
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	
 	$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaHotel\" ><tr><th> Name </th><th> Promotional description</th><th>Grade</th></tr>");
 		
 		$.each(pom, function(index, servis) {
-			$("#tabelaHotel").append("<tr><td class=\"hoverName\" onclick=\"hotelProfil('"+servis.id+"')>"+servis.naziv+"</td><td > "+servis.opis+"</td><td > "+servis.ocena+"</td></tr>");
+			$("#tabelaHotel").append("<tr><td class=\"hoverName\" onclick=\"hotelProfil('"+servis.id+"')\">"+servis.naziv+"</td><td > "+servis.opis+"</td><td > "+servis.ocena+"</td></tr>");
 		});
 	 $("#ispisiTabelu").append("</table>");
 }
@@ -70,6 +71,7 @@ function carShow(){
 function ispisiAutoservise(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#ispisiTabelu").empty();
+	 
 	 $("#ispisiTabelu").append("<table class=\"table table-striped table-hover\" id=\"tabelaRent\" ><tr><th> Name </th><th> Promotional description</th></tr>");
 		
 		$.each(pom, function(index, servis) {
@@ -98,5 +100,6 @@ function visitCar(id){
 	window.location="profileCar.html?id="+id;
 }
 function hotelProfil(id){
-	window.location.href = "profileHotel.html?id="+id;
+	console.log('usao u hotel profil');
+	window.location = "profileHotel.html?id="+id;
 }

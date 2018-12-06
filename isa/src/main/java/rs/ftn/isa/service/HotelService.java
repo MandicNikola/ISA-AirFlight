@@ -10,6 +10,7 @@ public interface HotelService {
 	List<Hotel> findAll();
 
 	Hotel findHotelByNaziv(String naziv);
+	Hotel findHotelById(Long id);
 	Hotel saveHotel(Hotel hotel);
 	 
 }

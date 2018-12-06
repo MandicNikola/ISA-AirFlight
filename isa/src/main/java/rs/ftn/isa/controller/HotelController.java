@@ -1,9 +1,14 @@
 package rs.ftn.isa.controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+
 import java.util.List;
+
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,10 +25,23 @@ public class HotelController {
 		private HotelService servis;
 		
 		@RequestMapping(value="/all", method = RequestMethod.GET)
-		public List<Hotel> getAllHoteli(){		
+		public List<Hotel> getAllHoteli(){	
 			return  servis.findAll();
 		}
 		
+		@RequestMapping(value = "/findById/{id}",
+						method = RequestMethod.GET)
+		public @ResponseBody Hotel findHotelById(@PathVariable Long id){
+			
+			
+			Hotel pronadjeni = servis.findHotelById(id);
+				if(pronadjeni == null) {
+					System.out.println("Nisam pronasao hotel sa datim id");
+					return pronadjeni;
+				}else{
+					return pronadjeni;
+				}
+		}
 		
 		@RequestMapping(value="/newhotel", 
 				method = RequestMethod.POST,

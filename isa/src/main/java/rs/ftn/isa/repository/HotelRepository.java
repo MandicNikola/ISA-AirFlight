@@ -11,5 +11,5 @@ import rs.ftn.isa.model.Hotel;
 @Repository
 public interface HotelRepository extends JpaRepository<Hotel,Long>{
 		 Hotel findOneByNaziv(String name);
-		
+		 Hotel findOneById(Long id);
 }
