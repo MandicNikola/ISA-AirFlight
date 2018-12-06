@@ -8,6 +8,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <title>Profile</title>
 <style>
+	
 	header{
 			background-color: white;
    			font-size: 36px;
@@ -28,18 +29,23 @@
  	 	border-radius: 5px;
  	 	padding: 10px;
  	 }
- 	 .jumbotron{
+ 	 #prviJumbo{
  	 	border: 2px solid #C3C3C3;
  	 	border-radius: 5px;
+ 	 	padding-top:2px;
+ 	 	padding-bottom:0px;
  	 	padding-left: 15px;
+ 	 	margin-bottom: 0px;
  	 }
  	 
- 	 
+  #prviJumbo p{
+  	margin:0px;
+  }
  </style>
 </head>
 <body onload="loadPodatke()">
 	<header> AirFinity</header>
-	<div class="jumbotron">
+	<div class="jumbotron" id="prviJumbo">
 			<h2 id="naslov"></h2>
 			<p>On this page you can find out what kind of services we offer and where you can find us.<br> 
 				There is a list of vehicles which are available in our company.</p>
