@@ -31,7 +31,7 @@ public class PricelistHotel {
 	 
 	//cijenovnik ima vise usluga,jedna usluga jedan cijenovnik
 	@OneToMany(mappedBy = "cijene", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<ServiceHotel> usluge = new HashSet<ServiceHotel>();
+	private Set<Usluga> usluge = new HashSet<Usluga>();
 	
 	public PricelistHotel(int id, Date datum_primene) {
 		super();
@@ -50,11 +50,11 @@ public class PricelistHotel {
 	}
 
 
-	public Set<ServiceHotel> getUsluge() {
+	public Set<Usluga> getUsluge() {
 		return usluge;
 	}
 
-	public void setUsluge(Set<ServiceHotel> usluge) {
+	public void setUsluge(Set<Usluga> usluge) {
 		this.usluge = usluge;
 	}
 
