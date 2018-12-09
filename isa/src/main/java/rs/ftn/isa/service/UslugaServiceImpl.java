@@ -14,6 +14,9 @@ public class UslugaServiceImpl implements UslugaService {
 	@Autowired
 	private UslugaRepository repozitorijum;
 	
+	 public UslugaServiceImpl() {
+		// TODO Auto-generated constructor stub
+	}
 	
 	@Override
 	public Usluga findUslugaById(Long id) {
