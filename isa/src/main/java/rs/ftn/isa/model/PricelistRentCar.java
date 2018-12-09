@@ -34,6 +34,8 @@ public class PricelistRentCar {
     @OneToOne(mappedBy = "cenovnik", fetch = FetchType.LAZY,cascade =  CascadeType.ALL)
 	private RentACar rentcar; 
 	
+    public PricelistRentCar() {}
+    
 	public PricelistRentCar(int id,Date datum_primene) {
 		super();
 		this.id = id;
