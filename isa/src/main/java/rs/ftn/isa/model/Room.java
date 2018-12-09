@@ -29,8 +29,9 @@ public class Room {
 	//cijena za noc
 	@Column(name = "cijena", nullable = false)	
 	private double cijena;
-	//jedna soba pripada jednog hotelu.
-	 @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    //jedna soba pripada jednog hotelu.
+
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	 private Hotel hotel;
 	 
 	public Room() {
