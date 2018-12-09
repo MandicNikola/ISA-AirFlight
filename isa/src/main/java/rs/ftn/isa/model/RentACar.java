@@ -1,21 +1,40 @@
 package rs.ftn.isa.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 @Entity
 public class RentACar {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	
 	@Column(name="naziv", nullable = false)
 	private String naziv;
+	
 	@Column(name="adresa",nullable = false)
 	private String adresa;
+	
 	@Column(name="opis",nullable = false)
 	private String opis;
+	
+	@OneToMany(mappedBy = "servis", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Filijala> filijale = new HashSet<Filijala>();
+
+	@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pricelistrentcar_id")    
+	private PricelistRentCar cenovnik ;
+
 	
 	public RentACar() {
 		
@@ -49,6 +68,7 @@ public class RentACar {
 	}
 	public String getAdresa() {
 		return adresa;
+		
 	}
 	public void setAdresa(String adresa) {
 		this.adresa = adresa;
@@ -58,6 +78,18 @@ public class RentACar {
 	}
 	public void setOpis(String opis) {
 		this.opis = opis;
+	}
+	public Set<Filijala> getFilijale() {
+		return filijale;
+	}
+	public void setFilijale(Set<Filijala> filijale) {
+		this.filijale = filijale;
+	}
+	public PricelistRentCar getCenovnik() {
+		return cenovnik;
+	}
+	public void setCenovnik(PricelistRentCar cenovnik) {
+		this.cenovnik = cenovnik;
 	}
 	
 }

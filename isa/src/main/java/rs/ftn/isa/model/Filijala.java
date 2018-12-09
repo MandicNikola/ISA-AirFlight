@@ -1,28 +1,28 @@
 package rs.ftn.isa.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 
 @Entity
 public class Filijala {
 		@Id
 		@GeneratedValue(strategy = GenerationType.AUTO)
 		private Long id;
+		
+		@Column(name="grad", nullable = false)
 		private String grad;
+
+		@Column(name="ulica", nullable = false)
 		private String ulica;
-		@ManyToMany
-	    @JoinTable(name = "pripadafilijali",
-	               joinColumns = @JoinColumn(name="filijala_id", referencedColumnName="id"),
-	               inverseJoinColumns = @JoinColumn(name="vehicle_id", referencedColumnName="id"))
-		private Set<Vehicle> vehicles = new HashSet<Vehicle>();
+		
+    	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+		private RentACar servis;
 				
 		public Filijala() {}
 		
@@ -39,15 +39,6 @@ public class Filijala {
 			this.ulica = ulica;
 		}
 
-
-
-		public Set<Vehicle> getVehicles() {
-			return vehicles;
-		}
-		public void setVehicles(Set<Vehicle> vehicles) {
-			this.vehicles = vehicles;
-		}
-		
 		
 		public Long getId() {
 			return id;
@@ -68,6 +59,14 @@ public class Filijala {
 		}
 		public void setUlica(String ulica) {
 			this.ulica = ulica;
+		}
+
+		public RentACar getServis() {
+			return servis;
+		}
+
+		public void setServis(RentACar servis) {
+			this.servis = servis;
 		}
 		
 		
