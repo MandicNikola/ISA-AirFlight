@@ -14,8 +14,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 //cijenovnik
 @Entity
+@Table(name = "cijenovnik")
 public class PricelistHotel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,7 +34,7 @@ public class PricelistHotel {
 	//cijenovnik ima vise usluga,jedna usluga jedan cijenovnik
 	@OneToMany(mappedBy = "cijene", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Usluga> usluge = new HashSet<Usluga>();
-	
+	public PricelistHotel() {}
 	public PricelistHotel(int id, Date datum_primene) {
 		super();
 		this.id = id;

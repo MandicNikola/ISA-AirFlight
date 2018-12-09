@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 import rs.ftn.isa.model.PricelistHotel;
 @Repository
 public interface CijenovnikHotelRepository extends JpaRepository<PricelistHotel,Long> {
-	 
+	PricelistHotel findOneById(Long id);
+
 }
