@@ -10,7 +10,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 
 @Entity
@@ -31,9 +33,15 @@ public class Hotel {
 	@Column(name = "ocena", nullable = false)	
 	private double ocena;
 	
-	//nedostaje kofiguracija soba i cenovnik usluga
+	//strani kljuc je id od cijenovnika
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "cijenovnik_id")
+	private  PricelistHotel cijenovnik;
+	
+	//nedostaje kofiguracija soba i cijenovnik usluga
 	//jedan hotel ima vise soba
-		@OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	
+	@OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 		private Set<Room> sobe = new HashSet<Room>();
 	
 	public Hotel() {

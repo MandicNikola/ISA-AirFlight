@@ -5,3 +5,7 @@ insert into hotel ( id, naziv, adresa, opis, ocena) values (1115,'Anjica', 'Novi
 insert into rentacar ( id, naziv, adresa, opis) values (1245,'Caaar', 'Novi Sad','samo brzo');
 insert into rentacar ( id, naziv, adresa, opis) values (1255,'Rent a caar', 'Novi Sad','sigurno i lako');
 insert into rentacar ( id, naziv, adresa, opis) values (1265,'Caaar the best', 'Novi Sad','samo brzo');
+insert into servicehotel( id, naziv, cena) values (123,'Pranje kola', '2000');
+insert into servicehotel( id, naziv, cena) values (124,'Privatni vozac', '10000');
+insert into cenovnik( id, datum_primene) values (125,'2018-11-11');
+insert into cenovnik( id, datum_primene) values (128,'2017-11-11');
