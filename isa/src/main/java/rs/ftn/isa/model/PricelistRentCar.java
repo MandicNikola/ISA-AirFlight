@@ -65,6 +65,14 @@ public class PricelistRentCar {
 		return id;
 	}
 
+	public RentACar getRentcar() {
+		return rentcar;
+	}
+
+	public void setRentcar(RentACar rentcar) {
+		this.rentcar = rentcar;
+	}
+
 	public void setId(int id) {
 		this.id = id;
 	}

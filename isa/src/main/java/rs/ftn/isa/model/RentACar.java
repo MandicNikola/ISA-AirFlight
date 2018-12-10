@@ -27,11 +27,11 @@ public class RentACar {
 	
 	@Column(name="opis",nullable = false)
 	private String opis;
-	
+
 	@OneToMany(mappedBy = "servis", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Filijala> filijale = new HashSet<Filijala>();
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "pricelistrentcar_id")    
 	private PricelistRentCar cenovnik ;
 

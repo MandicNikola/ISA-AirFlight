@@ -12,23 +12,30 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import rs.ftn.isa.model.PricelistRentCar;
+import rs.ftn.isa.model.RentACar;
 import rs.ftn.isa.model.Usluga;
 import rs.ftn.isa.repository.CenovnikRentRepository;
 import rs.ftn.isa.repository.RentACarRepository;
 import rs.ftn.isa.repository.UslugaRepository;
 import rs.ftn.isa.service.CenovnikRentService;
 import rs.ftn.isa.service.CenovnikRentServiceImpl;
+import rs.ftn.isa.service.FilijalaService;
+import rs.ftn.isa.service.RentACarService;
 import rs.ftn.isa.service.UslugaService;
 import rs.ftn.isa.service.UslugaServiceImpl;
+import rs.ftn.isa.model.Filijala;
 import rs.ftn.isa.model.PricelistHotel;
 
 @SpringBootApplication
 public class IsaApplication {
 
 	public static void main(String[] args) {
+		
 		ConfigurableApplicationContext c = SpringApplication.run(IsaApplication.class, args);
 		UslugaService servis1 = (UslugaService) c.getBean("uslugaServiceImpl");
 		CenovnikRentService servis2 = (CenovnikRentService) c.getBean("cenovnikRentServiceImpl");
+		FilijalaService servis3=(FilijalaService)c.getBean("filijalaServiceImpl");
+		RentACarService servis4 = (RentACarService)c.getBean("rentACarServiceImpl");
 		
 		Usluga usluga1 = new Usluga("WIFI",1200);
 		Usluga usluga2 = new Usluga("Bazen", 6000);
@@ -55,9 +62,6 @@ public class IsaApplication {
 		usluga3.setLista(cenovnik2);
 		usluga4.setLista(cenovnik);
 
-		//servis1.saveUsluga(usluga1);
-		//servis1.saveUsluga(usluga2);
-		
 		Set<Usluga> usluge = new HashSet<Usluga>();
 		usluge.add(usluga1);
 		usluge.add(usluga2);
@@ -69,9 +73,27 @@ public class IsaApplication {
 		
 		cenovnik2.setUsluge(usluge2);
 		
-		servis2.savePricelistRentCar(cenovnik);
-		servis2.savePricelistRentCar(cenovnik2);
+		RentACar serviss= new RentACar("Bonero", "Temerinska","sjajna ponuda");
 
+		//testiranje veze filijala
+		Filijala fil1= new Filijala("Novi Sad", "Gunduliceva");
+		Filijala fil2= new Filijala("Novi Sad", "Tekelijina");
+		
+		fil1.setServis(serviss);
+		fil2.setServis(serviss);
+		
+		Set<Filijala> filijale = new HashSet<Filijala>();
+		filijale.add(fil2);
+		filijale.add(fil1);
+		
+		serviss.setFilijale(filijale);
+		
+		cenovnik.setRentcar(serviss);
+		
+		serviss.setCenovnik(cenovnik);
+
+		servis4.saveRentACar(serviss);
+		
 		}
 
 }
