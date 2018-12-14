@@ -20,7 +20,20 @@ function iscrtajStranicu(servis){
 	
     $("#naslov").text(servis.naziv);
     $("#adresa").append(servis.adresa);
-
-
 	
 }
+$(document).ready(function(){
+	var pom=window.location.search.substring(1);
+	var id= pom.split('=')[1];
+	
+    $("p#vozilo").click(function(){
+		window.location="addCar.html?id="+id;
+
+
+   });
+    $("p#filijala").click(function(){
+    	
+		window.location="addCar.html?id="+id;
+
+   });
+});

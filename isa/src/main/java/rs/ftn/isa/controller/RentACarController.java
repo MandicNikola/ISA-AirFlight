@@ -1,6 +1,8 @@
 package rs.ftn.isa.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.ftn.isa.dto.RentACarDTO;
 import rs.ftn.isa.model.RentACar;
 import rs.ftn.isa.model.User;
+import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.service.RentACarServiceImpl;
 
 @RestController
@@ -50,10 +53,39 @@ public class RentACarController {
 	public @ResponseBody RentACar getRentId(@PathVariable Long id){
 	
 		RentACar rentServis = servis.findOneById(id);
-		System.out.println("Pronadjen je "+ rentServis.getNaziv());
+		System.out.println("Usao je u getRentId "+ rentServis.getNaziv());
 		return rentServis;
 	}
 
+	@RequestMapping(value="/postavivozilo/{id}",
+			method = RequestMethod.POST,
+			consumes = MediaType.APPLICATION_JSON_VALUE
+			)
+	public @ResponseBody RentACar postaviVozilo(@PathVariable Long id, @RequestBody Vehicle vozilo){
+	
+		RentACar rentServis = servis.findOneById(id);		
+		System.out.println("Pronasao rent servis "+ rentServis.getNaziv());
+		
+		Vehicle novo = vozilo;
+		System.out.println(novo.getNaziv() + " " + novo.getCena());
+		System.out.println(novo.toString());
+		novo.setServisrent(rentServis);
+		
+		Set<Vehicle> vozilaLista=rentServis.getVozila(); 
+		vozilaLista.add(novo);
+		rentServis.setVozila(vozilaLista);
+		
+	    servis.removeRentACar(id);
+	    
+	    //baza prilikom cuvanja izmeni id
+		RentACar povratna = servis.saveRentACar(rentServis);
+		
+		System.out.println("NOVI id od vozila je "+povratna.getId());
+		//treba mi za povratak na profil od ovog rent-a-car-a
+		String br=povratna.getId().toString();
+		povratna.setAdresa(br);
+		return povratna;
+	}
 
 	
 }

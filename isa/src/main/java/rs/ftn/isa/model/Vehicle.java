@@ -29,14 +29,14 @@ public class Vehicle {
 	@Column(name = "model", nullable = false)
 	private String model;
 	
-	@Column(name = "godina", nullable = false)
-	private int godina;
+	@Column(name = "godiste", nullable = false)
+	private int godiste;
 	
 	@Column(name = "sedista", nullable = false)
 	private int sedista;
 	
-	@Column(name = "tip", nullable = false)
-	private String tip;
+	@Column(name = "kategorija", nullable = false)
+	private String kategorija;
 	
 	@Column(name = "cena", nullable = false)
 	private double cena;
@@ -54,30 +54,41 @@ public class Vehicle {
 	public Vehicle() {}
 
 	
-	public Vehicle(String naziv, String marka, String model, int godina, int sedista, String tip, double cena,
+	public Vehicle(String naziv, String marka, String model, int godiste, int sedista, String kategorija, double cena,
 			double ocena) {
 		super();
 		this.naziv = naziv;
 		this.marka = marka;
 		this.model = model;
-		this.godina = godina;
+		this.godiste = godiste;
 		this.sedista = sedista;
-		this.tip = tip;
+		this.kategorija = kategorija;
 		this.cena = cena;
 		this.ocena = ocena;
 	}
 
 
-	public Vehicle(Long id, String naziv, String marka, String model, int godina, int sedista, String tip, double cena,
+	public Vehicle(String naziv, String marka, String model, int godiste, int sedista, String kategorija) {
+		super();
+		this.naziv = naziv;
+		this.marka = marka;
+		this.model = model;
+		this.godiste = godiste;
+		this.sedista = sedista;
+		this.kategorija = kategorija;
+	}
+
+
+	public Vehicle(Long id, String naziv, String marka, String model, int godiste, int sedista, String kategorija, double cena,
 			double ocena) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
 		this.marka = marka;
 		this.model = model;
-		this.godina = godina;
+		this.godiste = godiste;
 		this.sedista = sedista;
-		this.tip = tip;
+		this.kategorija = kategorija;
 		this.cena = cena;
 		this.ocena = ocena;
 	}
@@ -133,13 +144,13 @@ public class Vehicle {
 	}
 
 
-	public int getGodina() {
-		return godina;
+	public int getGodiste() {
+		return godiste;
 	}
 
 
-	public void setGodina(int godina) {
-		this.godina = godina;
+	public void setGodiste(int godiste) {
+		this.godiste = godiste;
 	}
 
 
@@ -153,13 +164,13 @@ public class Vehicle {
 	}
 
 
-	public String getTip() {
-		return tip;
+	public String getKategorija() {
+		return kategorija;
 	}
 
 
-	public void setTip(String tip) {
-		this.tip = tip;
+	public void setKategorija(String kategorija) {
+		this.kategorija = kategorija;
 	}
 
 
@@ -185,8 +196,8 @@ public class Vehicle {
 
 	@Override
 	public String toString() {
-		return "Vehicle [id=" + id + ", naziv=" + naziv + ", marka=" + marka + ", model=" + model + ", godina=" + godina
-				+ ", sedista=" + sedista + ", tip=" + tip + ", cena=" + cena + ", ocena=" + ocena + "]";
+		return "Vehicle [id=" + id + ", naziv=" + naziv + ", marka=" + marka + ", model=" + model + ", godiste=" + godiste
+				+ ", sedista=" + sedista + ", kategorija=" + kategorija + ", cena=" + cena + ", ocena=" + ocena + "]";
 	}
 	
 	

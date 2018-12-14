@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script type="text/javascript"  src="/js/newrentacar.js"></script>
+<script type="text/javascript" src="/js/addCar.js"></script>
   	
 <title>Register new Vehicle</title>
 	<style>
@@ -60,8 +60,8 @@
 				    <div class="form-group row ">				      	
 				        <div class="col-xs-6">
 						       <i class="glyphicon glyphicon-pencil"></i>
-						      <label for="ime"><span > </span>Name:</label>
-						      <input type="text" class="form-control" id="ime" placeholder="Enter  name" >
+						      <label for="ime">Name:</label>
+						      <input type="text" class="form-control" id="ime" placeholder="Enter  name" required>
 						   	  <div id= "imeError"></div>
 				   		</div>
 				    </div>
@@ -69,7 +69,7 @@
 				      <div class="col-xs-6">
 				       		  <i class="glyphicon glyphicon-pencil"></i>
 						      <label for="marka">Brand:</label>
-						      <input type="text" class="form-control" id="marka" placeholder="Enter brand">
+						      <input type="text" class="form-control" id="marka" placeholder="Enter brand" required>
 						      <div id= "markaError"></div>
 				      </div>
 				    </div>
@@ -77,7 +77,7 @@
 				        <div class="col-xs-6">
 				              <i class="glyphicon glyphicon-pencil"></i>
 				              <label for="model">Model:</label>
-						      <input type="text" class="form-control" id="model" placeholder="Enter model" >
+						      <input type="text" class="form-control" id="model" placeholder="Enter model" required >
 						      <div id= "modelError"></div>
 				    	</div>
 				    </div>
@@ -85,7 +85,7 @@
 				        <div class="col-xs-6">	
 				           	 <i class="glyphicon glyphicon-pencil"></i>
 				              <label for="godiste">Model year:</label>
-						      <input type="number" class="form-control" id="godiste" placeholder="Enter production date">
+						      <input type="number" class="form-control" id="godiste" placeholder="Enter production date" min="1990" required>
 						      <div id= "godError"></div>
 				    	</div>
 				    </div>
@@ -93,25 +93,25 @@
 			    		 <div class="col-xs-6">	
 			    	     	 <i class="glyphicon glyphicon-pencil"></i>
 						      <label for="seats">Number of seats:</label>
-						      <input type="number" class="form-control" id="seats" placeholder="Enter number of seats" name="seat">
-						   	  <div id= "seatsError"></div>
+						   	  <select class="form-control" id="sedista">
+							      <option value="2">2</option>
+							      <option value="4">4</option>
+							      <option value="5" selected>5</option>
+							</select>
 						 </div>
 				    </div>
 				    <div class="form-group row">
 				        <div class="col-xs-6">	
 				            <i class="glyphicon glyphicon-pencil"></i>
 				            <label for="cat">Category:</label>
-					        <input type="text" class="form-control" id="kategorija" placeholder="Enter a category" name="type">
-					  	    <div id= "catError"></div>
+				             <select class="form-control" id="kategorija">
+							      <option value="A" selected>A</option>
+							      <option value="B">B</option>
+							      <option value="C">C</option>
+							      <option value="D">D</option>
+							      <option value="E">E</option>
+							</select>
 				        </div>
-				    </div>
-					<div class="form-group row">
-					      <div class="col-xs-6">
-						      <i class="glyphicon glyphicon-euro"></i>
-				              <label for="price">Price:</label>
-						      <input type="number" class="form-control" id="price" placeholder="Enter price per day" name="price">
-						      <div id='priceError'></div>	
-						  </div>			      
 				    </div>		    				    
 			    <button type="submit" id="potvrdiBtn" class="btn btn-default btn-lg">Register</button>
 			  </form>

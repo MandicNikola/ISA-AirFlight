@@ -22,6 +22,13 @@ public class VoziloServiceImpl implements VoziloService{
 	}
 
 	@Override
+	public Vehicle findVehicleByNaziv(String naziv) {
+		// TODO Auto-generated method stub
+		
+		return repozitorijum.findOneByNaziv(naziv);
+	}
+
+	@Override
 	public List<Vehicle> findAll() {
 		// TODO Auto-generated method stub
 		return repozitorijum.findAll();
@@ -30,6 +37,7 @@ public class VoziloServiceImpl implements VoziloService{
 	@Override
 	public Vehicle saveVehicle(Vehicle vehicle) {
 		// TODO Auto-generated method stub
+		System.out.println("Sacuvano vozilo");
 		return repozitorijum.save(vehicle);
 	}
 

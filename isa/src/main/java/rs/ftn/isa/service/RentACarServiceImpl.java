@@ -34,6 +34,15 @@ public class RentACarServiceImpl implements RentACarService {
 	@Override
 	public RentACar findOneById(Long id) {
 		// TODO Auto-generated method stub
+		System.out.println("Usao u findById");
 		return repozitorijum.findOneById(id);
+	}
+
+	@Override
+	public void removeRentACar(Long id) {
+		// TODO Auto-generated method stub
+		System.out.println("Izbrisan servis rent");
+		repozitorijum.deleteById(id);
+		
 	}
 }

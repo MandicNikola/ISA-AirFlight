@@ -29,6 +29,23 @@
  	 	border-radius: 5px;
  	 	padding: 10px;
  	 }
+ 	 aside{
+ 	 	background-color: white;
+ 	 	border-radius: 5px;
+ 	 	padding: 0px !important;
+ 	 
+ 	 }
+ 	 .side{
+ 		 padding: 10px 12px;
+ 		 margin:0px;
+ 		 font-size:20px;
+		 cursor:pointer;
+		 border: 2px solid #C3C3C3;
+ 	 	 border-radius: 5px;
+    }
+    .side:hover{
+    	background-color: #C3C3C3;
+    }
  	 #prviJumbo{
  	 	border: 2px solid #C3C3C3;
  	 	border-radius: 5px;
@@ -37,33 +54,57 @@
  	 	padding-left: 15px;
  	 	margin-bottom: 0px;
  	 }
- 	 
+ 	 article{
+ 	 	padding: 0px !important;
+ 	 }
+ 	 .row{
+ 	 	padding-left:12px;
+ 	 	padding-right:12px;
+ 	 }
   #prviJumbo p{
   	margin:0px;
   }
  </style>
 </head>
 <body onload="loadPodatke()">
-	<header> AirFinity</header>
-	<div class="jumbotron" id="prviJumbo">
-			<h2 id="naslov"></h2>
-			<p>On this page you can find out what kind of services we offer and where you can find us.<br> 
-				There is a list of vehicles which are available in our company.</p>
-			<p>We are here for you 24/7, at any moment you have our full support. <br>
-			   Let us make your business trip or holiday goes without stress and worries.
-			   Choose the appropriate car and relax.
-			</p>
+	<div class="container-fluid">
+		<header class="nav">AirFinity </header>
+		<div id="dataContainer">
+		
+			<div class="jumbotron" id="prviJumbo">
+					<h2 id="naslov"></h2>
+					<p>On this page you can find out what kind of services we offer and where you can find us.<br> 
+						There is a list of vehicles which are available in our company.</p>
+					<p>We are here for you 24/7, at any moment you have our full support. <br>
+					   Let us make your business trip or holiday goes without stress and worries.
+					   Choose the appropriate car and relax.
+					</p>
+			</div>
+			<div class = "row">
+			<article class = "col-sm-10">
+				<section id="informacije">
+						<p id="opis"> </p>
+						<p id="adresa"><i class="glyphicon glyphicon-home"></i>Headquarters of company is in </p>
+				</section>
+				<section id="vozila">
+					<p></p>
+				</section>
+				<section id="filijale">
+					<p>You can find us in these cities <i class="glyphicon glyphicon-arrow-down"> </i></p>
+				</section>
+			</article>
+			<aside class="col-sm-2" id="pageAside">
+				<div class="side">
+					<p id="vozilo" class="h">Add Vehicle</p>		
+				</div>
+				<div class="side">
+					<p id="filijala" class="h">Add branch office</p>		
+				</div>
+			</aside>
+			</div>
+			
+			
+		</div>
 	</div>
-	<section id="informacije">
-			<p id="opis"> </p>
-			<p id="adresa"><i class="glyphicon glyphicon-home"></i>Headquarters of company is in </p>
-	</section>
-	<section id="vozila">
-		<p></p>
-	</section>
-	<section id="filijale">
-		<p>You can find us in these cities <i class="glyphicon glyphicon-arrow-down"> </i></p>
-	</section>
-	
 </body>
 </html>

@@ -9,5 +9,6 @@ import rs.ftn.isa.model.Vehicle;
 public interface VoziloRepository extends JpaRepository<Vehicle,Long> {
 
 	Vehicle findOneById(Long id);
+	Vehicle findOneByNaziv(String naziv);
 
 }

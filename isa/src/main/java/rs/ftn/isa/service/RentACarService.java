@@ -10,4 +10,6 @@ public interface RentACarService{
 	RentACar findOneByNaziv(String name);
 	RentACar findOneById(Long id);	
 	RentACar saveRentACar(RentACar rentACar);
+	void removeRentACar(Long id);
+
 }
