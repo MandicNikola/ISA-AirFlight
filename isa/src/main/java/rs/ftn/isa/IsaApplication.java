@@ -14,6 +14,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import rs.ftn.isa.model.PricelistRentCar;
 import rs.ftn.isa.model.RentACar;
 import rs.ftn.isa.model.Usluga;
+import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.repository.CenovnikRentRepository;
 import rs.ftn.isa.repository.RentACarRepository;
 import rs.ftn.isa.repository.UslugaRepository;
@@ -23,6 +24,8 @@ import rs.ftn.isa.service.FilijalaService;
 import rs.ftn.isa.service.RentACarService;
 import rs.ftn.isa.service.UslugaService;
 import rs.ftn.isa.service.UslugaServiceImpl;
+import rs.ftn.isa.service.VoziloService;
+import rs.ftn.isa.service.VoziloServiceImpl;
 import rs.ftn.isa.model.Filijala;
 import rs.ftn.isa.model.PricelistHotel;
 
@@ -36,6 +39,9 @@ public class IsaApplication {
 		CenovnikRentService servis2 = (CenovnikRentService) c.getBean("cenovnikRentServiceImpl");
 		FilijalaService servis3=(FilijalaService)c.getBean("filijalaServiceImpl");
 		RentACarService servis4 = (RentACarService)c.getBean("rentACarServiceImpl");
+		VoziloService servis5 = (VoziloServiceImpl)c.getBean("voziloServiceImpl");
+		
+		
 		
 		Usluga usluga1 = new Usluga("WIFI",1200);
 		Usluga usluga2 = new Usluga("Bazen", 6000);
@@ -86,6 +92,20 @@ public class IsaApplication {
 		filijale.add(fil2);
 		filijale.add(fil1);
 		
+		Vehicle vozilo1= new Vehicle("AMG", "Mercedes", "A klasa", 2017, 5, "A kategorija",7000, 5);
+		Vehicle vozilo2= new Vehicle("Urban", "Mercedes", "A klasa", 2015, 5, "A kategorija",5000, 5);
+		Vehicle vozilo3= new Vehicle("230", "Mercedes", "E klasa", 2017, 5, "E kategorija",6000, 5);
+		
+		vozilo1.setServisrent(serviss);
+		vozilo2.setServisrent(serviss);
+		vozilo3.setServisrent(serviss);
+		
+		Set<Vehicle> vozila = new HashSet<Vehicle>();
+		vozila.add(vozilo1);
+		vozila.add(vozilo2);
+		vozila.add(vozilo3);
+		
+		serviss.setVozila(vozila);
 		serviss.setFilijale(filijale);
 		
 		cenovnik.setRentcar(serviss);
@@ -93,6 +113,9 @@ public class IsaApplication {
 		serviss.setCenovnik(cenovnik);
 
 		servis4.saveRentACar(serviss);
+		
+		
+	
 		
 		}
 

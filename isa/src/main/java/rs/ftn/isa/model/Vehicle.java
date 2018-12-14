@@ -1,10 +1,14 @@
 package rs.ftn.isa.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -41,6 +45,11 @@ public class Vehicle {
 	private double ocena;
 	
 
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "rent_id")
+	private RentACar servisrent;
+	
+
 	
 	public Vehicle() {}
 
@@ -71,6 +80,16 @@ public class Vehicle {
 		this.tip = tip;
 		this.cena = cena;
 		this.ocena = ocena;
+	}
+
+
+	public RentACar getServisrent() {
+		return servisrent;
+	}
+
+
+	public void setServisrent(RentACar servisrent) {
+		this.servisrent = servisrent;
 	}
 
 
