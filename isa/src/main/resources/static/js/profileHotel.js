@@ -26,3 +26,10 @@ function ispisiProfilHotela(hotel){
 	
 	
 }
+function addRoom(){
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	window.location = "NewRoom.html?id="+id;
+	
+	
+}

@@ -43,8 +43,13 @@ public class IsaApplication {
 
 		 SpringApplication.run(IsaApplication.class, args);
 		/*ConfigurableApplicationContext c = SpringApplication.run(IsaApplication.class, args);
+<<<<<<< HEAD
 
 		SpringApplication.run(IsaApplication.class, args);
+=======
+		SpringApplication.run(IsaApplication.class, args);
+	/*	ConfigurableApplicationContext c = SpringApplication.run(IsaApplication.class, args);
+>>>>>>> 07c369b22f9b2ca694c5ba44d05e2e066408a1ff
 		UslugaService servis1 = (UslugaService) c.getBean("uslugaServiceImpl");
 		CenovnikRentService servis2 = (CenovnikRentService) c.getBean("cenovnikRentServiceImpl");
 		FilijalaService servis3=(FilijalaService)c.getBean("filijalaServiceImpl");
@@ -126,6 +131,10 @@ public class IsaApplication {
 
 		servis4.saveRentACar(serviss);
 
+<<<<<<< HEAD
+=======
+			}
+>>>>>>> 07c369b22f9b2ca694c5ba44d05e2e066408a1ff
 		//testiranje 
 		Hotel hotel1 = new Hotel("Leotar"," Trebinje","okej",10);
 		Room soba1 = new Room("jednokrevetna",7,1,2,150,"da");

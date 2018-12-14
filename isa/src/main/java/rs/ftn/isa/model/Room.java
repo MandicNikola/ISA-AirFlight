@@ -29,11 +29,13 @@ public class Room {
 	//cijena za noc
 	@Column(name = "cijena", nullable = false)	
 	private double cijena;
-    //jedna soba pripada jednog hotelu.
 
 	@Column(name = "balkon", nullable = false)	
 	private String balkon; //da ako ima,ne nema
     
+	
+
+    //jedna soba pripada jednog hotelu.
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	 private Hotel hotel;
 	
@@ -52,6 +54,17 @@ public class Room {
 		this.balkon = balkon;
 	}
 	
+	
+	public Room(String tip, int kreveti, int sprat,String balkon) {
+		super();
+		
+		this.tip = tip;
+		this.ocjena = 0;
+		this.kreveti = kreveti;
+		this.sprat = sprat;
+		this.cijena = 0;
+		this.balkon = balkon;
+	}
 	
 	public Room( String tip, double ocjena, int kreveti, int sprat, double cijena,String balkon) {
 		super();
