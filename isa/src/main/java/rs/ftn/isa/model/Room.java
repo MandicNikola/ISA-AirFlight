@@ -41,7 +41,7 @@ public class Room {
 	public Room() {
 		super();
 	} 
-	public Room(Long id, String tip, double ocjena, int kreveti, int sprat, double cijena) {
+	public Room(Long id, String tip, double ocjena, int kreveti, int sprat, double cijena,String balkon) {
 		super();
 		this.id = id;
 		this.tip = tip;
@@ -49,6 +49,18 @@ public class Room {
 		this.kreveti = kreveti;
 		this.sprat = sprat;
 		this.cijena = cijena;
+		this.balkon = balkon;
+	}
+	
+	
+	public Room( String tip, double ocjena, int kreveti, int sprat, double cijena,String balkon) {
+		super();
+		this.tip = tip;
+		this.ocjena = ocjena;
+		this.kreveti = kreveti;
+		this.sprat = sprat;
+		this.cijena = cijena;
+		this.balkon = balkon;
 	}
 	
 	public Room(String tip, double ocjena, int kreveti, int sprat, double cijena) {
@@ -112,6 +124,12 @@ public class Room {
 	}
 	public void setHotel(Hotel hotel) {
 		this.hotel = hotel;
+	}
+	public String getBalkon() {
+		return balkon;
+	}
+	public void setBalkon(String balkon) {
+		this.balkon = balkon;
 	}
 	
 
