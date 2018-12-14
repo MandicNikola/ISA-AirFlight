@@ -20,7 +20,7 @@ public class RentACarServiceImpl implements RentACarService {
 
 	@Override
 	public RentACar saveRentACar(RentACar rentACar) {
-		
+	System.out.println("Usao u sacuvaj rentACar");	
 		return repozitorijum.save(rentACar);
 	
 	}

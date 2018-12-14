@@ -3,10 +3,11 @@ package rs.ftn.isa.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import rs.ftn.isa.model.Usluga;
+import rs.ftn.isa.model.Vehicle;
 
 @Repository
-public interface UslugaRepository  extends JpaRepository<Usluga,Long>{
+public interface VoziloRepository extends JpaRepository<Vehicle,Long> {
 
-	Usluga findOneById(Long id);
+	Vehicle findOneById(Long id);
+
 }
