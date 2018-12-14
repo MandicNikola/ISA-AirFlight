@@ -13,6 +13,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import rs.ftn.isa.model.PricelistRentCar;
 import rs.ftn.isa.model.RentACar;
+import rs.ftn.isa.model.Room;
 import rs.ftn.isa.model.Usluga;
 import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.repository.CenovnikRentRepository;
@@ -21,26 +22,33 @@ import rs.ftn.isa.repository.UslugaRepository;
 import rs.ftn.isa.service.CenovnikRentService;
 import rs.ftn.isa.service.CenovnikRentServiceImpl;
 import rs.ftn.isa.service.FilijalaService;
+import rs.ftn.isa.service.HotelService;
+import rs.ftn.isa.service.HotelServiceImpl;
 import rs.ftn.isa.service.RentACarService;
+import rs.ftn.isa.service.RoomService;
+
+import rs.ftn.isa.service.RoomServiceImp;
 import rs.ftn.isa.service.UslugaService;
 import rs.ftn.isa.service.UslugaServiceImpl;
 import rs.ftn.isa.service.VoziloService;
 import rs.ftn.isa.service.VoziloServiceImpl;
 import rs.ftn.isa.model.Filijala;
+import rs.ftn.isa.model.Hotel;
 import rs.ftn.isa.model.PricelistHotel;
 
 @SpringBootApplication
 public class IsaApplication {
 
 	public static void main(String[] args) {
-		
-		ConfigurableApplicationContext c = SpringApplication.run(IsaApplication.class, args);
+		SpringApplication.run(IsaApplication.class, args);
+	/*	ConfigurableApplicationContext c = SpringApplication.run(IsaApplication.class, args);
 		UslugaService servis1 = (UslugaService) c.getBean("uslugaServiceImpl");
 		CenovnikRentService servis2 = (CenovnikRentService) c.getBean("cenovnikRentServiceImpl");
 		FilijalaService servis3=(FilijalaService)c.getBean("filijalaServiceImpl");
 		RentACarService servis4 = (RentACarService)c.getBean("rentACarServiceImpl");
 		VoziloService servis5 = (VoziloServiceImpl)c.getBean("voziloServiceImpl");
-		
+		RoomService servisRoom = (RoomServiceImp)c.getBean("roomServiceImp");
+		HotelService servisHotel = (HotelServiceImpl)c.getBean("hotelServiceImpl");
 		
 		
 		Usluga usluga1 = new Usluga("WIFI",1200);
@@ -74,17 +82,13 @@ public class IsaApplication {
 		usluge.add(usluga4);
 		cenovnik.setUsluge(usluge);
 		
-<<<<<<< HEAD
-	
-=======
-
->>>>>>> 4d675f42dd55d25a99401db49ff7d3f3b6ad0ed9
 		Set<Usluga> usluge2 = new HashSet<Usluga>();
 		usluge.add(usluga3);
 		
 		cenovnik2.setUsluge(usluge2);
 		
 		RentACar serviss= new RentACar("Bonero", "Temerinska","sjajna ponuda");
+		
 
 		//testiranje veze filijala
 		Filijala fil1= new Filijala("Novi Sad", "Gunduliceva");
@@ -118,13 +122,22 @@ public class IsaApplication {
 		serviss.setCenovnik(cenovnik);
 
 		servis4.saveRentACar(serviss);
+		//testiranje 
+		Hotel hotel1 = new Hotel("Leotar"," Trebinje","okej",10);
+		Room soba1 = new Room("jednokrevetna",7,1,2,150,"da");
+		Room soba2 = new Room("dvokrevetna",8,2,2,150,"ne");
+		soba1.setHotel(hotel1);
+		soba2.setHotel(hotel1);
 		
+		Set<Room> sobe = new HashSet<Room>();
+		sobe.add(soba1);
+		sobe.add(soba2);
 		
+		hotel1.setSobe(sobe);
+		servisHotel.saveHotel(hotel1);
+		*/
 	}
 		
-<<<<<<< HEAD
-=======
-		}
 
->>>>>>> 4d675f42dd55d25a99401db49ff7d3f3b6ad0ed9
 }
+
