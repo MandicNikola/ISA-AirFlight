@@ -16,7 +16,7 @@ public class Room {
 	private Long id;
 	
 	@Column(name = "tip", nullable = false)
-	private String tip;
+	private String tip; // tip je kategorija
 	
 	@Column(name = "ocena", nullable = false)	
 	private double ocjena;
@@ -31,8 +31,12 @@ public class Room {
 	private double cijena;
     //jedna soba pripada jednog hotelu.
 
+	@Column(name = "balkon", nullable = false)	
+	private String balkon; //da ako ima,ne nema
+    
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	 private Hotel hotel;
+	
 	 
 	public Room() {
 		super();
