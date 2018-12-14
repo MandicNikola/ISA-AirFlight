@@ -34,5 +34,6 @@ public class IsaApplication {
 		usluge.add(usluga2);
 
 		cenovnik.setUsluge(usluge);
+		
 	}
 }
