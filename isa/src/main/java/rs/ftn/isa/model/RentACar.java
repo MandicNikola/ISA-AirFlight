@@ -35,6 +35,9 @@ public class RentACar {
     @JoinColumn(name = "pricelistrentcar_id")    
 	private PricelistRentCar cenovnik ;
 
+	@OneToMany(mappedBy = "servisrent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Vehicle> vozila = new HashSet<Vehicle>();
+
 	
 	public RentACar() {
 		
@@ -53,6 +56,13 @@ public class RentACar {
 		this.naziv = naziv;
 		this.adresa = adresa;
 		this.opis = opis;
+	}
+	
+	public Set<Vehicle> getVozila() {
+		return vozila;
+	}
+	public void setVozila(Set<Vehicle> vozila) {
+		this.vozila = vozila;
 	}
 	public Long getId() {
 		return id;
