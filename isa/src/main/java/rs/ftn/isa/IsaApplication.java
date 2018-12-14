@@ -40,13 +40,11 @@ import rs.ftn.isa.model.PricelistHotel;
 public class IsaApplication {
 
 	public static void main(String[] args) {
-<<<<<<< HEAD
+
 		 SpringApplication.run(IsaApplication.class, args);
 		/*ConfigurableApplicationContext c = SpringApplication.run(IsaApplication.class, args);
-=======
 		SpringApplication.run(IsaApplication.class, args);
 	/*	ConfigurableApplicationContext c = SpringApplication.run(IsaApplication.class, args);
->>>>>>> ae75933c424d23b1acf6d77d3e6d292d88eacd28
 		UslugaService servis1 = (UslugaService) c.getBean("uslugaServiceImpl");
 		CenovnikRentService servis2 = (CenovnikRentService) c.getBean("cenovnikRentServiceImpl");
 		FilijalaService servis3=(FilijalaService)c.getBean("filijalaServiceImpl");
@@ -87,10 +85,6 @@ public class IsaApplication {
 		usluge.add(usluga4);
 		cenovnik.setUsluge(usluge);
 		
-<<<<<<< HEAD
-
-=======
->>>>>>> ae75933c424d23b1acf6d77d3e6d292d88eacd28
 		Set<Usluga> usluge2 = new HashSet<Usluga>();
 		usluge.add(usluga3);
 		
@@ -131,11 +125,8 @@ public class IsaApplication {
 		serviss.setCenovnik(cenovnik);
 
 		servis4.saveRentACar(serviss);
-<<<<<<< HEAD
-		
-		*/
+
 			}
-=======
 		//testiranje 
 		Hotel hotel1 = new Hotel("Leotar"," Trebinje","okej",10);
 		Room soba1 = new Room("jednokrevetna",7,1,2,150,"da");
@@ -152,7 +143,6 @@ public class IsaApplication {
 		*/
 	}
 		
->>>>>>> ae75933c424d23b1acf6d77d3e6d292d88eacd28
 
 }
 

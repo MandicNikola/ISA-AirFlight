@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.HotelDTO;
 import rs.ftn.isa.model.Hotel;
+import rs.ftn.isa.model.Room;
 import rs.ftn.isa.service.HotelService;
 @RestController
 @RequestMapping(value="api/hoteli")
@@ -72,5 +73,28 @@ public class HotelController {
 			
 			return "Uspesno";
 		}		
+
+		@RequestMapping(value="/addRoom/{id}", 
+				method = RequestMethod.POST,
+				consumes = MediaType.APPLICATION_JSON_VALUE,
+				produces = MediaType.APPLICATION_JSON_VALUE)
+		public @ResponseBody Hotel dodajSobu(@RequestBody Room room,@PathVariable Long id){		
+				//jedinstven po nazivu
+			 Hotel pom = servis.findHotelById(id);	
+			 
+			 if(pom == null) {
+		
+				 System.out.println(" ne postoji ti taj hotel ");
+				 return null;
+			 }
+			 
+			 	room.setHotel(pom);
+			 	pom.getSobe().add(room);
+			 	
+			 return pom;
+				 
+			 
+		}
+	
 		
 }
