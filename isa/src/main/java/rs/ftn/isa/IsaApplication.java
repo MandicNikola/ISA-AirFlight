@@ -33,8 +33,8 @@ import rs.ftn.isa.model.PricelistHotel;
 public class IsaApplication {
 
 	public static void main(String[] args) {
-		
-		ConfigurableApplicationContext c = SpringApplication.run(IsaApplication.class, args);
+		 SpringApplication.run(IsaApplication.class, args);
+		/*ConfigurableApplicationContext c = SpringApplication.run(IsaApplication.class, args);
 		UslugaService servis1 = (UslugaService) c.getBean("uslugaServiceImpl");
 		CenovnikRentService servis2 = (CenovnikRentService) c.getBean("cenovnikRentServiceImpl");
 		FilijalaService servis3=(FilijalaService)c.getBean("filijalaServiceImpl");
@@ -74,11 +74,7 @@ public class IsaApplication {
 		usluge.add(usluga4);
 		cenovnik.setUsluge(usluge);
 		
-<<<<<<< HEAD
-	
-=======
 
->>>>>>> 4d675f42dd55d25a99401db49ff7d3f3b6ad0ed9
 		Set<Usluga> usluge2 = new HashSet<Usluga>();
 		usluge.add(usluga3);
 		
@@ -119,12 +115,7 @@ public class IsaApplication {
 
 		servis4.saveRentACar(serviss);
 		
-		
-	}
-		
-<<<<<<< HEAD
-=======
-		}
+		*/
+			}
 
->>>>>>> 4d675f42dd55d25a99401db49ff7d3f3b6ad0ed9
 }
