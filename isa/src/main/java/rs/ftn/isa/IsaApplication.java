@@ -74,6 +74,9 @@ public class IsaApplication {
 		usluge.add(usluga4);
 		cenovnik.setUsluge(usluge);
 		
+<<<<<<< HEAD
+	}
+=======
 		Set<Usluga> usluge2 = new HashSet<Usluga>();
 		usluge.add(usluga3);
 		
@@ -119,4 +122,5 @@ public class IsaApplication {
 		
 		}
 
+>>>>>>> 06478911ef91728e5c821c097533739e4f72e748
 }
