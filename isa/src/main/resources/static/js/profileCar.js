@@ -33,7 +33,7 @@ $(document).ready(function(){
    });
     $("p#filijala").click(function(){
     	
-		window.location="addCar.html?id="+id;
+		window.location="addOffice.html?id="+id;
 
    });
 });

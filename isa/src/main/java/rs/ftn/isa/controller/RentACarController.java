@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.RentACarDTO;
+import rs.ftn.isa.model.Filijala;
 import rs.ftn.isa.model.RentACar;
 import rs.ftn.isa.model.User;
 import rs.ftn.isa.model.Vehicle;
@@ -85,6 +86,33 @@ public class RentACarController {
 		povratna.setAdresa(br);
 		return povratna;
 	}
-
+	@RequestMapping(value="/postavifilijalu/{id}",
+			method = RequestMethod.POST,
+			consumes = MediaType.APPLICATION_JSON_VALUE
+			)
+	public @ResponseBody RentACar postaviFilijalu(@PathVariable Long id, @RequestBody Filijala filijala){
+		
+		RentACar rentServis = servis.findOneById(id);		
+		System.out.println("Pronasao rent servis "+ rentServis.getNaziv());
+		
+		Filijala novo = filijala;
+		System.out.println(novo.toString());
+		
+		
+		novo.setServis(rentServis);;
+		Set<Filijala> filijalaLista=rentServis.getFilijale(); 
+		filijalaLista.add(novo);
+		rentServis.setFilijale(filijalaLista);
+		
+	    //baza prilikom cuvanja izmeni id
+		RentACar povratna = servis.saveRentACar(rentServis);
+		
+		String br=povratna.getId().toString();
+		povratna.setAdresa(br);
 	
+		return povratna;
+	}
+	
+
+		
 }
