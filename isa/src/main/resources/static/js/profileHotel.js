@@ -23,6 +23,24 @@ function onLoad(){
 function ispisiProfilHotela(hotel){
 	console.log("id "+hotel.id);
 	$("#naziv").text('Welcome to '+hotel.naziv);
+	preuzmiSobe(hotel);
+}
+function preuzmiSobe(hotel){
+	$.ajax({
+		method:'GET',
+		url: "/api/hoteli/getRooms",
+		success: function(lista){
+			if(lista == null){
+				console.log('Nema soba')
+			}else{
+				ispisiSobe(lista);
+				
+			}
+		}
+	});
+	
+}
+function ispisiSobe(data){
 	
 	
 }

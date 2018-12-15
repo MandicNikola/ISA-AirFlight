@@ -30,6 +30,12 @@ public class HotelController {
 			return  servis.findAll();
 		}
 		
+		/*
+		@RequestMapping(value="/getRooms", method = RequestMethod.GET)
+		public List<Room> getAllRooms(){	
+			//return  servis.findAllRoom();
+		}
+		*/
 		@RequestMapping(value = "/findById/{id}",
 						method = RequestMethod.GET)
 		public @ResponseBody Hotel findHotelById(@PathVariable Long id){
