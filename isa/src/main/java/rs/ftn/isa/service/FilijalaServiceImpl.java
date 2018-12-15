@@ -39,4 +39,22 @@ public class FilijalaServiceImpl implements FilijalaService{
 		repozitorijum.deleteById(id);
 	}
 
+	@Override
+	public Filijala findFilijalaByGrad(String grad) {
+		// TODO Auto-generated method stub
+		return repozitorijum.findOneByGrad(grad);
+	}
+
+	@Override
+	public Filijala findFilijalaByUlica(String ulica) {
+		// TODO Auto-generated method stub
+		return repozitorijum.findOneByUlica(ulica);
+	}
+
+	@Override
+	public List<Filijala> findAllByUlica(String ulica) {
+		// TODO Auto-generated method stub
+		return repozitorijum.findAllByUlica(ulica);
+	}
+
 }

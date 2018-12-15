@@ -33,6 +33,7 @@ public class RentACar {
 	private String opis;
 
 	@OneToMany(mappedBy = "servis", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
 	private Set<Filijala> filijale = new HashSet<Filijala>();
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
