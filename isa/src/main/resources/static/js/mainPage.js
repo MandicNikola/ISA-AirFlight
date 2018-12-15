@@ -12,8 +12,7 @@ function planeShow(){
 	$("#pozadinaAvion").show();
 	$("#pozadinaAuto").hide();
 	$("#pozadinaHotel").hide();
-
-	
+	$("#ispisiTabelu").empty();
 }
 function hotelShow(){
 	$("#pozadinaAvion").hide();
@@ -26,11 +25,9 @@ function hotelShow(){
 		url: "/api/hoteli/all",
 		success: function(lista){
 			if(lista == null){
-				console.log('Nema servise')
-				
+				console.log('Nema servise');
 			}else{
 				ispisiHotele(lista);
-				
 			}
 		}
 	});
@@ -50,8 +47,7 @@ function ispisiHotele(lista){
 function carShow(){
 	$("#pozadinaAvion").hide();
 	$("#pozadinaAuto").show();
-	$("#pozadinaHotel").hide();
-	
+	$("#pozadinaHotel").hide();	
 	 $("#ispisiTabelu").empty();
 		
 	
@@ -96,10 +92,23 @@ $(document).on("mouseleave", ".hoverName",function(){
 });
 function visitCar(id){
 	console.log('Usao u visitCar, dobio id: '+id);
-	
 	window.location="profileCar.html?id="+id;
 }
 function hotelProfil(id){
 	console.log('usao u hotel profil');
 	window.location = "profileHotel.html?id="+id;
+}
+
+function addPlane(){
+	window.location = "newHotel.html";
+}
+function addHotel(){
+	window.location = "newHotel.html";
+	
+	
+}
+function addCarHire(){
+	window.location = "newRentACar.html";
+	
+	
 }

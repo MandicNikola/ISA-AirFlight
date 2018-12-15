@@ -38,14 +38,17 @@
       padding: 0px 0px;
       margin-left:0px;      
       margin-right:0px;
-    background-color:#fff !important;
+    background-color:#fff ;
   	
   }
   .Ikonice {
    	font-size:20px;
  
   }
- 
+ .btn-group btn-group-lg{
+ 	 background-color:#fff !important;
+  	
+ }
  #listanav{
 	margin-right:0px !important;
  	padding-right: 0px !important;
@@ -53,6 +56,11 @@
  #logoMargin{
  	margin-left:10px;
  }
+ 
+ .bg-4 { 
+    background-color: #2f2f2f;
+    color: #ffffff;
+}
   </style>
 </head>
 <body onload="onLoad()">
@@ -97,5 +105,17 @@
 	
 </div>
 
+<div>
+<!-- Footer -->
+<footer class="container-fluid bg-4 text-center">
+  <p>
+  	<div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
+  	<button type="button" class="btn btn-secondary" onclick = "addPlane()">Add plane</button>
+  	<button type="button" class="btn btn-secondary" onclick = "addHotel()">Add hotel</button>
+  	<button type="button" class="btn btn-secondary" onclick = "addCarHire()">Add car-hire</button>
+   </div>
+  <p>Copyrights Made By <a href="http://localhost:8080/mainPage.html">Airfinity</a></p> 
+</footer>
+</div>
 </body>
 </html>

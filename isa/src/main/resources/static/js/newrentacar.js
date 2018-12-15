@@ -32,7 +32,8 @@ $(document).on('submit','.rentacar',function(e){
 		data:formToJSON(),
 		success : function(data) {
 				if(data.naziv != null){
-					console.log('uspjesno ste dodali rent a car servis');					
+					console.log('uspjesno ste dodali rent a car servis');
+					ucitajPocetnu();
 					alert('dodavanje super');
 				}else{
 					alert('dodavanje nije super');	
@@ -45,6 +46,9 @@ $(document).on('submit','.rentacar',function(e){
 	});
 	}
 });
+function ucitajPocetnu(){
+	window.location = "mainPage.html";
+}
 function formToJSON() {
 	return JSON.stringify({
 		"naziv" : $('#naziv').val(),

@@ -37,6 +37,7 @@ $(document).on('submit','.hotel',function(e){
 				if(data.naziv != null){
 					console.log('uspjesno ste dodali hotel');					
 					alert('dodavanje super');
+					ucitajPocetnu();
 				}else{
 					alert('dodavanje nije super');	
 				}	
@@ -54,4 +55,7 @@ function formToJSON() {
 		"adresa" : $('#adr').val(),
 		"opis" : $('#opis').val(),			
 	});
+}
+function ucitajPocetnu(){
+	window.location = "mainPage.html";
 }
