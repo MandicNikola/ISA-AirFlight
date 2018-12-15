@@ -3,6 +3,7 @@ package rs.ftn.isa.controller;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.websocket.server.PathParam;
 
@@ -28,6 +29,18 @@ public class HotelController {
 		@RequestMapping(value="/all", method = RequestMethod.GET)
 		public List<Hotel> getAllHoteli(){	
 			return  servis.findAll();
+		}
+		
+		@RequestMapping(value="/getRooms/{id}", method = RequestMethod.GET)
+		public Set<Room> getAllRooms(@PathVariable Long id){	
+			Hotel pronadjeni = servis.findHotelById(id);
+			if(pronadjeni == null) {
+				System.out.println("Nisam pronasao hotel sa datim id");
+				return null;
+			}else{
+				return pronadjeni.getSobe();
+			}
+		
 		}
 		
 		@RequestMapping(value = "/findById/{id}",

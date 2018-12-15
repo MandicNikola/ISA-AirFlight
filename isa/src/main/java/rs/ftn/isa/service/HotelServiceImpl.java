@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import rs.ftn.isa.model.Hotel;
+import rs.ftn.isa.model.Room;
 import rs.ftn.isa.repository.HotelRepository;
 @Service
 public class HotelServiceImpl implements HotelService {
@@ -38,4 +39,7 @@ public class HotelServiceImpl implements HotelService {
 		// TODO Auto-generated method stub
 		return hotelRepozitorijum.findOneById(id);
 	}
+
+
+	
 }
