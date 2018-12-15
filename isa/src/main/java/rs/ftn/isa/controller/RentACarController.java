@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.RentACarDTO;
 import rs.ftn.isa.model.Filijala;
+import rs.ftn.isa.model.Hotel;
 import rs.ftn.isa.model.RentACar;
 import rs.ftn.isa.model.User;
 import rs.ftn.isa.model.Vehicle;
@@ -29,7 +30,7 @@ public class RentACarController {
 	
 	
 	@RequestMapping(value="/all", method = RequestMethod.GET)
-	public List<RentACar> getAllKorisnici(){		
+	public List<RentACar> getAllRents(){		
 		return  servis.findAll();
 	}
 	
@@ -58,6 +59,7 @@ public class RentACarController {
 		return rentServis;
 	}
 
+	
 	@RequestMapping(value="/postavivozilo/{id}",
 			method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE
@@ -113,6 +115,28 @@ public class RentACarController {
 		return povratna;
 	}
 	
-
+	@RequestMapping(value="/getFilijale/{id}", method = RequestMethod.GET)
+	public  List<Filijala> vratiFilijale(@PathVariable Long id){	
+		ArrayList<Filijala> rezultat = new ArrayList<Filijala>();
+		RentACar rent = servis.findOneById(id);
+		
+		for(Filijala F : rent.getFilijale()) {
+				rezultat.add(F);
+			
+		}
+		return rezultat;
+	}
+	@RequestMapping(value="/getVozila/{id}", method = RequestMethod.GET)
+	public  List<Vehicle> vratiVozila(@PathVariable Long id){	
+		ArrayList<Vehicle> rezultat = new ArrayList<Vehicle>();
+		RentACar rent = servis.findOneById(id);
+		
+		for(Vehicle V : rent.getVozila()) {
+				rezultat.add(V);
+			
+		}
+		return rezultat;
+	}
+	
 		
 }
