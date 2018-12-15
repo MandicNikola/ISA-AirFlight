@@ -27,11 +27,11 @@ public class RoomController {
 		return  servis.findAll();
 	}
 	
-	@RequestMapping(value="/newroom/{id}",
+	@RequestMapping(value="/newroom",
 			method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody Room newRoom(@RequestBody Room room,@PathVariable Long id) {
+	public @ResponseBody Room newRoom(@RequestBody Room room) {
 			Room pomRoom = new Room();
 			System.out.println("tip je " + room.getTip()+" kreveti su " + room.getKreveti()+" ima balkon " + room.getBalkon());
 		if(room.getTip().equals("") || room.getTip() == null || room.getTip().equals("undefined")) {
@@ -48,10 +48,6 @@ public class RoomController {
 			
 			
 		}
-		//Hotel hotel = new Hotel();
-		//hotel.setId(id);
-		//room.setHotel(hotel);
-		//servis.saveRoom(room);
 		
 		return room;
 	}

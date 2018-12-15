@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 public class Hotel {
@@ -42,7 +44,8 @@ public class Hotel {
 	//jedan hotel ima vise soba
 	
 	@OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-		private Set<Room> sobe = new HashSet<Room>();
+	@JsonIgnore
+	private Set<Room> sobe = new HashSet<Room>();
 	
 	public Hotel() {
 		super();

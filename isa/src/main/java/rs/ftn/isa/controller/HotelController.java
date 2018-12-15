@@ -87,10 +87,12 @@ public class HotelController {
 				 System.out.println(" ne postoji ti taj hotel ");
 				 return null;
 			 }
-			 
+			 	//postavi sobi hotel koji joj odg
 			 	room.setHotel(pom);
+			 	//dodaj hotelu sobu
 			 	pom.getSobe().add(room);
-			 	
+			 	//update hotela
+			 	servis.saveHotel(pom);
 			 return pom;
 				 
 			 
