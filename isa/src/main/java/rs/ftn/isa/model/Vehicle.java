@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonManagedReference;
+
 @Entity
 @Table(name = "vozila")
 public class Vehicle {

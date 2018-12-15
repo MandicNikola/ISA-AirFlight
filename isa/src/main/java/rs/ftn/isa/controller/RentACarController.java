@@ -69,14 +69,13 @@ public class RentACarController {
 		Vehicle novo = vozilo;
 		System.out.println(novo.getNaziv() + " " + novo.getCena());
 		System.out.println(novo.toString());
-		novo.setServisrent(rentServis);
 		
+		
+		novo.setServisrent(rentServis);
 		Set<Vehicle> vozilaLista=rentServis.getVozila(); 
 		vozilaLista.add(novo);
 		rentServis.setVozila(vozilaLista);
 		
-	    servis.removeRentACar(id);
-	    
 	    //baza prilikom cuvanja izmeni id
 		RentACar povratna = servis.saveRentACar(rentServis);
 		

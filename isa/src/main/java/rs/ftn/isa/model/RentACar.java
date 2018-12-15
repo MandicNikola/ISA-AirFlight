@@ -13,6 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import org.codehaus.jackson.annotate.JsonBackReference;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 public class RentACar {
 	@Id
@@ -36,6 +40,7 @@ public class RentACar {
 	private PricelistRentCar cenovnik ;
 
 	@OneToMany(mappedBy = "servisrent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
 	private Set<Vehicle> vozila = new HashSet<Vehicle>();
 
 	

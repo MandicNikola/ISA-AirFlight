@@ -64,6 +64,7 @@ function poveziCar(data){
 			if( ret == null){	
 				 alert("Greska");
 			}else{
+
 				pozoviProfil(ret);
 
 			}
