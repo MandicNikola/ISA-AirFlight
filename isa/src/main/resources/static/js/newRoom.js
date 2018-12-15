@@ -82,6 +82,7 @@ function formToJSON() {
 		"tip" : $('#tip').val(),
 		"kreveti" : $('#kreveti').val(),			
 		"sprat" : $('#adr').val(),
+		"kapacitet": $('#kapacitet').val(),
 		"balkon" : rez			
 	});
 }
