@@ -63,3 +63,9 @@ function addRoom(){
 	window.location = "NewRoom.html?id="+id;
 		
 }
+function addConfiguration(){
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	
+	
+}

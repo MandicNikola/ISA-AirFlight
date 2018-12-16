@@ -112,6 +112,18 @@ public class Hotel {
 	public void setSobe(Set<Room> sobe) {
 		this.sobe = sobe;
 	}
+	public PricelistHotel getCijenovnik() {
+		return cijenovnik;
+	}
+	public void setCijenovnik(PricelistHotel cijenovnik) {
+		this.cijenovnik = cijenovnik;
+	}
+	public Set<Category> getKategorije() {
+		return kategorije;
+	}
+	public void setKategorije(Set<Category> kategorije) {
+		this.kategorije = kategorije;
+	}
 	
 	
 	
