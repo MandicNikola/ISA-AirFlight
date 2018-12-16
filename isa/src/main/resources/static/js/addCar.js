@@ -21,16 +21,16 @@ $(document).on('submit','.registracija',function(e){
 					data: sendcar,
 					dataType : 'json',
 					success : function(pov) {
-						if( pov.verifikovan == "null"){	
+						if( pov == null){	
 							 alert("Naziv vozila mora biti jedinstveno.");
-						}else if(pov.kategorija == 'marka'){
+						}else if(pov.kategorija == 1){
 							alert('Unesite pravilno marku vozila');
 
-						}else if(pov.kategorija == 'model'){
+						}else if(pov.kategorija == 2){
 							alert('Unesite pravilno model vozila');
 
-						}else if(pov.kategorija == 'naziv'){
-							alert('Naziv vozila mora biti jedinstven.');
+						}else if(pov.kategorija == 0){
+							alert('Unesite pravilno naziv.');
 
 						}else{
 							alert('Uspesno ste se registrovali');
