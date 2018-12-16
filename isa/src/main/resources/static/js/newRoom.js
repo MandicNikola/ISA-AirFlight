@@ -52,8 +52,7 @@ function dodajHotelu(data){
 		data:soba,
 		success : function(data) {
 				if(data == null){
-					alert('greska pri dodavanju sobe u hotel');
-					
+					alert('greska pri dodavanju sobe u hotel');		
 				}else{
 			prikaziHotel();
 				}

@@ -21,7 +21,10 @@ public class Category {
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
      private Hotel hotelKat;
 		
-	public Category( String naziv) {
+	public Category() {
+		super();
+	}
+	public Category(String naziv) {
 		super();
 		this.naziv = naziv;
 	}
@@ -30,6 +33,12 @@ public class Category {
 	}
 	public void setNaziv(String naziv) {
 		this.naziv = naziv;
+	}
+	public Hotel getHotelKat() {
+		return hotelKat;
+	}
+	public void setHotelKat(Hotel hotelKat) {
+		this.hotelKat = hotelKat;
 	}
 	
 	

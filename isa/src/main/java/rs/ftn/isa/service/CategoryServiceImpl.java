@@ -18,6 +18,12 @@ public class CategoryServiceImpl implements CategoryService {
 		// TODO Auto-generated method stub
 		return repozitorijum.findAll();
 	}
+
+	@Override
+	public Category findByNaziv(String name) {
+		// TODO Auto-generated method stub
+		return repozitorijum.findOneByNaziv(name);
+	}
 	
 	
 	

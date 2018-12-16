@@ -66,6 +66,77 @@ function addRoom(){
 function addConfiguration(){
 	var adresa = window.location.search.substring(1);
 	var id = adresa.split('=')[1];
+	$("#ispisiTabelu").empty();
+	 
+	 $("#ispisiTabelu").append("<div class=\"container\"><h3>New configuration</h3><form method=\"post\" class=\"konfiguracija\" id = \"formaKat\" >");
+	 $("#formaKat").append("<div class=\"form-group\">");
+	 $("#formaKat").append("<input  type = \"text\" class=\"form-control\" id=\"katNaziv\" placeholder=\"Configuration name\">"); 	
+	 $("#formaKat").append("</div><button type=\"submit\" class=\"btn btn-default\">Add</button></form>");
+	 $("#ispisiTabelu").append("</div>");
+}
+
+$(document).on('submit','.konfiguracija',function(e){
+	e.preventDefault();	
+	$.ajax({
+		type : 'POST',
+		url : "/api/kategorije/kat",
+		contentType : 'application/json',
+		dataType : "json",
+		data:formToJSON(),
+		success : function(data) {
+				if(data.naziv != "null"){
+					alert('Postoji izabrana kategorija');
+					
+				}else{
+					alert('dodavanje super');
+					dodajHoteluKategoriju(data);
+				}	
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("greska pri unosu nove kat");
+			   
+		}
+	});
+	
+});
+function formToJSON() {
+	console.log('dosao u form to JSON');
+	var kat = JSON.stringify({
+		"naziv":$('#katNaziv').val()
+	});
+	console.log(kat);
+	return kat;
+}
+function dodajHoteluKategoriju(data){
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	
+	$.ajax({
+		type : 'POST',
+		url : "/api/hoteli/sacuvajKat/"+id,
+		contentType : 'application/json',
+		dataType : "json",
+		data:formToJSON(),
+		success : function(data) {
+				if(data.naziv == null){
+					alert('Greska pri dodavanju kategorije hotelu');
+					
+				}else{
+					alert('dodavanje super');
+					formaZaCijene(data);
+				}	
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("greska pri unosu novog hotela");
+			   
+		}
+	});
 	
 	
+}
+function formaZaCijene(){
+	
+}
+function ucitajPocetnu(){
+	window.location = "mainPage.html";
 }

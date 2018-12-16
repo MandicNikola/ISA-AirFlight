@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.HotelDTO;
+import rs.ftn.isa.model.Category;
 import rs.ftn.isa.model.Hotel;
 import rs.ftn.isa.model.Room;
 import rs.ftn.isa.service.HotelService;
@@ -108,8 +109,23 @@ public class HotelController {
 			 	servis.saveHotel(pom);
 			 return pom;
 				 
-			 
 		}
 	
+		
+		@RequestMapping(value="/sacuvajKat/{id}", 
+				method = RequestMethod.POST,
+				consumes = MediaType.APPLICATION_JSON_VALUE,
+				produces = MediaType.APPLICATION_JSON_VALUE)
+		public @ResponseBody Category dodajKat(@RequestBody Category kat,@PathVariable Long id){		
+			 Hotel pom = servis.findHotelById(id);	 
+			 if(pom == null) {
+				 System.out.println(" ne postoji ti taj hotel ");
+				 return null;
+			 }
+			 	kat.setHotelKat(pom);
+			 	pom.getKategorije().add(kat);
+			 	servis.saveHotel(pom);
+			 return kat;
+		}
 		
 }

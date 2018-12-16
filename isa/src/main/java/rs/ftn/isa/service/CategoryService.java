@@ -7,5 +7,5 @@ import rs.ftn.isa.model.Category;
 
 public interface CategoryService {
 	List<Category> findAll();
-	
+	Category findByNaziv(String name);
 }
