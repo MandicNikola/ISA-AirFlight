@@ -25,12 +25,51 @@ public class Usluga {
 	@Column(name="cena", nullable = false)
 	private int cena;
 	
+	@Column(name="kategorija", nullable = false)
+	private String kategorija;
+	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	PricelistRentCar lista;
 	
 	//cijenovnik hotela
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	PricelistHotel cijene;
+
+	public Usluga() {}
+
+	
+	public Usluga(String naziv, int cena) {
+		super();
+		this.naziv = naziv;
+		this.cena= cena;
+	}
+
+
+	public Usluga(Long id, String naziv, int cena) {
+		super();
+		this.id = id;
+		this.naziv = naziv;
+		this.cena= cena;
+	}
+
+
+	public Usluga(String naziv, int cena, String kategorija) {
+		super();
+		this.naziv = naziv;
+		this.cena = cena;
+		this.kategorija = kategorija;
+	}
+
+
+	public String getKategorija() {
+		return kategorija;
+	}
+
+
+	public void setKategorija(String kategorija) {
+		this.kategorija = kategorija;
+	}
+
 
 	public PricelistRentCar getLista() {
 		return lista;
@@ -49,24 +88,6 @@ public class Usluga {
 
 	public void setCijene(PricelistHotel cijene) {
 		this.cijene = cijene;
-	}
-
-
-	public Usluga() {}
-
-	
-	public Usluga(String naziv, int cena) {
-		super();
-		this.naziv = naziv;
-		this.cena= cena;
-	}
-
-
-	public Usluga(Long id, String naziv, int cena) {
-		super();
-		this.id = id;
-		this.naziv = naziv;
-		this.cena= cena;
 	}
 
 
