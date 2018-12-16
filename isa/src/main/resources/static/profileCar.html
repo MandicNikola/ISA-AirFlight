@@ -75,6 +75,16 @@
   table td{
   	padding:8px;
   }
+  #pozTabovi{
+  		background-color:white;
+  		margin-left: 0px;
+  		padding-left: 0px;
+  		font-size: 20px; 
+  	}
+  	#informacije , #automobili{
+  		padding-left: 0px;
+  		padding-right: 0px;
+  	}
  </style>
 </head>
 <body onload="loadPodatke()">
@@ -93,27 +103,33 @@
 			</div>
 			<div class = "row">
 			<article class = "col-sm-10">
-				<section id="informacije">
+			   <div class="container-fluid" id="pozTabovi">
+				   <ul class="nav nav-tabs">
+				    <li class="active"><a id="info" href="#information">Information</a></li>
+				    <li><a id="veh" href="#vehicles">Vehicles</a></li>
+				    <li><a id="price" href="#pricelist">Pricelist</a></li>
+				  </ul>
+			  </div>
+			  <div id="informacije" class="container-fluid">
+			  		<section >
 						<p id="opis"> </p>
 						<p id="adresa"><i class="glyphicon glyphicon-home"></i>Headquarters of company is in </p>
-				</section>
-				<div class = "row" id="sadrzaj">
-					
-					<section id="vozila" class="col-sm-9">
+				    </section>
+				    <section >
+				    	<p>You can find us in these cities <i class="glyphicon glyphicon-arrow-down"> </i></p>
+						<div class="panel-group" id="filijale">
+						    
+  						</div>
+				    </section>
+			  </div>
+			  <div id="automobili" class="container-fluid">
+				  <section id="vozila" >
 						<p>Look at the list of our cars <i class="glyphicon glyphicon-search"> </i></p>
 						<div id="pregledVozila">
 						</div>
 						
 					</section>
-					<section  class="col-sm-3">
-						<p>You can find us in these cities <i class="glyphicon glyphicon-arrow-down"> </i></p>
-						<div class="panel-group" id="filijale">
-						    
-						    
-  						</div>
-					</section>		
-				</div>
-				
+			  </div>
 			</article>
 			<aside class="col-sm-2" id="pageAside">
 				<div class="side">

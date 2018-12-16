@@ -103,6 +103,7 @@ function ispisiVozila(skup){
 $(document).ready(function(){
 	var pom=window.location.search.substring(1);
 	var id= pom.split('=')[1];
+	$("#automobili").hide();
 	
     $("p#vozilo").click(function(){
 		window.location="addCar.html?id="+id;
@@ -114,4 +115,25 @@ $(document).ready(function(){
 		window.location="addOffice.html?id="+id;
 
    });
+        
+    $("a#veh").click(function(){
+    	$("#informacije").hide();
+    	$("#automobili").show();
+    		console.log('vozilo');
+   });
+    $("a#price").click(function(){
+    	
+		console.log('price');
+		$("#informacije").hide();
+		$("#automobili").hide();
+    });
+    
+    $("a#info").click(function(){
+    	console.log('pritisnuo');
+    	$("#informacije").show();
+    	$("#automobili").hide();
+    });
+    
+    
+    
 });
