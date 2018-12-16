@@ -104,6 +104,9 @@ $(document).ready(function(){
 	var pom=window.location.search.substring(1);
 	var id= pom.split('=')[1];
 	$("#automobili").hide();
+	$("#addUsluge").hide();
+	$("#cenovnik").hide();
+	
 	
     $("p#vozilo").click(function(){
 		window.location="addCar.html?id="+id;
@@ -115,10 +118,18 @@ $(document).ready(function(){
 		window.location="addOffice.html?id="+id;
 
    });
+    $("p#usluga").click(function(){
+    	$("#tabs").hide();
+    	
+    	$("#addUsluge").show();		
+
+   });
         
     $("a#veh").click(function(){
     	$("#informacije").hide();
+    	$("#cenovnik").hide();
     	$("#automobili").show();
+    	
     		console.log('vozilo');
    });
     $("a#price").click(function(){
@@ -126,12 +137,14 @@ $(document).ready(function(){
 		console.log('price');
 		$("#informacije").hide();
 		$("#automobili").hide();
+		$("#cenovnik").show();
     });
     
     $("a#info").click(function(){
     	console.log('pritisnuo');
-    	$("#informacije").show();
+    	$("#cenovnik").hide();
     	$("#automobili").hide();
+    	$("#informacije").show();
     });
     
     
