@@ -35,6 +35,12 @@ public class AirplaneCompany {
 		this.adresa = adresa;
 		this.opis = opis;
 	}
+	public AirplaneCompany(String naziv, String adresa, String opis) {
+		super();
+		this.naziv = naziv;
+		this.adresa = adresa;
+		this.opis = opis;
+	}
 
 	public Long getId() {
 		return id;
