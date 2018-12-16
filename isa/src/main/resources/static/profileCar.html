@@ -65,6 +65,12 @@
  	 	padding-left:12px;
  	 	padding-right:12px;
  	 }
+ 	 #polje{
+ 	 	background-color: white;
+ 	 	padding:5px;
+ 	 	border: 2px solid #C3C3C3;
+ 	 	 border-radius: 5px;
+ 	 }
   #prviJumbo p{
   	margin:0px;
   }
@@ -75,6 +81,16 @@
   table td{
   	padding:8px;
   }
+  #pozTabovi{
+  		background-color:white;
+  		margin-left: 0px;
+  		padding-left: 0px;
+  		font-size: 20px; 
+  	}
+  	#informacije , #automobili{
+  		padding-left: 0px;
+  		padding-right: 0px;
+  	}
  </style>
 </head>
 <body onload="loadPodatke()">
@@ -91,29 +107,38 @@
 					   Choose the appropriate car and relax.
 					</p>
 			</div>
-			<div class = "row">
+			<div class = "row" id="tabs">
 			<article class = "col-sm-10">
-				<section id="informacije">
+			   <div class="container-fluid" id="pozTabovi">
+				   <ul class="nav nav-tabs">
+				    <li class="active"><a id="info" href="#information">Information</a></li>
+				    <li><a id="veh" href="#vehicles">Vehicles</a></li>
+				    <li><a id="price" href="#pricelist">Pricelist</a></li>
+				  </ul>
+			  </div>
+			  <div id="informacije" class="container-fluid">
+			  		<section >
 						<p id="opis"> </p>
 						<p id="adresa"><i class="glyphicon glyphicon-home"></i>Headquarters of company is in </p>
-				</section>
-				<div class = "row" id="sadrzaj">
-					
-					<section id="vozila" class="col-sm-9">
+				    </section>
+				    <section >
+				    	<p>You can find us in these cities <i class="glyphicon glyphicon-arrow-down"> </i></p>
+						<div class="panel-group" id="filijale">
+						    
+  						</div>
+				    </section>
+			  </div>
+			  <div id="automobili" class="container-fluid">
+				  <section id="vozila" >
 						<p>Look at the list of our cars <i class="glyphicon glyphicon-search"> </i></p>
 						<div id="pregledVozila">
 						</div>
 						
 					</section>
-					<section  class="col-sm-3">
-						<p>You can find us in these cities <i class="glyphicon glyphicon-arrow-down"> </i></p>
-						<div class="panel-group" id="filijale">
-						    
-						    
-  						</div>
-					</section>		
-				</div>
-				
+			  </div>
+			  <div id="cenovnik">
+			  </div>
+			  
 			</article>
 			<aside class="col-sm-2" id="pageAside">
 				<div class="side">
@@ -122,10 +147,72 @@
 				<div class="side">
 					<p id="filijala" class="h">Add branch office</p>		
 				</div>
+				<div class="side">
+					<p id="vozilo" class="h">Add Vehicle</p>		
+				</div>
+				<div class="side">
+					<p id="usluga" class="h">Add a service</p>		
+				</div>
 			</aside>
 			</div>
 			
-			
+			 <div id="addUsluge" class= "container-fluid">
+			 	<div class="container" id="polje">
+			 		<h2>Add a service</h2>
+			 		<form method="post" class="registracija">
+			 		<div class="form-group row ">				      	
+				        <div class="col-xs-6">
+						       <i class="glyphicon glyphicon-user"></i>
+						      <label for="ime">Name:</label>
+						      <input type="text" class="form-control" id="ime" placeholder="Enter name of a service" >
+						   	  
+				   		</div>
+				    </div>
+				    <div class="form-group row">
+				      <div class="col-xs-6">
+				       		  <i class="glyphicon glyphicon-user"></i>
+						      <label>Price for A category:</label>
+						      <input type="number" class="form-control" id="catA" placeholder="Enter Price">
+					</div>
+				    </div>
+			    	<div class="form-group row">			    	
+				        <div class="col-xs-6">
+				              <i class="glyphicon glyphicon-phone"></i>
+				              <label>Price for B category:</label>
+						      <input type="number" class="form-control" id="catB" placeholder="Enter Price" >
+						      
+				    	</div>
+				    </div>
+				    <div class="form-group row">				    
+				        <div class="col-xs-6">	
+				           	 <i class="glyphicon glyphicon-map-marker"></i>
+				              <label>Price for C category:</label>
+						      <input type="number" min="0" class="form-control" id="catC" placeholder="Enter price">
+						     
+				    	</div>
+				    </div>
+			    	<div class="form-group row">
+			    		 <div class="col-xs-6">	
+			    	     	 <i class="glyphicon glyphicon-envelope"></i>
+						      <label>Price for category D:</label>
+						      <input type="number" min="0" class="form-control" id="catD" placeholder="Enter price" >
+						   	
+						 </div>
+				    </div>
+				    <div class="form-group row">
+				        <div class="col-xs-6">	
+				            <i class="glyphicon glyphicon-eye-close"></i>
+				            <label>Price for category E:</label>
+					        <input type="number" min="0" class="form-control" id="catE" placeholder="Enter price">
+					  	  
+				        </div>
+				    </div>    				    
+			    <button type="submit" id="potvrdiBtn" class="btn btn-default btn-lg">Add</button>
+			  </form>
+			 	</div>
+			 	
+			 
+			  </div>
 		</div>
 	</div>
 </body>
