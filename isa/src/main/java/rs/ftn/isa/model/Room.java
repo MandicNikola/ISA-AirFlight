@@ -36,9 +36,6 @@ public class Room {
 	@Column(name = "balkon", nullable = false)	
 	private String balkon; //da ako ima,ne nema
     
-	
-	
-
     //jedna soba pripada jednog hotelu.
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	 private Hotel hotel;

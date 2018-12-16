@@ -28,6 +28,9 @@ public class Usluga {
 	@Column(name="kategorija", nullable = false)
 	private String kategorija;
 	
+	@Column(name="konfiguracija", nullable = false)
+	private String konfiguracija;
+	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	PricelistRentCar lista;
 	
@@ -68,6 +71,16 @@ public class Usluga {
 
 	public void setKategorija(String kategorija) {
 		this.kategorija = kategorija;
+	}
+
+
+	public String getKonfiguracija() {
+		return konfiguracija;
+	}
+
+
+	public void setKonfiguracija(String konfiguracija) {
+		this.konfiguracija = konfiguracija;
 	}
 
 

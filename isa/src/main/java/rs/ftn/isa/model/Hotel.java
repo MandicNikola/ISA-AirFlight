@@ -47,6 +47,10 @@ public class Hotel {
 	@JsonIgnore
 	private Set<Room> sobe = new HashSet<Room>();
 	
+	@OneToMany(mappedBy = "hotelKat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	private Set<Category> kategorije = new HashSet<Category>();
+	
 	public Hotel() {
 		super();
 	}
