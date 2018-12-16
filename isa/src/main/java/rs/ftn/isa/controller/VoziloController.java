@@ -35,14 +35,14 @@ public class VoziloController {
 		
 		if(naziv.equals("")||naziv.equals("undefined")||naziv==null) {
 			Vehicle povratni = new Vehicle();
-			povratni.setKategorija("naziv");
+			povratni.setGodiste(0);
 			return povratni;
 		}
 		String marka=novo.getMarka();
 		
 		if(marka.equals("")||marka.equals("undefined")||marka==null) {
 			Vehicle povratni = new Vehicle();
-			povratni.setKategorija("marka");
+			povratni.setGodiste(1);
 			return povratni;
 		}
 		
@@ -50,7 +50,7 @@ public class VoziloController {
 		
 		if(model.equals("")||model.equals("undefined")||model==null) {
 			Vehicle povratni = new Vehicle();
-			povratni.setKategorija("model");
+			povratni.setGodiste(2);
 			return povratni;
 		}
 		
@@ -58,7 +58,7 @@ public class VoziloController {
 		
 		if(godiste < 1990) {
 			Vehicle povratni = new Vehicle();
-			povratni.setKategorija("godiste");
+			povratni.setGodiste(3);
 			return povratni;
 		}
 		System.out.println("Usao u registrovanje vozila, naziv je "+ novo.getNaziv());

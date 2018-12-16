@@ -3,6 +3,8 @@ package rs.ftn.isa.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,10 +27,11 @@ public class Usluga {
 	@Column(name="cena", nullable = false)
 	private int cena;
 	
-	@Column(name="kategorija", nullable = false)
-	private String kategorija;
+	@Enumerated(EnumType.STRING)
+	@Column(name="kategorija", nullable = true)
+	private CategoryCar kategorija;
 	
-	@Column(name="konfiguracija", nullable = false)
+	@Column(name="konfiguracija", nullable= true)
 	private String konfiguracija;
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -60,16 +63,18 @@ public class Usluga {
 		super();
 		this.naziv = naziv;
 		this.cena = cena;
-		this.kategorija = kategorija;
+		this.kategorija = CategoryCar.valueOf(kategorija);
 	}
 
 
-	public String getKategorija() {
+
+
+	public CategoryCar getKategorija() {
 		return kategorija;
 	}
 
 
-	public void setKategorija(String kategorija) {
+	public void setKategorija(CategoryCar kategorija) {
 		this.kategorija = kategorija;
 	}
 

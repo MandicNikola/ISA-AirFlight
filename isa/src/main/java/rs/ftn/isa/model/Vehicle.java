@@ -3,6 +3,8 @@ package rs.ftn.isa.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,15 +39,15 @@ public class Vehicle {
 	@Column(name = "sedista", nullable = false)
 	private int sedista;
 	
+	@Enumerated(EnumType.STRING)
 	@Column(name = "kategorija", nullable = false)
-	private String kategorija;
+	private CategoryCar kategorija;
 	
 	@Column(name = "cena", nullable = false)
 	private double cena;
 	
 	@Column(name = "ocena", nullable = false)
 	private double ocena;
-	
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "rent_id")
@@ -53,7 +55,8 @@ public class Vehicle {
 	
 
 	
-	public Vehicle() {}
+	public Vehicle() {
+	}
 
 	
 	public Vehicle(String naziv, String marka, String model, int godiste, int sedista, String kategorija, double cena,
@@ -64,7 +67,7 @@ public class Vehicle {
 		this.model = model;
 		this.godiste = godiste;
 		this.sedista = sedista;
-		this.kategorija = kategorija;
+		this.kategorija = CategoryCar.valueOf(kategorija);
 		this.cena = cena;
 		this.ocena = ocena;
 	}
@@ -77,7 +80,7 @@ public class Vehicle {
 		this.model = model;
 		this.godiste = godiste;
 		this.sedista = sedista;
-		this.kategorija = kategorija;
+		this.kategorija =CategoryCar.valueOf(kategorija);
 	}
 
 
@@ -90,7 +93,7 @@ public class Vehicle {
 		this.model = model;
 		this.godiste = godiste;
 		this.sedista = sedista;
-		this.kategorija = kategorija;
+		this.kategorija = CategoryCar.valueOf(kategorija);
 		this.cena = cena;
 		this.ocena = ocena;
 	}
@@ -166,12 +169,14 @@ public class Vehicle {
 	}
 
 
-	public String getKategorija() {
+
+
+	public CategoryCar getKategorija() {
 		return kategorija;
 	}
 
 
-	public void setKategorija(String kategorija) {
+	public void setKategorija(CategoryCar kategorija) {
 		this.kategorija = kategorija;
 	}
 
