@@ -26,26 +26,55 @@ function ispisiProfilHotela(hotel){
 	$("#naziv").text('Welcome to '+hotel.naziv);
 	
 }
-function preuzmiSobe(hotel){
+
+function ispisiSobe(lista){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	 $("#sobe").empty();
+	 $("#sobe").show();
+	 $("#sobe").append("<table class=\"table table-hover\" id=\"tabelaSoba\" ><tr><th>Room type </th><th>Capacity</th><th>Beds</th><th>Price for night</th><th></th></tr>");
+		
+		$.each(pom, function(index, data) {
+			$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.kreveti+"</td><td>"+data.cijena+"</td><td><button type=\"button\" onclick=\"changePrice("+data.id+","+data.cijena+")\" class=\"btn btn-light\">Change the price</button></td></tr>");
+			
+		});
+		
+	 $("#sobe").append("</table>");
+	 
+}
+function changePrice(roomID,roomCijena){
+	console.log("dosao u room id : "+roomID);
+	 $("#tabovi").hide();
+	 $("#sobe").hide();
+	 $("#izmjena").empty();
+	 $("#izmjena").show();
+			 
+	 $("#izmjena").append("<div class=\"container\"><h3>Change the price</h3><form method=\"post\" class=\"changeprice\" onsubmit=\"return changeR("+roomID+")\" id = \"formaPrice\" >");
+		$("#formaPrice").append("<div class=\"form-group\"><label>New price:</label>");
+		$("#formaPrice").append("<input  type = \"number\" class=\"form-control\" id=\"newPrice\" value=\""+roomCijena+"\">"); 	
+		$("#formaPrice").append("</div><button type=\"submit\" class=\"btn btn-default\">Change</button></form>");
+	$("#izmjena").append("</div>");
+}
+function changeR(roomID){
 	var adresa = window.location.search.substring(1);
-	console.log('adesa je '+adresa);
 	var id = adresa.split('=')[1];
 
+	var kat =$('#newPrice').val();
+	var pom = roomID+"-"+kat+"-"+id;
+
 	$.ajax({
-		method:'GET',
-		url: "/api/hoteli/getRooms/"+id,
-		success: function(lista){
-			if(lista == null){
-				console.log('Nema soba')
-			}else{
-				ispisiSobe(lista);
-				
-			}
+		type : 'POST',
+		url : "/api/hoteli/changePrice/"+pom,
+		success : function(data) {
+					alert('usao ovdje');
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("greska pri unosu novog hotela");
+			   
 		}
 	});
 	
 }
-function ispisiSobe(lista){
+function ispisiSobeBezAdima(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#sobe").empty();
 	 $("#sobe").show();
@@ -57,7 +86,8 @@ function ispisiSobe(lista){
 		});
 		
 	 $("#sobe").append("</table>");
-	 
+	
+	
 }
 
 function addRoom(){
@@ -76,37 +106,13 @@ function addConfiguration(){
 	
 	$("#ispisiTabelu").show();
 	$("#ispisiTabelu").empty();
-	$("#ispisiTabelu").append("<div class=\"container\"><h3>New configuration</h3><form method=\"post\" class=\"konfiguracija\" id = \"formaKat\" >");
+	$("#ispisiTabelu").append("<div class=\"container\"><h3>New configuration</h3><form method=\"post\" class=\"konfiguracija\"  id = \"formaKat\" >");
 		$("#formaKat").append("<div class=\"form-group\">");
 		$("#formaKat").append("<input  type = \"text\" class=\"form-control\" id=\"katNaziv\" placeholder=\"Configuration name\">"); 	
 		$("#formaKat").append("</div><button type=\"submit\" class=\"btn btn-default\">Add</button></form>");
 	$("#ispisiTabelu").append("</div>");
 }
 
-$(document).on('submit','.konfiguracija',function(e){
-	e.preventDefault();	
-	$.ajax({
-		type : 'POST',
-		url : "/api/kategorije/kat",
-		contentType : 'application/json',
-		dataType : "json",
-		data:formToJSON(),
-		success : function(data) {
-				if(data.naziv != "null"){
-					alert('Postoji izabrana kategorija');
-					
-				}else{
-					alert('dodavanje super');
-					dodajHoteluKategoriju(data);
-				}	
-		},
-		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("greska pri unosu nove kat");
-			   
-		}
-	});
-	
-});
 function formToJSON() {
 	console.log('dosao u form to JSON');
 	var kat = JSON.stringify({
@@ -142,6 +148,31 @@ function dodajHoteluKategoriju(data){
 	
 	
 }
+
+$(document).on('submit','.konfiguracija',function(e){
+	e.preventDefault();	
+	$.ajax({
+		type : 'POST',
+		url : "/api/kategorije/kat",
+		contentType : 'application/json',
+		dataType : "json",
+		data:formToJSON(),
+		success : function(data) {
+				if(data.naziv != "null"){
+					alert('Postoji izabrana kategorija');
+					
+				}else{
+					alert('dodavanje super');
+					dodajHoteluKategoriju(data);
+				}	
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("greska pri unosu nove kat");
+			   
+		}
+	});
+	
+});
 function formaZaCijene(){
 	$("#tabovi").show();
 	$("#informacije").show();

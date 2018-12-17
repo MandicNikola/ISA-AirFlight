@@ -15,9 +15,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 @Table(name = "cijenesoba")
 public class CijenovnikSoba {
 	@Id
@@ -37,6 +40,9 @@ public class CijenovnikSoba {
 	@JsonIgnore
 	private Set<Usluga> usluge = new HashSet<Usluga>();
 	
+	public CijenovnikSoba() {
+		super();
+	}
 	public CijenovnikSoba(Date datum_primene, boolean aktivan) {
 		super();
 		this.datum_primene = datum_primene;
@@ -59,6 +65,18 @@ public class CijenovnikSoba {
 	}
 	public void setAktivan(boolean aktivan) {
 		this.aktivan = aktivan;
+	}
+	public Room getSoba() {
+		return soba;
+	}
+	public void setSoba(Room soba) {
+		this.soba = soba;
+	}
+	public Set<Usluga> getUsluge() {
+		return usluge;
+	}
+	public void setUsluge(Set<Usluga> usluge) {
+		this.usluge = usluge;
 	}
 	
 	

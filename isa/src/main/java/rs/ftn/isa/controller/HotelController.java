@@ -1,7 +1,11 @@
 package rs.ftn.isa.controller;
 
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -107,19 +111,81 @@ public class HotelController {
 			 
 			 Usluga u = new Usluga("cijena_noc",room.getCijena());
 			 //kad dodaje sobu ne postoji cijenovnik za nju
-			// Data datum = new Data();
-			 //CijenovnikSoba cijenovik = new CijenovnikSoba();
-			 	//postavi sobi hotel koji joj odg
-			 	room.setHotel(pom);
-			 	//dodaj hotelu sobu
-			 	pom.getSobe().add(room);
+			 Date datum = new Date();
+			 CijenovnikSoba cijenovik = new CijenovnikSoba();			 
+			 cijenovik.setDatum_primene(datum);
+			 u.setCenesoba(cijenovik);
+			 Set<Usluga> usluge = new HashSet<Usluga>();
+			 usluge.add(u);
+			 cijenovik.setAktivan(true);
+			 cijenovik.setUsluge(usluge);
+			 cijenovik.setSoba(room);
+			 Set<CijenovnikSoba> cijenovnici = new HashSet<CijenovnikSoba>();
+			 cijenovnici.add(cijenovik);
+			 room.setCijenovnici(cijenovnici);
+			 room.setHotel(pom);
+			 pom.getSobe().add(room);
 			 	//update hotela
-			 	servis.saveHotel(pom);
+			 servis.saveHotel(pom);
 			 return pom;
 				 
 		}
 	
-		
+		@RequestMapping(value="/changePrice/{string}", 
+				method = RequestMethod.POST,
+				produces = MediaType.APPLICATION_JSON_VALUE)
+		public @ResponseBody Hotel changePrice(@PathVariable String string){		
+			
+			System.out.println("dobio sam string" + string);
+			String[] parts = string.split("-");
+			String roomID = parts[0];
+			String newPrice = parts[1];
+			String hotelID = parts[2];
+			Long hotelId = Long.parseLong(hotelID);
+			int cijena = Integer.parseInt(newPrice);
+			Long roomId = Long.parseLong(roomID);
+			   
+			Hotel pom = servis.findHotelById(hotelId);	
+			Room room = new Room();
+		    Set<Room> sobe = pom.getSobe();
+			for (Room soba : sobe) {
+				if(soba.getId() == roomId) {
+					room = soba;
+					break;
+				}
+			}
+
+			 sobe.remove(room);
+			Set<CijenovnikSoba> cijenovnici = room.getCijenovnici();
+			for(CijenovnikSoba cs :cijenovnici){
+				if(cs.isAktivan()) {
+					cs.setAktivan(false);
+				}
+			}
+			
+			Usluga nova = new Usluga("cijena_noc",cijena);
+			 
+			 Date datum = new Date();
+			 CijenovnikSoba cijenovik = new CijenovnikSoba(datum,true);			  
+			 nova.setCenesoba(cijenovik);
+			 Set<Usluga> usluge = new HashSet<Usluga>();
+			 usluge.add(nova);
+			 cijenovik.setUsluge(usluge);
+			 room.setCijena(cijena);
+			 cijenovik.setSoba(room);
+			
+			 cijenovnici.add(cijenovik);
+			 room.setCijenovnici(cijenovnici);
+			 room.setHotel(pom);
+			 sobe.add(room);
+			 pom.setSobe(sobe);
+			 	//update hotela
+			 servis.saveHotel(pom);
+			
+			return pom;
+				 
+		}
+	
 		@RequestMapping(value="/sacuvajKat/{id}", 
 				method = RequestMethod.POST,
 				consumes = MediaType.APPLICATION_JSON_VALUE,

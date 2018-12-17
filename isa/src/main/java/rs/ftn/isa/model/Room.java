@@ -13,9 +13,13 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
+
 public class Room {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -97,6 +101,16 @@ public class Room {
 		this.cijena = cijena;
 	}
 
+	public Room(String tip,int kapacitet,  int kreveti, int sprat, int cijena,String balkon) {
+		super();
+		this.tip = tip;
+		this.ocjena = 0;
+		this.kapacitet = kapacitet;
+		this.kreveti = kreveti;
+		this.sprat = sprat;
+		this.cijena = cijena;
+		this.balkon = balkon;
+	}
 
 	public Long getId() {
 		return id;
@@ -162,6 +176,12 @@ public class Room {
 	}
 	public void setKapacitet(int kapacitet) {
 		this.kapacitet = kapacitet;
+	}
+	public Set<CijenovnikSoba> getCijenovnici() {
+		return cijenovnici;
+	}
+	public void setCijenovnici(Set<CijenovnikSoba> cijenovnici) {
+		this.cijenovnici = cijenovnici;
 	}
 	
 	

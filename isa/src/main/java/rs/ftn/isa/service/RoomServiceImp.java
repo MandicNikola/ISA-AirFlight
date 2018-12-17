@@ -1,6 +1,7 @@
 package rs.ftn.isa.service;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import rs.ftn.isa.model.Room;
@@ -8,6 +9,7 @@ import rs.ftn.isa.repository.RoomRepository;
 
 @Service
 public class RoomServiceImp implements RoomService{
+	@Autowired
 	RoomRepository repozitorijum;
 	@Override
 	public Room findRoomById(Long id) {

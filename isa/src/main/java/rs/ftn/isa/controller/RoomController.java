@@ -23,7 +23,8 @@ public class RoomController {
 	private RoomServiceImp servis;
 
 	@RequestMapping(value="/all", method = RequestMethod.GET)
-	public List<Room> getAllKorisnici(){		
+	public List<Room> getAllRooms(){
+		System.out.println("dosao po sobe");
 		return  servis.findAll();
 	}
 	
