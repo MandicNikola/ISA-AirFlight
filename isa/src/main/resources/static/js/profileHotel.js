@@ -3,9 +3,8 @@
  */
 
 function onLoad(){
-	
-	
-	
+	$("#sobe").hide();
+	$("#cijene").hide();
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);
 	var id = adresa.split('=')[1];
@@ -25,7 +24,7 @@ function onLoad(){
 function ispisiProfilHotela(hotel){
 	console.log("id "+hotel.id);
 	$("#naziv").text('Welcome to '+hotel.naziv);
-	preuzmiSobe(hotel);
+	
 }
 function preuzmiSobe(hotel){
 	var adresa = window.location.search.substring(1);
@@ -49,14 +48,16 @@ function preuzmiSobe(hotel){
 function ispisiSobe(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#sobe").empty();
-	 
+	 $("#sobe").show();
 	 $("#sobe").append("<table class=\"table table-hover\" id=\"tabelaSoba\" ><tr><th>Room type </th><th>Capacity</th><th>Beds</th><th>Price for night</th></tr>");
 		
 		$.each(pom, function(index, data) {
 			$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.kreveti+"</td><td>"+data.cijena+"</td></tr>");
 			
 		});
+		
 	 $("#sobe").append("</table>");
+	 
 }
 
 function addRoom(){
@@ -69,7 +70,11 @@ function addConfiguration(){
 	var adresa = window.location.search.substring(1);
 	var id = adresa.split('=')[1];
 	$("#tabovi").hide();
+	$("#sobe").hide();
+	$("#informacije").hide();
+	$("#cijene").hide();
 	
+	$("#ispisiTabelu").show();
 	$("#ispisiTabelu").empty();
 	$("#ispisiTabelu").append("<div class=\"container\"><h3>New configuration</h3><form method=\"post\" class=\"konfiguracija\" id = \"formaKat\" >");
 		$("#formaKat").append("<div class=\"form-group\">");
@@ -139,19 +144,18 @@ function dodajHoteluKategoriju(data){
 }
 function formaZaCijene(){
 	$("#tabovi").show();
-	$("#ispisiTabelu").empty();
+	$("#informacije").show();
+	
+	$("#ispisiTabelu").hide();
 	
 }
 function ucitajPocetnu(){
 	window.location = "mainPage.html";
 }
 $(document).ready(function(){
-		
-	$("#rooms").hide();
-	$("#pricelist").hide();
-	
-	
-	
+	$("#sobe").hide();
+	$("#cijene").hide();
+ 	
     $("#rooms").click(function(){
     	listaSoba();
 		$("#informacije").hide();
@@ -168,6 +172,7 @@ $(document).ready(function(){
     });
     
     $("#price").click(function(){
+    	console.log('dosao u price');
     	$("#informacije").hide();
     	
 		$("#ispisiTabelu").hide();
