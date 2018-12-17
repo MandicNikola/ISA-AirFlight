@@ -1,5 +1,7 @@
 package rs.ftn.isa.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +24,11 @@ public class VoziloController {
 	@Autowired 
 	VoziloService servis;
 	
+	
+	@RequestMapping(value="/all", method = RequestMethod.GET)
+	public List<Vehicle> getAllVozila(){		
+		return  servis.findAll();
+	}	
 	
 			@RequestMapping(value="/registrovanje", 
 					method = RequestMethod.POST,

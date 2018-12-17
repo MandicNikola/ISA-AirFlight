@@ -1,6 +1,7 @@
 package rs.ftn.isa.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.model.Filijala;
+import rs.ftn.isa.model.RentACar;
 import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.service.FilijalaServiceImpl;
 
@@ -21,6 +23,10 @@ public class FilijalaController {
 	@Autowired
 	private FilijalaServiceImpl servis;
 	
+	@RequestMapping(value="/all", method = RequestMethod.GET)
+	public List<Filijala> getAllFilijale(){		
+		return  servis.findAll();
+	}
 	
 	@RequestMapping(value="/registrovanje", 
 			method = RequestMethod.POST,

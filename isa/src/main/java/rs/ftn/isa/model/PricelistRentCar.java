@@ -11,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -40,11 +42,16 @@ public class PricelistRentCar {
 	private Set<Usluga> usluge = new HashSet<Usluga>();
 
 	
-	@OneToOne(mappedBy = "cenovnik", fetch = FetchType.LAZY,cascade =  CascadeType.ALL)
-	@JsonIgnore
+	@ManyToOne( fetch = FetchType.EAGER, cascade =  CascadeType.ALL)
+	@JoinColumn(name = "rentcar_id")
 	private RentACar rentcar; 
 	
-    public PricelistRentCar() {}
+	@Column(name = "aktivan", nullable = false)
+	private boolean aktivan;
+	
+    public PricelistRentCar() {
+    	aktivan = true;
+    }
     
 	public PricelistRentCar(Date datum_primene) {
 		super();
@@ -84,6 +91,14 @@ public class PricelistRentCar {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public boolean isAktivan() {
+		return aktivan;
+	}
+
+	public void setAktivan(boolean aktivan) {
+		this.aktivan = aktivan;
 	}
 	
 	

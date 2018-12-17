@@ -39,10 +39,9 @@ public class RentACar {
 	@JsonIgnore
 	private Set<Filijala> filijale = new HashSet<Filijala>();
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "cenovnik_id")
+	@OneToMany(mappedBy = "rentcar",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore
-     private PricelistRentCar cenovnik ;
+     private Set<PricelistRentCar> cenovnici= new HashSet<PricelistRentCar>();
 
 	@OneToMany(mappedBy = "servisrent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
@@ -105,11 +104,13 @@ public class RentACar {
 	public void setFilijale(Set<Filijala> filijale) {
 		this.filijale = filijale;
 	}
-	public PricelistRentCar getCenovnik() {
-		return cenovnik;
+	public Set<PricelistRentCar> getCenovnici() {
+		return cenovnici;
 	}
-	public void setCenovnik(PricelistRentCar cenovnik) {
-		this.cenovnik = cenovnik;
+	public void setCenovnici(Set<PricelistRentCar> cenovnici) {
+		this.cenovnici = cenovnici;
 	}
+	
+	
 	
 }

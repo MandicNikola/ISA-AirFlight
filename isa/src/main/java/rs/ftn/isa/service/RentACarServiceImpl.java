@@ -1,10 +1,13 @@
 package rs.ftn.isa.service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import rs.ftn.isa.model.PricelistRentCar;
 import rs.ftn.isa.model.RentACar;
 import rs.ftn.isa.repository.RentACarRepository;
 @Service
@@ -43,6 +46,26 @@ public class RentACarServiceImpl implements RentACarService {
 		// TODO Auto-generated method stub
 		System.out.println("Izbrisan servis rent");
 		repozitorijum.deleteById(id);
+		
+	}
+
+	@Override
+	public PricelistRentCar findAktivanCenovnik(Long id) {
+		// TODO Auto-generated method stub
+		RentACar rent = repozitorijum.findOneById(id);
+		
+		Set<PricelistRentCar> cenovnici =  rent.getCenovnici();
+		if(rent.getCenovnici().size()==0) {
+				return null; //nema aktivnih cenovnika
+		}else {
+			
+			for(PricelistRentCar P : cenovnici) {
+					if(P.isAktivan()) {
+						return P;
+					}
+			}
+		}
+		return null;
 		
 	}
 }

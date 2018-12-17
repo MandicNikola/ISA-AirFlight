@@ -1,5 +1,7 @@
 package rs.ftn.isa.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.model.PricelistRentCar;
+import rs.ftn.isa.model.RentACar;
+import rs.ftn.isa.model.Usluga;
 import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.service.RentACarService;
 import rs.ftn.isa.service.UslugaServiceImpl;
@@ -22,6 +26,9 @@ public class UslugaController {
 	UslugaServiceImpl servis;
 	
 	
-	
+	@RequestMapping(value="/all", method = RequestMethod.GET)
+	public List<Usluga> getAllUsluge(){		
+		return  servis.findAll();
+	}
 	
 }
