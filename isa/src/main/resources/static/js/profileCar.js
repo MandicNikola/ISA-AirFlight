@@ -119,8 +119,11 @@ $(document).ready(function(){
 
    });
     $("p#usluga").click(function(){
-    	$("#tabs").hide();
-    	
+    	$("#pozTabovi").hide();
+    	$("#cenovnik").hide();
+    	$("#informacije").hide();
+    	$("#automobili").hide();
+    
     	$("#addUsluge").show();		
 
    });
@@ -128,6 +131,8 @@ $(document).ready(function(){
     $("a#veh").click(function(){
     	$("#informacije").hide();
     	$("#cenovnik").hide();
+     	$("#addUsluge").hide();		
+
     	$("#automobili").show();
     	
     		console.log('vozilo');
@@ -137,6 +142,8 @@ $(document).ready(function(){
 		console.log('price');
 		$("#informacije").hide();
 		$("#automobili").hide();
+	 	$("#addUsluge").hide();		
+
 		$("#cenovnik").show();
     });
     
@@ -144,9 +151,40 @@ $(document).ready(function(){
     	console.log('pritisnuo');
     	$("#cenovnik").hide();
     	$("#automobili").hide();
+     	$("#addUsluge").hide();		
+
     	$("#informacije").show();
     });
     
-    
-    
 });
+
+$(document).on('submit','.dodavanje',function(e){
+	e.preventDefault();	
+	
+	var pom=window.location.search.substring(1);
+	var id= pom.split('=')[1];
+	
+	naziv = $('#ime').val(),
+    katA = $('#catA').val(),
+	katB = $('#catB').val(),
+	katC = $('#catC').val(),
+	katD =  $('#catD').val(),
+	katE = $('#catE').val()
+	pom= id+"="+naziv+"="+katA+"="+katB+"="+katC+"="+katD+"="+katE
+		$.ajax({
+			type : 'POST',
+			url : "/api/rents/dodajUslugu/"+pom,
+			success : function(pov) {
+				if( pov == null){	
+					alert('Naziv usluge vec postoji u sistemu');
+				}else{
+					alert('Uspesno ste dodali uslugu');
+				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				alert('greska');
+			}
+		});
+});
+
+
