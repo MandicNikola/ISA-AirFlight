@@ -1,6 +1,8 @@
 package rs.ftn.isa.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -16,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.ftn.isa.dto.RentACarDTO;
 import rs.ftn.isa.model.Filijala;
 import rs.ftn.isa.model.Hotel;
+import rs.ftn.isa.model.PricelistRentCar;
 import rs.ftn.isa.model.RentACar;
 import rs.ftn.isa.model.User;
+import rs.ftn.isa.model.Usluga;
 import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.service.RentACarServiceImpl;
 
@@ -137,6 +141,72 @@ public class RentACarController {
 		}
 		return rezultat;
 	}
+	
+
+	@RequestMapping(value="/dodajUslugu/{pomocna}", 
+	method = RequestMethod.POST,
+	produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody RentACar dodajUslugu( @PathVariable String pomocna){		
+		
+		String [] niz=pomocna.split("=");
+		
+		String id= niz[0];
+		String naziv = niz[1];
+		String cenaA= niz[2];
+		String cenaB= niz[3];
+		String cenaC= niz[4];
+		String cenaD= niz[5];
+		String cenaE= niz[6];
+		
+		RentACar rent = servis.findOneById(Long.parseLong(id));
+		System.out.println("Pronadjen servis "+ rent.getNaziv());
+		//System.out.println("id je "+id+", naziv je "+naziv+ "cene : "+cenaA +" "+cenaB+ " "+cenaC+ " "+cenaD+ " "+cenaE);
+		
+		PricelistRentCar cenovnik = rent.getCenovnik();
+		PricelistRentCar noviCenovnik ;
+		
+		if(cenovnik == null) {
+			//jos nije postavljen cenovnik
+			Date datum = new Date();
+			noviCenovnik = new PricelistRentCar(datum);
+			
+			Usluga uslugaA = new Usluga(naziv, Integer.parseInt(cenaA), "A");
+			Usluga uslugaB = new Usluga(naziv, Integer.parseInt(cenaA), "B");
+			Usluga uslugaC = new Usluga(naziv, Integer.parseInt(cenaA), "C");
+			Usluga uslugaD = new Usluga(naziv, Integer.parseInt(cenaA), "D");
+			Usluga uslugaE = new Usluga(naziv, Integer.parseInt(cenaA), "E");
+			
+			uslugaA.setLista(noviCenovnik);
+			uslugaB.setLista(noviCenovnik);
+			uslugaC.setLista(noviCenovnik);
+			uslugaD.setLista(noviCenovnik);
+			uslugaE.setLista(noviCenovnik);
+			
+			HashSet<Usluga> nove = (HashSet<Usluga>) noviCenovnik.getUsluge();
+			nove.add(uslugaA);
+			nove.add(uslugaB);
+			nove.add(uslugaC);
+			nove.add(uslugaD);
+			nove.add(uslugaE);
+			
+			noviCenovnik.setUsluge(nove);
+			
+			noviCenovnik.setRentcar(rent);
+			rent.setCenovnik(noviCenovnik);
+			
+			RentACar povratna =servis.saveRentACar(rent);
+			return povratna;
+			
+		}
+		
+		
+		return null;
+	
+	}	
+	
+	
+		
+
 	
 		
 }

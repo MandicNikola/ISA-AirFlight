@@ -30,6 +30,7 @@ public class CenovnikRentServiceImpl implements CenovnikRentService {
 	@Override
 	public PricelistRentCar savePricelistRentCar(PricelistRentCar pricelistrentcar) {
 		// TODO Auto-generated method stub
+		System.out.println("Usao u save pricelist");
 		return repozitorijum.save(pricelistrentcar);
 	}
 

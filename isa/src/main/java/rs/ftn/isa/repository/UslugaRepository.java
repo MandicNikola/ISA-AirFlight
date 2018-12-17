@@ -9,4 +9,7 @@ import rs.ftn.isa.model.Usluga;
 public interface UslugaRepository  extends JpaRepository<Usluga,Long>{
 
 	Usluga findOneById(Long id);
+	Usluga findOneByNaziv(String naziv);
+	Usluga findOneByKategorija(String kategorija);
+
 }

@@ -15,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 @Entity
 @Table(name = "cenovnik")
 public class PricelistRentCar {
@@ -27,18 +29,20 @@ public class PricelistRentCar {
 	private Date datum_primene;
 	
 	//cenovnik ima vise usluga
+	
 	@OneToMany(mappedBy = "lista", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
 	private Set<Usluga> usluge = new HashSet<Usluga>();
 
-    
-    @OneToOne(mappedBy = "cenovnik", fetch = FetchType.LAZY,cascade =  CascadeType.ALL)
+	
+	@OneToOne(mappedBy = "cenovnik", fetch = FetchType.LAZY,cascade =  CascadeType.ALL)
+	@JsonIgnore
 	private RentACar rentcar; 
 	
     public PricelistRentCar() {}
     
-	public PricelistRentCar(int id,Date datum_primene) {
+	public PricelistRentCar(Date datum_primene) {
 		super();
-		this.id = id;
 		this.datum_primene=datum_primene;
 	}
 

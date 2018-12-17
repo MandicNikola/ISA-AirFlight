@@ -68,6 +68,7 @@
  	 #polje{
  	 	background-color: white;
  	 	padding:5px;
+ 	 	width:40%;
  	 	border: 2px solid #C3C3C3;
  	 	 border-radius: 5px;
  	 }
@@ -91,6 +92,13 @@
   		padding-left: 0px;
   		padding-right: 0px;
   	}
+  	#add{
+  		margin-left:20%;
+  		margin-right:20%;
+  	}
+  	.registracija{
+  		padding-left:20%;
+  	}
  </style>
 </head>
 <body onload="loadPodatke()">
@@ -108,7 +116,7 @@
 					</p>
 			</div>
 			<div class = "row" id="tabs">
-			<article class = "col-sm-10">
+			<article class = "col-sm-10" id="hid">
 			   <div class="container-fluid" id="pozTabovi">
 				   <ul class="nav nav-tabs">
 				    <li class="active"><a id="info" href="#information">Information</a></li>
@@ -139,27 +147,11 @@
 			  <div id="cenovnik">
 			  </div>
 			  
-			</article>
-			<aside class="col-sm-2" id="pageAside">
-				<div class="side">
-					<p id="vozilo" class="h">Add Vehicle</p>		
-				</div>
-				<div class="side">
-					<p id="filijala" class="h">Add branch office</p>		
-				</div>
-				<div class="side">
-					<p id="vozilo" class="h">Add Vehicle</p>		
-				</div>
-				<div class="side">
-					<p id="usluga" class="h">Add a service</p>		
-				</div>
-			</aside>
-			</div>
-			
-			 <div id="addUsluge" class= "container-fluid">
-			 	<div class="container" id="polje">
+			 <div id="addUsluge" class="container-fluid">
+			 	<div  id="polje" >
+			 		<form method="post" class="dodavanje">
 			 		<h2>Add a service</h2>
-			 		<form method="post" class="registracija">
+			 		
 			 		<div class="form-group row ">				      	
 				        <div class="col-xs-6">
 						       <i class="glyphicon glyphicon-user"></i>
@@ -210,9 +202,24 @@
 			    <button type="submit" id="potvrdiBtn" class="btn btn-default btn-lg">Add</button>
 			  </form>
 			 	</div>
-			 	
-			 
 			  </div>
+			</article>
+			<aside class="col-sm-2" id="pageAside">
+				<div class="side">
+					<p id="vozilo" class="h">Add Vehicle</p>		
+				</div>
+				<div class="side">
+					<p id="filijala" class="h">Add branch office</p>		
+				</div>
+				<div class="side">
+					<p id="vozilo" class="h">Add Vehicle</p>		
+				</div>
+				<div class="side">
+					<p id="usluga" class="h">Add a service</p>		
+				</div>
+			</aside>
+			</div>
+			
 		</div>
 	</div>
 </body>
