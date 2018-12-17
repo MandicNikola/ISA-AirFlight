@@ -16,8 +16,11 @@ import javax.persistence.OneToOne;
 
 import org.codehaus.jackson.annotate.JsonBackReference;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class RentACar {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,8 +40,9 @@ public class RentACar {
 	private Set<Filijala> filijale = new HashSet<Filijala>();
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "pricelistrentcar_id")    
-	private PricelistRentCar cenovnik ;
+	@JoinColumn(name = "cenovnik_id")
+	@JsonIgnore
+     private PricelistRentCar cenovnik ;
 
 	@OneToMany(mappedBy = "servisrent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore

@@ -13,7 +13,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 @Table(name = "usluge")
 public class Usluga {
 
@@ -36,7 +40,7 @@ public class Usluga {
 	private String konfiguracija;
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "cenovnik_id")
+	@JoinColumn(name = "lista_id")
 	PricelistRentCar lista;
 	
 	//cijenovnik hotela
