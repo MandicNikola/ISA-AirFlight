@@ -41,6 +41,7 @@ public class RentACar {
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "cenovnik_id")
+	@JsonIgnore
      private PricelistRentCar cenovnik ;
 
 	@OneToMany(mappedBy = "servisrent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

@@ -102,7 +102,7 @@ public class RentACarController {
 		System.out.println("Pronasao rent servis "+ rentServis.getNaziv());
 		
 		Filijala novo = filijala;
-		System.out.println(novo.toString());
+		System.out.println("Naziv filijale " + novo.getGrad() + " " + novo.getUlica());
 		
 		
 		novo.setServis(rentServis);;
@@ -120,12 +120,14 @@ public class RentACarController {
 	}
 	
 	@RequestMapping(value="/getFilijale/{id}", method = RequestMethod.GET)
-	public  List<Filijala> vratiFilijale(@PathVariable Long id){	
+	public  @ResponseBody ArrayList<Filijala> vratiFilijale(@PathVariable Long id){	
 		ArrayList<Filijala> rezultat = new ArrayList<Filijala>();
 		RentACar rent = servis.findOneById(id);
 		
+		System.out.println("Usao u vratiFilijale");
 		for(Filijala F : rent.getFilijale()) {
 				rezultat.add(F);
+				System.out.println("Ulica filijale "+F.getUlica());
 			
 		}
 		return rezultat;

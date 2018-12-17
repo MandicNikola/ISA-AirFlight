@@ -76,7 +76,8 @@ var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 		
 		$.each(lista, function(index, fil) {
 			$("#filijale").append("<div id=\""+index+"\"class=\"panel panel-default\">");
-			
+			console.log(fil.grad);
+			console.log(fil.index);
 			$("#" + index).append("<div class=\"panel-heading\">"+fil.grad+"</div>");
 			$("#" + index).append("<div class=\"panel-body\">"+fil.ulica+"</div>");
 

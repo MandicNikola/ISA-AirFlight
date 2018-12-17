@@ -36,10 +36,12 @@ public class PricelistRentCar {
 	//cenovnik ima vise usluga
 	
 	@OneToMany(mappedBy = "lista", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
 	private Set<Usluga> usluge = new HashSet<Usluga>();
 
 	
 	@OneToOne(mappedBy = "cenovnik", fetch = FetchType.LAZY,cascade =  CascadeType.ALL)
+	@JsonIgnore
 	private RentACar rentcar; 
 	
     public PricelistRentCar() {}
