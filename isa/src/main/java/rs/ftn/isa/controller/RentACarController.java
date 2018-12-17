@@ -164,20 +164,23 @@ public class RentACarController {
 		System.out.println("Pronadjen servis "+ rent.getNaziv());
 		//System.out.println("id je "+id+", naziv je "+naziv+ "cene : "+cenaA +" "+cenaB+ " "+cenaC+ " "+cenaD+ " "+cenaE);
 		
-		PricelistRentCar cenovnik = rent.getCenovnik();
-		PricelistRentCar noviCenovnik ;
 		
-		if(cenovnik == null) {
+		
+		PricelistRentCar noviCenovnik ;
+		PricelistRentCar cenovnik = servis.findAktivanCenovnik(rent.getId()) ;
+		
+		if(cenovnik == null) { //nema aktivnih cenovnika, treba dodati cenovnik
 			System.out.println("cenovnik je null");
 			//jos nije postavljen cenovnik
 			Date datum = new Date();
 			noviCenovnik = new PricelistRentCar(datum);
+			noviCenovnik.setAktivan(true);
 			
 			Usluga uslugaA = new Usluga(naziv, Integer.parseInt(cenaA), "A");
-			Usluga uslugaB = new Usluga(naziv, Integer.parseInt(cenaA), "B");
-			Usluga uslugaC = new Usluga(naziv, Integer.parseInt(cenaA), "C");
-			Usluga uslugaD = new Usluga(naziv, Integer.parseInt(cenaA), "D");
-			Usluga uslugaE = new Usluga(naziv, Integer.parseInt(cenaA), "E");
+			Usluga uslugaB = new Usluga(naziv, Integer.parseInt(cenaB), "B");
+			Usluga uslugaC = new Usluga(naziv, Integer.parseInt(cenaC), "C");
+			Usluga uslugaD = new Usluga(naziv, Integer.parseInt(cenaD), "D");
+			Usluga uslugaE = new Usluga(naziv, Integer.parseInt(cenaE), "E");
 			
 			uslugaA.setLista(noviCenovnik);
 			uslugaB.setLista(noviCenovnik);
@@ -185,7 +188,7 @@ public class RentACarController {
 			uslugaD.setLista(noviCenovnik);
 			uslugaE.setLista(noviCenovnik);
 			
-			HashSet<Usluga> nove = (HashSet<Usluga>) noviCenovnik.getUsluge();
+			Set<Usluga> nove =  noviCenovnik.getUsluge();
 			nove.add(uslugaA);
 			nove.add(uslugaB);
 			nove.add(uslugaC);
@@ -195,7 +198,41 @@ public class RentACarController {
 			noviCenovnik.setUsluge(nove);
 			
 			noviCenovnik.setRentcar(rent);
-			rent.setCenovnik(noviCenovnik);
+			Set<PricelistRentCar> cenovnici = rent.getCenovnici();
+			cenovnici.add(noviCenovnik);
+			rent.setCenovnici(cenovnici);
+			
+			RentACar povratna =servis.saveRentACar(rent);
+			return povratna;
+			
+		}else {
+			rent.getCenovnici().remove(cenovnik);
+			//postoji vec aktivan cenovnik, preuzmemo ga i dodamo mu nove usluge
+			Usluga uslugaA = new Usluga(naziv, Integer.parseInt(cenaA), "A");
+			Usluga uslugaB = new Usluga(naziv, Integer.parseInt(cenaB), "B");
+			Usluga uslugaC = new Usluga(naziv, Integer.parseInt(cenaC), "C");
+			Usluga uslugaD = new Usluga(naziv, Integer.parseInt(cenaD), "D");
+			Usluga uslugaE = new Usluga(naziv, Integer.parseInt(cenaE), "E");
+			
+			uslugaA.setLista(cenovnik);
+			uslugaB.setLista(cenovnik);
+			uslugaC.setLista(cenovnik);
+			uslugaD.setLista(cenovnik);
+			uslugaE.setLista(cenovnik);
+			
+			Set<Usluga> nove = cenovnik.getUsluge();
+			nove.add(uslugaA);
+			nove.add(uslugaB);
+			nove.add(uslugaC);
+			nove.add(uslugaD);
+			nove.add(uslugaE);
+			
+			cenovnik.setUsluge(nove);
+			
+			cenovnik.setRentcar(rent);
+			Set<PricelistRentCar> cenovnici =  rent.getCenovnici();
+			cenovnici.add(cenovnik);
+			rent.setCenovnici(cenovnici);
 			
 			RentACar povratna =servis.saveRentACar(rent);
 			return povratna;
@@ -203,7 +240,6 @@ public class RentACarController {
 		}
 		
 		
-		return null;
 	
 	}	
 	
