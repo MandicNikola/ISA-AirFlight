@@ -154,6 +154,16 @@ public class Usluga {
 	public String toString() {
 		return "Service [id=" + id + ", naziv=" + naziv + "]";
 	}
+
+
+	public CijenovnikSoba getCenesoba() {
+		return cenesoba;
+	}
+
+
+	public void setCenesoba(CijenovnikSoba cenesoba) {
+		this.cenesoba = cenesoba;
+	}
 	
 	
 	

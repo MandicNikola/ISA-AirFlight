@@ -4,6 +4,8 @@
 
 function onLoad(){
 	
+	
+	
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);
 	var id = adresa.split('=')[1];
@@ -69,12 +71,11 @@ function addConfiguration(){
 	$("#tabovi").hide();
 	
 	$("#ispisiTabelu").empty();
-	 
-	 $("#ispisiTabelu").append("<div class=\"container\"><h3>New configuration</h3><form method=\"post\" class=\"konfiguracija\" id = \"formaKat\" >");
-	 $("#formaKat").append("<div class=\"form-group\">");
-	 $("#formaKat").append("<input  type = \"text\" class=\"form-control\" id=\"katNaziv\" placeholder=\"Configuration name\">"); 	
-	 $("#formaKat").append("</div><button type=\"submit\" class=\"btn btn-default\">Add</button></form>");
-	 $("#ispisiTabelu").append("</div>");
+	$("#ispisiTabelu").append("<div class=\"container\"><h3>New configuration</h3><form method=\"post\" class=\"konfiguracija\" id = \"formaKat\" >");
+		$("#formaKat").append("<div class=\"form-group\">");
+		$("#formaKat").append("<input  type = \"text\" class=\"form-control\" id=\"katNaziv\" placeholder=\"Configuration name\">"); 	
+		$("#formaKat").append("</div><button type=\"submit\" class=\"btn btn-default\">Add</button></form>");
+	$("#ispisiTabelu").append("</div>");
 }
 
 $(document).on('submit','.konfiguracija',function(e){
@@ -125,7 +126,7 @@ function dodajHoteluKategoriju(data){
 					
 				}else{
 					alert('dodavanje super');
-					formaZaCijene(data);
+					formaZaCijene();
 				}	
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
@@ -138,6 +139,7 @@ function dodajHoteluKategoriju(data){
 }
 function formaZaCijene(){
 	$("#tabovi").show();
+	$("#ispisiTabelu").empty();
 	
 }
 function ucitajPocetnu(){
@@ -154,7 +156,6 @@ $(document).ready(function(){
     	listaSoba();
 		$("#informacije").hide();
 		$("#ispisiTabelu").hide();
-		 
 		$("#cijene").hide();
 	 	
     });
@@ -162,7 +163,6 @@ $(document).ready(function(){
     	$("#informacije").show();
 		$("#ispisiTabelu").hide();
 		$("#sobe").hide();
-		 
 		$("#cijene").hide();
 	 	
     });

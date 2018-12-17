@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.websocket.server.PathParam;
+import javax.xml.crypto.Data;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,8 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.HotelDTO;
 import rs.ftn.isa.model.Category;
+import rs.ftn.isa.model.CijenovnikSoba;
 import rs.ftn.isa.model.Hotel;
 import rs.ftn.isa.model.Room;
+import rs.ftn.isa.model.Usluga;
 import rs.ftn.isa.service.HotelService;
 @RestController
 @RequestMapping(value="api/hoteli")
@@ -101,6 +104,11 @@ public class HotelController {
 				 System.out.println(" ne postoji ti taj hotel ");
 				 return null;
 			 }
+			 
+			 Usluga u = new Usluga("cijena_noc",room.getCijena());
+			 //kad dodaje sobu ne postoji cijenovnik za nju
+			// Data datum = new Data();
+			 //CijenovnikSoba cijenovik = new CijenovnikSoba();
 			 	//postavi sobi hotel koji joj odg
 			 	room.setHotel(pom);
 			 	//dodaj hotelu sobu

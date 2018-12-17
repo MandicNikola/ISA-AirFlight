@@ -34,7 +34,7 @@ public class Room {
 	private int sprat;
 	//cijena za noc
 	@Column(name = "cijena", nullable = false)	
-	private double cijena;
+	private int cijena;
 
 	@Column(name = "kapacitet", nullable = false)	
 	private int kapacitet; //da ako ima,ne nema
@@ -54,7 +54,7 @@ public class Room {
 	public Room() {
 		super();
 	} 
-	public Room(Long id, String tip, double ocjena, int kreveti, int sprat, double cijena,String balkon) {
+	public Room(Long id, String tip, double ocjena, int kreveti, int sprat, int cijena,String balkon) {
 		super();
 		this.id = id;
 		this.tip = tip;
@@ -78,7 +78,7 @@ public class Room {
 		this.balkon = balkon;
 	}
 	
-	public Room( String tip, double ocjena, int kreveti, int sprat, double cijena,String balkon) {
+	public Room( String tip, double ocjena, int kreveti, int sprat, int cijena,String balkon) {
 		super();
 		this.tip = tip;
 		this.ocjena = ocjena;
@@ -88,7 +88,7 @@ public class Room {
 		this.balkon = balkon;
 	}
 	
-	public Room(String tip, double ocjena, int kreveti, int sprat, double cijena) {
+	public Room(String tip, double ocjena, int kreveti, int sprat, int cijena) {
 		super();
 		this.tip = tip;
 		this.ocjena = ocjena;
@@ -138,11 +138,11 @@ public class Room {
 		this.sprat = sprat;
 	}
 
-	public double getCijena() {
+	public int getCijena() {
 		return cijena;
 	}
 
-	public void setCijena(double cijena) {
+	public void setCijena(int cijena) {
 		this.cijena = cijena;
 	}
 	public Hotel getHotel() {
