@@ -23,29 +23,5 @@ public class UslugaController {
 	
 	
 	
-	@RequestMapping(value="/dodajUslugu", 
-	method = RequestMethod.POST,
-	produces = MediaType.APPLICATION_JSON_VALUE)
-public @ResponseBody PricelistRentCar dodajUslugu( @PathVariable String pomocna){		
-	
-	String [] niz=pomocna.split("=");
-	
-	String id= niz[0];
-	String naziv = niz[1];
-	String cenaA= niz[2];
-	String cenaB= niz[3];
-	String cenaC= niz[4];
-	String cenaD= niz[5];
-	String cenaE= niz[6];
-	
-	
-	
-	return null;
-
-}	
-
-
-	
-	
 	
 }

@@ -164,13 +164,14 @@ $(document).on('submit','.dodavanje',function(e){
 	var pom=window.location.search.substring(1);
 	var id= pom.split('=')[1];
 	
-	naziv = $('#ime').val(),
-    katA = $('#catA').val(),
-	katB = $('#catB').val(),
-	katC = $('#catC').val(),
-	katD =  $('#catD').val(),
-	katE = $('#catE').val()
-	pom= id+"="+naziv+"="+katA+"="+katB+"="+katC+"="+katD+"="+katE
+	naziv = $('#ime').val();
+    katA = $('#catA').val();
+	katB = $('#catB').val();
+	katC = $('#catC').val();
+	katD =  $('#catD').val();
+	katE = $('#catE').val();
+	pom= id+"="+naziv+"="+katA+"="+katB+"="+katC+"="+katD+"="+katE;
+	
 		$.ajax({
 			type : 'POST',
 			url : "/api/rents/dodajUslugu/"+pom,

@@ -166,6 +166,7 @@ public class RentACarController {
 		PricelistRentCar noviCenovnik ;
 		
 		if(cenovnik == null) {
+			System.out.println("cenovnik je null");
 			//jos nije postavljen cenovnik
 			Date datum = new Date();
 			noviCenovnik = new PricelistRentCar(datum);
