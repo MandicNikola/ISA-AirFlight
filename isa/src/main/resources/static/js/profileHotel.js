@@ -46,15 +46,15 @@ function preuzmiSobe(hotel){
 }
 function ispisiSobe(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
-	 $("#ispisiTabelu").empty();
+	 $("#sobe").empty();
 	 
-	 $("#ispisiTabelu").append("<table class=\"table table-hover\" id=\"tabelaSoba\" ><tr><th>Room type </th><th>Capacity</th><th>Beds</th><th>Price for night</th></tr>");
+	 $("#sobe").append("<table class=\"table table-hover\" id=\"tabelaSoba\" ><tr><th>Room type </th><th>Capacity</th><th>Beds</th><th>Price for night</th></tr>");
 		
 		$.each(pom, function(index, data) {
 			$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.kreveti+"</td><td>"+data.cijena+"</td></tr>");
 			
 		});
-	 $("#ispisiTabelu").append("</table>");
+	 $("#sobe").append("</table>");
 }
 
 function addRoom(){
@@ -66,6 +66,8 @@ function addRoom(){
 function addConfiguration(){
 	var adresa = window.location.search.substring(1);
 	var id = adresa.split('=')[1];
+	$("#tabovi").hide();
+	
 	$("#ispisiTabelu").empty();
 	 
 	 $("#ispisiTabelu").append("<div class=\"container\"><h3>New configuration</h3><form method=\"post\" class=\"konfiguracija\" id = \"formaKat\" >");
@@ -135,8 +137,63 @@ function dodajHoteluKategoriju(data){
 	
 }
 function formaZaCijene(){
+	$("#tabovi").show();
 	
 }
 function ucitajPocetnu(){
 	window.location = "mainPage.html";
+}
+$(document).ready(function(){
+		
+	$("#rooms").hide();
+	$("#pricelist").hide();
+	
+	
+	
+    $("#rooms").click(function(){
+    	listaSoba();
+		$("#informacije").hide();
+		$("#ispisiTabelu").hide();
+		 
+		$("#cijene").hide();
+	 	
+    });
+    $("#info").click(function(){
+    	$("#informacije").show();
+		$("#ispisiTabelu").hide();
+		$("#sobe").hide();
+		 
+		$("#cijene").hide();
+	 	
+    });
+    
+    $("#price").click(function(){
+    	$("#informacije").hide();
+    	
+		$("#ispisiTabelu").hide();
+		$("#sobe").hide();
+		 
+		$("#cijene").show();
+	 	
+    });
+});
+
+function listaSoba(){
+	var adresa = window.location.search.substring(1);
+	console.log('adesa je '+adresa);
+	var id = adresa.split('=')[1];
+
+	$.ajax({
+		method:'GET',
+		url: "/api/hoteli/getRooms/"+id,
+		success: function(lista){
+			if(lista == null){
+				console.log('Nema soba')
+			}else{
+				ispisiSobe(lista);
+				
+			}
+		}
+	});
+	
 }
