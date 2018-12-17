@@ -1,5 +1,8 @@
 package rs.ftn.isa.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Room {
@@ -40,7 +46,11 @@ public class Room {
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	 private Hotel hotel;
 	
-	 
+	//jedna soba ima vise cjenovnika
+	@OneToMany(mappedBy = "soba", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	private Set<CijenovnikSoba> cijenovnici = new HashSet<CijenovnikSoba>();
+	
 	public Room() {
 		super();
 	} 

@@ -40,6 +40,11 @@ public class Usluga {
 	//cijenovnik hotela
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	PricelistHotel cijene;
+	
+	//cijenovnik sobe
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	CijenovnikSoba cenesoba;
+
 
 	public Usluga() {}
 
