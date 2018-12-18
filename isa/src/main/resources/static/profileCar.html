@@ -65,12 +65,20 @@
  	 	padding-left:12px;
  	 	padding-right:12px;
  	 }
- 	 #polje{
+ 	 #polje, #cenovnik{
  	 	background-color: white;
  	 	padding:5px;
- 	 	width:40%;
- 	 	border: 2px solid #C3C3C3;
- 	 	 border-radius: 5px;
+ 	 	width:50%;
+ 	 }
+ 	 #prikazCenovnika{
+ 	 	background-color: white;
+ 	 	padding:5px;
+ 	 	margin-left:5px;
+ 	 }
+ 	 
+ 	 #cenovnik{
+ 	 	margin-left:0px;
+ 	 	padding: 10px;
  	 }
   #prviJumbo p{
   	margin:0px;
@@ -144,7 +152,50 @@
 						
 					</section>
 			  </div>
-			  <div id="cenovnik">
+			  <div id="cenovnik" class="row">
+			  		<article id="cenTab" class = "col-sm-4">
+								<table class="table">	
+									<thead><th>Kategorija</th> <th>Cenovnik</th></thead>
+									<tbody>
+										<tr>
+											<td>A</td> 
+											<td>
+												<button type="button" class="btn btn-info" onclick="kategorija('A')">Prikazi</button>
+											</td>
+										</tr>
+										<tr>
+											<td>B</td> 
+											<td>
+												<button type="button" class="btn btn-info" onclick="kategorija('B')">Prikazi</button>
+											</td>
+										</tr>
+										<tr>
+											<td>C</td> 
+											<td>
+												<button type="button" class="btn btn-info" onclick="kategorija('C')">Prikazi</button>
+											</td>
+										</tr>
+										<tr>
+											<td>D</td> 
+											<td>
+												<button type="button" class="btn btn-info" onclick="kategorija('D')">Prikazi</button>
+											</td>
+										</tr>
+										<tr>
+											<td>E</td> 
+											<td>
+												<button type="button" class="btn btn-info" onclick="kategorija('E')">Prikazi</button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+						
+						</article>
+				<article class = "col-sm-8" id="prikazCenovnika">
+						<p>  <i class="glyphicon glyphicon-calendar"> </i> Effective date <span id="vazi"></span>
+						</p>
+			
+				</article>
 			  </div>
 			  
 			 <div id="addUsluge" class="container-fluid">
@@ -153,7 +204,7 @@
 			 		<h2>Add a service</h2>
 			 		
 			 		<div class="form-group row ">				      	
-				        <div class="col-xs-6">
+				        <div class="col-xs-8">
 						       <i class="glyphicon glyphicon-user"></i>
 						      <label for="ime">Name:</label>
 						      <input type="text" class="form-control" id="ime" placeholder="Enter name of a service" >
@@ -161,14 +212,14 @@
 				   		</div>
 				    </div>
 				    <div class="form-group row">
-				      <div class="col-xs-6">
+				      <div class="col-xs-8">
 				       		  <i class="glyphicon glyphicon-user"></i>
 						      <label>Price for A category:</label>
 						      <input type="number" class="form-control" id="catA" placeholder="Enter Price">
 					</div>
 				    </div>
 			    	<div class="form-group row">			    	
-				        <div class="col-xs-6">
+				        <div class="col-xs-8">
 				              <i class="glyphicon glyphicon-phone"></i>
 				              <label>Price for B category:</label>
 						      <input type="number" class="form-control" id="catB" placeholder="Enter Price" >
@@ -176,7 +227,7 @@
 				    	</div>
 				    </div>
 				    <div class="form-group row">				    
-				        <div class="col-xs-6">	
+				        <div class="col-xs-8">	
 				           	 <i class="glyphicon glyphicon-map-marker"></i>
 				              <label>Price for C category:</label>
 						      <input type="number" min="0" class="form-control" id="catC" placeholder="Enter price">
@@ -184,7 +235,7 @@
 				    	</div>
 				    </div>
 			    	<div class="form-group row">
-			    		 <div class="col-xs-6">	
+			    		 <div class="col-xs-8">	
 			    	     	 <i class="glyphicon glyphicon-envelope"></i>
 						      <label>Price for category D:</label>
 						      <input type="number" min="0" class="form-control" id="catD" placeholder="Enter price" >
@@ -192,7 +243,7 @@
 						 </div>
 				    </div>
 				    <div class="form-group row">
-				        <div class="col-xs-6">	
+				        <div class="col-xs-8">	
 				            <i class="glyphicon glyphicon-eye-close"></i>
 				            <label>Price for category E:</label>
 					        <input type="number" min="0" class="form-control" id="catE" placeholder="Enter price">

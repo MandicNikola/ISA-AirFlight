@@ -30,6 +30,7 @@ function iscrtajStranicu(servis){
 	
 	popuniFilijale();
     popuniVozila();
+    //ispisiTabeluCenovnik();
 }
 
 function popuniFilijale(){
@@ -48,6 +49,37 @@ function popuniFilijale(){
 			}
 		}
 	});
+	
+}
+function ispisiTabeluCenovnik(){
+	console.log('usao u popuni cenovnik');
+	var podatak = window.location.search.substring(1);
+	var niz= podatak.split("=");
+	var id= niz[1]; 
+	
+    
+	
+}
+function ispisiCenovnik(pom){
+	
+	console.log('usao u ispisivozila');
+	$("#vazi").text(pom.datum);
+	
+	var skup = pom.usluge;
+	
+	var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
+		
+	$("#cenTab").append("<table class=\"table table-hover\" id=\"tabelaCenovnik\" ><thead><tr><th>Service</th><th>Category A</th><th>Category B</th><th>Category C</th><th>Category D</th><th>Category E</th></tr></thead>");
+	
+	$.each(lista, function(index, clan) {
+		//$("#tabelaCenovnik").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+clan.naziv+"</td><td > "+vozilo.marka+"</td><td > "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td > "+vozilo.sedista+"</td><td > "+vozilo.kategorija+"</td></tr>");
+	});
+    $("#cenTab").append("</table>");
+ 
+}
+
+function kategorija(naziv){
+	console.log('usao u kategorija dobio je '+naziv);
 	
 }
 function popuniVozila(){
@@ -181,6 +213,7 @@ $(document).on('submit','.dodavanje',function(e){
 					alert('Naziv usluge vec postoji u sistemu');
 				}else{
 					alert('Uspesno ste dodali uslugu');
+					resetuj();
 				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown){
@@ -189,4 +222,11 @@ $(document).on('submit','.dodavanje',function(e){
 		});
 });
 
-
+function resetuj(){
+	$("#pozTabovi").show();
+	$("#cenovnik").hide();
+	$("#informacije").show();
+	$("#automobili").hide();
+	$("#addUsluge").hide();		
+	
+}
