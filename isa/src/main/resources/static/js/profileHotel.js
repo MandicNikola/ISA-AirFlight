@@ -213,6 +213,7 @@ $(document).ready(function(){
     
     $("#price").click(function(){
     	console.log('dosao u price');
+    	showPrices();
     	$("#informacije").hide();
     	
 		$("#ispisiTabelu").hide();
@@ -223,6 +224,83 @@ $(document).ready(function(){
     });
 });
 
+function showPrices(){
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+
+	$.ajax({
+		method:'GET',
+		url: "/api/hoteli/getUsluge/"+id,
+		success: function(lista){
+			if(lista==null){
+				$("#cijeneDodatne").empty();
+				console.log('Nema usluga');
+			}else if(lista.length == 0){
+				$("#cijeneDodatne").empty();
+				console.log('Prazne usluga');
+			}else{
+				console.log('Ima usluga ');
+				ispisiDodatne(lista);
+			}
+		}
+	});
+	
+}
+
+function ispisiDodatne(data){
+	
+		console.log('usao u ispisiCenovnik dodatnih usluga');
+		
+		$("#cijeneDodatne").empty();
+		var lista = data == null ? [] : (data instanceof Array ? data : [ data ]);
+			
+		$("#cijeneDodatne").append("<table class=\"table table-hover\" id=\"tblDodatne\" ><tr><th>Service</th><th>Price</th><th></th></tr>");
+		console.log(lista.length);
+		
+		$.each(lista, function(index, usluga) {
+			
+			$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td ><input class=\"form-control\" type = \"number\"  id=\""+usluga.id+"\" value=\""+usluga.cena+"\"></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"promjeniDodatnu("+usluga.id+")\">Change</button></td></tr>");
+		});
+	    $("#cijeneDodatne").append("</table>");
+}
+
+function promjeniDodatnu(idUsluga){
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	
+	var vr =$("#"+idUsluga).val();
+	var pom = idUsluga+"-"+vr+"-"+id;
+
+	$.ajax({
+		type : 'POST',
+		url : "/api/hoteli/promjenidodatnu/"+pom,
+		success : function(data) {
+					alert('usao ovdje');
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("greska pri unosu novog hotela");
+			   
+		}
+	});
+
+}
+function ispisiDodatneKorisnik(data){
+	console.log('usao u ispisiCenovnik dodatnih usluga');
+	
+	$("#cijeneDodatne").empty();
+	var lista = data == null ? [] : (data instanceof Array ? data : [ data ]);
+		
+	$("#cijeneDodatne").append("<table class=\"table table-hover\" id=\"tblDodatne\" ><tr><th>Service</th><th>Price</th></tr>");
+	console.log(lista.length);
+	
+	$.each(lista, function(index, usluga) {
+		
+		$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td > "+usluga.cena+"</td></tr>");
+	});
+    $("#cijeneDodatne").append("</table>");
+
+	
+}
 function listaSoba(){
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);

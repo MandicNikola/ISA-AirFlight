@@ -1,16 +1,12 @@
 package rs.ftn.isa.controller;
 
-import static org.assertj.core.api.Assertions.assertThatNullPointerException;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.websocket.server.PathParam;
-import javax.xml.crypto.Data;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -131,7 +127,61 @@ public class HotelController {
 			 return pom;
 				 
 		}
-	
+		@RequestMapping(value="/promjenidodatnu/{slanje}", 
+				method = RequestMethod.POST,
+				produces = MediaType.APPLICATION_JSON_VALUE)
+		public @ResponseBody Hotel changeDodatnu(@PathVariable String slanje){	
+			System.out.println("dobio sam "+slanje);
+			
+			String[] parts = slanje.split("-");
+			String uslugaID = parts[0];
+			String cijenaStr = parts[1];
+			String hotelID = parts[2];
+			Long hotelId = Long.parseLong(hotelID);
+			int cijena = Integer.parseInt(cijenaStr);
+			Long uslugaId = Long.parseLong(uslugaID);
+			Hotel pom = servis.findHotelById(hotelId);	
+			   
+			PricelistHotel aktivni = new PricelistHotel();
+ 			System.out.println("dosao je u if 1 kad je broj cj razlicit od 0");
+ 			for(PricelistHotel cc:pom.getCijenovnici()) {
+ 				if(cc.isAktivan()) {
+ 					aktivni = cc;
+ 					break;
+ 				}
+ 			}
+			Usluga usluga = new Usluga();
+ 			for(Usluga uu:aktivni.getUsluge()) {
+ 				if(uu.getId() == uslugaId) {
+ 					usluga = uu;
+ 					break;
+ 				}
+ 				
+ 			}
+ 			//trenutno aktivni prestaje da bude aktivan jer smo izmjenili cijenu
+ 			pom.getCijenovnici().remove(aktivni);
+ 			aktivni.setAktivan(false);
+ 			pom.getCijenovnici().add(aktivni);
+ 			
+ 			//formiram novi cijenovnik
+ 			Date datum = new Date();
+ 			PricelistHotel cijenovnik = new PricelistHotel(datum,true);
+ 			aktivni.getUsluge().remove(usluga);
+ 			for(Usluga pomocna:aktivni.getUsluge()) {
+ 				pomocna.setCijene(cijenovnik);
+ 				cijenovnik.getUsluge().add(pomocna);
+ 			}
+ 			
+ 			usluga.setCena(cijena);
+ 			usluga.setCijene(cijenovnik);
+ 			cijenovnik.getUsluge().add(usluga);
+ 			
+ 			cijenovnik.setHotelski(pom);
+ 			pom.getCijenovnici().add(cijenovnik);
+ 			servis.saveHotel(pom);
+ 			return pom;
+		}
+		
 		@RequestMapping(value="/changePrice/{slanje}", 
 				method = RequestMethod.GET,
 				produces = MediaType.APPLICATION_JSON_VALUE)
@@ -295,5 +345,38 @@ public class HotelController {
 			 		return pom;
 			 	}
 			 	
+		}
+		
+		@RequestMapping(value="/getUsluge/{id}", 
+				method = RequestMethod.GET,
+				produces = MediaType.APPLICATION_JSON_VALUE)
+		public @ResponseBody ArrayList<Usluga> vratiUsluge(@PathVariable Long id){	
+			Hotel pom = servis.findHotelById(id);
+		 	System.out.println("dosao da doda dodantu uslugu");
+		 	ArrayList<Usluga> usluge = new ArrayList<Usluga>(); 
+		 	PricelistHotel cijenovnik = new PricelistHotel();
+		 	System.out.println("hotel je "+pom.getId());
+		 	
+		 	if(pom.getCijenovnici()!= null) {
+		 		System.out.println("postoje  neki cj");
+				 
+		 		if(pom.getCijenovnici().size() != 0) {
+		 			//postoje dodatne usluge u hotelu
+		 			for(PricelistHotel cc:pom.getCijenovnici()) {
+		 				if(cc.isAktivan()) {
+		 					cijenovnik = cc;
+		 					break;
+		 				}
+		 			
+		 			}
+		 			System.out.println("postoji cjenovnik dodatnih usluga");
+		 				for(Usluga uu:cijenovnik.getUsluge()) {
+		 					usluge.add(uu);
+		 				}
+		 				return usluge;
+		 		}
+		 	}		 		
+		 	
+			return null;
 		}
 }
