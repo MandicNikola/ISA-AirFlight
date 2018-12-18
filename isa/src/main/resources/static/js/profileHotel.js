@@ -3,6 +3,7 @@
  */
 
 function onLoad(){
+	
 	$("#sobe").hide();
 	$("#cijene").hide();
 	var adresa = window.location.search.substring(1);
@@ -48,13 +49,13 @@ function changePrice(roomID,roomCijena){
 	 $("#izmjena").empty();
 	 $("#izmjena").show();
 			 
-	 $("#izmjena").append("<div class=\"container\"><h3>New price:</h3><form  class=\"changeprice\"  id = \"formaPrice\" >");
-		$("#formaPrice").append("<div class=\"form-group\">");
-		$("#formaPrice").append("<input  type = \"number\" class=\"form-control\" id=\"newPrice\" value=\""+roomCijena+"\">"); 	
-		$("#formaPrice").append("</div><button onclick=\"changeR("+roomID+")\"  class=\"btn btn-default\">Change</button></form>");
+	 $("#izmjena").append("<div class=\"container\"><h3>New price:</h3>");
+		$("#izmjena").append("<input  type = \"number\"  id=\"newPrice\" value=\""+roomCijena+"\">"); 	
+		$("#izmjena").append("<button onclick=\"changeR("+roomID+")\"  class=\"btn btn-default\">Change</button>");
 	$("#izmjena").append("</div>");
 }
 function changeR(roomID){
+		
 	var adresa = window.location.search.substring(1);
 	var id = adresa.split('=')[1];
 	
@@ -67,7 +68,7 @@ function changeR(roomID){
 		url : "/api/hoteli/changePrice/"+pom,
 		success : function(data) {
 					alert('usao ovdje');
-					prikaziProfil(id);
+					window.location = "profileHotel.html?id="+id;
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			alert("greska pri unosu novog hotela");
@@ -80,7 +81,6 @@ function prikaziProfil(id){
 	console.log(id);
 	window.location = "profileHotel.html?id="+id;
 
-	
 }
 function ispisiSobeBezAdima(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
