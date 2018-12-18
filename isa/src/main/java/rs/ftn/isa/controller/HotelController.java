@@ -55,7 +55,7 @@ public class HotelController {
 		@RequestMapping(value = "/findById/{id}",
 						method = RequestMethod.GET)
 		public @ResponseBody Hotel findHotelById(@PathVariable Long id){
-			
+			System.out.println("find"  + id);
 			
 			Hotel pronadjeni = servis.findHotelById(id);
 				if(pronadjeni == null) {
@@ -133,7 +133,7 @@ public class HotelController {
 		}
 	
 		@RequestMapping(value="/changePrice/{slanje}", 
-				method = RequestMethod.POST,
+				method = RequestMethod.GET,
 				produces = MediaType.APPLICATION_JSON_VALUE)
 		public @ResponseBody Hotel changePrice(@PathVariable String slanje){		
 			
@@ -166,14 +166,15 @@ public class HotelController {
 			}
 			
 			Usluga nova = new Usluga("cijena_noc",cijena);
-			 
 			 Date datum = new Date();
 			 CijenovnikSoba cijenovik = new CijenovnikSoba(datum,true);			  
 			 cijenovik.setAktivan(true);
 			 nova.setCenesoba(cijenovik);
+			 
 			 Set<Usluga> usluge = new HashSet<Usluga>();
 			 usluge.add(nova);
 			 cijenovik.setUsluge(usluge);
+			 
 			 room.setCijena(cijena);
 			 cijenovik.setSoba(room);
 
@@ -209,7 +210,7 @@ public class HotelController {
 		}
 		
 		
-		@RequestMapping(value="/sacuvajKat/{id}", 
+		@RequestMapping(value="/dodajUs/{id}", 
 				method = RequestMethod.POST,
 				consumes = MediaType.APPLICATION_JSON_VALUE,
 				produces = MediaType.APPLICATION_JSON_VALUE)

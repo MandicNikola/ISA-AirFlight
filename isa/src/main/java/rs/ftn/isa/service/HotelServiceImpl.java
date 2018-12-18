@@ -30,6 +30,7 @@ public class HotelServiceImpl implements HotelService {
 	@Override
 	public Hotel saveHotel(Hotel hotel) {
 		// TODO Auto-generated method stub
+		System.out.println(" sacuvaj hotel ");
 			return hotelRepozitorijum.save(hotel);
 	}
 

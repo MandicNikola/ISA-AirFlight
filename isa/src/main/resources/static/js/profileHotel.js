@@ -48,7 +48,7 @@ function changePrice(roomID,roomCijena){
 	 $("#izmjena").empty();
 	 $("#izmjena").show();
 			 
-	 $("#izmjena").append("<div class=\"container\"><h3>New price:</h3><form method=\"post\" class=\"changeprice\" onsubmit=\"return changeR("+roomID+")\" id = \"formaPrice\" >");
+	 $("#izmjena").append("<div class=\"container\"><h3>New price:</h3><form  class=\"changeprice\" onsubmit=\"changeR("+roomID+")\" id = \"formaPrice\" >");
 		$("#formaPrice").append("<div class=\"form-group\">");
 		$("#formaPrice").append("<input  type = \"number\" class=\"form-control\" id=\"newPrice\" value=\""+roomCijena+"\">"); 	
 		$("#formaPrice").append("</div><button type=\"submit\" class=\"btn btn-default\">Change</button></form>");
@@ -62,10 +62,12 @@ function changeR(roomID){
 	var pom = roomID+"-"+kat+"-"+id;
 
 	$.ajax({
-		type : 'POST',
+		type : 'GET',
 		url : "/api/hoteli/changePrice/"+pom,
 		success : function(data) {
 					alert('usao ovdje');
+					window.location = "profileHotel.html?id="+id;
+
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			alert("greska pri unosu novog hotela");

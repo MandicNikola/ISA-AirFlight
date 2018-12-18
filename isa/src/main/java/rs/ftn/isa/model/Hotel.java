@@ -39,7 +39,7 @@ public class Hotel {
 	@Column(name = "ocena", nullable = false)	
 	private double ocena;
 	
-	@OneToMany(mappedBy = "rentcar",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "hotelski",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore
 	private  Set<PricelistHotel> cijenovnici;
 	

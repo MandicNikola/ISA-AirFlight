@@ -7,6 +7,5 @@ insert into cenovnik( id, datum_primene,aktivan) values (128,'2017-11-11',false)
 insert into rentacar ( id, naziv, adresa, opis) values (1245,'Caaar', 'Novi Sad','samo brzo');
 insert into rentacar ( id, naziv, adresa, opis) values (1255,'Rent a caar', 'Novi Sad','sigurno i lako');
 insert into rentacar ( id, naziv, adresa, opis) values (1265,'Caaar the best', 'Novi Sad','samo brzo');
-;
-insert into cijenovnik( id, datum) values (725,'2018-11-11');
-insert into cijenovnik( id, datum) values (728,'2017-11-11');
+insert into cijenovnik( id, datum,aktivan) values (725,'2018-11-11',false);
+insert into cijenovnik( id, datum,aktivan) values (728,'2017-11-11',false);
