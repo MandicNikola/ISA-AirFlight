@@ -132,6 +132,43 @@ public class RentACarController {
 		}
 		return rezultat;
 	}
+	
+	@RequestMapping(value="/getAktivanCenovnik/{id}", method = RequestMethod.GET)
+	public  @ResponseBody PricelistRentCar vratiAktivanCenovnik(@PathVariable Long id){	
+		
+		RentACar rent = servis.findOneById(id);
+		PricelistRentCar cenovnik =servis.findAktivanCenovnik(id);
+		
+		if(cenovnik==null) {
+			System.out.println("Nema aktivnog cenovnika");
+		}
+		return cenovnik;
+	}
+	//vraca usluge odredjenog servisa odredjene kategorije
+	@RequestMapping(value="/katUsluge/{pom}", method = RequestMethod.GET)
+	public  @ResponseBody ArrayList<Usluga> vratiUslugeKategorije(@PathVariable String pom){	
+		
+		String[] niz = pom.split("=");
+		Long id = Long.parseLong(niz[0]);
+		String kat=niz[1];
+		
+		RentACar rent = servis.findOneById(id);
+		PricelistRentCar cenovnik =servis.findAktivanCenovnik(id);
+		
+		Set<Usluga> sveUsluge = cenovnik.getUsluge();
+		
+		ArrayList<Usluga> katUsluge= new ArrayList<Usluga>();
+		
+		for(Usluga U : sveUsluge) {
+				if(U.getKategorija().toString().equals(kat)) {
+						katUsluge.add(U);
+				}
+		}
+		return katUsluge;
+	}
+	
+	
+	
 	@RequestMapping(value="/getVozila/{id}", method = RequestMethod.GET)
 	public  List<Vehicle> vratiVozila(@PathVariable Long id){	
 		ArrayList<Vehicle> rezultat = new ArrayList<Vehicle>();
