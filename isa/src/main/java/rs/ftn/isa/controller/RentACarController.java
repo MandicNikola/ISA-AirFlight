@@ -293,6 +293,69 @@ public class RentACarController {
 	}	
 	
 	
+	@RequestMapping(value="/izmeniUslugu/{pomocna}", 
+			method = RequestMethod.POST,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+			public @ResponseBody RentACar izmeniUslugu( @PathVariable String pomocna){		
+				
+		System.out.println("Usao je u izmeni Usluugu" +pomocna);
+				String [] niz=pomocna.split("=");
+				
+				String idUsluge= niz[0];
+				String novaVrednost= niz[1];
+				String idServisa= niz[2];
+				
+				RentACar rent = servis.findOneById(Long.parseLong(idServisa));
+				System.out.println("Usao u izmeniUslugu "+ rent.getNaziv());
+				//System.out.println("id je "+id+", naziv je "+naziv+ "cene : "+cenaA +" "+cenaB+ " "+cenaC+ " "+cenaD+ " "+cenaE);
+				
+				if(Integer.parseInt(novaVrednost) <=0) {
+					return null;
+				}
+				
+				
+				PricelistRentCar stariCenovnik = servis.findAktivanCenovnik(rent.getId()) ;
+				//pronasli smo trenutno aktivni cenovnik, koji postaje neaktivan
+				Usluga stara= new Usluga();
+				for(Usluga U : stariCenovnik.getUsluge()) {
+					if(U.getId() == Integer.parseInt(idUsluge)) {
+						stara=U;
+						break;
+					}
+				}
+				
+				rent.getCenovnici().remove(stariCenovnik);
+				stariCenovnik.setAktivan(false);
+				rent.getCenovnici().add(stariCenovnik);
+			
+				PricelistRentCar noviCenovnik=new PricelistRentCar(new Date());
+				noviCenovnik.setAktivan(true);
+				
+				stariCenovnik.getUsluge().remove(stara);
+				
+				for(Usluga usl : stariCenovnik.getUsluge()) {
+						usl.setLista(noviCenovnik);
+						noviCenovnik.getUsluge().add(usl);
+				}
+			
+				stara.setCena(Integer.parseInt(novaVrednost));
+				stara.setLista(noviCenovnik);
+				noviCenovnik.getUsluge().add(stara);
+				
+				//postoji aktivan cenovnik, preuzmemo ga i obrisemo, jer cemo izmeniti jednu uslugu
+				
+				
+				noviCenovnik.setRentcar(rent);
+				//setovali odnos cenovnik i usluge
+				
+				//dodamo novi cenovnik
+				rent.getCenovnici().add(noviCenovnik);
+				RentACar povratna =servis.saveRentACar(rent);
+				
+				return povratna;
+					
+			}	
+			
 		
 
 	

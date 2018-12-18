@@ -109,6 +109,7 @@ function ispisiDatum(data){
 	
 }
 
+
 function ispisiCenovnik(skup){
 		
 		console.log('usao u ispisiCenovnik');
@@ -118,18 +119,49 @@ function ispisiCenovnik(skup){
 		
 		var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 			
-		$("#cenovnikKategorije").append("<table class=\"table table-hover\" id=\"tabelaCenovnik\" ><tr><th>Service</th><th>Price</th></tr>");
+		$("#cenovnikKategorije").append("<table class=\"table table-hover\" id=\"tabelaCenovnik\" ><tr><th>Service</th><th>Price per day</th></tr>");
 		console.log(lista.length);
 		
 		$.each(lista, function(index, clan) {
-			
-			$("#tabelaCenovnik").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+clan.naziv+"</td><td > "+clan.cena+"</td></tr>");
+			var pomocna=clan.id+"="+clan.kategorija;
+		 $("#tabelaCenovnik").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+clan.naziv+"</td><td ><input class=\"form-control\" type = \"number\"  id=\""+clan.id+"\"  value=\""+clan.cena+"\"></td><td><button class=\"btn btn-info\" onclick=\"izmeniUslugu('"+pomocna+"')\">Change price</button></td></tr>");
 		});
 	    $("#cenovnikKategorije").append("</table>");
 	 
 	    dodajDatum();
 	}
-
+function izmeniUslugu(data){
+	var podatak = window.location.search.substring(1);
+	var niz= podatak.split("=");
+	var id= niz[1];  //id servisa
+	
+	var niz2= data.split("=");
+	var idUsluge = niz2[0];
+	var kategorija = niz2[1];
+	
+	var vrednost= $("#"+idUsluge).val();
+	
+	var slanje=idUsluge+"="+vrednost+"="+id; //saljemo id usluge,kategoriju,novu vrednost i id servisa
+	console.log('id servisa je '+ id + " id usluge je "+idUsluge + " kategorija je "+kategorija+" vrednost je"+ vrednost);
+	
+	
+	$.ajax({
+		type : 'POST',
+		url : "/api/rents/izmeniUslugu/"+slanje,
+		success : function(pov) {
+			if( pov == null){	
+				alert('Neispravna cena');
+			}else{
+				alert('Uspesno ste izmenili uslugu');
+			}
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+	});
+	
+	
+}
 function popuniVozila(){
 	console.log('usao u popuni vozila');
 	var podatak = window.location.search.substring(1);
