@@ -41,17 +41,18 @@
  	 h3{
  	  margin-left:25px;
  	 	text-color:#bfbfbf;
- 	 margin-bottom:0px;
+ 	 	font-family: "Times New Roman", Times, serif;
+ 		 margin-bottom:0px;
  	 }
- 	 button[type = submit]{
+ 	 button[type = submit],#buttonID{
  	 	margin-left:30%;
  	 	margin-top: 5px;
  	 	
  	 }
- 	 #katNaziv{
+ 	 #katNaziv,#newPrice,#uslugaNaziv,#uslugaCijena{
  	 	width: 40%;
-  padding: 12px 20px;
-  margin: 8px 0;
+  		padding: 12px 20px;
+ 		 margin: 8px 0;
  	 }
   </style>
 </head>
@@ -96,6 +97,8 @@
 				</div>
 				<div id = "izmjena"></div>
 		</div>
+		
+		<aside>
 		<div class= "col-md-2" id = "admin" >
 			<button onclick = "addRoom()" type="button" class="btn btn-link">Add room</button>
 		</div>
@@ -108,8 +111,9 @@
 		</div>
 		<div class= "col-md-2"  >
 			<button onclick = "addPopust()" type="button" class="btn btn-link">Add discount</button>
-			
 		</div>
+		
+		</aside>
 	</div>
 	</div>
 </div>
