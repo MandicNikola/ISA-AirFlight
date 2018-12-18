@@ -17,6 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 //cijenovnik
@@ -37,6 +39,7 @@ public class PricelistHotel {
 	 
 	//cijenovnik ima vise usluga,jedna usluga jedan cijenovnik
 	@OneToMany(mappedBy = "cijene", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
 	private Set<Usluga> usluge = new HashSet<Usluga>();
 	public PricelistHotel() {}
 

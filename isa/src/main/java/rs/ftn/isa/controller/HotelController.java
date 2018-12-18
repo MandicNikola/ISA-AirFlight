@@ -159,13 +159,18 @@ public class HotelController {
 			
 			sobe.remove(room);
 			Set<CijenovnikSoba> cijenovnici = room.getCijenovnici();
+			CijenovnikSoba pomCJ = new CijenovnikSoba();
 			for(CijenovnikSoba cs :cijenovnici){
 				if(cs.isAktivan()) {
-					cs.setAktivan(false);
+					pomCJ = cs;
+					break;
 				}
 			}
+			room.getCijenovnici().remove(pomCJ);
+			pomCJ.setAktivan(false);
+			room.getCijenovnici().add(pomCJ);
 			
-			Usluga nova = new Usluga("cijena_noc",cijena);
+			 Usluga nova = new Usluga("cijena_noc",cijena);
 			 Date datum = new Date();
 			 CijenovnikSoba cijenovik = new CijenovnikSoba(datum,true);			  
 			 cijenovik.setAktivan(true);
@@ -210,38 +215,68 @@ public class HotelController {
 		}
 		
 		
-		@RequestMapping(value="/dodajUs/{id}", 
+		@RequestMapping(value="/dodatnausluga/{id}", 
 				method = RequestMethod.POST,
 				consumes = MediaType.APPLICATION_JSON_VALUE,
 				produces = MediaType.APPLICATION_JSON_VALUE)
 		public @ResponseBody Hotel dodajDodatnuUslugu(@RequestBody Usluga u,@PathVariable Long id){		
-			 	Hotel pom = servis.findHotelById(id);	 
+			 	Hotel pom = servis.findHotelById(id);
+			 	System.out.println("dosao da doda dodantu uslugu");
+			 	
 			 	if(pom.getCijenovnici()!= null) {
-			 		PricelistHotel aktivni = new PricelistHotel();
 			 		
-			 		for(PricelistHotel cc:pom.getCijenovnici()) {
-			 			if(cc.isAktivan()) {
-			 				aktivni = cc;
-			 				break;
+			 		if(pom.getCijenovnici().size() != 0) {
+			 		
+			 			PricelistHotel aktivni = new PricelistHotel();
+			 			System.out.println("dosao je u if 1 kad je broj cj razlicit od 0");
+			 			for(PricelistHotel cc:pom.getCijenovnici()) {
+			 				if(cc.isAktivan()) {
+			 					aktivni = cc;
+			 					break;
+			 				}
 			 			}
-			 		}
 			 		for(Usluga uu :aktivni.getUsluge()) {
 			 			if(uu.getNaziv().equals(u.getNaziv())) {
-			 				//postoji vec usluga sa datim nazivom
+			 				//postoji vec usluga sa datim nazivom za gresku
+			 				System.out.println("postoji vec ta usluga");
 			 				pom.setOpis("Usluga");
 			 				return pom;
 			 			}
 			 		}
+			 		
 			 		u.setCijene(aktivni);
 			 		aktivni.getUsluge().add(u);
-			 		
+			 	
 			 		//izmjeni cijenovnik kod hotela
 			 		pom.getCijenovnici().remove(aktivni);
 			 		pom.getCijenovnici().add(aktivni);
 			 		servis.saveHotel(pom);
 			 		return pom;
+			 		}else{
+			 			//ne postoje cijenovnici
+				 		PricelistHotel aktivni = new PricelistHotel();
+				 		Date datum = new Date();
+				 		aktivni.setDatum_primene(datum);
+				 		aktivni.setAktivan(true);
+				 		u.setCijene(aktivni);
+				 		
+				 		Set<Usluga> usluge = new HashSet<Usluga>();
+					 	usluge.add(u);
+					 	aktivni.setUsluge(usluge);
+					 	
+				 		aktivni.setHotelski(pom);
+				 		Set<PricelistHotel> cijenovnici = new HashSet<PricelistHotel>();
+				 		cijenovnici.add(aktivni);
+				 		
+				 		pom.setCijenovnici(cijenovnici);
+				 		servis.saveHotel(pom);
+				 		return pom;
+
+			 			
+			 		}
 			 	}else {
 			 		//ne postoje cijenovnici
+			 		
 			 		PricelistHotel aktivni = new PricelistHotel();
 			 		Date datum = new Date();
 			 		aktivni.setDatum_primene(datum);

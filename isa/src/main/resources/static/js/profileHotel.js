@@ -42,6 +42,7 @@ function ispisiSobe(lista){
 	 $("#sobe").append("</table>");
 	 
 }
+
 function changePrice(roomID,roomCijena){
 	console.log("dosao u room id : "+roomID);
 	 $("#tabovi").hide();
@@ -50,8 +51,8 @@ function changePrice(roomID,roomCijena){
 	 $("#izmjena").show();
 			 
 	 $("#izmjena").append("<div class=\"container\"><h3>New price:</h3>");
-		$("#izmjena").append("<input  type = \"number\"  id=\"newPrice\" value=\""+roomCijena+"\">"); 	
-		$("#izmjena").append("<button onclick=\"changeR("+roomID+")\"  class=\"btn btn-default\">Change</button>");
+		$("#izmjena").append("<input class=\"form-control\" type = \"number\"  id=\"newPrice\" value=\""+roomCijena+"\">"); 	
+		$("#izmjena").append("<button id=\"buttonID\" class=\"btn btn-light\" onclick=\"changeR("+roomID+")\"  >Change</button>");
 	$("#izmjena").append("</div>");
 }
 function changeR(roomID){
@@ -145,7 +146,7 @@ function dodajHoteluKategoriju(data){
 					
 				}else{
 					alert('dodavanje super');
-					formaZaCijene();
+					resetProfil();
 				}	
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
@@ -181,7 +182,7 @@ $(document).on('submit','.konfiguracija',function(e){
 	});
 	
 });
-function formaZaCijene(){
+function resetProfil(){
 	$("#tabovi").show();
 	$("#informacije").show();
 	
@@ -254,10 +255,10 @@ function addUsluga(){
 	$("#ispisiTabelu").show();
 	$("#ispisiTabelu").empty();
 	$("#ispisiTabelu").append("<div class=\"container\"><h3>New additional services</h3><form method=\"post\" class=\"dodatnausluga\"  id = \"formaUsluga\" >");
-		$("#formaKat").append("<div class=\"form-group\">");
-		$("#formaKat").append("<input  type = \"text\" class=\"form-control\" id=\"uslugaNaziv\" placeholder=\"Additional service name\">"); 	
-		$("#formaKat").append("<input  type = \"number\" class=\"form-control\" id=\"uslugaCijena\" placeholder=\"Additional service price\">"); 	
-		$("#formaKat").append("</div><button type=\"submit\" class=\"btn btn-default\">Add</button></form>");
+		$("#formaUsluga").append("<div class=\"form-group\">");
+		$("#formaUsluga").append("<input  type = \"text\" class=\"form-control\" id=\"uslugaNaziv\" placeholder=\"Additional service name\">"); 	
+		$("#formaUsluga").append("<input  type = \"number\" class=\"form-control\" id=\"uslugaCijena\" placeholder=\"Additional service price\">"); 	
+		$("#formaUsluga").append("</div><button type=\"submit\" class=\"btn btn-default\">Add</button></form>");
 	$("#ispisiTabelu").append("</div>");
 }
 $(document).on('submit','.dodatnausluga',function(e){
@@ -268,17 +269,16 @@ $(document).on('submit','.dodatnausluga',function(e){
 	
 	$.ajax({
 		type : 'POST',
-		url : "/api/hoteli/dodatnaUsluga/"+id,
+		url : "/api/hoteli/dodatnausluga/"+id,
 		contentType : 'application/json',
 		dataType : "json",
 		data:dodUsluga(),
 		success : function(data) {
-				if(data.naziv != "null"){
-					alert('Postoji izabrana kategorija');
-					
+				if(data.opis == "Usluga"){
+					alert('Postoji izabrana dodatna usluga');					
+					resetProfil();
 				}else{
-					alert('dodavanje super');
-					dodajHoteluKategoriju(data);
+					resetProfil();
 				}	
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
@@ -290,12 +290,10 @@ $(document).on('submit','.dodatnausluga',function(e){
 });
 
 function dodUsluga() {
-	console.log('dosao u form to JSON');
 	
 	var kat = JSON.stringify({
 		"naziv":$('#uslugaNaziv').val(),
 		"cena":$('#uslugaCijena').val()
 	});
-	console.log(kat);
 	return kat;
 }
