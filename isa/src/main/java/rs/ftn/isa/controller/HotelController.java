@@ -25,6 +25,7 @@ import rs.ftn.isa.dto.HotelDTO;
 import rs.ftn.isa.model.Category;
 import rs.ftn.isa.model.CijenovnikSoba;
 import rs.ftn.isa.model.Hotel;
+import rs.ftn.isa.model.PricelistHotel;
 import rs.ftn.isa.model.Room;
 import rs.ftn.isa.model.Usluga;
 import rs.ftn.isa.service.HotelService;
@@ -131,13 +132,13 @@ public class HotelController {
 				 
 		}
 	
-		@RequestMapping(value="/changePrice/{string}", 
+		@RequestMapping(value="/changePrice/{slanje}", 
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE)
-		public @ResponseBody Hotel changePrice(@PathVariable String string){		
+		public @ResponseBody Hotel changePrice(@PathVariable String slanje){		
 			
-			System.out.println("dobio sam string" + string);
-			String[] parts = string.split("-");
+			System.out.println("dobio sam string" + slanje);
+			String[] parts = slanje.split("-");
 			String roomID = parts[0];
 			String newPrice = parts[1];
 			String hotelID = parts[2];
@@ -154,8 +155,9 @@ public class HotelController {
 					break;
 				}
 			}
-
-			 sobe.remove(room);
+			System.out.println("dobio sam dosao do 1");
+			
+			sobe.remove(room);
 			Set<CijenovnikSoba> cijenovnici = room.getCijenovnici();
 			for(CijenovnikSoba cs :cijenovnici){
 				if(cs.isAktivan()) {
@@ -167,19 +169,23 @@ public class HotelController {
 			 
 			 Date datum = new Date();
 			 CijenovnikSoba cijenovik = new CijenovnikSoba(datum,true);			  
+			 cijenovik.setAktivan(true);
 			 nova.setCenesoba(cijenovik);
 			 Set<Usluga> usluge = new HashSet<Usluga>();
 			 usluge.add(nova);
 			 cijenovik.setUsluge(usluge);
 			 room.setCijena(cijena);
 			 cijenovik.setSoba(room);
-			
+
+				System.out.println("dobio sam dosao do 2");
 			 cijenovnici.add(cijenovik);
 			 room.setCijenovnici(cijenovnici);
 			 room.setHotel(pom);
 			 sobe.add(room);
 			 pom.setSobe(sobe);
 			 	//update hotela
+
+				System.out.println("dobio sam dosao do 3");
 			 servis.saveHotel(pom);
 			
 			return pom;
@@ -202,4 +208,56 @@ public class HotelController {
 			 return kat;
 		}
 		
+		
+		@RequestMapping(value="/sacuvajKat/{id}", 
+				method = RequestMethod.POST,
+				consumes = MediaType.APPLICATION_JSON_VALUE,
+				produces = MediaType.APPLICATION_JSON_VALUE)
+		public @ResponseBody Hotel dodajDodatnuUslugu(@RequestBody Usluga u,@PathVariable Long id){		
+			 	Hotel pom = servis.findHotelById(id);	 
+			 	if(pom.getCijenovnici()!= null) {
+			 		PricelistHotel aktivni = new PricelistHotel();
+			 		
+			 		for(PricelistHotel cc:pom.getCijenovnici()) {
+			 			if(cc.isAktivan()) {
+			 				aktivni = cc;
+			 				break;
+			 			}
+			 		}
+			 		for(Usluga uu :aktivni.getUsluge()) {
+			 			if(uu.getNaziv().equals(u.getNaziv())) {
+			 				//postoji vec usluga sa datim nazivom
+			 				pom.setOpis("Usluga");
+			 				return pom;
+			 			}
+			 		}
+			 		u.setCijene(aktivni);
+			 		aktivni.getUsluge().add(u);
+			 		
+			 		//izmjeni cijenovnik kod hotela
+			 		pom.getCijenovnici().remove(aktivni);
+			 		pom.getCijenovnici().add(aktivni);
+			 		servis.saveHotel(pom);
+			 		return pom;
+			 	}else {
+			 		//ne postoje cijenovnici
+			 		PricelistHotel aktivni = new PricelistHotel();
+			 		Date datum = new Date();
+			 		aktivni.setDatum_primene(datum);
+			 		aktivni.setAktivan(true);
+			 		u.setCijene(aktivni);
+			 		
+			 		Set<Usluga> usluge = new HashSet<Usluga>();
+				 	usluge.add(u);
+				 	aktivni.setUsluge(usluge);
+				 	
+			 		aktivni.setHotelski(pom);
+			 		Set<PricelistHotel> cijenovnici = new HashSet<PricelistHotel>();
+			 		cijenovnici.add(aktivni);
+			 		pom.setCijenovnici(cijenovnici);
+			 		servis.saveHotel(pom);
+			 		return pom;
+			 	}
+			 	
+		}
 }

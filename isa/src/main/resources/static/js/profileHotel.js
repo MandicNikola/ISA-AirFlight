@@ -48,8 +48,8 @@ function changePrice(roomID,roomCijena){
 	 $("#izmjena").empty();
 	 $("#izmjena").show();
 			 
-	 $("#izmjena").append("<div class=\"container\"><h3>Change the price</h3><form method=\"post\" class=\"changeprice\" onsubmit=\"return changeR("+roomID+")\" id = \"formaPrice\" >");
-		$("#formaPrice").append("<div class=\"form-group\"><label>New price:</label>");
+	 $("#izmjena").append("<div class=\"container\"><h3>New price:</h3><form method=\"post\" class=\"changeprice\" onsubmit=\"return changeR("+roomID+")\" id = \"formaPrice\" >");
+		$("#formaPrice").append("<div class=\"form-group\">");
 		$("#formaPrice").append("<input  type = \"number\" class=\"form-control\" id=\"newPrice\" value=\""+roomCijena+"\">"); 	
 		$("#formaPrice").append("</div><button type=\"submit\" class=\"btn btn-default\">Change</button></form>");
 	$("#izmjena").append("</div>");
@@ -232,4 +232,62 @@ function listaSoba(){
 		}
 	});
 	
+}
+
+
+function addUsluga(){
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	$("#tabovi").hide();
+	$("#sobe").hide();
+	$("#informacije").hide();
+	$("#cijene").hide();
+	
+	$("#ispisiTabelu").show();
+	$("#ispisiTabelu").empty();
+	$("#ispisiTabelu").append("<div class=\"container\"><h3>New additional services</h3><form method=\"post\" class=\"dodatnausluga\"  id = \"formaUsluga\" >");
+		$("#formaKat").append("<div class=\"form-group\">");
+		$("#formaKat").append("<input  type = \"text\" class=\"form-control\" id=\"uslugaNaziv\" placeholder=\"Additional service name\">"); 	
+		$("#formaKat").append("<input  type = \"number\" class=\"form-control\" id=\"uslugaCijena\" placeholder=\"Additional service price\">"); 	
+		$("#formaKat").append("</div><button type=\"submit\" class=\"btn btn-default\">Add</button></form>");
+	$("#ispisiTabelu").append("</div>");
+}
+$(document).on('submit','.dodatnausluga',function(e){
+	e.preventDefault();	
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	
+	
+	$.ajax({
+		type : 'POST',
+		url : "/api/hoteli/dodatnaUsluga/"+id,
+		contentType : 'application/json',
+		dataType : "json",
+		data:dodUsluga(),
+		success : function(data) {
+				if(data.naziv != "null"){
+					alert('Postoji izabrana kategorija');
+					
+				}else{
+					alert('dodavanje super');
+					dodajHoteluKategoriju(data);
+				}	
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("greska pri unosu nove kat");
+			   
+		}
+	});
+	
+});
+
+function dodUsluga() {
+	console.log('dosao u form to JSON');
+	
+	var kat = JSON.stringify({
+		"naziv":$('#uslugaNaziv').val(),
+		"cena":$('#uslugaCijena').val()
+	});
+	console.log(kat);
+	return kat;
 }

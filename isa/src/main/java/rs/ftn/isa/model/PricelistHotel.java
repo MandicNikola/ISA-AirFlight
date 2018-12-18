@@ -12,36 +12,52 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 //cijenovnik
 @Entity
 @Table(name = "cijenovnik")
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class PricelistHotel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	@Column(name = "datum", nullable = false)
 	private Date datum_primene;
+	@Column(name = "aktivan", nullable = false)
+	private boolean aktivan;
 	
-	
-	@OneToOne(fetch = FetchType.LAZY,
-		    cascade =  CascadeType.ALL,
-		    mappedBy = "cijenovnik")
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	  private Hotel hotelski;
 	 
 	//cijenovnik ima vise usluga,jedna usluga jedan cijenovnik
 	@OneToMany(mappedBy = "cijene", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Usluga> usluge = new HashSet<Usluga>();
 	public PricelistHotel() {}
-	public PricelistHotel(int id, Date datum_primene) {
+
+	public PricelistHotel(Date datum_primene,boolean aktivan) {
 		super();
-		this.id = id;
 		this.datum_primene = datum_primene;
+		this.aktivan = aktivan;
 	}
 
-
+	public boolean isAktivan() {
+		return aktivan;
+	}
+	public void setAktivan(boolean aktivan) {
+		this.aktivan = aktivan;
+	}
+	public Hotel getHotelski() {
+		return hotelski;
+	}
+	public void setHotelski(Hotel hotelski) {
+		this.hotelski = hotelski;
+	}
 	public Date getDatum_primene() {
 		return datum_primene;
 	}

@@ -39,10 +39,9 @@ public class Hotel {
 	@Column(name = "ocena", nullable = false)	
 	private double ocena;
 	
-	//strani kljuc je id od cijenovnika
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "cijenovnik_id")
-	private  PricelistHotel cijenovnik;
+	@OneToMany(mappedBy = "rentcar",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	private  Set<PricelistHotel> cijenovnici;
 	
 	//nedostaje kofiguracija soba i cijenovnik usluga
 	//jedan hotel ima vise soba
@@ -116,11 +115,12 @@ public class Hotel {
 	public void setSobe(Set<Room> sobe) {
 		this.sobe = sobe;
 	}
-	public PricelistHotel getCijenovnik() {
-		return cijenovnik;
+	
+	public Set<PricelistHotel> getCijenovnici() {
+		return cijenovnici;
 	}
-	public void setCijenovnik(PricelistHotel cijenovnik) {
-		this.cijenovnik = cijenovnik;
+	public void setCijenovnici(Set<PricelistHotel> cijenovnici) {
+		this.cijenovnici = cijenovnici;
 	}
 	public Set<Category> getKategorije() {
 		return kategorije;
