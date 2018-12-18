@@ -90,8 +90,10 @@ function ispisiCenovnik(skup){
 		var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 			
 		$("#cenovnikKategorije").append("<table class=\"table table-hover\" id=\"tabelaCenovnik\" ><tr><th>Service</th><th>Price</th></tr>");
+		console.log(lista.length);
 		
 		$.each(lista, function(index, clan) {
+			
 			$("#tabelaCenovnik").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+clan.naziv+"</td><td > "+clan.cena+"</td></tr>");
 		});
 	    $("#cenovnikKategorije").append("</table>");
