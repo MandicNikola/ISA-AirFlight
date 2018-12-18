@@ -50,37 +50,53 @@ function popuniFilijale(){
 	});
 	
 }
-function ispisiTabeluCenovnik(){
-	console.log('usao u popuni cenovnik');
+
+
+
+//ovde treba da se preuzmu usluge od odredjene kategorije
+function kategorija(naziv){
+	console.log('usao u kategorija dobio je '+naziv);
 	var podatak = window.location.search.substring(1);
 	var niz= podatak.split("=");
 	var id= niz[1]; 
 	
-    
+	var pom=id+"="+naziv;
 	
-}
-function ispisiCenovnik(pom){
-	
-	console.log('usao u ispisivozila');
-	$("#vazi").text(pom.datum);
-	
-	var skup = pom.usluge;
-	
-	var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
-		
-	$("#cenTab").append("<table class=\"table table-hover\" id=\"tabelaCenovnik\" ><thead><tr><th>Service</th><th>Category A</th><th>Category B</th><th>Category C</th><th>Category D</th><th>Category E</th></tr></thead>");
-	
-	$.each(lista, function(index, clan) {
-		//$("#tabelaCenovnik").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+clan.naziv+"</td><td > "+vozilo.marka+"</td><td > "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td > "+vozilo.sedista+"</td><td > "+vozilo.kategorija+"</td></tr>");
+	$.ajax({
+		method:'GET',
+		url: "/api/rents/katUsluge/"+pom,
+		success: function(data){
+			if(data==null){
+				console.log('Nema usluga');
+			}else if(data.length == 0){
+				console.log('Prazne usluga');
+			}else{
+				console.log('Ima usluga u cenovniku');
+				ispisiCenovnik(data);
+			}
+		}
 	});
-    $("#cenTab").append("</table>");
- 
+	
 }
 
-function kategorija(naziv){
-	console.log('usao u kategorija dobio je '+naziv);
-	
-}
+
+function ispisiCenovnik(skup){
+		
+		console.log('usao u ispisiCenovnik');
+		
+		//ovde su usluge od odredjene kategorije, pravimo njenu tabelu
+		
+		$("#cenovnikKategorije").empty();
+		var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
+			
+		$("#cenovnikKategorije").append("<table class=\"table table-hover\" id=\"tabelaCenovnik\" ><tr><th>Service</th><th>Price</th></tr>");
+		
+		$.each(lista, function(index, clan) {
+			$("#tabelaCenovnik").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+clan.naziv+"</td><td > "+clan.cena+"</td></tr>");
+		});
+	    $("#cenovnikKategorije").append("</table>");
+	 
+	}
 function popuniVozila(){
 	console.log('usao u popuni vozila');
 	var podatak = window.location.search.substring(1);
@@ -177,6 +193,7 @@ $(document).ready(function(){
 	 	$("#addUsluge").hide();		
 
 		$("#cenovnik").show();
+		$("#cenovnikKategorije").empty();
     });
     
     $("a#info").click(function(){

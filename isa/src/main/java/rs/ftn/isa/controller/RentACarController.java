@@ -147,7 +147,7 @@ public class RentACarController {
 	//vraca usluge odredjenog servisa odredjene kategorije
 	@RequestMapping(value="/katUsluge/{pom}", method = RequestMethod.GET)
 	public  @ResponseBody ArrayList<Usluga> vratiUslugeKategorije(@PathVariable String pom){	
-		
+		//dobice oblik 1245=A <-1245 je id ,a A je kategorija
 		String[] niz = pom.split("=");
 		Long id = Long.parseLong(niz[0]);
 		String kat=niz[1];
@@ -155,6 +155,17 @@ public class RentACarController {
 		RentACar rent = servis.findOneById(id);
 		PricelistRentCar cenovnik =servis.findAktivanCenovnik(id);
 		
+		if(cenovnik == null) {
+			System.out.println("Cenovnik je null");
+			return null;
+		}
+		if(cenovnik.getUsluge().size() == 0) {
+			System.out.println("Cenovnik je prazan");
+			return null;
+			}
+		
+		System.out.println("Datum cenovnika je "+cenovnik.getDatum_primene());
+		System.out.println("Cenovnik nije prazan");
 		Set<Usluga> sveUsluge = cenovnik.getUsluge();
 		
 		ArrayList<Usluga> katUsluge= new ArrayList<Usluga>();
@@ -162,6 +173,7 @@ public class RentACarController {
 		for(Usluga U : sveUsluge) {
 				if(U.getKategorija().toString().equals(kat)) {
 						katUsluge.add(U);
+						System.out.println("Naziv usluge je "+U.getNaziv());
 				}
 		}
 		return katUsluge;
