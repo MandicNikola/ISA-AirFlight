@@ -60,7 +60,11 @@ function kategorija(naziv){
 	var niz= podatak.split("=");
 	var id= niz[1]; 
 	
+	$("#cenovnikKategorije").empty();
+	$("#cenovnikKategorije").append("<h4>Pricelist of category "+naziv+"</h4>");
+	
 	var pom=id+"="+naziv;
+	
 	
 	$.ajax({
 		method:'GET',
@@ -78,7 +82,32 @@ function kategorija(naziv){
 	});
 	
 }
-
+function dodajDatum(){
+	var podatak = window.location.search.substring(1);
+	var niz= podatak.split("=");
+	var id= niz[1]; 
+	
+	$.ajax({
+		method:'GET',
+		url: "/api/rents/getAktivanCenovnik/"+id,
+		success: function(data){
+			if(data==null){
+				console.log('Nema usluga');
+			}else if(data.length == 0){
+				console.log('Prazne usluga');
+			}else{
+				console.log('Ima usluga u cenovniku');
+				ispisiDatum(data);
+			}
+		}
+	});
+	
+	
+}
+function ispisiDatum(data){
+	$("#cenovnikKategorije").append("<p><i class=\"glyphicon glyphicon-calendar\"> </i> Effective date : "+data.datum_primene+"</p>");
+	
+}
 
 function ispisiCenovnik(skup){
 		
@@ -86,7 +115,7 @@ function ispisiCenovnik(skup){
 		
 		//ovde su usluge od odredjene kategorije, pravimo njenu tabelu
 		
-		$("#cenovnikKategorije").empty();
+		
 		var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 			
 		$("#cenovnikKategorije").append("<table class=\"table table-hover\" id=\"tabelaCenovnik\" ><tr><th>Service</th><th>Price</th></tr>");
@@ -98,7 +127,9 @@ function ispisiCenovnik(skup){
 		});
 	    $("#cenovnikKategorije").append("</table>");
 	 
+	    dodajDatum();
 	}
+
 function popuniVozila(){
 	console.log('usao u popuni vozila');
 	var podatak = window.location.search.substring(1);
