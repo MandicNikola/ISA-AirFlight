@@ -65,7 +65,7 @@
  	 	padding-left:12px;
  	 	padding-right:12px;
  	 }
- 	 #polje, #cenovnik{
+ 	 #polje{
  	 	background-color: white;
  	 	padding:5px;
  	 	width:50%;
@@ -75,10 +75,13 @@
  	 	padding:5px;
  	 	margin-left:5px;
  	 }
- 	 
  	 #cenovnik{
  	 	margin-left:0px;
- 	 	padding: 10px;
+ 	 	margin-right:0px;
+ 	 	background-color: white;
+ 	 	border: 2px solid #C3C3C3;
+ 	 	border-radius: 5px;
+ 	 	
  	 }
   #prviJumbo p{
   	margin:0px;
@@ -96,7 +99,7 @@
   		padding-left: 0px;
   		font-size: 20px; 
   	}
-  	#informacije , #automobili{
+  	#informacije , #automobili, #cenovnik{
   		padding-left: 0px;
   		padding-right: 0px;
   	}
@@ -106,6 +109,12 @@
   	}
   	.registracija{
   		padding-left:20%;
+  	}
+  	.floatC{
+  		float: left;
+  		width: 40%;
+  		margin-left:15px;
+  		margin-right:15px;
   	}
  </style>
 </head>
@@ -123,6 +132,7 @@
 					   Choose the appropriate car and relax.
 					</p>
 			</div>
+		<div class="container">
 			<div class = "row" id="tabs">
 			<article class = "col-sm-10" id="hid">
 			   <div class="container-fluid" id="pozTabovi">
@@ -131,8 +141,8 @@
 				    <li><a id="veh" >Vehicles</a></li>
 				    <li><a id="price" >Pricelist</a></li>
 				  </ul>
-			  </div>
-			  <div id="informacije" class="container-fluid">
+			   </div>
+			   <div id="informacije" class="container-fluid">
 			  		<section >
 						<p id="opis"> </p>
 						<p id="adresa"><i class="glyphicon glyphicon-home"></i>Headquarters of company is in </p>
@@ -143,17 +153,17 @@
 						    
   						</div>
 				    </section>
-			  </div>
-			  <div id="automobili" class="container-fluid">
+			   </div>
+			   <div id="automobili" class="container-fluid">
 				  <section id="vozila" >
 						<p>Look at the list of our cars <i class="glyphicon glyphicon-search"> </i></p>
 						<div id="pregledVozila">
 						</div>
 						
 					</section>
-			  </div>
-			  <div id="cenovnik" class="row">
-			  		<article id="cenTab" class = "col-sm-4">
+			   </div>
+			   <div class="container-fluid"  id="cenovnik">
+			      		<div class ="floatC" id="cenTab" >
 								<table class="table">	
 									<thead><th>Kategorija</th> <th>Cenovnik</th></thead>
 									<tbody>
@@ -190,16 +200,17 @@
 									</tbody>
 								</table>
 						
-						</article>
-				<article class = "col-sm-8" id="prikazCenovnika">
+						</div>
+				<div class ="floatC" id="prikazCenovnika">
 						<p>  <i class="glyphicon glyphicon-calendar"> </i> Effective date <span id="vazi"></span>
 						</p>
 						<div id="cenovnikKategorije">
 						</div>
-				</article>
+				</div>
+				 <br style="clear: left;" />
+				
 			  </div>
-			  
-			 <div id="addUsluge" class="container-fluid">
+			  <div id="addUsluge" class="container-fluid">
 			 	<div  id="polje" >
 			 		<form method="post" class="dodavanje">
 			 		<h2>Add a service</h2>
@@ -268,8 +279,9 @@
 				</div>
 			</aside>
 			</div>
-			
 		</div>
+			
+	</div>
 	</div>
 </body>
 </html>
