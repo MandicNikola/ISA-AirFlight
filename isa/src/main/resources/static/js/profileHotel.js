@@ -254,12 +254,21 @@ function ispisiDodatne(data){
 		$("#cijeneDodatne").empty();
 		var lista = data == null ? [] : (data instanceof Array ? data : [ data ]);
 			
-		$("#cijeneDodatne").append("<table class=\"table table-hover\" id=\"tblDodatne\" ><tr><th>Service</th><th>Price</th><th></th></tr>");
+		$("#cijeneDodatne").append("<table class=\"table table-hover\" id=\"tblDodatne\" ><tr><th>Service</th><th>Price</th><th></th><th>Discount</th><th></th></tr>");
 		console.log(lista.length);
 		
 		$.each(lista, function(index, usluga) {
 			
-			$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td ><input class=\"form-control\" type = \"number\"  id=\""+usluga.id+"\" value=\""+usluga.cena+"\"></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"promjeniDodatnu("+usluga.id+")\">Change</button></td></tr>");
+				console.log(usluga.konfiguracija);
+			if(usluga.konfiguracija == 'da'){
+				console.log('dosao u dodavanje za uslugu');
+				$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td ><input class=\"form-control\" type = \"number\"  id=\""+usluga.id+"\" value=\""+usluga.cena+"\"></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"promjeniDodatnu("+usluga.id+")\">Change</button></td><td ><input class=\"form-control\" type = \"number\"  id=\"pop"+usluga.id+"\" value=\""+usluga.popust+"\"></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"promjeniPopust("+usluga.id+")\">Change</button></td>");
+
+			}else{
+				$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td ><input class=\"form-control\" type = \"number\"  id=\""+usluga.id+"\" value=\""+usluga.cena+"\"></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"promjeniDodatnu("+usluga.id+")\">Change</button></td><td></td><td></td>");
+					
+			}
+			$("#tblDodatne").append("</tr>");
 		});
 	    $("#cijeneDodatne").append("</table>");
 }
@@ -279,6 +288,27 @@ function promjeniDodatnu(idUsluga){
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			alert("greska pri unosu novog hotela");
+			   
+		}
+	});
+
+}
+
+function promjeniPopust(idUsluga){
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	
+	var vr =$("#pop"+idUsluga).val();
+	var pom = idUsluga+"-"+vr+"-"+id;
+
+	$.ajax({
+		type : 'POST',
+		url : "/api/hoteli/promjeniPopust/"+pom,
+		success : function(data) {
+					alert('izmjenio Popust');
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("greska pri izmjeni popusta");
 			   
 		}
 	});
@@ -358,7 +388,7 @@ function formaPopusti(lista){
 		 $("#dodatne").append("<option  value=\""+data.id+"\">"+data.naziv+"</option>");	 
 		 
 	 });
-		$("#ispisiTabelu").append("</select><div><input  type = \"number\"  min=\"1\" max=\"99\" class=\"form-control\" id=\"popust\" placeholder=\"discount in %\"></div><div><button id=\"buttonID\" class=\"btn btn-light\" onclick=\"popustFunkcija()\"  >Change</button></div></div>");
+		$("#ispisiTabelu").append("</select><div class=\"container\"><input  type = \"number\"  min=\"1\" max=\"99\" class=\"form-control\" id=\"popust\" placeholder=\"discount in %\"></div><div><button id=\"dugmePopust\"  class=\"btn btn-info\" onclick=\"popustFunkcija()\"  >Change</button></div></div>");
 
 }
 function popustFunkcija(){

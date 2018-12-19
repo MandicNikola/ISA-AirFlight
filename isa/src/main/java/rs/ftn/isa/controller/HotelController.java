@@ -227,6 +227,50 @@ public class HotelController {
 		}
 		
 		
+		@RequestMapping(value="/promjeniPopust/{slanje}", 
+				method = RequestMethod.POST,
+				produces = MediaType.APPLICATION_JSON_VALUE)
+		public @ResponseBody Hotel changePopust(@PathVariable String slanje){	
+			System.out.println("dobio sam "+slanje);
+			
+			String[] parts = slanje.split("-");
+			String uslugaID = parts[0];
+			String cijenaStr = parts[1];
+			String hotelID = parts[2];
+			Long hotelId = Long.parseLong(hotelID);
+			int popust = Integer.parseInt(cijenaStr);
+			Long uslugaId = Long.parseLong(uslugaID);
+			Hotel pom = servis.findHotelById(hotelId);	
+			   
+			PricelistHotel aktivni = new PricelistHotel();
+ 			System.out.println("dosao je u if 1 kad je broj cj razlicit od 0");
+ 			for(PricelistHotel cc:pom.getCijenovnici()) {
+ 				if(cc.isAktivan()) {
+ 					aktivni = cc;
+ 					break;
+ 				}
+ 			}
+			Usluga usluga = new Usluga();
+ 			for(Usluga uu:aktivni.getUsluge()) {
+ 				if(uu.getId() == uslugaId) {
+ 					usluga = uu;
+ 					break;
+ 				}
+ 				
+ 			}
+ 			
+
+ 			pom.getCijenovnici().remove(aktivni);
+ 			aktivni.getUsluge().remove(usluga);
+ 			usluga.setPopust(popust);
+ 			aktivni.getUsluge().add(usluga);
+ 			
+ 			pom.getCijenovnici().add(aktivni);
+ 			servis.saveHotel(pom);
+ 			return pom;
+		}
+
+		
 		@RequestMapping(value="/changePrice/{slanje}", 
 				method = RequestMethod.GET,
 				produces = MediaType.APPLICATION_JSON_VALUE)
