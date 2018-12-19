@@ -284,7 +284,7 @@ function promjeniDodatnu(idUsluga){
 	});
 
 }
-function ispisiDodatneKorisnik(data){
+function ispisiDodatneNijeAdmin(data){
 	console.log('usao u ispisiCenovnik dodatnih usluga');
 	
 	$("#cijeneDodatne").empty();
@@ -320,8 +320,73 @@ function listaSoba(){
 	});
 	
 }
+function addPopust(){
+	var adresa = window.location.search.substring(1);
+	console.log('adesa je '+adresa);
+	var id = adresa.split('=')[1];
 
+	$.ajax({
+		method:'GET',
+		url: "/api/hoteli/getDodatneUsluge/"+id,
+		success: function(lista){
+			if(lista == null){
+				console.log('Nema dodatnih usluga');
+				
+			}else{
+				
+				console.log('postoje dodatne usluge');
+				formaPopusti(lista);
+			}
+		}
+	});
+	
+	
+}
+function formaPopusti(lista){
+	 var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	 
+		$("#sobe").hide();
+		$("#informacije").hide();
+		$("#cijene").hide();
+		
+		$("#ispisiTabelu").show();
+		$("#ispisiTabelu").empty();
+		$("#ispisiTabelu").append("<div class=\"container\"><h3>Add discount</h3><select class=\"form-control\" id=\"dodatne\">");
+			
+	 $.each(pom, function(index, data) {
+		 	
+		 $("#dodatne").append("<option  value=\""+data.id+"\">"+data.naziv+"</option>");	 
+		 
+	 });
+		$("#ispisiTabelu").append("</select><div><input  type = \"number\"  min=\"1\" max=\"99\" class=\"form-control\" id=\"popust\" placeholder=\"discount in %\"></div><div><button id=\"buttonID\" class=\"btn btn-light\" onclick=\"popustFunkcija()\"  >Change</button></div></div>");
 
+}
+function popustFunkcija(){
+	
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	
+	var vr =$('#popust').val();
+	var idUsluga =$('#dodatne').val();
+	console.log("izbor je "+idUsluga);
+	
+	var pom = idUsluga+"-"+vr+"-"+id;
+
+	$.ajax({
+		type : 'POST',
+		url : "/api/hoteli/dodajPopust/"+pom,
+		success : function(data) {
+					alert('usao ovdje');
+					resetProfil();
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("greska pri unosu novog hotela");
+			   
+		}
+	});
+
+	
+}
 function addUsluga(){
 	var adresa = window.location.search.substring(1);
 	var id = adresa.split('=')[1];

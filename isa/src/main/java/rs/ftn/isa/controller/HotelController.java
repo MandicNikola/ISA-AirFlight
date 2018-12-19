@@ -181,6 +181,51 @@ public class HotelController {
  			servis.saveHotel(pom);
  			return pom;
 		}
+		//dodavanje popusta na dodatnu uslugu koja ga jos uvijek nema
+		@RequestMapping(value="/dodajPopust/{slanje}", 
+				method = RequestMethod.POST,
+				produces = MediaType.APPLICATION_JSON_VALUE)
+		public @ResponseBody Hotel dodajPopust(@PathVariable String slanje){	
+			System.out.println("dobio sam "+slanje);
+			//idUsluga+"-"+vr+"-"+id;
+
+			String[] parts = slanje.split("-");
+			String uslugaID = parts[0];
+			String popust = parts[1];
+			String hotelID = parts[2];
+			Long hotelId = Long.parseLong(hotelID);
+			int popustINT = Integer.parseInt(popust);
+			Long uslugaId = Long.parseLong(uslugaID);
+			Hotel pom = servis.findHotelById(hotelId);	
+			  System.out.println(" usluga je "+uslugaId);
+			PricelistHotel aktivni = new PricelistHotel();
+ 			
+			for(PricelistHotel cc:pom.getCijenovnici()) {
+ 				if(cc.isAktivan()) {
+ 					aktivni = cc;
+ 					break;
+ 				}
+ 			}
+			Usluga usluga = new Usluga();
+ 			for(Usluga uu:aktivni.getUsluge()) {
+ 				if(uu.getId() == uslugaId) {
+ 					usluga = uu;
+ 					break;
+ 				}
+ 				
+ 			}
+ 			pom.getCijenovnici().remove(aktivni);
+ 			aktivni.getUsluge().remove(usluga);
+ 			
+ 			usluga.setKonfiguracija("da");
+ 			usluga.setPopust(popustINT);
+ 			aktivni.getUsluge().add(usluga);
+ 			
+ 			pom.getCijenovnici().add(aktivni); 	
+ 			servis.saveHotel(pom);
+ 			return pom;
+		}
+		
 		
 		@RequestMapping(value="/changePrice/{slanje}", 
 				method = RequestMethod.GET,
@@ -293,7 +338,7 @@ public class HotelController {
 			 				return pom;
 			 			}
 			 		}
-			 		
+			 		u.setKonfiguracija("ne");
 			 		u.setCijene(aktivni);
 			 		aktivni.getUsluge().add(u);
 			 	
@@ -308,6 +353,8 @@ public class HotelController {
 				 		Date datum = new Date();
 				 		aktivni.setDatum_primene(datum);
 				 		aktivni.setAktivan(true);
+				 		u.setKonfiguracija("ne");
+				 		
 				 		u.setCijene(aktivni);
 				 		
 				 		Set<Usluga> usluge = new HashSet<Usluga>();
@@ -331,6 +378,8 @@ public class HotelController {
 			 		Date datum = new Date();
 			 		aktivni.setDatum_primene(datum);
 			 		aktivni.setAktivan(true);
+			 		u.setKonfiguracija("ne");
+			 		
 			 		u.setCijene(aktivni);
 			 		
 			 		Set<Usluga> usluge = new HashSet<Usluga>();
@@ -379,4 +428,39 @@ public class HotelController {
 		 	
 			return null;
 		}
+		
+		
+		@RequestMapping(value="/getDodatneUsluge/{id}", 
+				method = RequestMethod.GET,
+				produces = MediaType.APPLICATION_JSON_VALUE)
+		public @ResponseBody ArrayList<Usluga> vratiDodatneUsluge(@PathVariable Long id){	
+			Hotel pom = servis.findHotelById(id);
+		 	ArrayList<Usluga> usluge = new ArrayList<Usluga>(); 
+		 	PricelistHotel cijenovnik = new PricelistHotel();
+		 	
+		 	if(pom.getCijenovnici()!= null) {
+		 		System.out.println("postoje  neki cj");
+				 
+		 		if(pom.getCijenovnici().size() != 0) {
+		 			//postoje dodatne usluge u hotelu
+		 			for(PricelistHotel cc:pom.getCijenovnici()) {
+		 				if(cc.isAktivan()) {
+		 					cijenovnik = cc;
+		 					break;
+		 				}
+		 			
+		 			}
+		 			System.out.println("postoji cjenovnik dodatnih usluga");
+		 				for(Usluga uu:cijenovnik.getUsluge()) {
+		 					if(uu.getKonfiguracija().equals("ne") ) {
+		 						usluge.add(uu);
+		 					}
+		 				}
+		 				return usluge;
+		 		}
+		 	}		 		
+		 	
+			return null;
+		}
+
 }

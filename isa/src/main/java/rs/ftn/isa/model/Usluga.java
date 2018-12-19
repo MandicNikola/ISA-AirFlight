@@ -38,6 +38,9 @@ public class Usluga {
 	@Column(name="konfiguracija", nullable= true)
 	private String konfiguracija;
 	
+	@Column(name="popust", nullable= true)
+	private int popust;
+	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "lista_id")
 	PricelistRentCar lista;
@@ -76,7 +79,26 @@ public class Usluga {
 		this.kategorija = CategoryCar.valueOf(kategorija);
 	}
 
+	
 
+
+	public Usluga(String naziv, int cena, String konfiguracija, int popust) {
+		super();
+		this.naziv = naziv;
+		this.cena = cena;
+		this.konfiguracija = konfiguracija;
+		this.popust = popust;
+	}
+
+
+	public int getPopust() {
+		return popust;
+	}
+
+
+	public void setPopust(int popust) {
+		this.popust = popust;
+	}
 
 
 	public CategoryCar getKategorija() {
