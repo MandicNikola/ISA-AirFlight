@@ -31,4 +31,9 @@ public class UslugaController {
 		return  servis.findAll();
 	}
 	
+	@RequestMapping(value="/izbrisidodatnu/{pom}", method = RequestMethod.POST)
+	public void getAllUsluge(@PathVariable String pom){		
+		  servis.removeUsluga(Long.parseLong(pom));
+	}
+	
 }

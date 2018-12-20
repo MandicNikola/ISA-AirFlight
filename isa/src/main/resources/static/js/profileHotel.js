@@ -50,7 +50,7 @@ function deleteRoom(sobaID){
 		url : "/api/rooms/obrisiSobu/"+sobaID,
 		success : function(data) {
 				console.log('obrisana soba');
-				onLoad();
+				listaSoba();
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
 			alert('greska');
@@ -279,15 +279,32 @@ function ispisiDodatne(data){
 				console.log(usluga.konfiguracija);
 			if(usluga.konfiguracija == 'da'){
 				console.log('dosao u dodavanje za uslugu');
-				$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td ><input class=\"form-control\" type = \"number\"  id=\""+usluga.id+"\" value=\""+usluga.cena+"\"></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"promjeniDodatnu("+usluga.id+")\">Change</button></td><td ><input class=\"form-control\" type = \"number\"  id=\"pop"+usluga.id+"\" value=\""+usluga.popust+"\"></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"promjeniPopust("+usluga.id+")\">Change</button></td>");
+				$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td ><input class=\"form-control\" type = \"number\"  id=\""+usluga.id+"\" value=\""+usluga.cena+"\"></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"promjeniDodatnu("+usluga.id+")\">Change</button></td><td ><input class=\"form-control\" type = \"number\"  id=\"pop"+usluga.id+"\" value=\""+usluga.popust+"\"></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"promjeniPopust("+usluga.id+")\">Change</button></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"izbrisiDodatnu("+usluga.id+")\">Delete</button></td>");
 
 			}else{
-				$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td ><input class=\"form-control\" type = \"number\"  id=\""+usluga.id+"\" value=\""+usluga.cena+"\"></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"promjeniDodatnu("+usluga.id+")\">Change</button></td><td></td><td></td>");
+				$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td ><input class=\"form-control\" type = \"number\"  id=\""+usluga.id+"\" value=\""+usluga.cena+"\"></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"promjeniDodatnu("+usluga.id+")\">Change</button></td><td></td><td></td></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"izbrisiDodatnu("+usluga.id+")\">Delete</button></td>");
 					
 			}
 			$("#tblDodatne").append("</tr>");
 		});
 	    $("#cijeneDodatne").append("</table>");
+}
+
+function izbrisiDodatnu(idUsluga){
+	
+	$.ajax({
+		type : 'POST',
+		url : "/api/usluge/izbrisidodatnu/"+idUsluga,
+		success : function(data) {
+					showPrices();
+					alert('izbrisao');
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("greska pri brisanju dodatne usluge");
+			   
+		}
+	});
+
 }
 
 function promjeniDodatnu(idUsluga){

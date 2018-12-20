@@ -46,7 +46,7 @@ public class Usluga {
 	PricelistRentCar lista;
 	
 	//cijenovnik hotela
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne( fetch = FetchType.EAGER)
 	PricelistHotel cijene;
 	
 	//cijenovnik sobe
