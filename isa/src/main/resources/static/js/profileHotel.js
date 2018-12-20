@@ -14,7 +14,7 @@ function onLoad(){
 		url: "/api/hoteli/findById/"+id,
 		success: function(hotel){
 			if(hotel == null){
-				console.log('Nema servise')
+				console.log('Nema servise');
 			}else{
 				ispisiProfilHotela(hotel);
 				

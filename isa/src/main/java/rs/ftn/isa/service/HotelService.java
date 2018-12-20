@@ -13,5 +13,7 @@ public interface HotelService {
 	Hotel findHotelByNaziv(String naziv);
 	Hotel findHotelById(Long id);
 	Hotel saveHotel(Hotel hotel);
+	void removeHotel(Long id);
+	
 	 
 }

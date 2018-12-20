@@ -37,12 +37,31 @@ function ispisiHotele(lista){
 	console.log('usao u ispisi hotele u js');
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	
-	$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaHotel\" ><tr><th> Name </th><th> Promotional description</th><th>Grade</th></tr>");
+	$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaHotel\" ><tr><th> Name </th><th> Promotional description</th><th>Grade</th><th></th><th></th></tr>");
 		
 		$.each(pom, function(index, servis) {
-			$("#tabelaHotel").append("<tr><td class=\"hoverName\" onclick=\"hotelProfil('"+servis.id+"')\">"+servis.naziv+"</td><td > "+servis.opis+"</td><td > "+servis.ocena+"</td></tr>");
+			$("#tabelaHotel").append("<tr><td class=\"hoverName\" onclick=\"hotelProfil('"+servis.id+"')\">"+servis.naziv+"</td><td > "+servis.opis+"</td><td > "+servis.ocena+"</td><td><button  class=\"btn btn-dark\" onclick=\"changeHotel('"+servis.id+"')\">Change</button></td><td><button  class=\"btn btn-dark\" onclick=\"deleteHotel('"+servis.id+"')\">Delete</button></td></tr>");
 		});
 	 $("#ispisiTabelu").append("</table>");
+}
+function changeHotel(id){
+	window.location = "changeHotel.html?id="+id;
+	
+}
+function deleteHotel(id){
+	$.ajax({
+		type : 'POST',
+		url : "/api/hoteli/obrisiHotel/"+id,
+		success : function(data) {
+				console.log('obrisan hotel');
+				hotelShow();
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+	});
+	
+	
 }
 function carShow(){
 	$("#pozadinaAvion").hide();

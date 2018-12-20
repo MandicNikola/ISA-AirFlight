@@ -42,5 +42,13 @@ public class HotelServiceImpl implements HotelService {
 	}
 
 
+	@Override
+	public void removeHotel(Long id) {
+		// TODO Auto-generated method stub
+		hotelRepozitorijum.deleteById(id);
+		
+	}
+
+
 	
 }

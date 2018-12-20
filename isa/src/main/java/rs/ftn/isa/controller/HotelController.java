@@ -48,6 +48,13 @@ public class HotelController {
 		
 		}
 		
+		@RequestMapping(value="/obrisiHotel/{id}", method = RequestMethod.POST)
+		public  void obrisiHotel(@PathVariable Long id){
+			System.out.println("brisanje hotel "+id);
+			servis.removeHotel(id);
+		
+		}
+		
 		@RequestMapping(value = "/findById/{id}",
 						method = RequestMethod.GET)
 		public @ResponseBody Hotel findHotelById(@PathVariable Long id){
@@ -514,5 +521,31 @@ public class HotelController {
 		 	
 			return null;
 		}
+		
+		@RequestMapping(value="/changehotel/{id}", 
+				method = RequestMethod.POST,
+				consumes = MediaType.APPLICATION_JSON_VALUE,
+				produces = MediaType.APPLICATION_JSON_VALUE)
+		public @ResponseBody Hotel changeHotel(@RequestBody Hotel hotel,@PathVariable Long id){		
+			Hotel old = servis.findHotelById(id);
+			System.out.println("dosao da izmjeni hotel");
+			List<Hotel> hoteli = servis.findAll();
+			//jedinstveni su hoteli po nazivu
+			for(Hotel hh :hoteli) {
+				if(hh.getId() != old.getId()) {
+					if(hh.getNaziv().equals(hotel.getNaziv())) {
+						old.setOpis("naziv");
+						return old;
+					}
+				}
+				
+			}
+			old.setNaziv(hotel.getNaziv());
+			old.setAdresa(hotel.getAdresa());
+			old.setOpis(hotel.getOpis());
+			servis.saveHotel(old);
+			System.out.println("sacuvao hotel");
+			return old;
+		}	
 
 }

@@ -54,7 +54,7 @@ public class RoomController {
 	}
 	
 	@RequestMapping(value="/obrisiSobu/{soba}", method = RequestMethod.POST)
-	public  void obrisiVozila(@PathVariable String soba){
+	public  void obrisiSobu(@PathVariable String soba){
 		System.out.println("brisanje sobe "+soba);
 		Long idSoba = Long.parseLong(soba);
 		servis.removeRoom(idSoba);
