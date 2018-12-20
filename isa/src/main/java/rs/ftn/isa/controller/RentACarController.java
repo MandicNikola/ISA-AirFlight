@@ -359,7 +359,35 @@ public class RentACarController {
 					
 			}	
 			
+	@RequestMapping(value="/izmena",
+			method = RequestMethod.POST,
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody RentACar changeRentACar(@RequestBody RentACar newRent) {
 		
+		RentACar rent = servis.findOneById(newRent.getId());
+		
+		if(rent.getNaziv().equals(newRent.getNaziv()) && (rent.getAdresa().equals(newRent.getAdresa())) && (rent.getOpis().equals(newRent.getOpis())) ) {
+			//nista se nije izmenilo
+			System.out.println("Nista se nije izmenilo");
+			return rent;
+		}
+		
+		RentACar provera =servis.findOneByNaziv(newRent.getNaziv());
+		if(provera!=null) {
+			System.out.println("Postoji vec taj  naziv rent");
+			return null;
+		}
+		
+		rent.setAdresa(newRent.getAdresa());
+		rent.setNaziv(newRent.getNaziv());
+		rent.setOpis(newRent.getOpis());
+		
+		servis.saveRentACar(rent);
+		
+		return rent;
+	}	
+	
 
 	
 		
