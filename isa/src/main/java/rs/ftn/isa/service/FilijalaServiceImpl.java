@@ -17,6 +17,7 @@ public class FilijalaServiceImpl implements FilijalaService{
 	@Override
 	public Filijala findFilijalaById(Long id) {
 		// TODO Auto-generated method stub
+		System.out.println("Usao u findFilijalu");
 		return repozitorijum.findOneById(id);
 	}
 

@@ -29,6 +29,15 @@ public class FilijalaController {
 		return  servis.findAll();
 	}
 	
+	@RequestMapping(value="/vratiFilijalu/{id}",
+					method = RequestMethod.GET,
+					produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody Filijala getFilijaluById(@PathVariable Long id){	
+		Filijala povratna = servis.findFilijalaById(id);
+		System.out.println(povratna.getGrad());
+		return povratna;
+	}
+	
 	@RequestMapping(value="/registrovanje", 
 			method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -65,5 +74,52 @@ public @ResponseBody Filijala registrujFilijalu( @RequestBody Filijala nova){
 	}
 		
 
+	@RequestMapping(value="/izmena", 
+			method = RequestMethod.POST,
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody Filijala izmeniFilijalu(@RequestBody Filijala nova){		
+		
+		System.out.println("Usao u izmeniFilijalu");
+		Long id=nova.getId();
+		
+		Filijala stara = servis.findFilijalaById(id);
+		if(stara.getGrad().equals(nova.getGrad())) {
+			if(stara.getUlica().equals(nova.getUlica())) {
+				System.out.println("Nista nije izmenjeno, vrati filijalu");
+				Long rent=stara.getServis().getId();
+				stara.setUlica(rent.toString());
+				return stara;
+			}
+		}
+		
+		//provera da li postoji vec filijala sa unetom adresom i gradom
+		ArrayList<Filijala> lista = (ArrayList<Filijala>) servis.findAllByUlica(nova.getUlica());
+		boolean postoji = false;
+		
+		for(Filijala F : lista) {
+			//ako postoje filijale sa istim nazivom ulice proveravamo da li se nalaze u istom gradu
+			if(F.getGrad().equals(nova.getGrad())) {
+				postoji=true;
+				break;
+			}
+		}
+		if(postoji) {
+			//ulica+grad mora biti jedinstven
+			return null;
+		}
+		
+		System.out.println("Menjaj filijalu sve je ispunjeno");
+		stara.setUlica(nova.getUlica());
+		stara.setGrad(nova.getGrad());
+		//izmenili podatke
+		servis.saveFilijala(stara);
+		
+
+		Long rent=stara.getServis().getId();
+		stara.setUlica(rent.toString());
+		return stara;
+
+	}	
 
 }

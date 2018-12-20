@@ -193,10 +193,13 @@ var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 			console.log(fil.index);
 			$("#" + index).append("<div class=\"panel-heading\">"+fil.grad+"</div>");
 			$("#" + index).append("<div class=\"panel-body\">"+fil.ulica+"</div>");
-			$("#" + index).append("<div class=\"panel-footer\"><button  class=\"btn btn-info\" onclick=\"obrisiFilijalu('"+fil.id+"')\">Obrisi</button></div>");
+			$("#" + index).append("<div class=\"panel-footer\"><button  class=\"btn btn-info\" onclick=\"izmeniFilijalu('"+fil.id+"')\">Izmeni</button> <button  class=\"btn btn-info\" onclick=\"obrisiFilijalu('"+fil.id+"')\">Obrisi</button></div>");
 			 $("#filijale").append("</div>");
 		});
 	
+}
+function izmeniFilijalu(id){
+	window.location="changeOffice.html?id="+id;
 }
 function obrisiFilijalu(id){
 	console.log('Treba obrisati filijalu sa id '+id);
