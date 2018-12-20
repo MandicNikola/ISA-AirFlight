@@ -481,6 +481,14 @@ public class HotelController {
 			Hotel pom = servis.findHotelById(id);
 		 	ArrayList<Usluga> usluge = new ArrayList<Usluga>(); 
 		 	PricelistHotel cijenovnik = new PricelistHotel();
+		 	if(pom.getCijenovnici() == null) {
+		 		System.out.println("usao u null");
+		 		return null;
+		 	}
+		 	if(pom.getCijenovnici().size() == 0) {
+		 		System.out.println("usao u size jednako 0");	
+		 		return null;
+		 	}
 		 	
 		 	if(pom.getCijenovnici()!= null) {
 		 		System.out.println("postoje  neki cj");

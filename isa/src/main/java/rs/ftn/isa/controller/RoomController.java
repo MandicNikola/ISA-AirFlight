@@ -1,6 +1,8 @@
 package rs.ftn.isa.controller;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.HotelDTO;
 import rs.ftn.isa.model.Hotel;
+import rs.ftn.isa.model.RentACar;
 import rs.ftn.isa.model.Room;
+import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.service.RoomServiceImp;
 
 @RestController
@@ -53,6 +57,14 @@ public class RoomController {
 		return room;
 	}
 	
-		
+	@RequestMapping(value="/obrisiSobu/{soba}", method = RequestMethod.POST)
+	public  void obrisiVozila(@PathVariable String soba){
+		System.out.println("brisanje sobe "+soba);
+		Long idSoba = Long.parseLong(soba);
+		servis.removeRoom(idSoba);
+	
+	}
+	
+	
 	
 }

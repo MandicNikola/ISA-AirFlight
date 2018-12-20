@@ -47,7 +47,7 @@ public class Room {
 	private String balkon; //da ako ima,ne nema
     
     //jedna soba pripada jednog hotelu.
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne( fetch = FetchType.EAGER)
 	 private Hotel hotel;
 	
 	//jedna soba ima vise cjenovnika
