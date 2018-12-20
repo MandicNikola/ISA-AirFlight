@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -53,6 +54,16 @@ public @ResponseBody Filijala registrujFilijalu( @RequestBody Filijala nova){
 	
 	return nova;
 }	
+
+	@RequestMapping(value="/deleteFilijalu/{id}", method = RequestMethod.POST)
+	public  void obrisiFilijalu(@PathVariable String id){
+			System.out.println("Usao u Delete filijalu dobio je "+id);
+			
+			
+			servis.removeFilijala(Long.parseLong(id));
+			
+	}
+		
 
 
 }

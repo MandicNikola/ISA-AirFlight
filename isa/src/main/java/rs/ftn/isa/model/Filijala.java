@@ -24,7 +24,7 @@ public class Filijala {
 		@Column(name="ulica", nullable = false)
 		private String ulica;
 		
-    	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    	@ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "servis_id")
 		private RentACar servis;
 				
