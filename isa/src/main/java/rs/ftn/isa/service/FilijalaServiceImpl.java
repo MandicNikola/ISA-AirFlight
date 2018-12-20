@@ -36,6 +36,7 @@ public class FilijalaServiceImpl implements FilijalaService{
 	@Override
 	public void removeFilijala(Long id) {
 		// TODO Auto-generated method stub
+		System.out.println("Usao u remove filiijalu");
 		repozitorijum.deleteById(id);
 	}
 

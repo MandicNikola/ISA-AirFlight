@@ -186,17 +186,31 @@ function ispisiFilijale(skup){
 	
 var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 	
-		
+		$("#filijale").empty();
 		$.each(lista, function(index, fil) {
 			$("#filijale").append("<div id=\""+index+"\"class=\"panel panel-default\">");
 			console.log(fil.grad);
 			console.log(fil.index);
 			$("#" + index).append("<div class=\"panel-heading\">"+fil.grad+"</div>");
 			$("#" + index).append("<div class=\"panel-body\">"+fil.ulica+"</div>");
-
+			$("#" + index).append("<div class=\"panel-footer\"><button  class=\"btn btn-info\" onclick=\"obrisiFilijalu('"+fil.id+"')\">Obrisi</button></div>");
 			 $("#filijale").append("</div>");
 		});
 	
+}
+function obrisiFilijalu(id){
+	console.log('Treba obrisati filijalu sa id '+id);
+	$.ajax({
+		type : 'POST',
+		url : "/api/filijale/deleteFilijalu/"+id,
+		success : function(pov) {
+				popuniFilijale();
+				console.log('obrisana filijala');
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+	});
 }
 
 function ispisiVozila(skup){
