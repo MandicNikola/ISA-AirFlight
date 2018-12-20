@@ -3,7 +3,7 @@
  */
 
 function onLoad(){
-	
+	$("#konfig").hide();
 	$("#sobe").hide();
 	$("#cijene").hide();
 	var adresa = window.location.search.substring(1);
@@ -73,6 +73,8 @@ function changePrice(roomID,roomCijena){
 	console.log("dosao u room id : "+roomID);
 	 $("#tabovi").hide();
 	 $("#sobe").hide();
+	 $("#konfig").hide();
+		
 	 $("#izmjena").empty();
 	 $("#izmjena").show();
 			 
@@ -138,6 +140,7 @@ function addConfiguration(){
 	$("#sobe").hide();
 	$("#informacije").hide();
 	$("#cijene").hide();
+	$("#konfig").hide();
 	
 	$("#ispisiTabelu").show();
 	$("#ispisiTabelu").empty();
@@ -221,35 +224,82 @@ function ucitajPocetnu(){
 $(document).ready(function(){
 	$("#sobe").hide();
 	$("#cijene").hide();
+	$("#konfig").hide();
+	
  	
     $("#rooms").click(function(){
     	listaSoba();
 		$("#informacije").hide();
 		$("#ispisiTabelu").hide();
 		$("#cijene").hide();
-	 	
+		$("#konfig").hide();
+	    
     });
     $("#info").click(function(){
     	$("#informacije").show();
 		$("#ispisiTabelu").hide();
 		$("#sobe").hide();
 		$("#cijene").hide();
-	 	
+		$("#konfig").hide();
+    	
     });
     
+    
+    $("#config").click(function(){
+    	ispisiKonfiguracije();
+    	$("#informacije").hide();
+		$("#ispisiTabelu").hide();
+		$("#sobe").hide();
+		$("#cijene").hide();
+	 	
+    });
     $("#price").click(function(){
     	console.log('dosao u price');
     	showPrices();
     	$("#informacije").hide();
-    	
 		$("#ispisiTabelu").hide();
-		$("#sobe").hide();
-		 
+		$("#sobe").hide(); 
 		$("#cijene").show();
-	 	
+		$("#konfig").hide();
+	    
     });
 });
+function ispisiKonfiguracije(){
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
 
+	$.ajax({
+		method:'GET',
+		url: "/api/hoteli/getKonfiguracije/"+id,
+		success: function(lista){
+			if(lista.length == 0){
+				console.log('nema usluga');
+			}else{
+				console.log('Ima usluga ');
+				ispisiKonf(lista);
+			}
+		}
+	});
+	
+}
+function ispisiKonf(data){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	 $("#konfig").empty();
+	 $("#konfig").show();
+	 $("#konfig").append("<table class=\"table table-hover\" id=\"tabelaKonfig\" ><tr><th>Room type </th><th>Capacity</th><th>Beds</th><th>Price per night</th><th></th><th></th></tr>");
+		
+		$.each(pom, function(index, data) {
+			$("#tabelaKonfig").append("<tr><td class=\"hoverName\">"+data.naziv+"</td><td><button type=\"button\" onclick=\"deleteKonf("+data.id+")\" class=\"btn btn-light\">Delete</button></td></tr>");
+			
+		});
+		
+	 $("#konfig").append("</table>");
+	
+}
+function deleteKonf(idKonf){
+	
+	
+}
 function showPrices(){
 	var adresa = window.location.search.substring(1);
 	var id = adresa.split('=')[1];
@@ -421,6 +471,8 @@ function formaPopusti(lista){
 		$("#sobe").hide();
 		$("#informacije").hide();
 		$("#cijene").hide();
+		$("#konfig").hide();
+		
 		
 		$("#ispisiTabelu").show();
 		$("#ispisiTabelu").empty();
@@ -467,6 +519,8 @@ function addUsluga(){
 	$("#sobe").hide();
 	$("#informacije").hide();
 	$("#cijene").hide();
+	$("#konfig").hide();
+	
 	
 	$("#ispisiTabelu").show();
 	$("#ispisiTabelu").empty();

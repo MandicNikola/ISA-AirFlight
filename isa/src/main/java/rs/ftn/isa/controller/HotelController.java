@@ -547,5 +547,21 @@ public class HotelController {
 			System.out.println("sacuvao hotel");
 			return old;
 		}	
+		
+		
+		@RequestMapping(value="/getKonfiguracije/{id}", 
+				method = RequestMethod.GET,
+				produces = MediaType.APPLICATION_JSON_VALUE)
+		public @ResponseBody ArrayList<Category> vratiKonfiguracije(@PathVariable Long id){	
+			Hotel pom = servis.findHotelById(id);
+		 	
+			ArrayList<Category> kat = new ArrayList<Category>(); 
+			for(Category kk:pom.getKategorije()) {
+				kat.add(kk);
+			}
+		 			 	
+			return kat;
+		}
+		
 
 }
