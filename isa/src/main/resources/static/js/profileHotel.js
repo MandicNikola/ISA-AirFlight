@@ -279,6 +279,7 @@ function ispisiKonfiguracije(){
 		url: "/api/hoteli/getKonfiguracije/"+id,
 		success: function(lista){
 			if(lista.length == 0){
+				 $("#konfig").empty();
 				console.log('nema usluga');
 			}else{
 				console.log('Ima usluga ');

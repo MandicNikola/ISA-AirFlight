@@ -558,8 +558,9 @@ public class HotelController {
 			ArrayList<Category> kat = new ArrayList<Category>(); 
 			for(Category kk:pom.getKategorije()) {
 				kat.add(kk);
+				System.out.println("id je " + kk.getId());
 			}
-		 			 	
+		 			 
 			return kat;
 		}
 		

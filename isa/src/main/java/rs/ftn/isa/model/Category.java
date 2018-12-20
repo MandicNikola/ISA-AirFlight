@@ -40,6 +40,12 @@ public class Category {
 	public void setHotelKat(Hotel hotelKat) {
 		this.hotelKat = hotelKat;
 	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 	
 	
 	
