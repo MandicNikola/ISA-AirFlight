@@ -192,7 +192,37 @@ public class RentACarController {
 		}
 		return rezultat;
 	}
+
+	@RequestMapping(value="/obrisiVozilo/{pom}", method = RequestMethod.POST)
+	public  RentACar obrisiVozila(@PathVariable String pom){
+		System.out.println("Usao u obrisi vozilo dobio je "+pom);
+		
+		String[] niz = pom.split("=");
+		Long idRent = Long.parseLong(niz[0]);
+		Long idVozilo = Long.parseLong(niz[1]);
+		
+		RentACar rent= servis.findOneById(idRent);
+		Vehicle vozilo=null;
+		for(Vehicle V: rent.getVozila()) {
+				if(V.getId() == idVozilo) {
+						vozilo=V;
+						System.out.println("Pronadjeno vozilo");
+						break;
+				}
+		}
+		rent.getVozila().remove(vozilo);
+		Set<Vehicle> rezultat = new HashSet<Vehicle>();
+		
+		
+		for(Vehicle V : rent.getVozila()) {
+			System.out.println("ime vozila koje je ostalo" + V.getNaziv());
+				rezultat.add(V);
+		}
+		rent.setVozila( rezultat);
+		return rent;
+	}
 	
+
 
 	@RequestMapping(value="/dodajUslugu/{pomocna}", 
 	method = RequestMethod.POST,

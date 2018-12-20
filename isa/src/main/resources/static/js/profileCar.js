@@ -22,6 +22,7 @@ function iscrtajStranicu(servis){
 	
     $("#naslov").text(servis.naziv);
     $("#adresa").append(servis.adresa);
+    $("#opis").append(servis.opis);
 	
     var podatak = window.location.search.substring(1);
 	var niz= podatak.split("=");
@@ -206,13 +207,32 @@ function ispisiVozila(skup){
 	$("#pregledVozila").append("<table class=\"table table-hover\" id=\"tabelaVozilo\" ><thead><tr><th>Name</th><th>Brand</th><th>Model</th><th>Model year</th><th>Number of seats </th><th>Category</th></tr></thead>");
 	
 	$.each(lista, function(index, vozilo) {
-		$("#tabelaVozilo").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+vozilo.naziv+"</td><td > "+vozilo.marka+"</td><td > "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td > "+vozilo.sedista+"</td><td > "+vozilo.kategorija+"</td></tr>");
+		$("#tabelaVozilo").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+vozilo.naziv+"</td><td > "+vozilo.marka+"</td><td > "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td > "+vozilo.sedista+"</td><td > "+vozilo.kategorija+"</td><td><button class=\"btn btn-info\" onclick=\"obrisiVozilo('"+vozilo.id+"')\">Obrisi</button></td></tr>");
 	});
     $("#pregledVozila").append("</table>");
  
 }
 
-
+function obrisiVozilo(idVozila){
+	var pom=window.location.search.substring(1);
+	var id= pom.split('=')[1];
+	console.log('Vozilo koje treba obrisati ima id '+idVozila);
+	
+	pom=id+"="+idVozila;
+	
+	$.ajax({
+		type : 'POST',
+		url : "/api/rents/obrisiVozilo/"+pom,
+		success : function(pov) {
+				console.log('obrisano vozilo')
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+	});
+	
+	
+}
 $(document).ready(function(){
 	var pom=window.location.search.substring(1);
 	var id= pom.split('=')[1];
