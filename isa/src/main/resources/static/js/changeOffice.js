@@ -48,7 +48,7 @@ $(document).on('submit','.izmeni',function(e){
 				//alert('Uspesno ste dodali filijalu');
 				console.log('Nije null');
 				console.log(pov);
-				pozoviProfil(pov.adresa);			}
+				pozoviProfil(pov.ulica);			}
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
 			alert('greska');
@@ -73,5 +73,5 @@ function formToJSON() {
 }
 function pozoviProfil(data){
 	
-	window.location="profileCar.html?id="+data.adresa;
+	window.location="profileCar.html?id="+data;
 }
