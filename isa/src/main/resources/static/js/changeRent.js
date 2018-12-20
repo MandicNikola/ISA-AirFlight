@@ -22,6 +22,8 @@ function iscrtajStranicu(rent){
 }
 
 $(document).on('submit','.izmeni',function(e){
+	e.preventDefault();	
+
 	console.log('Pritisnuo izmeni');
 	var podatak = window.location.search.substring(1);
 	var niz= podatak.split("=");
@@ -49,7 +51,7 @@ $(document).on('submit','.izmeni',function(e){
 				alert('Vec postoji servis sa unetim nazivom');
 			}else{
 				console.log(pov);
-				pozoviPromenu();
+				pozoviPocetnu();
 			}
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
@@ -59,7 +61,6 @@ $(document).on('submit','.izmeni',function(e){
 
 });
 
-function pozoviPromenu(){
-	window.location="mainPage.html";
-
+function pozoviPocetnu(){
+	window.location.replace("mainPage.html");
 }

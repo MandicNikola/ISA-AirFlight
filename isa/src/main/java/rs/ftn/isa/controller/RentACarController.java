@@ -374,7 +374,7 @@ public class RentACarController {
 		}
 		
 		RentACar provera =servis.findOneByNaziv(newRent.getNaziv());
-		if(provera!=null) {
+		if(provera!=null && provera.getId()!=newRent.getId()) {
 			System.out.println("Postoji vec taj  naziv rent");
 			return null;
 		}
