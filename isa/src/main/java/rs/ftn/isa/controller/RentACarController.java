@@ -359,6 +359,12 @@ public class RentACarController {
 					
 			}	
 			
+	@RequestMapping(value="/obrisiRent/{id}", method = RequestMethod.POST)
+	public  void obrisiRent(@PathVariable Long id){
+		
+		servis.removeRentACar(id);
+	
+	}
 	@RequestMapping(value="/izmena",
 			method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
