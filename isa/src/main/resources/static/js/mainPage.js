@@ -87,10 +87,10 @@ function ispisiAutoservise(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#ispisiTabelu").empty();
 	 
-	 $("#ispisiTabelu").append("<table class=\"table table-striped table-hover\" id=\"tabelaRent\" ><tr><th> Name </th><th> Promotional description</th></tr>");
+	 $("#ispisiTabelu").append("<table class=\"table table-striped table-hover\" id=\"tabelaRent\" ><tr><th> Name </th><th> Promotional description</th><th></th><th></th></tr>");
 		
 		$.each(pom, function(index, servis) {
-			$("#tabelaRent").append("<tr><td class=\"hoverName\" onclick=\"visitCar('"+servis.id+"')\">"+servis.naziv+"</td><td > "+servis.opis+"</td><td><button  class=\"btn btn-info\" onclick=\"izmeniRent('"+servis.id+"')\">Izmeni</button></td></tr>");
+			$("#tabelaRent").append("<tr><td class=\"hoverName\" onclick=\"visitCar('"+servis.id+"')\">"+servis.naziv+"</td><td > "+servis.opis+"</td><td><button  class=\"btn btn-info\" onclick=\"izmeniRent('"+servis.id+"')\">Izmeni</button><td><button  class=\"btn btn-info\" onclick=\"obrisiRent('"+servis.id+"')\">Obrisi</button></td></tr>");
 			
 		});
 	 $("#ispisiTabelu").append("</table>");
@@ -101,6 +101,24 @@ function izmeniRent(id){
 	window.location = "izmeniRent.html?id="+id;
 
 }
+function obrisiRent(id){
+
+	
+	$.ajax({
+		type : 'POST',
+		url : "/api/rents/obrisiRent/"+id,
+		success : function(data) {
+				console.log('obrisan rent');
+				carShow();
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+	});
+	
+
+}
+
 $(document).on("mouseenter", ".hoverName",function(){
 			
     $(this).css("color", "purple");
