@@ -219,6 +219,7 @@ public class RentACarController {
 				rezultat.add(V);
 		}
 		rent.setVozila( rezultat);
+		servis.saveRentACar(rent);
 		return rent;
 	}
 	
