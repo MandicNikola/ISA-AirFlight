@@ -24,6 +24,12 @@ public class CategoryServiceImpl implements CategoryService {
 		// TODO Auto-generated method stub
 		return repozitorijum.findOneByNaziv(name);
 	}
+
+	@Override
+	public void removeById(Long id) {
+		// TODO Auto-generated method stub
+		repozitorijum.deleteById(id);
+	}
 	
 	
 	
