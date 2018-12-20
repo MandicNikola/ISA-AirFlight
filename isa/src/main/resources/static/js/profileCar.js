@@ -201,6 +201,7 @@ var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 
 function ispisiVozila(skup){
 	
+	$("#pregledVozila").empty();
 	console.log('usao u ispisivozila');
 	var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 		
@@ -214,17 +215,14 @@ function ispisiVozila(skup){
 }
 
 function obrisiVozilo(idVozila){
-	var pom=window.location.search.substring(1);
-	var id= pom.split('=')[1];
 	console.log('Vozilo koje treba obrisati ima id '+idVozila);
-	
-	pom=id+"="+idVozila;
 	
 	$.ajax({
 		type : 'POST',
-		url : "/api/rents/obrisiVozilo/"+pom,
+		url : "/api/vozila/deleteVozilo/"+idVozila,
 		success : function(pov) {
-				console.log('obrisano vozilo')
+			popuniVozila();
+				console.log('obrisano vozilo');
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
 			alert('greska');
