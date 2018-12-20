@@ -24,8 +24,14 @@ function onLoad(){
 }
 function ispisiProfilHotela(hotel){
 	console.log("id "+hotel.id);
+	var adr = hotel.adresa;
 	$("#naziv").text('Welcome to '+hotel.naziv);
-	
+	$("#opis").text(hotel.opis);
+	$("#adresa").append(hotel.adresa);
+	var adresa=	adr.replace(" ", "%20");
+    
+	$("#adresa").append("<div class=\"mapouter\"><div class=\"gmap_canvas\"><iframe width=\"600\" height=\"500\" id=\"gmap_canvas\" src=\"https://maps.google.com/maps?q="+adresa+"&t=&z=13&ie=UTF8&iwloc=&output=embed\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\"></iframe><a href=\"https://www.embedgooglemap.net\">embedgooglemap.net</a></div><style>.mapouter{text-align:right;height:500px;width:600px;}.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:600px;}</style></div>")
+   
 }
 
 function ispisiSobe(lista){
@@ -282,11 +288,11 @@ function ispisiKonfiguracije(){
 	});
 	
 }
-function ispisiKonf(data){
+function ispisiKonf(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#konfig").empty();
 	 $("#konfig").show();
-	 $("#konfig").append("<table class=\"table table-hover\" id=\"tabelaKonfig\" ><tr><th>Room type </th><th>Capacity</th><th>Beds</th><th>Price per night</th><th></th><th></th></tr>");
+	 $("#konfig").append("<table class=\"table table-hover\" id=\"tabelaKonfig\" ><tr><th>Name </th><th></th></tr>");
 		
 		$.each(pom, function(index, data) {
 			$("#tabelaKonfig").append("<tr><td class=\"hoverName\">"+data.naziv+"</td><td><button type=\"button\" onclick=\"deleteKonf("+data.id+")\" class=\"btn btn-light\">Delete</button></td></tr>");
