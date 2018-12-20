@@ -2,6 +2,7 @@ package rs.ftn.isa.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,6 +32,13 @@ public class CategoryController {
 		 System.out.println("dosao da provjeri kategoriju");
 		  return pom;
 		
+	}
+	
+	@RequestMapping(value="/obrisiKat/{id}", method = RequestMethod.POST)
+	public  void obrisiKonf(@PathVariable Long id){
+		System.out.println("dobio sam id " + id);
+		servis.removeById(id);
+	
 	}
 
 }

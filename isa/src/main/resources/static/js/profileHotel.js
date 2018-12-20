@@ -295,6 +295,7 @@ function ispisiKonf(lista){
 	 $("#konfig").append("<table class=\"table table-hover\" id=\"tabelaKonfig\" ><tr><th>Name </th><th></th></tr>");
 		
 		$.each(pom, function(index, data) {
+			console.log(data.id);
 			$("#tabelaKonfig").append("<tr><td class=\"hoverName\">"+data.naziv+"</td><td><button type=\"button\" onclick=\"deleteKonf("+data.id+")\" class=\"btn btn-light\">Delete</button></td></tr>");
 			
 		});
@@ -302,8 +303,19 @@ function ispisiKonf(lista){
 	 $("#konfig").append("</table>");
 	
 }
-function deleteKonf(idKonf){
-	
+function deleteKonf(id){
+	console.log(id);
+	$.ajax({
+		type : 'POST',
+		url : "/api/kategorije/obrisiKat/"+id,
+		success : function(data) {
+				console.log('obrisana konf');
+				ispisiKonfiguracije();
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+	});
 	
 }
 function showPrices(){

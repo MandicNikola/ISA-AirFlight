@@ -18,7 +18,7 @@ public class Category {
 	private String naziv;
 	
 	   //jedna soba pripada jednog hotelu.
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne( fetch = FetchType.EAGER)
      private Hotel hotelKat;
 		
 	public Category() {
