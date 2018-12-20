@@ -49,7 +49,7 @@ public class Vehicle {
 	@Column(name = "ocena", nullable = false)
 	private double ocena;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne( fetch = FetchType.EAGER)
     @JoinColumn(name = "rent_id")
 	private RentACar servisrent;
 	

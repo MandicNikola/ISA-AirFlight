@@ -44,6 +44,7 @@ public class VoziloServiceImpl implements VoziloService{
 	@Override
 	public void removeVehicle(Long id) {
 		// TODO Auto-generated method stub
+		System.out.println("Usao u removeVehicle");
 		repozitorijum.deleteById(id);
 	}
 

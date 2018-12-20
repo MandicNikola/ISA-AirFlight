@@ -1,6 +1,8 @@
 package rs.ftn.isa.controller;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -82,6 +84,16 @@ public class VoziloController {
 		return novo;
 		
 		}	
-		
+		@RequestMapping(value="/deleteVozilo/{id}", method = RequestMethod.POST)
+		public  void obrisiVozilo(@PathVariable String id){
+				System.out.println("Usao u Delete vozilo dobio je "+id);
+				
+				
+				servis.removeVehicle(Long.parseLong(id));
+				
+		}
+			
+
+	
 
 }
