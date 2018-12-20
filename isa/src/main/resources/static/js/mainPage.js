@@ -71,12 +71,16 @@ function ispisiAutoservise(lista){
 	 $("#ispisiTabelu").append("<table class=\"table table-striped table-hover\" id=\"tabelaRent\" ><tr><th> Name </th><th> Promotional description</th></tr>");
 		
 		$.each(pom, function(index, servis) {
-			$("#tabelaRent").append("<tr><td class=\"hoverName\" onclick=\"visitCar('"+servis.id+"')\">"+servis.naziv+"</td><td > "+servis.opis+"</td></tr>");
+			$("#tabelaRent").append("<tr><td class=\"hoverName\" onclick=\"visitCar('"+servis.id+"')\">"+servis.naziv+"</td><td > "+servis.opis+"</td><td><button  class=\"btn btn-info\" onclick=\"izmeniRent('"+servis.id+"')\">Izmeni</button></td></tr>");
 			
 		});
 	 $("#ispisiTabelu").append("</table>");
 	 
 	
+}
+function izmeniRent(id){
+	window.location = "izmeniRent.html?id="+id;
+
 }
 $(document).on("mouseenter", ".hoverName",function(){
 			
