@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript"  src="/js/changeRoom.js"></script>
+  <style>
+  	div{
+  		width:250px;
+  	}
+  	body{
+     background-color: #fdecd5;
+	 text-align: center;
+  	}
+  	form {
+	 	text-align: center;
+	    display: inline-block;
+	}
+	.form-group{
+			text-align: left;
+		}
+  	#unosSobe{
+  	            padding: 5%;
+ 	 	    	margin-top: 1%;
+  				border: 3px solid #666;
+   		        border-radius: 8px;
+   		     	background-color: rgba(255,255,255,0.8);
+  	}
+  	button{
+  		margin-top:5px;
+  		border-radius: 2px;
+  	}
+  	h2{
+  		margin:45px 0px;
+  	}
+  	#tip{
+  	border-radius: 3px;
+	padding-left: 5px;
+	height: 30px;
+	margin-left:10px;  
+  	}
+  	#balkoncic{
+  	 font-weight: bold; 	 
+}
+}
+  	
+  </style>	  
+<title>New room</title>
+</head>
+
+
+<body onload = "onLoad()">
+  <div class="container">
+    <h2>New room</h2>
+    	<form method="post" class="soba" id="unosSobe" >	
+		    <div class="form-group">
+		       <label for="Kategorija">Category:</label>
+		       <select  id="tip">
+    			<option value = "Jednokrevetna">Jednokrevetna</option>
+    			<option value="Dvokrevetna">Dvokrevetna</option>
+    			<option value="Apartman">Apartman</option>
+    			<option value="Delux">Delux</option>
+  				</select>
+
+		    </div>
+		    
+		    <div class="form-group">
+		    <i ></i> <label for="floor">Floor:</label>
+		      <input type="number" class="form-control" required="required" min ="0" id="sprat" placeholder="Number of flat ">
+		    </div>
+		    
+		    <div class="form-group">
+			   	<i class="glyphicon glyphicon-bed"></i> <label for="kreveti">Beds:</label> 	
+		     	<input type="number" class="form-control" min = "1" required="required" id="kreveti" placeholder="Number of beds" >
+		    </div>
+		    <div class="form-group">
+				
+			   	<i class="glyphicon glyphicon-user"></i><label >Capacity:</label> 
+      			   	<input type="number" class="form-control" min = "1" required="required" id="kapacitet" placeholder="Number of people" >
+		    
+    		</div>
+    		 <div class="form-group">
+				
+			   	<i class="glyphicon glyphicon-euro"></i><label >Price:</label> 
+      			   	<input type="number" class="form-control" min = "1" required="required" id="cijena" placeholder="Price for night " >
+		    
+    		</div>
+		    
+			<div class="form-group">
+				<div class="checkbox">
+      				<label id = "balkoncic" for = "balkon"><input type="checkbox" value="" id = "balkon">Have a balcony</label>
+		    	</div>  
+    		</div>
+    		
+		    <button type="submit" class="btn btn-default">Add</button>
+		  
+		  </form>
+</div>
+   
+</body>
+</html>

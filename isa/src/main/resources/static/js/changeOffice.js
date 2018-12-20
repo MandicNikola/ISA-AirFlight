@@ -56,6 +56,21 @@ $(document).on('submit','.izmeni',function(e){
 	});
 
 });
+
+function formToJSON() {
+	var rez = 'ne';
+	if ($('#balkon').is(":checked")){
+		rez = 'da';
+	}
+	return JSON.stringify({
+		"tip" : $('#tip').val(),
+		"kreveti" : $('#kreveti').val(),			
+		"sprat" : $('#sprat').val(),
+		"kapacitet": $('#kapacitet').val(),
+		"cijena":$('#cijena').val(),
+		"balkon" : rez			
+	});
+}
 function pozoviProfil(data){
 	
 	window.location="profileCar.html?id="+data.adresa;

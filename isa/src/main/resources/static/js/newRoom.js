@@ -80,7 +80,7 @@ function formToJSON() {
 	return JSON.stringify({
 		"tip" : $('#tip').val(),
 		"kreveti" : $('#kreveti').val(),			
-		"sprat" : $('#adr').val(),
+		"sprat" : $('#sprat').val(),
 		"kapacitet": $('#kapacitet').val(),
 		"cijena":$('#cijena').val(),
 		"balkon" : rez			

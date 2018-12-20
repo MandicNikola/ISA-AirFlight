@@ -1,8 +1,7 @@
 package rs.ftn.isa.controller;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -13,11 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import rs.ftn.isa.dto.HotelDTO;
-import rs.ftn.isa.model.Hotel;
-import rs.ftn.isa.model.RentACar;
+import rs.ftn.isa.model.Filijala;
 import rs.ftn.isa.model.Room;
-import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.service.RoomServiceImp;
 
 @RestController
@@ -65,6 +61,32 @@ public class RoomController {
 	
 	}
 	
+	@RequestMapping(value="/vratiSobu/{id}",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+		public @ResponseBody Room getRoomById(@PathVariable Long id){	
+				Room soba = servis.findRoomById(id);
+				return soba;
+
+	}
 	
 	
+	@RequestMapping(value="/izmjeniSobu/{id}", 
+			method = RequestMethod.POST,
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody Room izmjeniSobu(@RequestBody Room soba,@PathVariable Long id){		
+		Room stara = servis.findRoomById(id);
+		System.out.println("dosao da izmjeni sobu " + soba.getId());
+		stara.setBalkon(soba.getBalkon());
+		stara.setCijena(soba.getCijena());
+		stara.setKapacitet(soba.getKapacitet());
+		stara.setKreveti(soba.getKreveti());
+		stara.setSprat(soba.getSprat());
+		stara.setTip(soba.getTip());
+		//automatski radi update po id sobe
+		servis.saveRoom(stara);
+		System.out.println("izmjenio sobu");
+		return stara;
+	}	
 }
