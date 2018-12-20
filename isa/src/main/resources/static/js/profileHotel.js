@@ -376,9 +376,9 @@ function addPopust(){
 		method:'GET',
 		url: "/api/hoteli/getDodatneUsluge/"+id,
 		success: function(lista){
-			if(lista == null){
+			if(lista.length ==0){
 				console.log('Nema dodatnih usluga');
-				
+				$("#ispisiTabelu").empty();
 			}else{
 				
 				console.log('postoje dodatne usluge');
