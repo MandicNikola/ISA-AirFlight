@@ -587,5 +587,6 @@ public class HotelController {
 			return kat;
 		}
 		
+		
 
 }

@@ -1,7 +1,34 @@
 /**
  * 
  */
+function onLoad(){
+	var adresa = window.location.search.substring(1);
+	console.log('adresa je '+adresa);
+	var id = adresa.split('=')[1];
+	
+	
+	$.ajax({
+		  url : "/api/hoteli/getKonfiguracije/"+id,
+		  type: 'get',
+		  success: function(pom) {
+			  if(pom == null){
+				  
+			  }else if(pom.length == 0){
+				  
+			  }else{
+				  popuniPolja(pom);
+			  }
+			  
+			}
+		});
 
+}
+function popuniPolja(lista){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	$.each(pom, function(index, data) {
+		 $("#tip").append("<option  value=\""+data.id+"\">"+data.naziv+"</option>");	 	 
+	 });
+}
 $(document).on('submit','.soba',function(e){
 	e.preventDefault();	
 	$.ajax({
