@@ -69,6 +69,29 @@ public class HotelController {
 				}
 		}
 		
+		@RequestMapping(value = "/findCijenovnik/{id}",
+				method = RequestMethod.GET)
+		public PricelistHotel findCijenovnik(@PathVariable Long id){
+			System.out.println("find"  + id);
+			
+			Hotel pronadjeni = servis.findHotelById(id);
+			if(pronadjeni.getCijenovnici() == null) {
+				return null;
+			}
+			if(pronadjeni.getCijenovnici().size() == 0) {
+				return null;
+			}
+			PricelistHotel aktivan = new PricelistHotel();
+			for(PricelistHotel cc :pronadjeni.getCijenovnici()) {
+				if(cc.isAktivan()) {
+					aktivan = cc;
+					break;
+				}
+			}
+			
+			return aktivan;
+		}
+		
 		@RequestMapping(value="/newhotel", 
 				method = RequestMethod.POST,
 				consumes = MediaType.APPLICATION_JSON_VALUE,

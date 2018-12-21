@@ -366,6 +366,41 @@ function ispisiDodatne(data){
 			$("#tblDodatne").append("</tr>");
 		});
 	    $("#cijeneDodatne").append("</table>");
+	    console.log("Zavrsio sa tabelom dodatnih");
+	    dodajDatum();
+	    
+}
+function dodajDatum(){
+	console.log("Dodaj datum");
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	$.ajax({
+		type : 'GET',
+		url : "/api/hoteli/findCijenovnik/"+id,
+		success : function(data) {
+			
+			if(data==null){
+				console.log('Nema usluga');
+			}else if(data.length == 0){
+				console.log('Nema usluga');
+			}else{
+				
+					ispisiDatum(data);
+			}
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("greska pri preuzimanju datuma");
+			   
+		}
+	});	
+	
+}
+function ispisiDatum(data){
+	var pom=JSON.stringify(data);
+	console.log(pom);
+	console.log('datum je  '+data.datum_primene);
+	$("#cijene").append("<p><i class=\"glyphicon glyphicon-calendar\"> </i> Effective date : "+data.datum_primene+"</p>");
+
 }
 
 function izbrisiDodatnu(idUsluga){
