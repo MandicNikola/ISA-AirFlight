@@ -79,7 +79,6 @@ public class RoomController {
 		Room stara = servis.findRoomById(id);
 		System.out.println("dosao da izmjeni sobu " + soba.getId());
 		stara.setBalkon(soba.getBalkon());
-		stara.setCijena(soba.getCijena());
 		stara.setKapacitet(soba.getKapacitet());
 		stara.setKreveti(soba.getKreveti());
 		stara.setSprat(soba.getSprat());

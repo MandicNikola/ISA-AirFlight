@@ -47,7 +47,7 @@
 }
   	
   </style>	  
-<title>New room</title>
+<title>Change room</title>
 </head>
 
 
@@ -57,12 +57,9 @@
     	<form method="post" class="soba" id="unosSobe" >	
 		    <div class="form-group">
 		       <label for="Kategorija">Category:</label>
-		       <select  id="tip">
-    			<option value = "Jednokrevetna">Jednokrevetna</option>
-    			<option value="Dvokrevetna">Dvokrevetna</option>
-    			<option value="Apartman">Apartman</option>
-    			<option value="Delux">Delux</option>
-  				</select>
+		       <select  id="tip" class="form-control">
+    			
+  			</select>
 
 		    </div>
 		    
@@ -81,13 +78,7 @@
       			   	<input type="number" class="form-control" min = "1" required="required" id="kapacitet" placeholder="Number of people" >
 		    
     		</div>
-    		 <div class="form-group">
-				
-			   	<i class="glyphicon glyphicon-euro"></i><label >Price:</label> 
-      			   	<input type="number" class="form-control" min = "1" required="required" id="cijena" placeholder="Price for night " >
-		    
-    		</div>
-		    
+    	    
 			<div class="form-group">
 				<div class="checkbox">
       				<label id = "balkoncic" for = "balkon"><input type="checkbox" value="" id = "balkon">Have a balcony</label>

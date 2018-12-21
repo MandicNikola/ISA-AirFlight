@@ -19,17 +19,34 @@ function onLoad(){
 
 }
 function popuniPolja(soba){
-	$("#tip").val(soba.tip);
 	$("#kreveti").val(soba.kreveti);
 	$("#sprat").val(soba.sprat);
-	$("#cijena").val(soba.cijena);
 	$("#kapacitet").val(soba.kapacitet);
 	if(soba.balkon == 'da'){
 		$("#balkon").prop('checked', true);
 	}
 	
+	
+	var adresa = window.location.search.substring(1);
+	console.log('adesa je '+adresa);
+	var idRoom = adresa.split('-')[0];
+	var idHotel = adresa.split('-')[1];
+	
+	$.ajax({
+		  url : "/api/hoteli/getKonf/"+adresa,
+		  type: 'get',
+		  success: function(pom) {
+				  popuni(pom);
+			  
+			}
+		});
 }
-
+function popuni(lista){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	$.each(pom, function(index, data) {
+		 $("#tip").append("<option  value=\""+data+"\">"+data+"</option>");	 	 
+	 });
+}
 
 $(document).on('submit','.soba',function(e){
 	e.preventDefault();	
@@ -72,7 +89,6 @@ function formToJSON() {
 		"kreveti" : $('#kreveti').val(),			
 		"sprat" : $('#sprat').val(),
 		"kapacitet": $('#kapacitet').val(),
-		"cijena":$('#cijena').val(),
 		"balkon" : rez			
 	});
 }

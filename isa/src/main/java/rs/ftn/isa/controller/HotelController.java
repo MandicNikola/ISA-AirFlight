@@ -586,6 +586,41 @@ public class HotelController {
 		 			 
 			return kat;
 		}
+		//vrati konf za izmjenu sobe
+		@RequestMapping(value="/getKonf/{pom}", 
+				method = RequestMethod.GET,
+				produces = MediaType.APPLICATION_JSON_VALUE)
+		public @ResponseBody ArrayList<String> vratiKonf(@PathVariable String pom){	
+			
+			String[] parts = pom.split("-");
+			String roomID = parts[0];
+			String hotelID = parts[1];
+			Long idR = Long.parseLong(roomID);
+			Long idH = Long.parseLong(hotelID);
+			
+			Hotel hotel = servis.findHotelById(idH);
+		 	
+			ArrayList<String> kat = new ArrayList<String>(); 
+			String trenutni = "";
+			for(Room soba:hotel.getSobe()) {
+				if(soba.getId() == idR) {
+					 trenutni= soba.getTip();
+					break;
+				}
+				
+			}
+			kat.add(trenutni);
+			for(Category kk:hotel.getKategorije()) {
+				if(!kk.getNaziv().equals(trenutni)) {
+				kat.add(kk.getNaziv());
+				}
+			}
+		 		
+			for(String ss:kat) {
+				System.out.println("string " + ss);
+			}
+			return kat;
+		}
 		
 		
 

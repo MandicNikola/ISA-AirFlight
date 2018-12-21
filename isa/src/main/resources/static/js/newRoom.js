@@ -43,7 +43,7 @@ function vratiSe(){
 function popuniPolja(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	$.each(pom, function(index, data) {
-		 $("#tip").append("<option  value=\""+data.id+"\">"+data.naziv+"</option>");	 	 
+		 $("#tip").append("<option  value=\""+data.naziv+"\">"+data.naziv+"</option>");	 	 
 	 });
 }
 $(document).on('submit','.soba',function(e){

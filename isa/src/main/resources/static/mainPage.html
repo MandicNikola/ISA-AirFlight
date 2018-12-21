@@ -44,14 +44,19 @@
 }
 .form-header{
 	text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 #tamnoBtn{
 	background-color: #2f2f2f !important;
 	color: white;
 	font-weight: bold;
 }
-  
+  #HotelDugme{
+  background-color: #404040 !important;
+	padding:6px;	
+	color: white;
+	font-weight: bold;
+  }
   .container-fluid {
       padding: 0px 0px;
       margin-left:0px;      
@@ -63,6 +68,15 @@
    	font-size:20px;
  
   }
+  
+  .booking-form {
+    max-width: 768px;
+    width: 100%;
+    margin: auto;
+    padding: 30px;
+    border-radius: 3px;
+}
+  
   
  .btn-group btn-group-lg{
  	 background-color:#fff !important;
@@ -76,6 +90,12 @@
  	margin-left:10px;
  }
  
+ input[type="date"]::before { 
+	content: attr(data-placeholder);
+	width: 100%;
+}
+input[type="date"]:focus::before,
+input[type="date"]:valid::before { display: none }
  .bg-4 { 
     background-color: #2f2f2f;
     color: #ffffff;
@@ -119,6 +139,69 @@
   <h1>Hotels</h1> 
   <h3>Stay with us, and feel like home…</h3> 
  </div>
+ <div id = "reserveHotel">
+	<div class="container" >
+   	<div class="row">
+   	<div class="booking-form">
+   		<div class="form-header">
+   			<h1>Make your reservation</h1>
+   		</div>
+   		<form>
+   			<div class="row">
+						<div class="col-md-12">
+									<div class="form-group">
+										<input class="form-control" type="text" required placeholder="Enter hotel or destination name">
+									</div>
+						</div>
+   			</div>
+   		 <div class = "row">
+   		 	<div class="col-md-6">
+					<div class="form-group">
+						 <div class="input-group">
+						<span class="input-group-addon"> <i class="glyphicon glyphicon-calendar"></i></span>
+						<input class="form-control" type="date" required="required" data-placeholder="Check in">
+						</div>
+					</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+							 <div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+							<input class="form-control" type="date" required="required"  data-placeholder="Check out">
+							</div>
+				</div>
+			</div>
+		 </div>
+   		
+   		 <div class="row">
+   		  <div class="col-md-4">
+				<div class="form-group">
+					 <div class="input-group">	
+			   		<span class="input-group-addon"> <i class="glyphicon glyphicon-bed"></i></span>
+					<input class="form-control" type="number" min="1" required="required" placeholder="Rooms">		
+					</div>
+			</div>
+		 </div>
+		 <div class="col-md-4">
+				<div class="form-group">
+				 <div class="input-group">	
+				    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+					<input class="form-control" min="1" type="number" min="1" required="required" placeholder="Guests">
+			   </div></div>
+		 </div>
+		 <div class="col-md-4">
+					<div class="form-btn">
+					<button type="button" id="HotelDugme" class="btn  btn-lg">Check availability</button>
+					</div>
+		 </div>
+	</div>
+   	 		</form>
+   	</div>
+   	</div>
+ </div>
+	
+</div>
+ 
 <div id="reserveCar">
 	<div class="container" id="booking">
 		<div class="row">
@@ -181,6 +264,7 @@
 		</div>
 	</div>
 </div>
+
 <div class="container" id = "ispisiTabelu">
 	
 </div>
