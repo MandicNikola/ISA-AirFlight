@@ -7,6 +7,8 @@ function onLoad(){
 	$("#pozadinaAuto").hide();
 	$("#pozadinaHotel").hide();
 	$("#reserveCar").hide();
+	$("#reserveHotel").hide();
+
 }
 
 function planeShow(){
@@ -14,13 +16,18 @@ function planeShow(){
 	$("#pozadinaAuto").hide();
 	$("#pozadinaHotel").hide();
 	$("#ispisiTabelu").empty();
+	$("#reserveCar").hide();
+	$("#reserveHotel").hide();
+
 }
 function hotelShow(){
 	$("#pozadinaAvion").hide();
 	$("#pozadinaAuto").hide();
 	$("#pozadinaHotel").show();
 	$("#ispisiTabelu").empty();
-		
+	$("#reserveHotel").show();
+	$("#reserveCar").hide();
+	
 	$.ajax({
 		method:'GET',
 		url: "/api/hoteli/all",
@@ -68,6 +75,8 @@ function carShow(){
 	$("#pozadinaAvion").hide();
 	$("#pozadinaAuto").show();
 	$("#reserveCar").show();
+	$("#reserveHotel").hide();
+
 	$("#pozadinaHotel").hide();	
 	 $("#ispisiTabelu").empty();
 		
