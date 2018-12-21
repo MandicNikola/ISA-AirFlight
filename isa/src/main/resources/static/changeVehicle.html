@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/changeVehicle.js"></script>
+  	
+<title>Change Vehicle</title>
+	<style>
+		  header{
+	 	 	margin-top:2%;
+	 	 	text-align: center !important;
+	 	 	font-size: 50px;
+	 	 	font-weight: bold;
+	 	 	font-family: "Comic Sans MS", cursive, sans-serif	
+	 	 	
+	 	 	}
+	 	   body{
+				background-color: #EFEFEF;
+				color: #666;
+	  		    font-family: 'Lato', sans-serif;    
+	  		    font-size: 16px;
+	 	   }
+	 	   .col-xs-6{
+	 	 			margin-left:25%;
+	 	 			margin-right:25%;
+	 	 }
+	 	 h2{
+	 	 			text-align: center;
+	 	 			
+	 	 }
+	 	 #polje{
+	 	 		padding: 1%;
+	 	 		margin-top: 1%;
+	 	 		max-width: 500px;
+	 	 	 	background-color: rgba(255,255,255,0.8);
+	 	 	 	border: 3px solid #C3C3C3;
+	   		     border-radius: 8px;
+	 	 }
+	 	 #potvrdiBtn{
+	 	 			padding : 10px;
+	 	 }
+	  	form{
+	 	 		text-align: center;
+	 	 	}
+	 	.form-group{
+				text-align: left;
+	 	 }	
+	</style>
+</head>
+<body onload="loadInformacije()">
+<header>
+				<p>AirFinity</p>
+		</header>
+		<div class="container" id="polje">
+  				<h2>Change </h2>
+			  <form method="post" class="izmeni">
+				    <div class="form-group row ">				      	
+				        <div class="col-xs-6">
+						       <i class="glyphicon glyphicon-pencil"></i>
+						      <label for="ime">Name:</label>
+						      <input type="text" class="form-control" id="ime" required>
+				  		</div>
+				    </div>
+				    <div class="form-group row">
+				      <div class="col-xs-6">
+				       		  <i class="glyphicon glyphicon-pencil"></i>
+						      <label for="marka">Brand:</label>
+						      <input type="text" class="form-control" id="marka" required>
+				     </div>
+				    </div>
+			    	<div class="form-group row">			    	
+				        <div class="col-xs-6">
+				              <i class="glyphicon glyphicon-pencil"></i>
+				              <label for="model">Model:</label>
+						      <input type="text" class="form-control" id="model" required >
+						</div>
+				    </div>
+				    <div class="form-group row">				    
+				        <div class="col-xs-6">	
+				           	 <i class="glyphicon glyphicon-pencil"></i>
+				              <label for="godiste">Model year:</label>
+						      <input type="number" class="form-control" id="godiste" placeholder="Enter production date" min="1990" required>
+						</div>
+				    </div>
+			    	<div class="form-group row">
+			    		 <div class="col-xs-6">	
+			    	     	 <i class="glyphicon glyphicon-pencil"></i>
+						      <label for="seats">Number of seats:</label>
+						   	  <select class="form-control" id="sedista">
+							      <option value="2">2</option>
+							      <option value="4">4</option>
+							      <option value="5" selected>5</option>
+							</select>
+						 </div>
+				    </div>
+				    <div class="form-group row">
+				        <div class="col-xs-6">	
+				            <i class="glyphicon glyphicon-pencil"></i>
+				            <label for="cat">Category:</label>
+				             <select class="form-control" id="kategorija">
+							      <option value="A" selected>A</option>
+							      <option value="B">B</option>
+							      <option value="C">C</option>
+							      <option value="D">D</option>
+							      <option value="E">E</option>
+							</select>
+				        </div>
+				    </div>		    				    
+			    <button type="submit" id="potvrdiBtn" class="btn btn-default btn-lg">Change</button>
+			  </form>
+	</div>
+
+
+</body>
+</html>

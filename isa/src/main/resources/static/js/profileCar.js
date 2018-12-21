@@ -225,15 +225,20 @@ function ispisiVozila(skup){
 	console.log('usao u ispisivozila');
 	var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 		
-	$("#pregledVozila").append("<table class=\"table table-hover\" id=\"tabelaVozilo\" ><thead><tr><th>Name</th><th>Brand</th><th>Model</th><th>Model year</th><th>Number of seats </th><th>Category</th></tr></thead>");
+	$("#pregledVozila").append("<table class=\"table table-hover\" id=\"tabelaVozilo\" ><thead><tr><th>Name</th><th>Brand</th><th>Model</th><th>Model year</th><th>Number of seats </th><th>Category</th><th></th><th></th></tr></thead>");
 	
 	$.each(lista, function(index, vozilo) {
-		$("#tabelaVozilo").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+vozilo.naziv+"</td><td > "+vozilo.marka+"</td><td > "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td > "+vozilo.sedista+"</td><td > "+vozilo.kategorija+"</td><td><button class=\"btn btn-info\" onclick=\"obrisiVozilo('"+vozilo.id+"')\">Obrisi</button></td></tr>");
+		$("#tabelaVozilo").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+vozilo.naziv+"</td><td > "+vozilo.marka+"</td><td > "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td > "+vozilo.sedista+"</td><td > "+vozilo.kategorija+"</td><td><button class=\"btn btn-info\" onclick=\"izmeniVozilo('"+vozilo.id+"')\">Change</button></td><td><button class=\"btn btn-info\" onclick=\"obrisiVozilo('"+vozilo.id+"')\">Delete</button></td></tr>");
 	});
     $("#pregledVozila").append("</table>");
  
 }
 
+function izmeniVozilo(idVozila){
+	window.location="changeVehicle.html?id="+idVozila;
+	
+	
+}
 function obrisiVozilo(idVozila){
 	console.log('Vozilo koje treba obrisati ima id '+idVozila);
 	
