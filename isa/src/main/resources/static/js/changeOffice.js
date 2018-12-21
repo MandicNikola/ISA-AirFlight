@@ -19,6 +19,7 @@ function iscrtajStranicu(filijala){
 	$("#grad").val(filijala.grad);
 	$("#ulica").val(filijala.ulica);
 }
+
 $(document).on('submit','.izmeni',function(e){
 	console.log('Pritisnuo izmeni');
 	var podatak = window.location.search.substring(1);

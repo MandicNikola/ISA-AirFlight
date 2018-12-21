@@ -1,5 +1,6 @@
 package rs.ftn.isa.controller;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.UserDTO;
+import rs.ftn.isa.model.Filijala;
 import rs.ftn.isa.model.RentACar;
 import rs.ftn.isa.model.User;
 import rs.ftn.isa.model.Vehicle;
@@ -92,8 +94,56 @@ public class VoziloController {
 				servis.removeVehicle(Long.parseLong(id));
 				
 		}
-			
+		@RequestMapping(value="/vratiVozilo/{id}",
+				method = RequestMethod.GET,
+				produces = MediaType.APPLICATION_JSON_VALUE)
+		public @ResponseBody Vehicle getVoziloById(@PathVariable Long id){	
+			Vehicle povratna = servis.findVehicleById(id);
+			System.out.println(" Nasao vozilo sa nazivom "+ povratna.getNaziv());
+			return povratna;
+		}
 
-	
+
+		@RequestMapping(value="/izmeniAuto", 
+				method = RequestMethod.POST,
+				consumes = MediaType.APPLICATION_JSON_VALUE,
+				produces = MediaType.APPLICATION_JSON_VALUE)
+		public @ResponseBody Vehicle izmeniVozilo(@RequestBody Vehicle nova){		
+			
+			System.out.println("Usao u izmeniVozilo");
+			Long id=nova.getId();
+			
+			//prvo pronadjemo vozilo koje treba da se izmeni
+			
+			Vehicle vozilo = servis.findVehicleById(id);
+			if(vozilo.equals(nova)) {
+				System.out.println("Nista nije izmenjeno");
+				vozilo.setModel(vozilo.getServisrent().getId().toString());
+				return vozilo;
+			}
+			
+			Vehicle proveraImena = servis.findVehicleByNaziv(nova.getNaziv());
+			if(proveraImena != null && proveraImena.getId() != nova.getId()) {
+				System.out.println("Postoji vozilo sa tim ienom");
+				return null;
+			}
+			
+			System.out.println("Provere su prosle");
+			vozilo.setNaziv(nova.getNaziv());
+			vozilo.setGodiste(nova.getGodiste());
+			vozilo.setMarka(nova.getMarka());
+			vozilo.setModel(nova.getModel());
+			vozilo.setKategorija(nova.getKategorija());
+			vozilo.setSedista(nova.getSedista());
+			
+			
+			servis.saveVehicle(vozilo);
+			Long idRent = vozilo.getServisrent().getId();
+			
+			vozilo.setModel(idRent.toString());
+			return vozilo;
+
+		}	
+
 
 }

@@ -206,6 +206,13 @@ public class Vehicle {
 		return "Vehicle [id=" + id + ", naziv=" + naziv + ", marka=" + marka + ", model=" + model + ", godiste=" + godiste
 				+ ", sedista=" + sedista + ", kategorija=" + kategorija + ", cena=" + cena + ", ocena=" + ocena + "]";
 	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		return super.equals(obj);
+	}
 	
 	
 	
