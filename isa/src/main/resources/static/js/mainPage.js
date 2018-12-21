@@ -6,6 +6,7 @@ function onLoad(){
 	
 	$("#pozadinaAuto").hide();
 	$("#pozadinaHotel").hide();
+	$("#reserveCar").hide();
 }
 
 function planeShow(){
@@ -66,6 +67,7 @@ function deleteHotel(id){
 function carShow(){
 	$("#pozadinaAvion").hide();
 	$("#pozadinaAuto").show();
+	$("#reserveCar").show();
 	$("#pozadinaHotel").hide();	
 	 $("#ispisiTabelu").empty();
 		

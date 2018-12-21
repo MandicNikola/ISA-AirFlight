@@ -34,6 +34,24 @@
   	color:#fff;
   } 
   
+  
+#booking{
+    background-color: #fff;
+    width: 50%;
+    padding: 10px 30px 40px 30px;
+    border-radius: 3px;
+    font-family: 'Josefin Sans', sans-serif;
+}
+.form-header{
+	text-align: center;
+    margin-bottom: 40px;
+}
+#tamnoBtn{
+	background-color: #2f2f2f !important;
+	color: white;
+	font-weight: bold;
+}
+  
   .container-fluid {
       padding: 0px 0px;
       margin-left:0px;      
@@ -45,6 +63,7 @@
    	font-size:20px;
  
   }
+  
  .btn-group btn-group-lg{
  	 background-color:#fff !important;
   	
@@ -100,7 +119,68 @@
   <h1>Hotels</h1> 
   <h3>Stay with us, and feel like home…</h3> 
  </div>
-
+<div id="reserveCar">
+	<div class="container" id="booking">
+		<div class="row">
+				<div class="form-header">
+					<h1>Make a reservation</h1>
+				</div>
+				<form>	
+					<div class="row">
+						<div class="col-md-6">
+									<div class="form-group">
+										<span class="form-label">Pick up location <i class="glyphicon glyphicon-map-marker"></i></span>
+										<input class="form-control" type="text" placeholder="Enter location" required>
+									</div>
+						</div>
+						<div class="col-md-6">
+									<div class="form-group">
+										<span class="form-label">Drop off location <i class="glyphicon glyphicon-map-marker"></i></span>
+										<input class="form-control" type="text" placeholder="Enter location" required>
+									</div>
+						</div>
+					</div>
+					<div class="row">
+							<div class="col-md-6">
+									<div class="form-group">
+										<span class="form-label">Pick up date <i class="glyphicon glyphicon-calendar"></i></span>
+										<input class="form-control" type="date" required>
+									</div>
+						</div>
+						<div class="col-md-6">
+									<div class="form-group">
+										<span class="form-label">Drop off date <i class="glyphicon glyphicon-calendar"></i></span>
+										<input class="form-control" type="date" required>
+									</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3">
+									<div class="form-group">
+										<span class="form-label">Category of car <i class="glyphicon glyphicon-star"></i></span>
+										<select class="form-control">
+										      <option value="A" selected>A</option>
+										      <option value="B">B</option>
+										      <option value="C">C</option>
+										      <option value="D">D</option>
+										      <option value="E">E</option>
+										</select>
+									</div>
+						</div>
+						<div class="col-md-5">
+									<div class="form-group">
+										<span class="form-label">Passengers <i class="glyphicon glyphicon-user"></i></span>
+										<input class="form-control" type="number" placeholder="Enter number of passengers" min="1" max="5" required>
+									</div>
+						</div>
+						<div class="col-md-4">
+										<button type="button" id="tamnoBtn" class="btn  btn-lg">Search cars</button>
+						</div>
+					</div>
+				</form>
+		</div>
+	</div>
+</div>
 <div class="container" id = "ispisiTabelu">
 	
 </div>
