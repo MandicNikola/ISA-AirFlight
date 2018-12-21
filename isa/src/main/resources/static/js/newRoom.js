@@ -12,9 +12,10 @@ function onLoad(){
 		  type: 'get',
 		  success: function(pom) {
 			  if(pom == null){
-				  
+				  ispisiUpozorenje();
 			  }else if(pom.length == 0){
-				  
+				  console.log('prazan');
+				  ispisiUpozorenje();
 			  }else{
 				  popuniPolja(pom);
 			  }
@@ -22,6 +23,22 @@ function onLoad(){
 			}
 		});
 
+}
+function ispisiUpozorenje(){
+	$('#sakrij').hide();
+	
+	$('#sastav').empty();
+	
+	$('#sastav').append("<p>You have to add configuration of the room first.</p><p><button type=\"button\" onclick=\"vratiSe()\" class=\"btn btn-link\">Go to add</button></p>");
+
+	
+}
+function vratiSe(){
+	var adresa = window.location.search.substring(1);
+	console.log('adresa je '+adresa);
+	var id = adresa.split('=')[1];
+	window.location = "profileHotel.html?id="+id;
+	
 }
 function popuniPolja(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);

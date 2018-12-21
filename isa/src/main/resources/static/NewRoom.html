@@ -35,6 +35,9 @@
   	h2{
   		margin:45px 0px;
   	}
+  	#sastav{
+  		text-align:center;
+  	}
   	#tip{
   	border-radius: 3px;
 	padding-left: 5px;
@@ -52,13 +55,14 @@
 
 
 <body onload = "onLoad()">
-  <div class="container">
+<div id="sastav"></div>
+  <div class="container" id="sakrij">
     <h2>New room</h2>
     	<form method="post" class="soba" id="unosSobe" >	
 		    <div class="form-group">
 		       <label for="Kategorija">Category:</label>
-		       <select  id="tip">
-    		</select>
+		 	   <select  id="tip" class="form-control">
+    		   </select>
 
 		    </div>
 		    
