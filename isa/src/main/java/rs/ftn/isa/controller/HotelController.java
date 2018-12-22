@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.HotelDTO;
+import rs.ftn.isa.dto.ReservationHotelDTO;
 import rs.ftn.isa.model.Category;
 import rs.ftn.isa.model.CijenovnikSoba;
 import rs.ftn.isa.model.Hotel;
@@ -624,4 +625,20 @@ public class HotelController {
 		
 		
 
+		@RequestMapping(value="/vratiPonude/{id}", 
+				method = RequestMethod.POST,
+				consumes = MediaType.APPLICATION_JSON_VALUE)
+		public ArrayList<Room> vratiPonude(@RequestBody ReservationHotelDTO rez,@PathVariable Long id){		
+			Hotel hotel = servis.findHotelById(id);
+			System.out.println("dosao da vrati ponude");
+			ArrayList<Room> sobe = new ArrayList<Room>();
+			for(Room soba:hotel.getSobe()) {
+				sobe.add(soba);
+			}
+			
+			return sobe;
+		}	
+		
+		
+		
 }

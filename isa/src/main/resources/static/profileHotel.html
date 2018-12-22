@@ -80,6 +80,45 @@
   		padding: 12px 20px;
  		 margin: 8px 0;
  	 }
+ 	 
+ 	#booking{
+    background-color: #fff;
+    width: 50%;
+    padding: 10px 30px 40px 30px;
+    border-radius: 3px;
+   
+}
+
+ #HotelDugme{
+  background-color: #404040 !important;
+	padding:6px;	
+	color: white;
+	font-weight: bold;
+  }
+ .booking-form {
+    max-width: 768px;
+    width: 100%;
+    margin: auto;
+    padding: 30px;
+    border-radius: 3px;
+     font-family: 'Josefin Sans', sans-serif;
+}
+  
+  
+.form-header{
+	text-align: center;
+    margin-bottom: 20px;
+}
+ 	  input[type="date"]::before { 
+	content: attr(data-placeholder);
+	width: 100%;
+}
+input[type="date"]:focus::before,
+input[type="date"]:valid::before { display: none }
+ .bg-4 { 
+    background-color: #2f2f2f;
+    color: #ffffff;
+}
   </style>
 </head>
 <body onload="onLoad()" >
@@ -130,15 +169,15 @@
 									<div class="form-group">
 										 <div class="input-group">
 										<span class="input-group-addon"> <i class="glyphicon glyphicon-calendar"></i></span>
-										<input class="form-control" type="date" required="required" data-placeholder="Check in">
+										<input id = "checkin" class="form-control" type="date" required="required" data-placeholder="Check in">
 										</div>
 									</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
 											 <div class="input-group">
-											<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-											<input class="form-control" type="date" required="required"  data-placeholder="Check out">
+												<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+												<input id = "checkout"  class="form-control" type="date" required="required"  data-placeholder="Check out">
 											</div>
 								</div>
 							</div>
@@ -149,7 +188,7 @@
 								<div class="form-group">
 									 <div class="input-group">	
 							   		<span class="input-group-addon"> <i class="glyphicon glyphicon-bed"></i></span>
-									<input class="form-control" type="number" min="1" required="required" placeholder="Rooms">		
+									<input class="form-control" id = "brojSoba"  type="number" min="1" required="required" placeholder="Rooms">		
 									</div>
 							</div>
 						 </div>
@@ -157,12 +196,12 @@
 								<div class="form-group">
 								 <div class="input-group">	
 								    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-									<input class="form-control" min="1" type="number" min="1" required="required" placeholder="Guests">
+									<input class="form-control" min="1" id = "brojLjudi"  type="number" min="1" required="required" placeholder="Guests">
 							   </div></div>
 						 </div>
 						 <div class="col-md-4">
 									<div class="form-btn">
-									<button type="button" id="HotelDugme" class="btn  btn-lg">Check availability</button>
+									<button type="button" id="HotelDugme" class="btn  btn-lg" onclick = "izlistajPonudu()">Check availability</button>
 									</div>
 						 </div>
 					</div>

@@ -641,3 +641,46 @@ function dodUsluga() {
 	});
 	return kat;
 }
+function izlistajPonudu(){
+	var adresa = window.location.search.substring(1);
+	console.log('adesa je '+adresa);
+	var id = adresa.split('=')[1];
+
+	$.ajax({
+		type : 'POST',
+		url : "/api/hoteli/vratiPonude/"+id,
+		contentType : 'application/json',
+		dataType : "json",
+		data:preuzmiPodatke(),
+		success : function(data) {
+				if(data.length == 0){
+					alert('nema ponuda');
+					
+				}else{
+					alert('ima ponuda');
+					ispisiPonude(data);
+				}	
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("greska pri unosu nove kat");
+			   
+		}
+	});
+
+	
+}
+
+function preuzmiPodatke() {
+	
+	var kat = JSON.stringify({
+		"checkIn":$('#checkin').val(),
+		"checkOut":$('#checkout').val(),
+		"brojSoba":$('#brojSoba').val(),
+		"brojLjudi":$('#brojLjudi').val()
+	});
+	return kat;
+}
+function ispisiPonude(data){
+	
+	console.log('ima ponuda');
+}
