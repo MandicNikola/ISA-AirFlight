@@ -23,6 +23,9 @@ public class RezervacijaRentCar {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+	@Column(nullable = false)
+	private boolean zavrsena;
+	
 	
 	@Column(nullable = false)
 	private String mestoPreuzimanja;
@@ -46,10 +49,26 @@ public class RezervacijaRentCar {
 	private Vehicle vozilo;
 	
 	@ManyToOne( fetch = FetchType.EAGER)
-    @JoinColumn(name = "rent_id")
-	private RentACar servisrent;
+    @JoinColumn(name = "usluga_id")
+	private Usluga usluga;
+	
 	
 	public RezervacijaRentCar() {}
+
+	
+	public RezervacijaRentCar(String mestoPreuzimanja, String mestoVracanja, Date datumPreuzimanja, Date datumVracanja,
+			User korisnik, Vehicle vozilo, Usluga usluga) {
+		super();
+		this.mestoPreuzimanja = mestoPreuzimanja;
+		this.mestoVracanja = mestoVracanja;
+		this.datumPreuzimanja = datumPreuzimanja;
+		this.datumVracanja = datumVracanja;
+		this.korisnik = korisnik;
+		this.vozilo = vozilo;
+		this.usluga = usluga;
+		this.zavrsena=false;
+	}
+
 
 	public Long getId() {
 		return id;
@@ -107,19 +126,28 @@ public class RezervacijaRentCar {
 		this.vozilo = vozilo;
 	}
 
-	public RentACar getServisrent() {
-		return servisrent;
-	}
-
-	public void setServisrent(RentACar servisrent) {
-		this.servisrent = servisrent;
-	}
 
 	@Override
 	public String toString() {
 		return "RezervacijaRentCar [id=" + id + ", mestoPreuzimanja=" + mestoPreuzimanja + ", mestoVracanja="
 				+ mestoVracanja + ", datumPreuzimanja=" + datumPreuzimanja + ", datumVracanja=" + datumVracanja
-				+ ", korisnik=" + korisnik + ", vozilo=" + vozilo + ", servisrent=" + servisrent + "]";
+				+ ", korisnik=" + korisnik + ", vozilo=" + vozilo +"]";
+	}
+
+	public boolean isZavrsena() {
+		return zavrsena;
+	}
+
+	public void setZavrsena(boolean zavrsena) {
+		this.zavrsena = zavrsena;
+	}
+
+	public Usluga getUsluga() {
+		return usluga;
+	}
+
+	public void setUsluga(Usluga usluga) {
+		this.usluga = usluga;
 	}
 	
 	
