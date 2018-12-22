@@ -123,13 +123,31 @@ function ispisiCenovnik(skup){
 		
 		var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 			
-		$("#cenovnikKategorije").append("<table class=\"table table-hover\" id=\"tabelaCenovnik\" ><tr><th>Service</th><th>Price per day</th></tr>");
+		$("#cenovnikKategorije").append("<table class=\"table table-hover\" id=\"tabelaCenovnik\" ><tr><th>Od</th><th>Do</th><th>Price per day</th></tr>");
 		console.log(lista.length);
+		var pod = lista[0];
+		var a=pod.id+"="+pod.kategorija;
+		
+		$("#tabelaCenovnik").append("<tr class=\"thead-light \"><td class=\"hoverName\">1</td><td>"+pod.prekoTrajanja+"</td><td ><input class=\"form-control\" type = \"number\"  id=\""+pod.id+"\"  value=\""+pod.cena+"\"></td><td><button class=\"btn btn-info\" onclick=\"izmeniUslugu('"+a+"')\">Change price</button></td></tr>");
+		
+		var duzina = lista.length-1;
 		
 		$.each(lista, function(index, clan) {
 			var pomocna=clan.id+"="+clan.kategorija;
-		 $("#tabelaCenovnik").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+clan.naziv+"</td><td ><input class=\"form-control\" type = \"number\"  id=\""+clan.id+"\"  value=\""+clan.cena+"\"></td><td><button class=\"btn btn-info\" onclick=\"izmeniUslugu('"+pomocna+"')\">Change price</button></td></tr>");
-		});
+			console.log("duzina niza je " +duzina);
+			
+			if(index != 0){
+				if(index != duzina){
+					var prethodni = lista[index-1];
+					$("#tabelaCenovnik").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+prethodni.prekoTrajanja+"</td><td> "+clan.prekoTrajanja+"</td><td ><input class=\"form-control\" type = \"number\"  id=\""+clan.id+"\"  value=\""+clan.cena+"\"></td><td><button class=\"btn btn-info\" onclick=\"izmeniUslugu('"+pomocna+"')\">Change price</button></td></tr>");
+				}
+			}
+			});
+		var podd = lista[duzina];
+		var b=podd.id+"="+podd.kategorija;
+		
+		$("#tabelaCenovnik").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+podd.prekoTrajanja+"</td><td>-</td><td ><input class=\"form-control\" type = \"number\"  id=\""+podd.id+"\"  value=\""+podd.cena+"\"></td><td><button class=\"btn btn-info\" onclick=\"izmeniUslugu('"+b+"')\">Change price</button></td></tr>");
+	
 	    $("#cenovnikKategorije").append("</table>");
 	 
 	    dodajDatum();
@@ -321,13 +339,13 @@ $(document).on('submit','.dodavanje',function(e){
 	var pom=window.location.search.substring(1);
 	var id= pom.split('=')[1];
 	
-	naziv = $('#ime').val();
+	trajanje = $('#days').val();
     katA = $('#catA').val();
 	katB = $('#catB').val();
 	katC = $('#catC').val();
 	katD =  $('#catD').val();
 	katE = $('#catE').val();
-	pom= id+"="+naziv+"="+katA+"="+katB+"="+katC+"="+katD+"="+katE;
+	pom= id+"="+trajanje+"="+katA+"="+katB+"="+katC+"="+katD+"="+katE;
 	
 		$.ajax({
 			type : 'POST',

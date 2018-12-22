@@ -29,16 +29,16 @@ public class Usluga {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@Column(name="naziv", nullable = false)
+	@Column(name="naziv")
 	private String naziv;
 	
 	@Column(name="cena", nullable = false)
 	private int cena;
 	
 	//u zavisnosti od toga na koliko se dana uzima auto cena varira
-	// ako imamo trajanje 10 dana i trajanje 15 dana ako se uzme auto na 12 dana onda spada u uslugu 15 dana
-	@Column(name="trajanje", nullable = false)
-	private int trajanje;
+	//ako je trajanje 5 dana , sve >=5 dana ima tu cenu
+	@Column(name="od", nullable = true)
+	private int prekoTrajanja;
 	
 	
 	@Enumerated(EnumType.STRING)
@@ -84,6 +84,14 @@ public class Usluga {
 		this.id = id;
 		this.naziv = naziv;
 		this.cena= cena;
+	}
+
+
+	public Usluga(int cena, int prekoTrajanja, String kategorija) {
+		super();
+		this.cena = cena;
+		this.prekoTrajanja = prekoTrajanja;
+		this.kategorija = CategoryCar.valueOf(kategorija);
 	}
 
 
@@ -202,13 +210,15 @@ public class Usluga {
 	}
 
 
-	public int getTrajanje() {
-		return trajanje;
+
+
+	public int getPrekoTrajanja() {
+		return prekoTrajanja;
 	}
 
 
-	public void setTrajanje(int trajanje) {
-		this.trajanje = trajanje;
+	public void setPrekoTrajanja(int prekoTrajanja) {
+		this.prekoTrajanja = prekoTrajanja;
 	}
 
 

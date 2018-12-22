@@ -1,6 +1,7 @@
 package rs.ftn.isa.controller;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -176,6 +177,12 @@ public class RentACarController {
 						System.out.println("Naziv usluge je "+U.getNaziv());
 				}
 		}
+		katUsluge.sort(Comparator.comparingInt(Usluga :: getPrekoTrajanja));
+		
+		for(int i=0;i<katUsluge.size();i++) {
+			System.out.println("Usluga ima trajanje "+katUsluge.get(i).getPrekoTrajanja());
+		}
+		
 		return katUsluge;
 	}
 	
@@ -205,7 +212,7 @@ public class RentACarController {
 		String [] niz=pomocna.split("=");
 		
 		String id= niz[0];
-		String naziv = niz[1];
+		String trajanje = niz[1];
 		String cenaA= niz[2];
 		String cenaB= niz[3];
 		String cenaC= niz[4];
@@ -228,11 +235,12 @@ public class RentACarController {
 			noviCenovnik = new PricelistRentCar(datum);
 			noviCenovnik.setAktivan(true);
 			
-			Usluga uslugaA = new Usluga(naziv, Integer.parseInt(cenaA), "A");
-			Usluga uslugaB = new Usluga(naziv, Integer.parseInt(cenaB), "B");
-			Usluga uslugaC = new Usluga(naziv, Integer.parseInt(cenaC), "C");
-			Usluga uslugaD = new Usluga(naziv, Integer.parseInt(cenaD), "D");
-			Usluga uslugaE = new Usluga(naziv, Integer.parseInt(cenaE), "E");
+			int dana = Integer.parseInt(trajanje);
+			Usluga uslugaA = new Usluga(Integer.parseInt(cenaA),dana, "A");
+			Usluga uslugaB = new Usluga( Integer.parseInt(cenaB),dana, "B");
+			Usluga uslugaC = new Usluga( Integer.parseInt(cenaC),dana, "C");
+			Usluga uslugaD = new Usluga( Integer.parseInt(cenaD),dana, "D");
+			Usluga uslugaE = new Usluga( Integer.parseInt(cenaE),dana, "E");
 			
 			uslugaA.setLista(noviCenovnik);
 			uslugaB.setLista(noviCenovnik);
@@ -260,11 +268,15 @@ public class RentACarController {
 		}else {
 			rent.getCenovnici().remove(cenovnik);
 			//postoji vec aktivan cenovnik, preuzmemo ga i dodamo mu nove usluge
-			Usluga uslugaA = new Usluga(naziv, Integer.parseInt(cenaA), "A");
-			Usluga uslugaB = new Usluga(naziv, Integer.parseInt(cenaB), "B");
-			Usluga uslugaC = new Usluga(naziv, Integer.parseInt(cenaC), "C");
-			Usluga uslugaD = new Usluga(naziv, Integer.parseInt(cenaD), "D");
-			Usluga uslugaE = new Usluga(naziv, Integer.parseInt(cenaE), "E");
+			
+
+			int dana = Integer.parseInt(trajanje);
+			
+			Usluga uslugaA = new Usluga(Integer.parseInt(cenaA),dana, "A");
+			Usluga uslugaB = new Usluga( Integer.parseInt(cenaB),dana, "B");
+			Usluga uslugaC = new Usluga( Integer.parseInt(cenaC),dana, "C");
+			Usluga uslugaD = new Usluga( Integer.parseInt(cenaD),dana, "D");
+			Usluga uslugaE = new Usluga( Integer.parseInt(cenaE),dana, "E");
 			
 			uslugaA.setLista(cenovnik);
 			uslugaB.setLista(cenovnik);
