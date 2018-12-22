@@ -2,6 +2,7 @@ package rs.ftn.isa.model;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -52,6 +53,12 @@ public class RezervacijaRentCar {
     @JoinColumn(name = "usluga_id")
 	private Usluga usluga;
 	
+	@ManyToOne(fetch = FetchType.EAGER, cascade =  CascadeType.ALL)
+	@JoinColumn(name = "office_id")
+	private Filijala office;
+	
+	@Column(nullable = false)
+	private int cena;
 	
 	public RezervacijaRentCar() {}
 
@@ -70,6 +77,31 @@ public class RezervacijaRentCar {
 	}
 
 
+	public RezervacijaRentCar(String mestoPreuzimanja, String mestoVracanja, Date datumPreuzimanja, Date datumVracanja,
+			User korisnik, Vehicle vozilo, Usluga usluga, Filijala office, int cena) {
+		super();
+		this.mestoPreuzimanja = mestoPreuzimanja;
+		this.mestoVracanja = mestoVracanja;
+		this.datumPreuzimanja = datumPreuzimanja;
+		this.datumVracanja = datumVracanja;
+		this.korisnik = korisnik;
+		this.vozilo = vozilo;
+		this.usluga = usluga;
+		this.office = office;
+		this.cena = cena;
+	}
+
+
+	public int getCena() {
+		return cena;
+	}
+
+
+	public void setCena(int cena) {
+		this.cena = cena;
+	}
+
+
 	public Long getId() {
 		return id;
 	}
@@ -77,6 +109,16 @@ public class RezervacijaRentCar {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+	public Filijala getOffice() {
+		return office;
+	}
+
+
+	public void setOffice(Filijala office) {
+		this.office = office;
+	}
+
 
 	public String getMestoPreuzimanja() {
 		return mestoPreuzimanja;

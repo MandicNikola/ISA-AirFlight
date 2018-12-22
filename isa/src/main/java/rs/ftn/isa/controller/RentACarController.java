@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.ftn.isa.dto.RentACarDTO;
 import rs.ftn.isa.dto.ReservationRentDTO;
 import rs.ftn.isa.model.Filijala;
-import rs.ftn.isa.model.Hotel;
 import rs.ftn.isa.model.PricelistRentCar;
 import rs.ftn.isa.model.RentACar;
+import rs.ftn.isa.model.RezervacijaRentCar;
 import rs.ftn.isa.model.User;
 import rs.ftn.isa.model.Usluga;
 import rs.ftn.isa.model.Vehicle;
@@ -470,25 +470,85 @@ public class RentACarController {
 		
 		Long id=rezervacija.getRentId();
 		ArrayList<Vehicle> ispunjeniUslovi=new  ArrayList<Vehicle>();
+		
 		//prvo gledamo u kom se servisu nalazimo
 		RentACar rent = servis.findOneById(id);
-			System.out.println("Usau u checkReservation");
+		System.out.println("Usau u checkReservation");
 			
+		String startLokacija = rezervacija.getStartLocation(); 
+		String endLokacija = rezervacija.getEndLocation(); 
+		
+		boolean postojiStartFilijala=false;
+		boolean postojiEndFilijala=false;
+		
+		Filijala lociranaFilijala=null;
+		
+		for(Filijala F : rent.getFilijale()) {
+
+			//1.proveravamo da li se u listi filijala nalazi grad iz pick up location 
+			if(F.getGrad().equals(startLokacija)) {
+					lociranaFilijala=F;
+					System.out.println("Ne postoji grad iz pickUpLocation");
+					postojiStartFilijala=true;
+				}
+			//2.proveravamo da li se u listi filijala nalazi grad iz drop off location 
+			if(F.getGrad().equals(endLokacija)) {
+					postojiEndFilijala=true;
+
+					System.out.println("Ne postoji grad iz dropOffLocation");
+				}
+		}
+		if(postojiStartFilijala==false || postojiEndFilijala==false) {
+			return null;
+		}
+		
 		ArrayList<Vehicle> ispunjenaKategorija=new  ArrayList<Vehicle>();
 		String kat=rezervacija.getTip();
 		
-		/*for(Vehicle V : rent.getVozila()) {
+		for(Vehicle V : lociranaFilijala.getVozila()) {
 				if(V.getKategorija().toString().equals(kat)){
-						ispunjenaKategorija.add(V);
+					System.out.println("Dodato vozilo sa nazivom "+V.getNaziv() + " kategorija je "+V.getKategorija());
+						ispunjenaKategorija.add(V);//vozila koja se nalaze u trazenom gradu i kategoriji
 				}
-		}*/
-		boolean postojiFilijala=false;
-		String lokacija = rezervacija.getStartLocation(); 
+		}
+		
+		for(int i=0;i<ispunjenaKategorija.size();i++) {
+				Vehicle vozilo = ispunjenaKategorija.get(i);
+				Set<RezervacijaRentCar> rezervacije = vozilo.getRezervacije(); 
 				
-		for(Filijala F : rent.getFilijale()) {
-				if(F.getGrad().equals(lokacija)) {
-					postojiFilijala=true;
-					break;
+				//Provera 1 --> 
+				//ako je nas datum preuzimanja pre datuma vracanja iz rezervacije,
+				//Provera 2 --> 
+				//onda gledamo da li je i datum vracanja naseg vozila nakon datuma preuzimanja iz
+				//rezervacije
+				
+				boolean dozvolaPickUp = true;
+				//prolazimo kroz sve rezervacije koje su napravljene za ovo vozilo
+				for(RezervacijaRentCar R : rezervacije) {	
+					//ako je datum preuzimanja vozila pre datuma vracanja iz rezervacije
+					if(rezervacija.getPickUp().before(R.getDatumVracanja())) {
+						System.out.println("provera1");
+						 //datum vracanja auta posle datuma preuzimanja iz rezervacije, preklapaju se termini, vozilo nam ne odgovara
+							if(rezervacija.getDropOff().after(R.getDatumPreuzimanja())){
+								dozvolaPickUp = false;
+								System.out.println("provera2");
+							}
+					}
+					
+				}
+				
+				boolean dozvolaPutnici = true;
+					
+				//PROVERA3 da li mogu stati putnici
+				if(vozilo.getSedista() < rezervacija.getPutnici()) {
+						dozvolaPutnici=false;
+						System.out.println("Ne mogu stati putnici");
+				}
+				
+				
+				if(dozvolaPickUp && dozvolaPutnici) {
+					ispunjeniUslovi.add(vozilo);
+					System.out.println("Vozilo sa nazivom "+vozilo.getNaziv()+ " ispunjava uslov");
 				}
 		}
 		

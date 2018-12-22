@@ -390,7 +390,9 @@ function resetuj(){
 }
 
 function rezervisi(){
-			
+
+	$("#rezultat").empty();
+	
 	var pom=window.location.search.substring(1);
 	var id= pom.split('=')[1];
 		
@@ -413,12 +415,45 @@ function rezervisi(){
 		contentType : "application/json",
 		data: sendReservation,
 		dataType : 'json',
-		success : function(pov) {
-				console.log('kraj')
+		success : function(povratna) {
+					if(povratna.length==0){
+						nemaPonuda();
+					}else if(povratna == 0){
+						nemaPonuda();
+					}else{
+						izlistajPonude(povratna);
+					}
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
 			alert('greska');
 		}
 		});
 
+}
+function nemaPonuda(){
+	$("#anketa").hide();
+	 
+	$("#rezultat").empty();
+	 $("#rezultat").append("<p><h2>Unfortunately we don't have rigth offer for you.</h2></p>");
+}
+function izlistajPonude(data){
+	var niz = data == null ? [] : (data instanceof Array ? data : [ data ]);
+	$("#anketa").hide();
+	 
+	$("#rezultat").empty();
+	 $("#rezultat").show();
+	 $("#rezultat").append("<table class=\"table table-hover\" id=\"tabelaPonuda\" ><thead><tr><th>Name</th><th>Brand</th><th>Model</th><th>Model year</th><th>Number of seats </th><th>Category</th><th>Branch office</th><th>Total price</th><th></th></thead>");
+		
+		$.each(niz, function(index, pom) {
+		
+			var filpom=pom.filijala.grad;
+			$("#tabelaPonuda").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+pom.naziv+"</td><td > "+pom.marka+"</td><td > "+pom.model+"</td><td > "+pom.godiste+"</td><td > "+pom.sedista+"</td><td> "+pom.kategorija+"</td><td > "+filpom+"</td><td> "+pom.cena+"</td><td><button class=\"btn btn-info\" onclick=\"rezervisiVozilo('"+pom.id+"')\">Reserve</button></td><td></tr>");
+				
+		});
+		
+	 $("#rezultat").append("</table>");
+	
+}
+function rezervisiVozilo(id){
+	console.log('Usao u rezervisi vozilo '+ id);
 }
