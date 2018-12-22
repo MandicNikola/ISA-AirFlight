@@ -48,10 +48,10 @@ public class RezervacijaHotel {
     @JoinColumn(name = "korisnik_id")
 	private User userHotel;
 	
-	//jedna rezervicija pripada tacno jednom hotelu
+	/*//jedna rezervicija pripada tacno jednom hotelu
 	@ManyToOne( fetch = FetchType.EAGER)
 	private Hotel rezHotel;
-	
+	*/
 	
 	//jedna rezervicija moze da sadrzi vise dodatnih usluga
 	 @ManyToMany(cascade = { CascadeType.ALL })
@@ -142,7 +142,7 @@ public class RezervacijaHotel {
 		this.usluge = usluge;
 	}
 
-	public Hotel getRezHotel() {
+	/*public Hotel getRezHotel() {
 		return rezHotel;
 	}
 
@@ -150,6 +150,6 @@ public class RezervacijaHotel {
 		this.rezHotel = rezHotel;
 	}
 	
-
+*/
 
 }

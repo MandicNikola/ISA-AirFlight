@@ -103,6 +103,7 @@
 				   <ul class="nav nav-tabs">
 				    <li class="active"><a id="info" >Information</a></li>
 				    <li><a id="rooms" >Rooms</a></li>
+				    <li><a id="rooms" >Reservations</a></li>
 				    <li><a id="price" >Pricelist</a></li>
 				  	<li><a id="config" >List of configurations</a></li>			  
 				  </ul>
@@ -113,7 +114,73 @@
 						<p id="adresa"><i class="glyphicon glyphicon-home"></i>You can find us here </p>
 				    </section>
 			  </div>
-			  
+			 
+			 <div id="rezervacije" class="container-fluid">
+			  		<section >
+						<div id = "reserveHotel">
+	<div class="container" >
+   	<div class="row">
+   	<div class="booking-form">
+   		<div class="form-header">
+   			<h1>Make your reservation</h1>
+   		</div>
+   		<form>
+   			<div class="row">
+						<div class="col-md-12">
+									<div class="form-group">
+										<input class="form-control" type="text" required placeholder="Enter hotel or destination name">
+									</div>
+						</div>
+   			</div>
+   		 <div class = "row">
+   		 	<div class="col-md-6">
+					<div class="form-group">
+						 <div class="input-group">
+						<span class="input-group-addon"> <i class="glyphicon glyphicon-calendar"></i></span>
+						<input class="form-control" type="date" required="required" data-placeholder="Check in">
+						</div>
+					</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+							 <div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+							<input class="form-control" type="date" required="required"  data-placeholder="Check out">
+							</div>
+				</div>
+			</div>
+		 </div>
+   		
+   		 <div class="row">
+   		  <div class="col-md-4">
+				<div class="form-group">
+					 <div class="input-group">	
+			   		<span class="input-group-addon"> <i class="glyphicon glyphicon-bed"></i></span>
+					<input class="form-control" type="number" min="1" required="required" placeholder="Rooms">		
+					</div>
+			</div>
+		 </div>
+		 <div class="col-md-4">
+				<div class="form-group">
+				 <div class="input-group">	
+				    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+					<input class="form-control" min="1" type="number" min="1" required="required" placeholder="Guests">
+			   </div></div>
+		 </div>
+		 <div class="col-md-4">
+					<div class="form-btn">
+					<button type="button" id="HotelDugme" class="btn  btn-lg">Check availability</button>
+					</div>
+		 </div>
+	</div>
+   	 		</form>
+   	</div>
+   	</div>
+ </div>
+	
+</div>
+					</section>
+			  </div> 
 			 <div id="sobe" class="container-fluid">			  		
 			 </div>
 			 
