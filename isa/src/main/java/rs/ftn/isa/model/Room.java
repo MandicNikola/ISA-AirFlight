@@ -56,7 +56,7 @@ public class Room {
 	
 	 //jedna soba moze prirpadati vise rezervacija
 	@ManyToMany(mappedBy = "sobe")
-		private Set<RezervacijaHotel> rezervacije = new HashSet<RezervacijaHotel>();
+	private Set<RezervacijaHotel> rezervacije = new HashSet<RezervacijaHotel>();
 	
 	//jedna soba ima vise cjenovnika
 	@OneToMany(mappedBy = "soba", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

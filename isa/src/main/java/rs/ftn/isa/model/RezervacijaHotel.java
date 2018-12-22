@@ -39,7 +39,7 @@ public class RezervacijaHotel {
 	private boolean zavrsena;
 	
 	//jedan rezervacija moze da sadrzi vise soba
-	@ManyToMany(mappedBy = "rezervacija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(cascade = {CascadeType.ALL})
 	@JoinTable(
 	        name = "Rezervacija_Room", 
 	        joinColumns = { @JoinColumn(name = "rezervacijaHotel_id") }, 
@@ -61,7 +61,7 @@ public class RezervacijaHotel {
 	 @ManyToMany(cascade = { CascadeType.ALL })
 	 @JoinTable(
 	        name = "Rezervacija_Usluga", 
-	        joinColumns = { @JoinColumn(name = "rezervacijaHotel_id") }, 
+	        joinColumns = { @JoinColumn(name = "rezervacija_id") }, 
 	        inverseJoinColumns = { @JoinColumn(name = "usluga_id") }
 	  )
 	private Set<Usluga>  usluge = new HashSet<Usluga>();

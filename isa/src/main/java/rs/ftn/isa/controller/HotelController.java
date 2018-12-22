@@ -631,6 +631,8 @@ public class HotelController {
 				consumes = MediaType.APPLICATION_JSON_VALUE)
 		public ArrayList<Room> vratiPonude(@RequestBody ReservationHotelDTO rez,@PathVariable Long id){		
 			Hotel hotel = servis.findHotelById(id);
+			
+			System.out.println(rez);
 			System.out.println("dosao da vrati ponude");
 			ArrayList<Room> sobe = new ArrayList<Room>();
 			
@@ -644,6 +646,7 @@ public class HotelController {
 				for(RezervacijaHotel pom:rezervacije) {	
 					
 					if(rez.getCheckIn().compareTo(pom.getDatumOdlaska())<=0) {
+						System.out.println("nije odobren check in");
 						odobrenCheckIN = false;
 						break;
 					}
@@ -654,6 +657,7 @@ public class HotelController {
 					for(RezervacijaHotel pom:rezervacije) {	
 						
 						if(rez.getCheckOut().compareTo(pom.getDatumDolaska())>=0) {
+							System.out.println("nije odobren check out");
 							odobrenCheckOUT = false;
 							break;
 						}
@@ -662,6 +666,7 @@ public class HotelController {
 				}
 				//odobrena je soba
 				if(odobrenCheckIN == true && odobrenCheckOUT == true) {
+					System.out.println("odobrena soba");
 					sobe.add(soba);
 				}
 				
@@ -669,6 +674,7 @@ public class HotelController {
 			
 			//provjera da li imam dovoljan broj soba
 			if(sobe.size() < rez.getBrojSoba()) {
+				System.out.println("nedovoljan broj soba");
 				return null;
 			}
 			int suma = 0;
@@ -676,7 +682,9 @@ public class HotelController {
 			for(Room sobica:sobe) {
 				suma += sobica.getKapacitet();
 			}
-			if(rez.getBrojLjudi() < suma) {
+			if(rez.getBrojLjudi() >= suma) {
+				System.out.println("nedovoljan kapacitet");
+				
 				return null;
 			}
 			

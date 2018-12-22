@@ -653,6 +653,7 @@ function izlistajPonudu(){
 		dataType : "json",
 		data:preuzmiPodatke(),
 		success : function(data) {
+				
 				if(data.length == 0){
 					alert('nema ponuda');
 					

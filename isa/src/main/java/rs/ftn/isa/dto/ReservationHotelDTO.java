@@ -60,5 +60,12 @@ public class ReservationHotelDTO {
 	public void setCheckOut(Date checkOut) {
 		this.checkOut = checkOut;
 	}
+
+	@Override
+	public String toString() {
+		return "ReservationHotelDTO [nazivHotela=" + nazivHotela + ", brojSoba=" + brojSoba + ", brojLjudi=" + brojLjudi
+				+ ", checkIn=" + checkIn + ", checkOut=" + checkOut + "]";
+	}
+	
 	
 }
