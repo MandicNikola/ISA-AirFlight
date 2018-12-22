@@ -39,8 +39,12 @@ public class RezervacijaHotel {
 	private boolean zavrsena;
 	
 	//jedan rezervacija moze da sadrzi vise soba
-	@OneToMany(mappedBy = "rezervacija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JsonIgnore
+	@ManyToMany(mappedBy = "rezervacija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(
+	        name = "Rezervacija_Room", 
+	        joinColumns = { @JoinColumn(name = "rezervacijaHotel_id") }, 
+	        inverseJoinColumns = { @JoinColumn(name = "room_id") }
+	  )
 	private Set<Room> sobe = new HashSet<Room>();
 	
 	//jedna rezervicija pripada tacno jednom korisniku

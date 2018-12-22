@@ -680,7 +680,57 @@ function preuzmiPodatke() {
 	});
 	return kat;
 }
-function ispisiPonude(data){
-	
+function ispisiPonude(lista){
 	console.log('ima ponuda');
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	 $("#korak").empty();
+	 $("#korak").show();
+	 $("#korak").append("<table class=\"table table-hover\" id=\"tabelaSoba\" ><tr><th>Room type </th><th>Capacity</th><th>Floor</th><th>Balkony</th><th>Price per night</th><th>Select</th></tr>");
+		
+		$.each(pom, function(index, data) {
+			if(data.balkon){
+				$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\" ></td><td>"+data.cijena+"</td><td><input type=\"checkbox\" id=\""+data.id+"\" value=\""+data.id+"\"></td></tr>");	
+			}else{
+				$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td><input type=\"checkbox\"  disabled=\"disabled\" ></td><td>"+data.cijena+"</td><td>"+data.cijena+"</td><td><input type=\"checkbox\" id=\""+data.id+"\" value=\""+data.id+"\"></td></tr>");	
+			}
+		});
+		
+	 $("#korak").append("</table>");
+	
+}
+
+
+function korak2get(){
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+
+	$.ajax({
+		method:'GET',
+		url: "/api/hoteli/getUsluge/"+id,
+		success: function(lista){
+			if(lista==null){
+				$("#korak").empty();
+				console.log('Nema usluga');
+			}else if(lista.length == 0){
+				$("#korak").empty();
+				console.log('Prazne usluga');
+			}else{
+				console.log('Ima usluga ');
+				korak4ispis(lista);
+			}
+		}
+	});
+	
+}
+function korak4ispis(data){
+		
+		$("#korak").empty();
+		var lista = data == null ? [] : (data instanceof Array ? data : [ data ]);
+			
+		$("#korak").append("<table class=\"table table-hover\" id=\"tblDodatne\" ><tr><th>Service name </th><th>Rate</th><th></th></tr>");
+		$.each(lista, function(index, usluga) {
+				$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td>"+usluga.cena+"</td><td><input type=\"checkbox\" id=\""+usluga.id+"\" value=\""+usluga.id+"\"></td></tr>");
+		});
+	    $("#korak").append("</table>");
+	    $("#korak").append("<p><button type=\"button\" class=\"btn btn-outline-secondary\">Back</button><button type=\"button\" class=\"btn btn-success\">Next</button></p>")
 }

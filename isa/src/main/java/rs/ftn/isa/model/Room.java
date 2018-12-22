@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -53,9 +54,9 @@ public class Room {
 	@ManyToOne( fetch = FetchType.EAGER)
 	 private Hotel hotel;
 	
-	 //jedna soba moze prirpadati tacno jednoj rezervaciji
-	@ManyToOne( fetch = FetchType.EAGER)
-		 private RezervacijaHotel rezervacija;
+	 //jedna soba moze prirpadati vise rezervacija
+	@ManyToMany(mappedBy = "sobe")
+		private Set<RezervacijaHotel> rezervacije = new HashSet<RezervacijaHotel>();
 	
 	//jedna soba ima vise cjenovnika
 	@OneToMany(mappedBy = "soba", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -196,11 +197,11 @@ public class Room {
 	public void setRezervisana(boolean rezervisana) {
 		this.rezervisana = rezervisana;
 	}
-	public RezervacijaHotel getRezervacija() {
-		return rezervacija;
+	public Set<RezervacijaHotel> getRezervacije() {
+		return rezervacije;
 	}
-	public void setRezervacija(RezervacijaHotel rezervacija) {
-		this.rezervacija = rezervacija;
+	public void setRezervacije(Set<RezervacijaHotel> rezervacije) {
+		this.rezervacije = rezervacije;
 	}
 	
 	

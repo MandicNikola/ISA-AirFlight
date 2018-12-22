@@ -23,6 +23,7 @@ import rs.ftn.isa.model.Category;
 import rs.ftn.isa.model.CijenovnikSoba;
 import rs.ftn.isa.model.Hotel;
 import rs.ftn.isa.model.PricelistHotel;
+import rs.ftn.isa.model.RezervacijaHotel;
 import rs.ftn.isa.model.Room;
 import rs.ftn.isa.model.Usluga;
 import rs.ftn.isa.service.HotelService;
@@ -476,8 +477,8 @@ public class HotelController {
 				produces = MediaType.APPLICATION_JSON_VALUE)
 		public @ResponseBody ArrayList<Usluga> vratiUsluge(@PathVariable Long id){	
 			Hotel pom = servis.findHotelById(id);
-		 	System.out.println("dosao da doda dodantu uslugu");
-		 	ArrayList<Usluga> usluge = new ArrayList<Usluga>(); 
+		 	
+			ArrayList<Usluga> usluge = new ArrayList<Usluga>(); 
 		 	PricelistHotel cijenovnik = new PricelistHotel();
 		 	System.out.println("hotel je "+pom.getId());
 		 	
@@ -623,7 +624,7 @@ public class HotelController {
 			return kat;
 		}
 		
-		
+		//pretraga hotela
 
 		@RequestMapping(value="/vratiPonude/{id}", 
 				method = RequestMethod.POST,
@@ -632,8 +633,51 @@ public class HotelController {
 			Hotel hotel = servis.findHotelById(id);
 			System.out.println("dosao da vrati ponude");
 			ArrayList<Room> sobe = new ArrayList<Room>();
+			
 			for(Room soba:hotel.getSobe()) {
-				sobe.add(soba);
+				//provjera za sobu da li zadovoljava uslove
+				Room room = soba;
+				Set<RezervacijaHotel> rezervacije = room.getRezervacije(); 
+				
+				//moram provjeriti prvi slucaj: da li je check in > od krajeva svih rezervacija koje postoje za tu sobu
+				boolean odobrenCheckIN = true;
+				for(RezervacijaHotel pom:rezervacije) {	
+					
+					if(rez.getCheckIn().compareTo(pom.getDatumOdlaska())<=0) {
+						odobrenCheckIN = false;
+						break;
+					}
+				}
+				//odobren check in,provjeravam check out ..da li je check out < od pocetaka svih rezervacija koje postoje za datu sobu
+				boolean odobrenCheckOUT= true;
+				if(odobrenCheckIN) {
+					for(RezervacijaHotel pom:rezervacije) {	
+						
+						if(rez.getCheckOut().compareTo(pom.getDatumDolaska())>=0) {
+							odobrenCheckOUT = false;
+							break;
+						}
+					}
+					
+				}
+				//odobrena je soba
+				if(odobrenCheckIN == true && odobrenCheckOUT == true) {
+					sobe.add(soba);
+				}
+				
+			}
+			
+			//provjera da li imam dovoljan broj soba
+			if(sobe.size() < rez.getBrojSoba()) {
+				return null;
+			}
+			int suma = 0;
+			//treba nekako da razlikujem koja je greska !!
+			for(Room sobica:sobe) {
+				suma += sobica.getKapacitet();
+			}
+			if(rez.getBrojLjudi() < suma) {
+				return null;
 			}
 			
 			return sobe;
