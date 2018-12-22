@@ -43,10 +43,6 @@ public class RentACar {
 	@JsonIgnore
      private Set<PricelistRentCar> cenovnici= new HashSet<PricelistRentCar>();
 
-	@OneToMany(mappedBy = "servisrent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnore
-	private Set<Vehicle> vozila = new HashSet<Vehicle>();
-
 	
 	public RentACar() {
 		
@@ -67,12 +63,7 @@ public class RentACar {
 		this.opis = opis;
 	}
 	
-	public Set<Vehicle> getVozila() {
-		return vozila;
-	}
-	public void setVozila(Set<Vehicle> vozila) {
-		this.vozila = vozila;
-	}
+	
 	public Long getId() {
 		return id;
 	}

@@ -118,7 +118,7 @@ public class VoziloController {
 			Vehicle vozilo = servis.findVehicleById(id);
 			if(vozilo.equals(nova)) {
 				System.out.println("Nista nije izmenjeno");
-				vozilo.setModel(vozilo.getServisrent().getId().toString());
+				vozilo.setModel(vozilo.getFilijala().getServis().getId().toString());
 				return vozilo;
 			}
 			
@@ -138,7 +138,7 @@ public class VoziloController {
 			
 			
 			servis.saveVehicle(vozilo);
-			Long idRent = vozilo.getServisrent().getId();
+			Long idRent = vozilo.getFilijala().getServis().getId();
 			
 			vozilo.setModel(idRent.toString());
 			return vozilo;

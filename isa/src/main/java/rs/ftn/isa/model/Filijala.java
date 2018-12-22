@@ -1,7 +1,14 @@
 package rs.ftn.isa.model;
 
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,6 +35,12 @@ public class Filijala {
         @JoinColumn(name = "servis_id")
 		private RentACar servis;
 				
+    	@OneToMany(mappedBy = "filijala", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @JsonIgnore
+    	private Set<Vehicle> vozila = new HashSet<Vehicle>();
+
+
+    	
 		public Filijala() {}
 		
 		public Filijala( String grad, String ulica) {
@@ -44,6 +57,14 @@ public class Filijala {
 		}
 
 		
+		public Set<Vehicle> getVozila() {
+			return vozila;
+		}
+
+		public void setVozila(Set<Vehicle> vozila) {
+			this.vozila = vozila;
+		}
+
 		public Long getId() {
 			return id;
 		}

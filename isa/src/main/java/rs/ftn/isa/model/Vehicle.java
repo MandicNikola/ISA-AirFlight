@@ -55,9 +55,10 @@ public class Vehicle {
 	@Column(name = "ocena", nullable = false)
 	private double ocena;
 
+	//svako vozilo pripada odredjenoj filijali
 	@ManyToOne( fetch = FetchType.EAGER)
-    @JoinColumn(name = "rent_id")
-	private RentACar servisrent;
+    @JoinColumn(name = "filijala_id")
+	private Filijala filijala;
 	
 	@OneToMany(mappedBy = "vozilo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
@@ -108,15 +109,6 @@ public class Vehicle {
 	}
 
 
-	public RentACar getServisrent() {
-		return servisrent;
-	}
-
-
-	public void setServisrent(RentACar servisrent) {
-		this.servisrent = servisrent;
-	}
-
 
 	public Long getId() {
 		return id;
@@ -130,6 +122,26 @@ public class Vehicle {
 
 	public String getNaziv() {
 		return naziv;
+	}
+
+
+	public Filijala getFilijala() {
+		return filijala;
+	}
+
+
+	public void setFilijala(Filijala filijala) {
+		this.filijala = filijala;
+	}
+
+
+	public Set<RezervacijaRentCar> getRezervacije() {
+		return rezervacije;
+	}
+
+
+	public void setRezervacije(Set<RezervacijaRentCar> rezervacije) {
+		this.rezervacije = rezervacije;
 	}
 
 

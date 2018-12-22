@@ -217,7 +217,6 @@ var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 		$.each(lista, function(index, fil) {
 			$("#filijale").append("<div id=\""+index+"\"class=\"panel panel-default\">");
 			console.log(fil.grad);
-			console.log(fil.index);
 			$("#" + index).append("<div class=\"panel-heading\">"+fil.grad+"</div>");
 			$("#" + index).append("<div class=\"panel-body\">"+fil.ulica+"</div>");
 			$("#" + index).append("<div class=\"panel-footer\"><button  class=\"btn btn-info\" onclick=\"izmeniFilijalu('"+fil.id+"')\">Izmeni</button> <button  class=\"btn btn-info\" onclick=\"obrisiFilijalu('"+fil.id+"')\">Obrisi</button></div>");
@@ -249,10 +248,12 @@ function ispisiVozila(skup){
 	console.log('usao u ispisivozila');
 	var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 		
-	$("#pregledVozila").append("<table class=\"table table-hover\" id=\"tabelaVozilo\" ><thead><tr><th>Name</th><th>Brand</th><th>Model</th><th>Model year</th><th>Number of seats </th><th>Category</th><th></th><th></th></tr></thead>");
+	$("#pregledVozila").append("<table class=\"table table-hover\" id=\"tabelaVozilo\" ><thead><tr><th>Name</th><th>Brand</th><th>Model</th><th>Model year</th><th>Number of seats </th><th>Category</th><th>Branch office</th><th></th><th></th></tr></thead>");
 	
 	$.each(lista, function(index, vozilo) {
-		$("#tabelaVozilo").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+vozilo.naziv+"</td><td > "+vozilo.marka+"</td><td > "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td > "+vozilo.sedista+"</td><td > "+vozilo.kategorija+"</td><td><button class=\"btn btn-info\" onclick=\"izmeniVozilo('"+vozilo.id+"')\">Change</button></td><td><button class=\"btn btn-info\" onclick=\"obrisiVozilo('"+vozilo.id+"')\">Delete</button></td></tr>");
+		var filpom=vozilo.filijala.grad;
+		console.log(filpom);
+		$("#tabelaVozilo").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+vozilo.naziv+"</td><td > "+vozilo.marka+"</td><td > "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td > "+vozilo.sedista+"</td><td > "+vozilo.kategorija+"</td><td > "+filpom+"</td><td><button class=\"btn btn-info\" onclick=\"izmeniVozilo('"+vozilo.id+"')\">Change</button></td><td><button class=\"btn btn-info\" onclick=\"obrisiVozilo('"+vozilo.id+"')\">Delete</button></td></tr>");
 	});
     $("#pregledVozila").append("</table>");
  

@@ -1,4 +1,50 @@
+function dodajFilijale(){
+	console.log('usao u dodaj filijale')
+	var pom=window.location.search.substring(1);
+	var idRent= pom.split('=')[1];
+	
+	$.ajax({
+		method:'GET',
+		url: "/api/rents/getFilijale/"+idRent,
+		success: function(data){
+			if(data == null){
+				console.log('Nema filijala');
+				upozorenje();
+			}else if(data.length==0){
+				console.log('Nema filijala');
+				upozorenje();
+			}else{
+			    ispisiFilijale(data);
+			}
+		}
+	});
 
+	
+}
+function upozorenje(){
+	$('#polje').hide();
+	
+	$('#upozorenje').empty();
+	
+	$('#upozorenje').append("<p>You have to add branch office of the rent-a-car first.</p><p><button type=\"button\" onclick=\"vratiSe()\" class=\"btn btn-link\">Go to add</button></p>");
+
+	
+}
+function vratiSe(){
+	var adresa = window.location.search.substring(1);
+	console.log('adresa je '+adresa);
+	var id = adresa.split('=')[1];
+	window.location = "profileCar.html?id="+id;
+	
+}
+function ispisiFilijale(skup){
+	var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
+
+	$("#office").empty();
+	$.each(lista, function(index, fil) {
+		 $("#office").append("<option  value=\""+fil.id+"\">"+fil.grad+"</option>");
+	});
+}
 $(document).on('submit','.registracija',function(e){
 			e.preventDefault();	
 	
@@ -13,69 +59,34 @@ $(document).on('submit','.registracija',function(e){
 				
 				sendcar= JSON.stringify(newcar);			
 				console.log('auto je ' + sendcar);
-				 
+				 idFilijala=$('#office').val();
+	
+				 var pom=window.location.search.substring(1);
+				var id= pom.split('=')[1];
+				
+				var salji=id+"="+idFilijala;
+				
 				$.ajax({
 					type : 'POST',
-					url : "/api/vozila/registrovanje",
+					url : "/api/rents/poveziFilijalu/"+salji,
 					contentType : "application/json",
 					data: sendcar,
 					dataType : 'json',
-					success : function(pov) {
-						if( pov == null){	
-							 alert("Naziv vozila mora biti jedinstveno.");
-						}else if(pov.kategorija == 1){
-							alert('Unesite pravilno marku vozila');
-
-						}else if(pov.kategorija == 2){
-							alert('Unesite pravilno model vozila');
-
-						}else if(pov.kategorija == 0){
-							alert('Unesite pravilno naziv.');
-
+					success : function(ret) {
+						if( ret == null){	
+							 alert("Greska");
 						}else{
-							alert('Uspesno ste se registrovali');
-							poveziCar(pov);
+
+							pozoviProfil(ret);
+
 						}
 					},
 					error: function(XMLHttpRequest, textStatus, errorThrown){
 						alert('greska');
 					}
-				});
+				});	
 	});
 
-function poveziCar(data){
-	
-	console.log('usao u poveziCar');
-	console.log('auto je ' + data);
-	var sendcar= JSON.stringify(data);			
-
-	console.log('ispis je '+sendcar);
-
-	var pom=window.location.search.substring(1);
-	var id= pom.split('=')[1];
-	
-	$.ajax({
-		type : 'POST',
-		url : "/api/rents/postavivozilo/"+id,
-		contentType : "application/json",
-		data: sendcar,
-		dataType : 'json',
-		success : function(ret) {
-			if( ret == null){	
-				 alert("Greska");
-			}else{
-
-				pozoviProfil(ret);
-
-			}
-		},
-		error: function(XMLHttpRequest, textStatus, errorThrown){
-			alert('greska');
-		}
-	});	
-	
-	
-}
 function pozoviProfil(data){
 	
 	window.location="profileCar.html?id="+data.adresa;
