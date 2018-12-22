@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -53,7 +54,12 @@ public class RezervacijaHotel {
 	
 	
 	//jedna rezervicija moze da sadrzi vise dodatnih usluga
-	@ManyToMany( fetch = FetchType.EAGER)
+	 @ManyToMany(cascade = { CascadeType.ALL })
+	 @JoinTable(
+	        name = "Rezervacija_Usluga", 
+	        joinColumns = { @JoinColumn(name = "rezervacijaHotel_id") }, 
+	        inverseJoinColumns = { @JoinColumn(name = "usluga_id") }
+	  )
 	private Set<Usluga>  usluge = new HashSet<Usluga>();
 
 	public RezervacijaHotel() {

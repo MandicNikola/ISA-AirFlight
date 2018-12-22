@@ -54,7 +54,7 @@ public class Usluga {
 	PricelistHotel cijene;
 	
 	//dodatne usluge mogu da budu rezervisane vise puta u hotelu
-	@ManyToMany
+	@ManyToMany(mappedBy = "usluge")
 	private Set<RezervacijaHotel> rezHotela = new HashSet<RezervacijaHotel>();
 	
 	//cijenovnik sobe
