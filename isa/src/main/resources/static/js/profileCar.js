@@ -128,26 +128,32 @@ function ispisiCenovnik(skup){
 		var pod = lista[0];
 		var a=pod.id+"="+pod.kategorija;
 		
-		$("#tabelaCenovnik").append("<tr class=\"thead-light \"><td class=\"hoverName\">1</td><td>"+pod.prekoTrajanja+"</td><td ><input class=\"form-control\" type = \"number\"  id=\""+pod.id+"\"  value=\""+pod.cena+"\"></td><td><button class=\"btn btn-info\" onclick=\"izmeniUslugu('"+a+"')\">Change price</button></td></tr>");
-		
-		var duzina = lista.length-1;
-		
-		$.each(lista, function(index, clan) {
-			var pomocna=clan.id+"="+clan.kategorija;
-			console.log("duzina niza je " +duzina);
+		if(lista.length == 1){
 			
-			if(index != 0){
-				if(index != duzina){
-					var prethodni = lista[index-1];
-					$("#tabelaCenovnik").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+prethodni.prekoTrajanja+"</td><td> "+clan.prekoTrajanja+"</td><td ><input class=\"form-control\" type = \"number\"  id=\""+clan.id+"\"  value=\""+clan.cena+"\"></td><td><button class=\"btn btn-info\" onclick=\"izmeniUslugu('"+pomocna+"')\">Change price</button></td></tr>");
+			$("#tabelaCenovnik").append("<tr class=\"thead-light \"><td class=\"hoverName\">1</td><td>-</td><td ><input class=\"form-control\" type = \"number\"  id=\""+pod.id+"\"  value=\""+pod.cena+"\"></td><td><button class=\"btn btn-info\" onclick=\"izmeniUslugu('"+a+"')\">Change price</button></td></tr>");
+				
+		}else{
+			$("#tabelaCenovnik").append("<tr class=\"thead-light \"><td class=\"hoverName\">1</td><td>"+pod.prekoTrajanja+"</td><td ><input class=\"form-control\" type = \"number\"  id=\""+pod.id+"\"  value=\""+pod.cena+"\"></td><td><button class=\"btn btn-info\" onclick=\"izmeniUslugu('"+a+"')\">Change price</button></td></tr>");
+			
+			var duzina = lista.length-1;
+			
+			$.each(lista, function(index, clan) {
+				var pomocna=clan.id+"="+clan.kategorija;
+				console.log("duzina niza je " +duzina);
+				
+				if(index != 0){
+					if(index != duzina){
+						var prethodni = lista[index-1];
+						$("#tabelaCenovnik").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+prethodni.prekoTrajanja+"</td><td> "+clan.prekoTrajanja+"</td><td ><input class=\"form-control\" type = \"number\"  id=\""+clan.id+"\"  value=\""+clan.cena+"\"></td><td><button class=\"btn btn-info\" onclick=\"izmeniUslugu('"+pomocna+"')\">Change price</button></td></tr>");
+					}
 				}
+				});
+			var podd = lista[duzina];
+			var b=podd.id+"="+podd.kategorija;
+			
+			$("#tabelaCenovnik").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+podd.prekoTrajanja+"</td><td>-</td><td ><input class=\"form-control\" type = \"number\"  id=\""+podd.id+"\"  value=\""+podd.cena+"\"></td><td><button class=\"btn btn-info\" onclick=\"izmeniUslugu('"+b+"')\">Change price</button></td></tr>");
+			
 			}
-			});
-		var podd = lista[duzina];
-		var b=podd.id+"="+podd.kategorija;
-		
-		$("#tabelaCenovnik").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+podd.prekoTrajanja+"</td><td>-</td><td ><input class=\"form-control\" type = \"number\"  id=\""+podd.id+"\"  value=\""+podd.cena+"\"></td><td><button class=\"btn btn-info\" onclick=\"izmeniUslugu('"+b+"')\">Change price</button></td></tr>");
-	
 	    $("#cenovnikKategorije").append("</table>");
 	 
 	    dodajDatum();
@@ -280,7 +286,7 @@ $(document).ready(function(){
 	$("#automobili").hide();
 	$("#addUsluge").hide();
 	$("#cenovnik").hide();
-	
+	$("#bg").hide();
 	
     $("p#vozilo").click(function(){
 		window.location="addCar.html?id="+id;
@@ -297,7 +303,7 @@ $(document).ready(function(){
     	$("#cenovnik").hide();
     	$("#informacije").hide();
     	$("#automobili").hide();
-    
+    	$("#bg").hide();
     	$("#addUsluge").show();		
 
    });
@@ -306,10 +312,19 @@ $(document).ready(function(){
     	$("#informacije").hide();
     	$("#cenovnik").hide();
      	$("#addUsluge").hide();		
-
+     	$("#bg").hide();
     	$("#automobili").show();
     	
     		console.log('vozilo');
+   });
+
+    $("a#res").click(function(){
+    	$("#informacije").hide();
+    	$("#cenovnik").hide();
+     	$("#addUsluge").hide();
+    	$("#automobili").hide();
+    	$("#bg").show();
+    		console.log('rezervacije');
    });
     $("a#price").click(function(){
     	
@@ -317,7 +332,7 @@ $(document).ready(function(){
 		$("#informacije").hide();
 		$("#automobili").hide();
 	 	$("#addUsluge").hide();		
-
+	 	$("#bg").hide();
 		$("#cenovnik").show();
 		$("#cenovnikKategorije").empty();
     });
@@ -327,7 +342,7 @@ $(document).ready(function(){
     	$("#cenovnik").hide();
     	$("#automobili").hide();
      	$("#addUsluge").hide();		
-
+     	$("#bg").hide();
     	$("#informacije").show();
     });
     
@@ -371,4 +386,38 @@ function resetuj(){
 	$("#automobili").hide();
 	$("#addUsluge").hide();		
 	
+}
+
+function rezervisi(){
+			
+	var pom=window.location.search.substring(1);
+	var id= pom.split('=')[1];
+		
+		var newReservation={
+				rentId : id,
+				pickUp : $('#pickDate').val(),
+				dropOff : $('#dropDate').val(),
+				startLocation : $('#pickLocation').val(),
+				endLocation :  $('#dropLocation').val(),
+				tip : $('#tip').val(),
+				putnici : $('#putnici').val()
+		}
+
+		sendReservation= JSON.stringify(newReservation);			
+		console.log('rezervacija je ' + sendReservation);
+		
+		$.ajax({
+		type : 'POST',
+		url : "/api/rents/checkRezervaciju",
+		contentType : "application/json",
+		data: sendReservation,
+		dataType : 'json',
+		success : function(pov) {
+				console.log('kraj')
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+		});
+
 }

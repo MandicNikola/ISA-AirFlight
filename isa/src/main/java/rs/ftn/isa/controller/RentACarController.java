@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.RentACarDTO;
+import rs.ftn.isa.dto.ReservationRentDTO;
 import rs.ftn.isa.model.Filijala;
 import rs.ftn.isa.model.Hotel;
 import rs.ftn.isa.model.PricelistRentCar;
@@ -408,5 +409,39 @@ public class RentACarController {
 	
 
 	
+	@RequestMapping(value="/checkRezervaciju",
+			method = RequestMethod.POST,
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody ArrayList<Vehicle> checkReservation(@RequestBody ReservationRentDTO rezervacija) {
 		
+		Long id=rezervacija.getRentId();
+		ArrayList<Vehicle> ispunjeniUslovi=new  ArrayList<Vehicle>();
+		//prvo gledamo u kom se servisu nalazimo
+		RentACar rent = servis.findOneById(id);
+			System.out.println("Usau u checkReservation");
+			
+		ArrayList<Vehicle> ispunjenaKategorija=new  ArrayList<Vehicle>();
+		String kat=rezervacija.getTip();
+		
+		for(Vehicle V : rent.getVozila()) {
+				if(V.getKategorija().toString().equals(kat)){
+						ispunjenaKategorija.add(V);
+				}
+		}
+		boolean postojiFilijala=false;
+		String lokacija = rezervacija.getStartLocation(); 
+				
+		for(Filijala F : rent.getFilijale()) {
+				if(F.getGrad().equals(lokacija)) {
+					postojiFilijala=true;
+					break;
+				}
+		}
+		
+		
+		return ispunjeniUslovi;
+	}	
+	
+
 }
