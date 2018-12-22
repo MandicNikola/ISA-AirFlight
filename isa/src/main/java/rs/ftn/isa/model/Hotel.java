@@ -50,6 +50,11 @@ public class Hotel {
 	@JsonIgnore
 	private Set<Room> sobe = new HashSet<Room>();
 	
+	//jedan hotel ima vise rezervacija
+	@OneToMany(mappedBy = "rezHotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	private Set<RezervacijaHotel> rezervacije = new HashSet<RezervacijaHotel>();
+	
 	@OneToMany(mappedBy = "hotelKat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore
 	private Set<Category> kategorije = new HashSet<Category>();
@@ -127,6 +132,12 @@ public class Hotel {
 	}
 	public void setKategorije(Set<Category> kategorije) {
 		this.kategorije = kategorije;
+	}
+	public Set<RezervacijaHotel> getRezervacije() {
+		return rezervacije;
+	}
+	public void setRezervacije(Set<RezervacijaHotel> rezervacije) {
+		this.rezervacije = rezervacije;
 	}
 	
 	

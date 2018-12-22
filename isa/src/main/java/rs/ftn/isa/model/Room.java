@@ -45,10 +45,17 @@ public class Room {
     
 	@Column(name = "balkon", nullable = false)	
 	private String balkon; //da ako ima,ne nema
+	
+	@Column(name = "rezervisana")	
+	private boolean rezervisana; 
     
     //jedna soba pripada jednog hotelu.
 	@ManyToOne( fetch = FetchType.EAGER)
 	 private Hotel hotel;
+	
+	 //jedna soba moze prirpadati tacno jednoj rezervaciji
+	@ManyToOne( fetch = FetchType.EAGER)
+		 private RezervacijaHotel rezervacija;
 	
 	//jedna soba ima vise cjenovnika
 	@OneToMany(mappedBy = "soba", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -182,6 +189,18 @@ public class Room {
 	}
 	public void setCijenovnici(Set<CijenovnikSoba> cijenovnici) {
 		this.cijenovnici = cijenovnici;
+	}
+	public boolean isRezervisana() {
+		return rezervisana;
+	}
+	public void setRezervisana(boolean rezervisana) {
+		this.rezervisana = rezervisana;
+	}
+	public RezervacijaHotel getRezervacija() {
+		return rezervacija;
+	}
+	public void setRezervacija(RezervacijaHotel rezervacija) {
+		this.rezervacija = rezervacija;
 	}
 	
 	

@@ -1,10 +1,18 @@
 package rs.ftn.isa.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class User {
@@ -37,6 +45,10 @@ public class User {
 	@Column(name="tip")
 	private String tip;
 
+	//jedna korisnik moze da ima vise rezervacija u jednom hotelu 
+	@OneToMany(mappedBy = "userHotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	private Set<RezervacijaHotel> rezHotela = new HashSet<RezervacijaHotel>();
 	
 	public User() {
 		super();
