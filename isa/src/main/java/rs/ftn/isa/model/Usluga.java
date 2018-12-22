@@ -35,6 +35,12 @@ public class Usluga {
 	@Column(name="cena", nullable = false)
 	private int cena;
 	
+	//u zavisnosti od toga na koliko se dana uzima auto cena varira
+	// ako imamo trajanje 10 dana i trajanje 15 dana ako se uzme auto na 12 dana onda spada u uslugu 15 dana
+	@Column(name="trajanje", nullable = false)
+	private int trajanje;
+	
+	
 	@Enumerated(EnumType.STRING)
 	@Column(name="kategorija", nullable = true)
 	private CategoryCar kategorija;
@@ -193,6 +199,26 @@ public class Usluga {
 
 	public void setCenesoba(CijenovnikSoba cenesoba) {
 		this.cenesoba = cenesoba;
+	}
+
+
+	public int getTrajanje() {
+		return trajanje;
+	}
+
+
+	public void setTrajanje(int trajanje) {
+		this.trajanje = trajanje;
+	}
+
+
+	public Set<RezervacijaHotel> getRezHotela() {
+		return rezHotela;
+	}
+
+
+	public void setRezHotela(Set<RezervacijaHotel> rezHotela) {
+		this.rezHotela = rezHotela;
 	}
 	
 	

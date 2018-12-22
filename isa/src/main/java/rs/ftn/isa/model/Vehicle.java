@@ -1,5 +1,8 @@
 package rs.ftn.isa.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,9 +14,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonManagedReference;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "vozila")
@@ -53,6 +59,9 @@ public class Vehicle {
     @JoinColumn(name = "rent_id")
 	private RentACar servisrent;
 	
+	@OneToMany(mappedBy = "vozilo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+	private Set<RezervacijaRentCar> rezervacije = new HashSet<RezervacijaRentCar>();
 
 	
 	public Vehicle() {

@@ -49,6 +49,11 @@ public class User {
 	@OneToMany(mappedBy = "userHotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore
 	private Set<RezervacijaHotel> rezHotela = new HashSet<RezervacijaHotel>();
+
+	@OneToMany(mappedBy = "korisnik", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	private Set<RezervacijaRentCar> rezRent = new HashSet<RezervacijaRentCar>();
+
 	
 	public User() {
 		super();
@@ -92,6 +97,30 @@ public class User {
 
 	public void setTip(String tip) {
 		this.tip = tip;
+	}
+
+
+
+	public Set<RezervacijaHotel> getRezHotela() {
+		return rezHotela;
+	}
+
+
+
+	public void setRezHotela(Set<RezervacijaHotel> rezHotela) {
+		this.rezHotela = rezHotela;
+	}
+
+
+
+	public Set<RezervacijaRentCar> getRezRent() {
+		return rezRent;
+	}
+
+
+
+	public void setRezRent(Set<RezervacijaRentCar> rezRent) {
+		this.rezRent = rezRent;
 	}
 
 
