@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.RentACarDTO;
+import rs.ftn.isa.dto.ReservationRentDTO;
 import rs.ftn.isa.model.Filijala;
 import rs.ftn.isa.model.Hotel;
 import rs.ftn.isa.model.PricelistRentCar;
@@ -65,7 +66,7 @@ public class RentACarController {
 	}
 
 	
-	@RequestMapping(value="/postavivozilo/{id}",
+	/*@RequestMapping(value="/postavivozilo/{id}",
 			method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE
 			)
@@ -88,6 +89,53 @@ public class RentACarController {
 		RentACar povratna = servis.saveRentACar(rentServis);
 		
 		System.out.println("NOVI id od vozila je "+povratna.getId());
+		//treba mi za povratak na profil od ovog rent-a-car-a
+		String br=povratna.getId().toString();
+		povratna.setAdresa(br);
+		return povratna;
+	}*/
+	@RequestMapping(value="/poveziFilijalu/{podatak}",
+			method = RequestMethod.POST,
+			consumes = MediaType.APPLICATION_JSON_VALUE
+			)
+	public @ResponseBody RentACar poveziFilijalu(@PathVariable String podatak, @RequestBody Vehicle vozilo){
+	
+		String [] niz =podatak.split("=");
+		Long id=Long.parseLong(niz[0]);
+		Long idFilijala = Long.parseLong(niz[1]);
+		RentACar rentServis = servis.findOneById(id);		
+		System.out.println("Pronasao rent servis u poveziFilijalu"+ rentServis.getNaziv());
+		
+		Filijala stara =null;
+		
+		for(Filijala s : rentServis.getFilijale()) {
+				if(s.getId()==idFilijala) {
+						stara=s;
+						break;
+				}
+		}
+		//PROVERA DA LI U TOJ FILIJALI VEC POSTOJI ISTO VOZILO
+		for(Vehicle V : stara.getVozila()) {
+			if(V.getNaziv().equals(vozilo.getNaziv())) {
+				return null;
+			}
+		}
+		
+		//brissemo staru filijalu da bismo joj dodali novo vozilo
+		
+		rentServis.getFilijale().remove(stara);
+		
+		
+		//Set<Filijala> filLista=rentServis.getFilijale(); 
+		vozilo.setFilijala(stara);
+		stara.getVozila().add(vozilo);
+		
+		stara.setServis(rentServis);
+		
+		rentServis.getFilijale().add(stara);
+		
+		RentACar povratna = servis.saveRentACar(rentServis);
+		
 		//treba mi za povratak na profil od ovog rent-a-car-a
 		String br=povratna.getId().toString();
 		povratna.setAdresa(br);
@@ -193,11 +241,17 @@ public class RentACarController {
 		ArrayList<Vehicle> rezultat = new ArrayList<Vehicle>();
 		RentACar rent = servis.findOneById(id);
 		
-		System.out.println("Usao u get vozila");
+		System.out.println("Usao u get vozila, prolazimo kroz sve filijale");
+		//prolazimo kroz sve filijale i preuzimamo sva vozila
 		
-		for(Vehicle V : rent.getVozila()) {
-				System.out.println("Vozilo je "+ V.getNaziv());
-				rezultat.add(V);
+		for(Filijala F:rent.getFilijale()) {
+
+			
+			for(Vehicle V : F.getVozila()) {
+					System.out.println("Vozilo je "+ V.getNaziv());
+					rezultat.add(V);
+				
+			}
 			
 		}
 		return rezultat;
@@ -408,5 +462,39 @@ public class RentACarController {
 	
 
 	
+	@RequestMapping(value="/checkRezervaciju",
+			method = RequestMethod.POST,
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody ArrayList<Vehicle> checkReservation(@RequestBody ReservationRentDTO rezervacija) {
 		
+		Long id=rezervacija.getRentId();
+		ArrayList<Vehicle> ispunjeniUslovi=new  ArrayList<Vehicle>();
+		//prvo gledamo u kom se servisu nalazimo
+		RentACar rent = servis.findOneById(id);
+			System.out.println("Usau u checkReservation");
+			
+		ArrayList<Vehicle> ispunjenaKategorija=new  ArrayList<Vehicle>();
+		String kat=rezervacija.getTip();
+		
+		/*for(Vehicle V : rent.getVozila()) {
+				if(V.getKategorija().toString().equals(kat)){
+						ispunjenaKategorija.add(V);
+				}
+		}*/
+		boolean postojiFilijala=false;
+		String lokacija = rezervacija.getStartLocation(); 
+				
+		for(Filijala F : rent.getFilijale()) {
+				if(F.getGrad().equals(lokacija)) {
+					postojiFilijala=true;
+					break;
+				}
+		}
+		
+		
+		return ispunjeniUslovi;
+	}	
+	
+
 }
