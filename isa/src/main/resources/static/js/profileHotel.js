@@ -6,6 +6,7 @@ function onLoad(){
 	$("#konfig").hide();
 	$("#sobe").hide();
 	$("#cijene").hide();
+	$("#rezervacije").hide();
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);
 	var id = adresa.split('=')[1];
@@ -147,6 +148,8 @@ function addConfiguration(){
 	$("#informacije").hide();
 	$("#cijene").hide();
 	$("#konfig").hide();
+	$("#rezervacije").hide();
+
 	
 	$("#ispisiTabelu").show();
 	$("#ispisiTabelu").empty();
@@ -231,6 +234,8 @@ $(document).ready(function(){
 	$("#sobe").hide();
 	$("#cijene").hide();
 	$("#konfig").hide();
+	$("#rezervacije").hide();
+
 	
  	
     $("#rooms").click(function(){
@@ -239,7 +244,8 @@ $(document).ready(function(){
 		$("#ispisiTabelu").hide();
 		$("#cijene").hide();
 		$("#konfig").hide();
-	    
+		$("#rezervacije").hide();
+
     });
     $("#info").click(function(){
     	$("#informacije").show();
@@ -247,18 +253,31 @@ $(document).ready(function(){
 		$("#sobe").hide();
 		$("#cijene").hide();
 		$("#konfig").hide();
-    	
+		$("#rezervacije").hide();
+
     });
     
-    
+    $("#reservation").click(function(){
+    	$("#informacije").hide();
+		$("#ispisiTabelu").hide();
+		$("#sobe").hide();
+		$("#cijene").hide();
+		$("#konfig").hide();
+		$("#rezervacije").show();
+
+    });
     $("#config").click(function(){
     	ispisiKonfiguracije();
     	$("#informacije").hide();
 		$("#ispisiTabelu").hide();
 		$("#sobe").hide();
 		$("#cijene").hide();
+		$("#rezervacije").hide();
+
 	 	
     });
+    
+    
     $("#price").click(function(){
     	console.log('dosao u price');
     	showPrices();
@@ -267,7 +286,8 @@ $(document).ready(function(){
 		$("#sobe").hide(); 
 		$("#cijene").show();
 		$("#konfig").hide();
-	    
+		$("#rezervacije").hide();
+
     });
 });
 function ispisiKonfiguracije(){
