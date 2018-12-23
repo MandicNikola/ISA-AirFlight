@@ -1,13 +1,20 @@
 package rs.ftn.isa.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import rs.ftn.isa.dto.ReservationHotelDTO;
 import rs.ftn.isa.model.RezervacijaHotel;
+import rs.ftn.isa.model.Room;
 import rs.ftn.isa.service.RezervacijaHotelServiceImp;
 
 @RestController
@@ -21,4 +28,47 @@ public class RezervacijaHotelController {
 		return  servis.findAll();
 	}
 	
+	
+	@RequestMapping(value="/rezervisi/{info}/sobe/{nizSoba}/nizUsluga/{listaUsl}", 
+			method = RequestMethod.POST,
+			produces = MediaType.APPLICATION_JSON_VALUE
+			)
+	public @ResponseBody RezervacijaHotel vratiPonude(@PathVariable("info") String info,
+            @PathVariable("nizSoba") String nizSoba,@PathVariable("listaUsl") String listaUsl){
+		System.out.println("uusao u rezervisi u rezervaciji");
+		System.out.println("info "+info);
+		System.out.println("nizSoba "+nizSoba);
+		System.out.println("listaUsl "+listaUsl);
+		//info 2018-12-30*2019-01-01*2
+		//nizSoba 4
+		//listaUsl 3
+		String[] infoPom = info.split("\\*");
+		String checkIN = infoPom[0];
+		String checkOUT = infoPom[1];
+		String broj = infoPom[2];
+		int brLjudi = Integer.parseInt(broj);
+		String[] indexSoba = null;
+		
+		if(nizSoba.contains(",")) {
+			indexSoba = nizSoba.split(",");
+		}else {
+			indexSoba[0]=nizSoba;
+		}
+		boolean imaUsluga = true;
+		if(listaUsl.equals("nema")) {
+			imaUsluga = false;
+		}
+		String[] indexUsluga = null;
+		
+		if(imaUsluga == true) {
+			if(listaUsl.contains(",")) {
+				indexUsluga = listaUsl.split(",");
+			}else {
+				indexUsluga[0]=listaUsl;
+			}
+		}
+		
+		return null;
+	
+	}
 }
