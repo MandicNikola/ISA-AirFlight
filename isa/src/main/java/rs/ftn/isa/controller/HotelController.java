@@ -682,7 +682,7 @@ public class HotelController {
 			for(Room sobica:sobe) {
 				suma += sobica.getKapacitet();
 			}
-			if(rez.getBrojLjudi() >= suma) {
+			if(rez.getBrojLjudi() > suma) {
 				System.out.println("nedovoljan kapacitet");
 				
 				return null;
