@@ -7,7 +7,7 @@ import rs.ftn.isa.model.RezervacijaRentCar;
 import rs.ftn.isa.model.User;
 
 @Repository
-public interface RezervacijaRent extends JpaRepository<RezervacijaRentCar,Long> {
+public interface RezervacijaRentRepository extends JpaRepository<RezervacijaRentCar,Long> {
 
 	 RezervacijaRentCar findOneById(Long id);
 	 RezervacijaRentCar findOneByKorisnik(User korisnik);

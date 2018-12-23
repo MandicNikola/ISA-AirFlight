@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 
 import rs.ftn.isa.model.RezervacijaRentCar;
 import rs.ftn.isa.model.User;
-import rs.ftn.isa.repository.RezervacijaRent;
+import rs.ftn.isa.repository.RezervacijaRentRepository;
 
 @Service
 public class RezervacijaRentServiceImpl implements RezervacijaRentService {
 
 	@Autowired
-	RezervacijaRent repozitorijum;
+	RezervacijaRentRepository repozitorijum;
 	
 	@Override
 	public List<RezervacijaRentCar> findAll() {
