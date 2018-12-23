@@ -713,8 +713,8 @@ function korak2get(){
 	var id = adresa.split('=')[1];
 
 	  var niz= ""+id;
-	    $('input[name="cekirani"] :checked').each(function() {
-	    
+	    $('input[name=cekirani] :checked').each(function() {
+	    	console.log('dosao ovdje');
 	    	niz += "-"+$(this).val();
 	    });
 	
