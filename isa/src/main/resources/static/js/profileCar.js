@@ -324,7 +324,11 @@ $(document).ready(function(){
     	$("#cenovnik").hide();
      	$("#addUsluge").hide();
     	$("#automobili").hide();
+    	
     	$("#bg").show();
+    	$("#rezultat").empty();
+
+    	$("#anketa").show();
     		console.log('rezervacije');
    });
     $("a#price").click(function(){
@@ -426,9 +430,12 @@ function rezervisi(){
 		data: sendReservation,
 		dataType : 'json',
 		success : function(povratna) {
-					if(povratna.length==0){
+					if(povratna == null){
+						console.log('null je');
 						nemaPonuda();
-					}else if(povratna == 0){
+					}else if(povratna.length==0){
+
+						console.log('povratna je 0');
 						nemaPonuda();
 					}else{
 						izlistajPonude(povratna);
@@ -447,6 +454,8 @@ function nemaPonuda(){
 	 $("#rezultat").append("<p><h2>Unfortunately we don't have rigth offer for you.</h2></p>");
 }
 function izlistajPonude(data){
+	console.log('Usao u izlistaj ponude');
+	
 	var niz = data == null ? [] : (data instanceof Array ? data : [ data ]);
 	 $("#rezultat").show();
 	 $("#rezultat").append("<table class=\"table table-hover\" id=\"tabelaPonuda\" ><thead><tr><th>Name</th><th>Brand</th><th>Model</th><th>Model year</th><th>Number of seats </th><th>Category</th><th>Branch office</th><th>Total price</th><th></th></thead>");
