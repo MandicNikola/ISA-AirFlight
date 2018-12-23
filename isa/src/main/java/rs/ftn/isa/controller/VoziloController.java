@@ -207,7 +207,9 @@ public class VoziloController {
 			vozilo.getRezervacije().add(rezervacija);
 			
 			servis.saveVehicle(vozilo);
+			Long idRent = vozilo.getFilijala().getServis().getId();
 			
+			vozilo.setModel(idRent.toString());	
 			return vozilo;
 
 		}

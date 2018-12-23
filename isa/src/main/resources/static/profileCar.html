@@ -174,18 +174,19 @@
 					<div class="form-header">
 						<h1>Make a reservation</h1>
 					</div>
-					<form>	
 						<div class="row">
 							<div class="col-md-6">
 										<div class="form-group">
 											<span class="form-label">Pick up location <i class="glyphicon glyphicon-map-marker"></i></span>
-											<input class="form-control" id="pickLocation" type="text" placeholder="Enter city" required>
+											<select class="form-control" id="pickLocation">
+											</select>
 										</div>
 							</div>
 							<div class="col-md-6">
 										<div class="form-group">
 											<span class="form-label">Drop off location <i class="glyphicon glyphicon-map-marker"></i></span>
-											<input class="form-control" id="dropLocation" type="text" placeholder="Enter city" required>
+											<select class="form-control" id="dropLocation">
+											</select>	
 										</div>
 							</div>
 						</div>
@@ -226,7 +227,6 @@
 											<button type="button" id="tamnoBtn" onclick="rezervisi()" class="btn  btn-lg">Search cars</button>
 							</div>
 						</div>
-					</form>
 				</div>
 			</div>
 		</div> 

@@ -49,7 +49,7 @@ function popuniFilijale(){
 				console.log('Nema filijala');
 			}else{
 			    ispisiFilijale(data);
-			}
+	    	}
 		}
 	});
 	
@@ -222,6 +222,20 @@ var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 			$("#" + index).append("<div class=\"panel-footer\"><button  class=\"btn btn-info\" onclick=\"izmeniFilijalu('"+fil.id+"')\">Izmeni</button> <button  class=\"btn btn-info\" onclick=\"obrisiFilijalu('"+fil.id+"')\">Obrisi</button></div>");
 			 $("#filijale").append("</div>");
 		});
+	popuniSelect(skup);
+}
+function popuniSelect(skup){
+	
+	console.log('Usao u popuni select');
+	
+	var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
+	 $.each(lista, function(index, data) {
+		 	var adresa=data.grad + ", "+data.ulica;
+		 $("#pickLocation").append("<option  value=\""+data.id+"\">"+adresa+"</option>");
+
+		 $("#dropLocation").append("<option  value=\""+data.id+"\">"+adresa+"</option>");
+		 
+	 });
 	
 }
 function izmeniFilijalu(id){
@@ -252,8 +266,10 @@ function ispisiVozila(skup){
 	
 	$.each(lista, function(index, vozilo) {
 		var filpom=vozilo.filijala.grad;
+		var filulica=vozilo.filijala.ulica;
+		var adresa=filpom + ", "+filulica;
 		console.log(filpom);
-		$("#tabelaVozilo").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+vozilo.naziv+"</td><td > "+vozilo.marka+"</td><td > "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td > "+vozilo.sedista+"</td><td > "+vozilo.kategorija+"</td><td > "+filpom+"</td><td><button class=\"btn btn-info\" onclick=\"izmeniVozilo('"+vozilo.id+"')\">Change</button></td><td><button class=\"btn btn-info\" onclick=\"obrisiVozilo('"+vozilo.id+"')\">Delete</button></td></tr>");
+		$("#tabelaVozilo").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+vozilo.naziv+"</td><td > "+vozilo.marka+"</td><td > "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td > "+vozilo.sedista+"</td><td > "+vozilo.kategorija+"</td><td > "+adresa+"</td><td><button class=\"btn btn-info\" onclick=\"izmeniVozilo('"+vozilo.id+"')\">Change</button></td><td><button class=\"btn btn-info\" onclick=\"obrisiVozilo('"+vozilo.id+"')\">Delete</button></td></tr>");
 	});
     $("#pregledVozila").append("</table>");
  
@@ -490,9 +506,22 @@ function rezervisiVozilo(param){
 		url : "/api/vozila/dodajRezervaciju/"+posalji,
 		success : function(povratna) {
 			console.log('zavrsena rezervacija');
+			ispisiUspesno();
+			//pozoviProfil(povratna.model);
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
 			alert('greska');
 		}
 		});
+}
+function 	ispisiUspesno(){
+	$("#anketa").hide();
+	 
+	$("#rezultat").empty();
+	 $("#rezultat").append("<p><h2>You have successfully made a reservation</h2></p>");
+	
+}
+function pozoviProfil(data){
+	
+	window.location="profileCar.html?id="+data;
 }

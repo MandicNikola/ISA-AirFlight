@@ -686,39 +686,25 @@ function ispisiPonude(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#korak").empty();
 	 $("#korak").show();
-	 $("#reserveHotel").hide();
 	 $("#korak").append("<table class=\"table table-hover\" id=\"tabelaSoba\" ><tr><th>Room type </th><th>Capacity</th><th>Floor</th><th>Balkony</th><th>Price per night</th><th>Select</th></tr>");
 		
 		$.each(pom, function(index, data) {
-			if(data.balkon == 'da'){
-				$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\" ></td><td>"+data.cijena+"</td><td><input type=\"checkbox\" id=\""+data.id+"\" name= \"cekirani\" value=\""+data.id+"\"></td></tr>");	
+			if(data.balkon){
+				$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\" ></td><td>"+data.cijena+"</td><td><input type=\"checkbox\" id=\""+data.id+"\" value=\""+data.id+"\"></td></tr>");	
 			}else{
-				$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td><input type=\"checkbox\"  disabled=\"disabled\" ></td><td>"+data.cijena+"</td><td>"+data.cijena+"</td><td><input type=\"checkbox\" name= \"cekirani\" id=\""+data.id+"\" value=\""+data.id+"\"></td></tr>");	
+				$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td><input type=\"checkbox\"  disabled=\"disabled\" ></td><td>"+data.cijena+"</td><td>"+data.cijena+"</td><td><input type=\"checkbox\" id=\""+data.id+"\" value=\""+data.id+"\"></td></tr>");	
 			}
 		});
 		
 	 $("#korak").append("</table>");
-	 $("#korak").append("<p><button type=\"button\" onclick = \"povratakPretraga()\" class=\"btn btn-outline-secondary\">Back</button><button onclick = \"korak2get()\" type=\"button\" class=\"btn btn-success\">Next</button></p>")
-
-}
-function povratakPretraga(){
-	 $("#korak").hide();
-     $("#reserveHotel").show();	
 	
 }
+
 
 function korak2get(){
-	
 	var adresa = window.location.search.substring(1);
 	var id = adresa.split('=')[1];
 
-	  var niz= ""+id;
-	    $('input[name=cekirani] :checked').each(function() {
-	    	console.log('dosao ovdje');
-	    	niz += "-"+$(this).val();
-	    });
-	
-	    console.log('niz je' +niz);
 	$.ajax({
 		method:'GET',
 		url: "/api/hoteli/getUsluge/"+id,
@@ -731,16 +717,15 @@ function korak2get(){
 				console.log('Prazne usluga');
 			}else{
 				console.log('Ima usluga ');
-				korak4ispis(lista,niz);
+				korak4ispis(lista);
 			}
 		}
 	});
 	
 }
-function korak4ispis(data,niz){
+function korak4ispis(data){
 		
 		$("#korak").empty();
-		$("#reserveHotel").hide();
 		var lista = data == null ? [] : (data instanceof Array ? data : [ data ]);
 			
 		$("#korak").append("<table class=\"table table-hover\" id=\"tblDodatne\" ><tr><th>Service name </th><th>Rate</th><th></th></tr>");

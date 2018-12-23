@@ -475,13 +475,10 @@ public class RentACarController {
 		RentACar rent = servis.findOneById(id);
 		System.out.println("Usau u checkReservation");
 			
-		String startLokacija = rezervacija.getStartLocation(); 
-		String endLokacija = rezervacija.getEndLocation(); 
-		
-		boolean postojiStartFilijala=false;
-		boolean postojiEndFilijala=false;
-		
+	
+
 		Filijala lociranaFilijala=null;
+		//ako nema filijala nije korisnik mogao nista da izabere
 		if(rent.getFilijale() == null) {
 
 			System.out.println("nema filjala1");
@@ -492,24 +489,15 @@ public class RentACarController {
 			System.out.println("nema filjala2");
 			return new ArrayList<Vehicle>();
 		}
+	
+		String startLokacija = rezervacija.getStartLocation();
+		Long idPocetnaF = Long.parseLong(startLokacija);
+		
 		for(Filijala F : rent.getFilijale()) {
-
-			//1.proveravamo da li se u listi filijala nalazi grad iz pick up location 
-			if(F.getGrad().equals(startLokacija)) {
+				if(F.getId() == idPocetnaF) {
 					lociranaFilijala=F;
-					System.out.println("Ne postoji grad iz pickUpLocation");
-					postojiStartFilijala=true;
+					System.out.println("Pronadjena filijala iz koje se uzima vozilo");
 				}
-			//2.proveravamo da li se u listi filijala nalazi grad iz drop off location 
-			if(F.getGrad().equals(endLokacija)) {
-					postojiEndFilijala=true;
-
-					System.out.println("Ne postoji grad iz dropOffLocation");
-				}
-		}
-		if(postojiStartFilijala==false || postojiEndFilijala==false) {
-			System.out.println("Mora postojati filijala i u polaznom i u krajnjem gradu");
-			return new ArrayList<Vehicle>();
 		}
 		
 		ArrayList<Vehicle> ispunjenaKategorija=new  ArrayList<Vehicle>();
