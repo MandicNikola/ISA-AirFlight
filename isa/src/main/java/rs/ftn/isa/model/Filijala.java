@@ -39,11 +39,7 @@ public class Filijala {
         @JsonIgnore
     	private Set<Vehicle> vozila = new HashSet<Vehicle>();
 
-    	@OneToMany(mappedBy = "office", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-        @JsonIgnore
-    	private Set<RezervacijaRentCar> rezervacije = new HashSet<RezervacijaRentCar>();
-    	
-    	
+    	    	
 		public Filijala() {}
 		
 		public Filijala( String grad, String ulica) {
@@ -66,14 +62,6 @@ public class Filijala {
 
 		public void setVozila(Set<Vehicle> vozila) {
 			this.vozila = vozila;
-		}
-
-		public Set<RezervacijaRentCar> getRezervacije() {
-			return rezervacije;
-		}
-
-		public void setRezervacije(Set<RezervacijaRentCar> rezervacije) {
-			this.rezervacije = rezervacije;
 		}
 
 		public Long getId() {

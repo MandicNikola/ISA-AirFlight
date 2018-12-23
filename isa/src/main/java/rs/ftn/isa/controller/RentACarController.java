@@ -482,7 +482,16 @@ public class RentACarController {
 		boolean postojiEndFilijala=false;
 		
 		Filijala lociranaFilijala=null;
-		
+		if(rent.getFilijale() == null) {
+
+			System.out.println("nema filjala1");
+			return new ArrayList<Vehicle>();
+		}
+		if(rent.getFilijale().size()==0) {
+
+			System.out.println("nema filjala2");
+			return new ArrayList<Vehicle>();
+		}
 		for(Filijala F : rent.getFilijale()) {
 
 			//1.proveravamo da li se u listi filijala nalazi grad iz pick up location 
@@ -499,12 +508,21 @@ public class RentACarController {
 				}
 		}
 		if(postojiStartFilijala==false || postojiEndFilijala==false) {
-			return null;
+			System.out.println("Mora postojati filijala i u polaznom i u krajnjem gradu");
+			return new ArrayList<Vehicle>();
 		}
 		
 		ArrayList<Vehicle> ispunjenaKategorija=new  ArrayList<Vehicle>();
 		String kat=rezervacija.getTip();
-		
+		if(lociranaFilijala.getVozila()==null) {
+			System.out.println("nema vozila1");
+			return new ArrayList<Vehicle>();
+		}
+		if(lociranaFilijala.getVozila().size()==0) {
+
+			System.out.println("nema vozila2");
+			return new ArrayList<Vehicle>();
+		}
 		for(Vehicle V : lociranaFilijala.getVozila()) {
 				if(V.getKategorija().toString().equals(kat)){
 					System.out.println("Dodato vozilo sa nazivom "+V.getNaziv() + " kategorija je "+V.getKategorija());
@@ -527,11 +545,11 @@ public class RentACarController {
 				for(RezervacijaRentCar R : rezervacije) {	
 					//ako je datum preuzimanja vozila pre datuma vracanja iz rezervacije
 					if(rezervacija.getPickUp().before(R.getDatumVracanja())) {
-						System.out.println("provera1");
+						System.out.println("provera1-> Datum preuzimanja je pre datuma vracanja iz liste rezervacije");
 						 //datum vracanja auta posle datuma preuzimanja iz rezervacije, preklapaju se termini, vozilo nam ne odgovara
 							if(rezervacija.getDropOff().after(R.getDatumPreuzimanja())){
 								dozvolaPickUp = false;
-								System.out.println("provera2");
+								System.out.println("provera2--> Datum vracanja je posle datuma preuzimanja iz rezervacije");
 							}
 					}
 					
@@ -550,13 +568,17 @@ public class RentACarController {
 				
 				PricelistRentCar cenovnik = servis.findAktivanCenovnik(rent.getId());
 				if(cenovnik==null) {
-					return null;
+					System.out.println("Cenovnik je null");
+					return new ArrayList<Vehicle>();
 				}
 				if(cenovnik.getUsluge()==null) {
-					return null;
+					System.out.println("nema usluga 1");
+					return new ArrayList<Vehicle>();
 				}
 				if(cenovnik.getUsluge().size()==0) {
-					return null;
+
+					System.out.println("nema usluga 2");
+					return new ArrayList<Vehicle>();
 				}
 				Set<Usluga> usluge= cenovnik.getUsluge();
 				int cena=0;
