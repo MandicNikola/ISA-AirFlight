@@ -645,7 +645,19 @@ function izlistajPonudu(){
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);
 	var id = adresa.split('=')[1];
-
+	
+	var pocetak=$('#checkin').val();
+	var kraj=$('#checkout').val();
+	var osobe=$('#brojLjudi').val();
+	
+	$("#reserveHotel").hide();
+	$("#korak").empty();
+	
+	$("#korak").append("<p><h2>Offers </h2></p>");
+	$("#korak").append("<p>FROM <span id=\"pocetak\">"+pocetak+"</span>TO <span id=\"kraj\">"+kraj+"</span></p>");
+	$("#korak").append("<p>FOR <span id=\"osobe\">"+osobe+"</span>  passengers</p>");
+	
+	
 	$.ajax({
 		type : 'POST',
 		url : "/api/hoteli/vratiPonude/"+id,
@@ -684,9 +696,10 @@ function preuzmiPodatke() {
 function ispisiPonude(lista){
 	console.log('ima ponuda');
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
-	 $("#korak").empty();
+	
+	//$("#korak").empty();
 	 $("#korak").show();
-	 $("#reserveHotel").hide();
+	// $("#reserveHotel").hide();
 	 $("#korak").append("<table class=\"table table-hover\" id=\"tabelaSoba\" ><tr><th>Room type </th><th>Capacity</th><th>Floor</th><th>Balkony</th><th>Price per night</th><th>Select</th></tr>");
 		
 		$.each(pom, function(index, data) {
@@ -711,14 +724,30 @@ function korak2get(){
 	
 	var adresa = window.location.search.substring(1);
 	var id = adresa.split('=')[1];
-
-	  var niz= ""+id;
-	    $('input[name=cekirani] :checked').each(function() {
-	    	console.log('dosao ovdje');
-	    	niz += "-"+$(this).val();
-	    });
 	
-	    console.log('niz je' +niz);
+	//ovdje kupim sobe koje sam selektovala da imam u narednom koraku
+	var sList="";
+	  
+	  $('input[name = "cekirani"]').each(function () {
+		  console.log('usao ovdje');
+		  if(this.checked){
+			  sList += (sList=="" ? $(this).val() : "," + $(this).val());
+				  
+		    }
+		   
+		});
+	  console.log('niz je' +sList);
+	  //dodatne informacije za rezervaciju	
+	  	var pocetak=$('#checkin').val();
+		var kraj=$('#checkout').val();
+		var osobe=$('#brojLjudi').val();
+		$("#korak").empty();
+		$("#reserveHotel").hide();
+		
+		$("#korak").append("<p><h2>Offers </h2></p>");
+		$("#korak").append("<p>FROM <span id=\"pocetak\">"+pocetak+"</span>TO <span id=\"kraj\">"+kraj+"</span></p>");
+		$("#korak").append("<p>FOR <span id=\"osobe\">"+osobe+"</span>  passengers</p>");
+		
 	$.ajax({
 		method:'GET',
 		url: "/api/hoteli/getUsluge/"+id,
@@ -731,22 +760,60 @@ function korak2get(){
 				console.log('Prazne usluga');
 			}else{
 				console.log('Ima usluga ');
-				korak4ispis(lista,niz);
+				korak4ispis(lista,sList);
 			}
 		}
 	});
 	
 }
 function korak4ispis(data,niz){
-		
-		$("#korak").empty();
-		$("#reserveHotel").hide();
+
+	$("#reserveHotel").hide();
 		var lista = data == null ? [] : (data instanceof Array ? data : [ data ]);
 			
 		$("#korak").append("<table class=\"table table-hover\" id=\"tblDodatne\" ><tr><th>Service name </th><th>Rate</th><th></th></tr>");
 		$.each(lista, function(index, usluga) {
-				$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td>"+usluga.cena+"</td><td><input type=\"checkbox\" id=\""+usluga.id+"\" value=\""+usluga.id+"\"></td></tr>");
+				$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td>"+usluga.cena+"</td><td><input type=\"checkbox\" name= \"cekiraneUsluge\" id=\""+usluga.id+"\" value=\""+usluga.id+"\"></td></tr>");
 		});
-	    $("#korak").append("</table>");
-	    $("#korak").append("<p><button type=\"button\" class=\"btn btn-outline-secondary\">Back</button><button type=\"button\" class=\"btn btn-success\">Next</button></p>")
+	    $("#korak").append("</table>");                                                                                                     
+	    $("#korak").append("<p><button type=\"button\" class=\"btn btn-outline-secondary\">Back</button><button onclick = \"zavrsiRez("+niz+")\" type=\"button\" class=\"btn btn-success\">Finish</button></p>")
+}
+function zavrsiRez(nizSoba){
+	console.log("dosao do zavrsiRez "+info);
+	var pocetak=$('#checkin').val();
+	var kraj=$('#checkout').val();
+	var osobe=$('#brojLjudi').val();
+	var info = pocetak+"*" + kraj+"*"+osobe;	  
+	console.log(info);
+	var listaUsl="";
+	  
+	  $('input[name = "cekiraneUsluge"]').each(function () {
+		  console.log('usao ovdje');
+		  if(this.checked){
+			  listaUsl += (listaUsl=="" ? $(this).val() : "," + $(this).val());
+				  
+		    }
+		   
+		});
+	  if(listaUsl == ""){
+		  listaUsl = "nema";
+	  }
+	  
+	  $.ajax({
+			type : 'POST',
+			url : "/api/rezervacijehotel/rezervisi/"+info+"/sobe/"+nizSoba+"/nizUsluga/"+listaUsl,
+			success : function(povratna) {
+						if(povratna.length==0){
+							console.log('neuspjesno');
+						}else if(povratna == 0){
+							console.log('neuspjesno');
+						}else{
+							console.log('uspjesno');
+						}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				alert('greska');
+			}
+			});
+	  
 }
