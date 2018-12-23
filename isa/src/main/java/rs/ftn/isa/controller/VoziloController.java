@@ -1,6 +1,10 @@
 package rs.ftn.isa.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.ftn.isa.dto.UserDTO;
 import rs.ftn.isa.model.Filijala;
 import rs.ftn.isa.model.RentACar;
+import rs.ftn.isa.model.RezervacijaRentCar;
 import rs.ftn.isa.model.User;
 import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.service.VoziloService;
@@ -144,6 +149,67 @@ public class VoziloController {
 			return vozilo;
 
 		}	
+		@RequestMapping(value="/dodajRezervaciju/{podatak}", 
+				method = RequestMethod.POST,
+				produces = MediaType.APPLICATION_JSON_VALUE)
+		public @ResponseBody Vehicle dodajRezervaciju(@PathVariable String podatak){		
+			//u podatku se nalazi idVozilo=datumPreuzimanja=datumVracanja=cena
+			System.out.println("usao u dodajRezervaciju "+podatak);
+			
+			String[] niz=podatak.split("=");
+			
+			Long idVozilo=Long.parseLong(niz[0]);
+			
+			String startDatum=niz[1];
+			String[] datP=startDatum.split("-");
+			
+			int year=Integer.parseInt(datP[0]);
+			//meseci u javi od 0
+			int month=Integer.parseInt(datP[1])-1;
+			int day=Integer.parseInt(datP[2]);
+		
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(year, month, day);
+			Date datPreuzimanja = calendar.getTime();
+				
+			
+			System.out.println("Daatum je "+datPreuzimanja);
+			
+			String krajDatum=niz[2];
+			String[] krajP=krajDatum.split("-");
+			
+			 year=Integer.parseInt(krajP[0]);
+			 //meseci u javi idu od 0
+			 month=Integer.parseInt(krajP[1])-1;
+			 day=Integer.parseInt(krajP[2]);
+			
+			 calendar.set(year, month, day);
+			 Date datVracanje = calendar.getTime();
+			 System.out.println("Daatum je "+datVracanje);
+					
+			 
+			int cena=Integer.parseInt(niz[3]);
+	        			System.out.println("Usao u dodajRezervaciju u vozilo");
+			
+	        	
+			//prvo pronadjemo vozilo koje treba da se izmeni
+			RezervacijaRentCar rezervacija = new RezervacijaRentCar();
+			rezervacija.setCena(cena);
+			System.out.println("Datum preuzimanja je "+datPreuzimanja);
+			System.out.println("Datum vracanja  je "+datVracanje);
+			rezervacija.setDatumPreuzimanja(datPreuzimanja);
+			rezervacija.setDatumVracanja(datVracanje);
+			System.out.println(rezervacija);
+	        			
+			Vehicle vozilo = servis.findVehicleById(idVozilo);
+			System.out.println("Nasao je vozilo ");
+			rezervacija.setVozilo(vozilo);
+			vozilo.getRezervacije().add(rezervacija);
+			
+			servis.saveVehicle(vozilo);
+			
+			return vozilo;
 
+		}
 
 }

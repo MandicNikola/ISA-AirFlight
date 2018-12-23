@@ -420,8 +420,8 @@ function rezervisi(){
 		$("#rezultat").empty();
 		
 		$("#rezultat").append("<p><h2>Offers </h2></p>");
-		$("#rezultat").append("<p>FROM <span id=\"pocetak\"> "+pocetak+" </span>TO <span id=\"kraj\"> "+kraj+" </span></p>");
-		$("#rezultat").append("<p>FOR <span id=\"osobe\"> "+osobe+" </span>  passengers</p>");
+		$("#rezultat").append("<p>FROM <span id=\"pocetak\">"+pocetak+"</span> TO <span id=\"kraj\">"+kraj+"</span></p>");
+		$("#rezultat").append("<p>FOR <span id=\"osobe\">"+osobe+"</span>  passengers</p>");
 		
 		$.ajax({
 		type : 'POST',
@@ -457,36 +457,39 @@ function izlistajPonude(data){
 	console.log('Usao u izlistaj ponude');
 	
 	var niz = data == null ? [] : (data instanceof Array ? data : [ data ]);
-	 $("#rezultat").show();
+	
+	$("#rezultat").show();
 	 $("#rezultat").append("<table class=\"table table-hover\" id=\"tabelaPonuda\" ><thead><tr><th>Name</th><th>Brand</th><th>Model</th><th>Model year</th><th>Number of seats </th><th>Category</th><th>Branch office</th><th>Total price</th><th></th></thead>");
 		
 		$.each(niz, function(index, pom) {
 			
 			var filpom=pom.filijala.grad;
-			$("#tabelaPonuda").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+pom.naziv+"</td><td > "+pom.marka+"</td><td > "+pom.model+"</td><td > "+pom.godiste+"</td><td > "+pom.sedista+"</td><td> "+pom.kategorija+"</td><td > "+filpom+"</td><td> "+pom.cena+"</td><td><button class=\"btn btn-info\" onclick=\"rezervisiVozilo('"+pom.id+"')\">Reserve</button></td><td></tr>");
+			var cena=pom.cena;
+			var param=cena+"="+pom.id;
+			$("#tabelaPonuda").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+pom.naziv+"</td><td > "+pom.marka+"</td><td > "+pom.model+"</td><td > "+pom.godiste+"</td><td > "+pom.sedista+"</td><td> "+pom.kategorija+"</td><td > "+filpom+"</td><td> "+pom.cena+"</td><td><button class=\"btn btn-info\" onclick=\"rezervisiVozilo('"+param+"')\">Reserve</button></td><td></tr>");
 				
 		});
 		
 	 $("#rezultat").append("</table>");
 	
 }
-function rezervisiVozilo(id){
-	console.log('Usao u rezervisi vozilo '+ id);
+function rezervisiVozilo(param){
+	
+	var cena=param.split('=')[0];
+	var id= param.split('=')[1];
+	
+	console.log('Usao u rezervisi vozilo '+ id + " cena je "+cena);
+	var pocetak =  $("#pocetak").text();
+	var kraj =  $("#kraj").text();
+	
+	console.log("pocetak je"+ pocetak+" kraj je "+ kraj);
+	var posalji = id+"="+pocetak+"="+kraj+"="+cena;
 	
 	$.ajax({
 		type : 'POST',
-		url : "/api/rents/makeReservation",
-		contentType : "application/json",
-		data: sendReservation,
-		dataType : 'json',
+		url : "/api/vozila/dodajRezervaciju/"+posalji,
 		success : function(povratna) {
-					if(povratna.length==0){
-						nemaPonuda();
-					}else if(povratna == 0){
-						nemaPonuda();
-					}else{
-						izlistajPonude(povratna);
-					}
+			console.log('zavrsena rezervacija');
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
 			alert('greska');

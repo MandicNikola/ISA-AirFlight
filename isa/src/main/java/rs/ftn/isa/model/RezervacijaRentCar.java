@@ -28,10 +28,10 @@ public class RezervacijaRentCar {
 	private boolean zavrsena;
 	
 	
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private String mestoPreuzimanja;
 	
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private String mestoVracanja;
 	
 	
@@ -47,15 +47,8 @@ public class RezervacijaRentCar {
 	
 	@ManyToOne( fetch = FetchType.EAGER)
     @JoinColumn(name = "vozilo_id")
-	private Vehicle vozilo;
+	private Vehicle vozilo;	
 	
-	@ManyToOne( fetch = FetchType.EAGER)
-    @JoinColumn(name = "usluga_id")
-	private Usluga usluga;
-	
-	@ManyToOne(fetch = FetchType.EAGER, cascade =  CascadeType.ALL)
-	@JoinColumn(name = "office_id")
-	private Filijala office;
 	
 	@Column(nullable = false)
 	private int cena;
@@ -64,7 +57,7 @@ public class RezervacijaRentCar {
 
 	
 	public RezervacijaRentCar(String mestoPreuzimanja, String mestoVracanja, Date datumPreuzimanja, Date datumVracanja,
-			User korisnik, Vehicle vozilo, Usluga usluga) {
+			User korisnik, Vehicle vozilo) {
 		super();
 		this.mestoPreuzimanja = mestoPreuzimanja;
 		this.mestoVracanja = mestoVracanja;
@@ -72,13 +65,12 @@ public class RezervacijaRentCar {
 		this.datumVracanja = datumVracanja;
 		this.korisnik = korisnik;
 		this.vozilo = vozilo;
-		this.usluga = usluga;
 		this.zavrsena=false;
 	}
 
 
 	public RezervacijaRentCar(String mestoPreuzimanja, String mestoVracanja, Date datumPreuzimanja, Date datumVracanja,
-			User korisnik, Vehicle vozilo, Usluga usluga, Filijala office, int cena) {
+			User korisnik, Vehicle vozilo, int cena) {
 		super();
 		this.mestoPreuzimanja = mestoPreuzimanja;
 		this.mestoVracanja = mestoVracanja;
@@ -86,8 +78,6 @@ public class RezervacijaRentCar {
 		this.datumVracanja = datumVracanja;
 		this.korisnik = korisnik;
 		this.vozilo = vozilo;
-		this.usluga = usluga;
-		this.office = office;
 		this.cena = cena;
 	}
 
@@ -109,16 +99,6 @@ public class RezervacijaRentCar {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public Filijala getOffice() {
-		return office;
-	}
-
-
-	public void setOffice(Filijala office) {
-		this.office = office;
-	}
-
 
 	public String getMestoPreuzimanja() {
 		return mestoPreuzimanja;
@@ -169,12 +149,15 @@ public class RezervacijaRentCar {
 	}
 
 
+	
+
 	@Override
 	public String toString() {
-		return "RezervacijaRentCar [id=" + id + ", mestoPreuzimanja=" + mestoPreuzimanja + ", mestoVracanja="
-				+ mestoVracanja + ", datumPreuzimanja=" + datumPreuzimanja + ", datumVracanja=" + datumVracanja
-				+ ", korisnik=" + korisnik + ", vozilo=" + vozilo +"]";
+		return "RezervacijaRentCar [zavrsena=" + zavrsena + ", mestoPreuzimanja=" + mestoPreuzimanja
+				+ ", mestoVracanja=" + mestoVracanja + ", datumPreuzimanja=" + datumPreuzimanja + ", datumVracanja="
+				+ datumVracanja + ", korisnik=" + korisnik + ", vozilo=" + vozilo + ", cena=" + cena + "]";
 	}
+
 
 	public boolean isZavrsena() {
 		return zavrsena;
@@ -184,13 +167,6 @@ public class RezervacijaRentCar {
 		this.zavrsena = zavrsena;
 	}
 
-	public Usluga getUsluga() {
-		return usluga;
-	}
 
-	public void setUsluga(Usluga usluga) {
-		this.usluga = usluga;
-	}
-	
 	
 }
