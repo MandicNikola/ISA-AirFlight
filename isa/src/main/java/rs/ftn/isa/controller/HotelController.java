@@ -2,6 +2,7 @@ package rs.ftn.isa.controller;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -654,7 +655,7 @@ public class HotelController {
 				}
 				//odobren check in,provjeravam check out ..da li je check out < od pocetaka svih rezervacija koje postoje za datu sobu
 				boolean odobrenCheckOUT= true;
-				if(odobrenCheckIN) {
+				
 					for(RezervacijaHotel pom:rezervacije) {	
 						
 						if(rez.getCheckOut().compareTo(pom.getDatumDolaska())>=0) {
@@ -664,9 +665,9 @@ public class HotelController {
 						}
 					}
 					
-				}
+				
 				//odobrena je soba
-				if(odobrenCheckIN == true && odobrenCheckOUT == true) {
+				if(odobrenCheckIN == true || odobrenCheckOUT == true) {
 					System.out.println("odobrena soba");
 					sobe.add(soba);
 				}
@@ -694,6 +695,157 @@ public class HotelController {
 			return sobe;
 		}	
 		
+		@RequestMapping(value="/rezervisi/{info}/sobe/{nizSoba}/nizUsluga/{listaUsl}/idHotela/{id}", 
+				method = RequestMethod.POST,
+				produces = MediaType.APPLICATION_JSON_VALUE
+				)
+		public @ResponseBody Room vratiPonude(@PathVariable("info") String info,
+	            @PathVariable("nizSoba") String nizSoba,@PathVariable("listaUsl") String listaUsl,@PathVariable("id") Long id){
+			System.out.println("uusao u rezervisi u rezervaciji");
+			System.out.println("info "+info);
+			System.out.println("nizSoba "+nizSoba);
+			System.out.println("listaUsl "+listaUsl);
+			
+			//info 2018-12-30*2019-01-01*2
+			//nizSoba 4
+			//listaUsl 3
+			String[] infoPom = info.split("\\*");
+			String checkIN = infoPom[0];
+			String checkOUT = infoPom[1];
+			String broj = infoPom[2];
+			int brLjudi = Integer.parseInt(broj);
+			ArrayList<String> indexSoba = new ArrayList<String>() {};
+			
+			if(nizSoba.contains(",")) {
+				String[] pomocna = nizSoba.split(",");
+				for(int i = 0;i<pomocna.length;i++) {
+					indexSoba.add(pomocna[i]);
+				}
+			}else {
+				indexSoba.add(nizSoba);
+			}
+			boolean imaUsluga = true;
+			if(listaUsl.equals("nema")) {
+				imaUsluga = false;
+			}
+			ArrayList<String> indexUsluga = new ArrayList<String>() {};
+			
+			if(imaUsluga == true) {
+				if(listaUsl.contains(",")) {
+					String[] pomocna = listaUsl.split(",");
+					for(int i = 0;i<pomocna.length;i++) {
+						indexUsluga.add(pomocna[i]);
+					}
+				}else {
+						indexUsluga.add(listaUsl);
+				}
+			}
+			
+			String[] datIN=checkIN.split("-");
+			
+			int godina=Integer.parseInt(datIN[0]);
+			//mjesec krece od 0
+			int mjesec=Integer.parseInt(datIN[1])-1;
+			int dan=Integer.parseInt(datIN[2]);
 		
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(godina, mjesec, dan);
+			Date datumCheckIn = calendar.getTime();
+				
+			
+			System.out.println("Daatum je "+datumCheckIn);
+			String[] datOUT=checkOUT.split("-");
+			
+			 godina=Integer.parseInt(datOUT[0]);
+			//mjesec krece od 0
+			 mjesec=Integer.parseInt(datOUT[1])-1;
+			 dan=Integer.parseInt(datOUT[2]);
+			 calendar.set(godina, mjesec, dan);
+			Date datumCheckOut = calendar.getTime();
+			
+			System.out.println("Daatum je "+datumCheckOut);
+			Hotel hotel = servis.findHotelById(id);
+			ArrayList<Room> sobe = new ArrayList<Room>();
+			for(int i =0;i<indexSoba.size();i++) {
+				Long idSobe = Long.parseLong(indexSoba.get(i));
+				
+				for(Room ss:hotel.getSobe()) {
+					if(ss.getId() == idSobe) {
+						Room sobica = ss;
+						sobe.add(sobica);
+						break;
+					}
+				}
+			}
+			
+			ArrayList<Usluga> usluge = new ArrayList<Usluga>();
+			//preuzmi aktivni cjenovnik
+			PricelistHotel aktivni = null;
+			for(PricelistHotel ph:hotel.getCijenovnici()) {
+				if(ph.isAktivan()) {
+					aktivni = ph;
+					break;
+				}
+				
+			}
+			//ako je selektovao usluge
+			if(imaUsluga) {
+				for(int i = 0;i<indexUsluga.size();i++) {
+					Long idUsluge = Long.parseLong(indexUsluga.get(i));
+					
+					for(Usluga usl:aktivni.getUsluge()) {
+						if(usl.getId() ==idUsluge) {
+							usluge.add(usl);
+							break;
+						}
+					}
+				}
+				
+			}
+			
+			RezervacijaHotel rez = new RezervacijaHotel();
+			rez.setDatumDolaska(datumCheckIn);
+			rez.setDatumOdlaska(datumCheckOut);
+			int dani = daysBetween(datumCheckIn, datumCheckOut);
+			int cijena = 0;
+			for(int i = 0;i<sobe.size();i++) {
+				cijena += (dani*sobe.get(i).getCijena());
+			}
+			if(imaUsluga) {
+				for(int i = 0;i<usluge.size();i++) {
+					cijena += (dani*brLjudi*usluge.get(i).getCena());
+				}
+			}
+			rez.setCijena(cijena);
+			
+			for(Room room:sobe) {
+				Room soba = room;
+				hotel.getSobe().remove(room);
+				Set<RezervacijaHotel> rezSobe = room.getRezervacije();
+				rezSobe.add(rez);
+				soba.setRezervacije(rezSobe);
+				hotel.getSobe().add(soba);
+			}
+			if(imaUsluga) {
+				hotel.getCijenovnici().remove(aktivni);
+				
+				for(Usluga usl:usluge) {
+					aktivni.getUsluge().remove(usl);
+					Usluga usluga = usl;
+					Set<RezervacijaHotel> rezUsluge = usluga.getRezHotela();
+					rezUsluge.add(rez);
+					usluga.setRezHotela(rezUsluge);
+					aktivni.getUsluge().add(usluga);
+				}
+				hotel.getCijenovnici().add(aktivni);
+			}
+			servis.saveHotel(hotel);
+			return null;
+		
+		}
+		
+		 public int daysBetween(Date d1, Date d2){
+	         return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+	 }
 		
 }

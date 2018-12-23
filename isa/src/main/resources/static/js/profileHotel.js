@@ -827,6 +827,7 @@ function zavrsiRez(nizSoba){
 	console.log(info);
 	var listaUsl="";
 	  
+	
 	  $('input[name = "cekiraneUsluge"]').each(function () {
 		  console.log('usao ovdje');
 		  if(this.checked){
@@ -838,10 +839,15 @@ function zavrsiRez(nizSoba){
 	  if(listaUsl == ""){
 		  listaUsl = "nema";
 	  }
+	 
+	  var adresa = window.location.search.substring(1);
+		console.log('adesa je '+adresa);
+		var id = adresa.split('=')[1];
+		
 	  
 	  $.ajax({
 			type : 'POST',
-			url : "/api/rezervacijehotel/rezervisi/"+info+"/sobe/"+nizSoba+"/nizUsluga/"+listaUsl,
+			url : "/api/hoteli/rezervisi/"+info+"/sobe/"+nizSoba+"/nizUsluga/"+listaUsl+"/idHotela/"+id,
 			success : function(povratna) {
 						if(povratna.length==0){
 							console.log('neuspjesno');

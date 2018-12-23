@@ -38,13 +38,12 @@ public class RezervacijaHotel {
 	@Column
 	private boolean zavrsena;
 	
+	@Column(nullable = false)
+	private int cijena;
+	
+	
 	//jedan rezervacija moze da sadrzi vise soba
-	@ManyToMany(cascade = {CascadeType.ALL})
-	@JoinTable(
-	        name = "Rezervacija_Room", 
-	        joinColumns = { @JoinColumn(name = "rezervacijaHotel_id") }, 
-	        inverseJoinColumns = { @JoinColumn(name = "room_id") }
-	  )
+	@ManyToMany(mappedBy = "rezervacije")
 	private Set<Room> sobe = new HashSet<Room>();
 	
 	//jedna rezervicija pripada tacno jednom korisniku
@@ -58,12 +57,7 @@ public class RezervacijaHotel {
 	*/
 	
 	//jedna rezervicija moze da sadrzi vise dodatnih usluga
-	 @ManyToMany(cascade = { CascadeType.ALL })
-	 @JoinTable(
-	        name = "Rezervacija_Usluga", 
-	        joinColumns = { @JoinColumn(name = "rezervacija_id") }, 
-	        inverseJoinColumns = { @JoinColumn(name = "usluga_id") }
-	  )
+	@ManyToMany(mappedBy = "rezHotela") 
 	private Set<Usluga>  usluge = new HashSet<Usluga>();
 
 	public RezervacijaHotel() {
@@ -86,6 +80,14 @@ public class RezervacijaHotel {
 		this.id = id;
 	}
 
+
+	public int getCijena() {
+		return cijena;
+	}
+
+	public void setCijena(int cijena) {
+		this.cijena = cijena;
+	}
 
 	public Date getDatumDolaska() {
 		return datumDolaska;

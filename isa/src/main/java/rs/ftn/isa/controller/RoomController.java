@@ -1,6 +1,8 @@
 package rs.ftn.isa.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.model.Filijala;
+import rs.ftn.isa.model.RezervacijaHotel;
 import rs.ftn.isa.model.Room;
 import rs.ftn.isa.service.RoomServiceImp;
 
@@ -87,5 +90,8 @@ public class RoomController {
 		servis.saveRoom(stara);
 		System.out.println("izmjenio sobu");
 		return stara;
-	}	
+	}
+
+	
+
 }

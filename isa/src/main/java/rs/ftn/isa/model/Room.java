@@ -10,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -55,7 +57,12 @@ public class Room {
 	 private Hotel hotel;
 	
 	 //jedna soba moze prirpadati vise rezervacija
-	@ManyToMany(mappedBy = "sobe")
+	@ManyToMany(cascade = {CascadeType.ALL})
+	@JoinTable(
+	        name = "Rezervacija_Room", 
+	        joinColumns = { @JoinColumn(name = "room_id") }, 
+	        inverseJoinColumns = { @JoinColumn(name = "rezervacijaHotel_id") }
+	  )
 	private Set<RezervacijaHotel> rezervacije = new HashSet<RezervacijaHotel>();
 	
 	//jedna soba ima vise cjenovnika

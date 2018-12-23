@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -60,7 +61,12 @@ public class Usluga {
 	PricelistHotel cijene;
 	
 	//dodatne usluge mogu da budu rezervisane vise puta u hotelu
-	@ManyToMany(mappedBy = "usluge")
+	@ManyToMany(cascade = { CascadeType.ALL })
+	 @JoinTable(
+	        name = "Rezervacija_Usluga", 
+	        joinColumns = { @JoinColumn(name = "usluga_id") }, 
+	        inverseJoinColumns = { @JoinColumn(name = "rezervacijaHotel_id") }
+	  )
 	private Set<RezervacijaHotel> rezHotela = new HashSet<RezervacijaHotel>();
 	
 	//cijenovnik sobe
