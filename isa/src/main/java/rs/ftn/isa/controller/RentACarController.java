@@ -545,16 +545,59 @@ public class RentACarController {
 						System.out.println("Ne mogu stati putnici");
 				}
 				
+				int brojDana = daysBetween(rezervacija.getPickUp(), rezervacija.getDropOff());
+				System.out.println("Broj dana je "+brojDana);
+				
+				PricelistRentCar cenovnik = servis.findAktivanCenovnik(rent.getId());
+				if(cenovnik==null) {
+					return null;
+				}
+				if(cenovnik.getUsluge()==null) {
+					return null;
+				}
+				if(cenovnik.getUsluge().size()==0) {
+					return null;
+				}
+				Set<Usluga> usluge= cenovnik.getUsluge();
+				int cena=0;
+				
+				ArrayList<Usluga> sortirane = new ArrayList<Usluga>();
+				for(Usluga u : usluge) {
+					if(u.getKategorija().toString().equals(kat)) {
+						sortirane.add(u);
+					}
+				}
+				sortirane.sort(Comparator.comparingInt(Usluga :: getCena));
+				
+				cena= sortirane.get(0).getCena(); //uzima se najmanja cena
+				for(int j = 0;j < sortirane.size();j++) {
+						Usluga pom=sortirane.get(j);
+						if(brojDana >= pom.getPrekoTrajanja()) {
+							cena=pom.getCena();	
+							System.out.println("Promenjena cena na "+cena);
+						}
+						
+						
+				}
+				
+				System.out.println("Cena po danu je "+cena);
+				int ukupnaCena=brojDana*cena;
 				
 				if(dozvolaPickUp && dozvolaPutnici) {
+					vozilo.setCena(ukupnaCena);
 					ispunjeniUslovi.add(vozilo);
 					System.out.println("Vozilo sa nazivom "+vozilo.getNaziv()+ " ispunjava uslov");
 				}
+				
+				
+				
 		}
 		
 		
 		return ispunjeniUslovi;
 	}	
 	
-
+	 public int daysBetween(Date d1, Date d2){
+         return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+ }
 }

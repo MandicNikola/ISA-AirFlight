@@ -21,4 +21,6 @@ public class RezervacijaRentController {
 	public List<RezervacijaRentCar> getAllRezervacije(){		
 		return  servis.findAll();
 	}
+	
+	
 }
