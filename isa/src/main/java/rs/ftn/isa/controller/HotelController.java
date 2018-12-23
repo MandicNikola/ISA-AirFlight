@@ -26,6 +26,7 @@ import rs.ftn.isa.model.PricelistHotel;
 import rs.ftn.isa.model.RezervacijaHotel;
 import rs.ftn.isa.model.Room;
 import rs.ftn.isa.model.Usluga;
+import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.service.HotelService;
 @RestController
 @RequestMapping(value="api/hoteli")
@@ -624,7 +625,7 @@ public class HotelController {
 			return kat;
 		}
 		
-		//pretraga hotela
+		// da li postoje ponude za unesenu rezervaciju bez hoteala 
 
 		@RequestMapping(value="/vratiPonude/{id}", 
 				method = RequestMethod.POST,
@@ -675,17 +676,19 @@ public class HotelController {
 			//provjera da li imam dovoljan broj soba
 			if(sobe.size() < rez.getBrojSoba()) {
 				System.out.println("nedovoljan broj soba");
-				return null;
+				
+				 return new ArrayList<Room>();
 			}
 			int suma = 0;
-			//treba nekako da razlikujem koja je greska !!
 			for(Room sobica:sobe) {
 				suma += sobica.getKapacitet();
 			}
+			
+			//provjera da li imam dovoljno kapaciteta
 			if(rez.getBrojLjudi() > suma) {
 				System.out.println("nedovoljan kapacitet");
 				
-				return null;
+				 return new ArrayList<Room>();
 			}
 			
 			return sobe;

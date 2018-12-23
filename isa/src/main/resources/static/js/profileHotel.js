@@ -237,6 +237,30 @@ $(document).ready(function(){
 	$("#rezervacije").hide();
 
 	
+	     $("#predjiNaDodatne").one('click', function (event) {  
+	           event.preventDefault();
+	           //do something
+	           
+	           var sList="";
+	     	  
+	     	  $('input[name = "cekirani"]').each(function () {
+	     		  console.log('usao ovdje');
+	     		  if(this.checked){
+	     			  sList += (sList=="" ? $(this).val() : "," + $(this).val());	  
+	     		    }
+	     		   
+	     		});
+	     	  if(sList==""){
+	     		  console.log('zabranio');
+	           $(this).prop('disabled', true);
+	     	  }else{
+
+	     		  console.log('nije zabranio');
+	     		 $(this).prop('disabled', false);
+		     	    
+	     	  }
+	     });
+	
  	
     $("#rooms").click(function(){
     	listaSoba();
@@ -666,11 +690,12 @@ function izlistajPonudu(){
 		data:preuzmiPodatke(),
 		success : function(data) {
 				
-				if(data.length == 0){
-					alert('nema ponuda');
-					
+				if(data == null){
+					nemaPonuda();
+				}else if(data.length  == 0){
+		
+					nemaPonuda();
 				}else{
-					alert('ima ponuda');
 					ispisiPonude(data);
 				}	
 		},
@@ -693,6 +718,13 @@ function preuzmiPodatke() {
 	});
 	return kat;
 }
+
+function nemaPonuda(){
+	$("#reserveHotel").hide(); 
+	$("#korak").empty();
+	$("#korak").append("<p><h2>Unfortunately we don't have rigth offer for you.</h2></p>");
+}
+
 function ispisiPonude(lista){
 	console.log('ima ponuda');
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
@@ -711,7 +743,7 @@ function ispisiPonude(lista){
 		});
 		
 	 $("#korak").append("</table>");
-	 $("#korak").append("<p><button type=\"button\" onclick = \"povratakPretraga()\" class=\"btn btn-outline-secondary\">Back</button><button onclick = \"korak2get()\" type=\"button\" class=\"btn btn-success\">Next</button></p>")
+	 $("#korak").append("<p><button type=\"button\" onclick = \"povratakPretraga()\" class=\"btn btn-outline-secondary\">Back</button><button onclick = \"korak2get()\" id=\"predjiNaDodatne\" type=\"button\" class=\"btn btn-success\">Next</button></p>")
 
 }
 function povratakPretraga(){

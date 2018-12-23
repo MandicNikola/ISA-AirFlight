@@ -1,6 +1,8 @@
 package rs.ftn.isa.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +70,30 @@ public class RezervacijaHotelController {
 			}
 		}
 		
+		String[] datIN=checkIN.split("-");
+		
+		int godina=Integer.parseInt(datIN[0]);
+		//mjesec krece od 0
+		int mjesec=Integer.parseInt(datIN[1])-1;
+		int dan=Integer.parseInt(datIN[2]);
+	
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(godina, mjesec, dan);
+		Date datumCheckIn = calendar.getTime();
+			
+		
+		System.out.println("Daatum je "+datumCheckIn);
+		String[] datOUT=checkOUT.split("-");
+		
+		 godina=Integer.parseInt(datOUT[0]);
+		//mjesec krece od 0
+		 mjesec=Integer.parseInt(datOUT[1])-1;
+		 dan=Integer.parseInt(datOUT[2]);
+		 calendar.set(godina, mjesec, dan);
+		Date datumCheckOut = calendar.getTime();
+		
+		System.out.println("Daatum je "+datumCheckOut);
+	
 		return null;
 	
 	}
