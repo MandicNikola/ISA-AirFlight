@@ -10,25 +10,23 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Seat {
+public class Relation {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	//red i kolona sedista
-	@Column(name = "red", nullable = false)
-	private int red;
+	//da li je tip veze jedan ili drugi
+	@Column(name = "type")
+	private String tip;
 	
-	@Column(name = "kolona", nullable = false)
-	private int kolona;
-	
-	//segment kome pripadaju sedista
+	//onaj koji salje zahtev 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private Segment segment;
+	private User relating;
 	
-	
-	
+	//koji prima zazhtev
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private User related;
 	
 	
 }

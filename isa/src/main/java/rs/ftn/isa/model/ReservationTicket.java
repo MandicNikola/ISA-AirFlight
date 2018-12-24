@@ -1,5 +1,7 @@
 package rs.ftn.isa.model;
 
+import java.sql.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,23 +12,22 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Seat {
+public class ReservationTicket {
 
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	//red i kolona sedista
-	@Column(name = "red", nullable = false)
-	private int red;
+	@Column(name = "datumRezervacije", nullable = false)
+	private java.util.Date datumRezervacije;
 	
-	@Column(name = "kolona", nullable = false)
-	private int kolona;
+	@Column(name = "prosla", nullable = false)
+	private boolean zavrsena;
 	
-	//segment kome pripadaju sedista
+	//imaju korisnika na kog se vezuju
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private Segment segment;
-	
+	private User korisnik;
 	
 	
 	

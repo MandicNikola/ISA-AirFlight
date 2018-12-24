@@ -45,6 +45,23 @@ public class User {
 	@Column(name="tip")
 	private String tip;
 
+
+	//liste veza relacija u kojima se nalazi korisnik
+	@OneToMany(mappedBy = "relating", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	private Set<Relation> relatingRel = new HashSet<Relation>();
+	
+	@OneToMany(mappedBy = "related", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	private Set<Relation> relatedRel = new HashSet<Relation>();
+	
+	
+	//rez karata
+	@OneToMany(mappedBy = "korisnik", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	private Set<ReservationTicket> resTicket = new HashSet<ReservationTicket>();
+	
+	
 	//jedna korisnik moze da ima vise rezervacija u jednom hotelu 
 	@OneToMany(mappedBy = "userHotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore

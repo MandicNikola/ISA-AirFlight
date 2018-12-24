@@ -1,13 +1,24 @@
 package rs.ftn.isa.model;
 
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class AirplaneCompany {
 
 	
@@ -24,6 +35,18 @@ public class AirplaneCompany {
 	@Column(name = "opis", nullable = false)
 	private String opis;
 
+	//avioni koji mu pripadaju aviokompaniji
+	@OneToMany(mappedBy = "airComp",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	private  Set<AirPlane> avioni = new HashSet<AirPlane>();
+	
+	//letovi koji mi trebaju
+	@OneToMany(mappedBy = "avioKomp",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	private  Set<Flight> letovi = new HashSet<Flight>();
+	
+	
+	
 	
 	public AirplaneCompany() {
 		super();
