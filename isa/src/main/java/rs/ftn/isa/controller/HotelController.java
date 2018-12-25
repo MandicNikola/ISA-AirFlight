@@ -2,7 +2,9 @@ package rs.ftn.isa.controller;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.yaml.snakeyaml.util.ArrayUtils;
 
 import rs.ftn.isa.dto.HotelDTO;
 import rs.ftn.isa.dto.ReservationHotelDTO;
@@ -673,7 +676,22 @@ public class HotelController {
 				}
 				
 			}
-			
+			//slucaj kad je trazio samo jednu sobu,provjerim da li je broj ljudi u svakoj pojedicnacno veci ili jednak od trazenog broja
+			if(rez.getBrojSoba()==1) {
+				ArrayList<Room> povratna = new ArrayList<Room>();
+				for(Room soba:sobe) {
+					if(soba.getKapacitet() >= rez.getBrojLjudi()){
+						povratna.add(soba);
+					}
+					
+				}
+				//nema soba koji primaju toliki broj gostiju
+				if(povratna.size() == 0) {
+					return new ArrayList<Room>();
+				}else {
+					return povratna;
+				}
+			}
 			//provjera da li imam dovoljan broj soba
 			if(sobe.size() < rez.getBrojSoba()) {
 				System.out.println("nedovoljan broj soba");
@@ -694,12 +712,12 @@ public class HotelController {
 			
 			return sobe;
 		}	
-		
+		//metoda koja formira rezervaciju
 		@RequestMapping(value="/rezervisi/{info}/sobe/{nizSoba}/nizUsluga/{listaUsl}/idHotela/{id}", 
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE
 				)
-		public @ResponseBody Room vratiPonude(@PathVariable("info") String info,
+		public @ResponseBody RezervacijaHotel rezervacija(@PathVariable("info") String info,
 	            @PathVariable("nizSoba") String nizSoba,@PathVariable("listaUsl") String listaUsl,@PathVariable("id") Long id){
 			System.out.println("uusao u rezervisi u rezervaciji");
 			System.out.println("info "+info);
@@ -762,6 +780,10 @@ public class HotelController {
 			 dan=Integer.parseInt(datOUT[2]);
 			 calendar.set(godina, mjesec, dan);
 			Date datumCheckOut = calendar.getTime();
+			RezervacijaHotel povratna = new RezervacijaHotel();
+			
+			povratna.setDatumDolaska(datumCheckIn);
+			povratna.setDatumOdlaska(datumCheckOut);
 			
 			System.out.println("Daatum je "+datumCheckOut);
 			Hotel hotel = servis.findHotelById(id);
@@ -779,6 +801,8 @@ public class HotelController {
 			}
 			
 			ArrayList<Usluga> usluge = new ArrayList<Usluga>();
+			ArrayList<Usluga> popusti = new ArrayList<Usluga>();
+			
 			//preuzmi aktivni cjenovnik
 			PricelistHotel aktivni = null;
 			for(PricelistHotel ph:hotel.getCijenovnici()) {
@@ -796,6 +820,9 @@ public class HotelController {
 					for(Usluga usl:aktivni.getUsluge()) {
 						if(usl.getId() ==idUsluge) {
 							usluge.add(usl);
+							if(usl.getKonfiguracija().equals("da")) {
+								popusti.add(usl);
+							}
 							break;
 						}
 					}
@@ -803,11 +830,16 @@ public class HotelController {
 				
 			}
 			
+			if(popusti.size() != 0) {
+				popusti.sort(Comparator.comparingInt(Usluga :: getPopust));	
+			}
+			
 			RezervacijaHotel rez = new RezervacijaHotel();
 			rez.setDatumDolaska(datumCheckIn);
 			rez.setDatumOdlaska(datumCheckOut);
 			int dani = daysBetween(datumCheckIn, datumCheckOut);
 			int cijena = 0;
+			//popust na cijenu sobe dobija
 			for(int i = 0;i<sobe.size();i++) {
 				cijena += (dani*sobe.get(i).getCijena());
 			}
@@ -816,8 +848,15 @@ public class HotelController {
 					cijena += (dani*brLjudi*usluge.get(i).getCena());
 				}
 			}
-			rez.setCijena(cijena);
-			
+			if(popusti.size() == 0) {
+				rez.setCijena(cijena);
+				povratna.setCijena(cijena);
+			}else {
+				System.out.println(cijena);
+				int popustMax = popusti.get(0).getPopust();
+				rez.setCijena((int)(cijena*((100-popustMax)/100)));
+				povratna.setCijena((int)(cijena*((100-popustMax)/100)));
+			}
 			for(Room room:sobe) {
 				Room soba = room;
 				hotel.getSobe().remove(room);
@@ -840,7 +879,9 @@ public class HotelController {
 				hotel.getCijenovnici().add(aktivni);
 			}
 			servis.saveHotel(hotel);
-			return null;
+			System.out.println("cijena je "+povratna.getCijena());
+		
+			return povratna;
 		
 		}
 		
