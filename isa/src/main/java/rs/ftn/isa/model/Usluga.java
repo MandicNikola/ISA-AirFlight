@@ -34,7 +34,7 @@ public class Usluga {
 	private String naziv;
 	
 	@Column(name="cena", nullable = false)
-	private int cena;
+	private double cena;
 	
 	//u zavisnosti od toga na koliko se dana uzima auto cena varira
 	//ako je trajanje 5 dana , sve >=5 dana ima tu cenu
@@ -78,14 +78,14 @@ public class Usluga {
 	public Usluga() {}
 
 	
-	public Usluga(String naziv, int cena) {
+	public Usluga(String naziv, double cena) {
 		super();
 		this.naziv = naziv;
 		this.cena= cena;
 	}
 
 
-	public Usluga(Long id, String naziv, int cena) {
+	public Usluga(Long id, String naziv, double cena) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
@@ -101,7 +101,7 @@ public class Usluga {
 	}
 
 
-	public Usluga(String naziv, int cena, String kategorija) {
+	public Usluga(String naziv, double cena, String kategorija) {
 		super();
 		this.naziv = naziv;
 		this.cena = cena;
@@ -111,7 +111,7 @@ public class Usluga {
 	
 
 
-	public Usluga(String naziv, int cena, String konfiguracija, int popust) {
+	public Usluga(String naziv, double cena, String konfiguracija, int popust) {
 		super();
 		this.naziv = naziv;
 		this.cena = cena;
@@ -170,12 +170,12 @@ public class Usluga {
 	}
 
 
-	public int getCena() {
+	public double getCena() {
 		return cena;
 	}
 
 
-	public void setCena(int cena) {
+	public void setCena(double cena) {
 		this.cena = cena;
 	}
 

@@ -663,7 +663,7 @@ public class RentACarController {
 					return new ArrayList<Vehicle>();
 				}
 				Set<Usluga> usluge= cenovnik.getUsluge();
-				int cena=0;
+				double cena=0;
 				
 				ArrayList<Usluga> sortirane = new ArrayList<Usluga>();
 				for(Usluga u : usluge) {
@@ -671,7 +671,7 @@ public class RentACarController {
 						sortirane.add(u);
 					}
 				}
-				sortirane.sort(Comparator.comparingInt(Usluga :: getCena));
+				sortirane.sort(Comparator.comparingDouble(Usluga :: getCena));
 				
 				cena= sortirane.get(0).getCena(); //uzima se najmanja cena
 				for(int j = 0;j < sortirane.size();j++) {
@@ -685,7 +685,7 @@ public class RentACarController {
 				}
 				
 				System.out.println("Cena po danu je "+cena);
-				int ukupnaCena=brojDana*cena;
+				double ukupnaCena=brojDana*cena;
 				
 				if(dozvolaPickUp && dozvolaPutnici) {
 					vozilo.setCena(ukupnaCena);

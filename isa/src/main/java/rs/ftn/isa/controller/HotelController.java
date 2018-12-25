@@ -175,7 +175,7 @@ public class HotelController {
 			String cijenaStr = parts[1];
 			String hotelID = parts[2];
 			Long hotelId = Long.parseLong(hotelID);
-			int cijena = Integer.parseInt(cijenaStr);
+			double cijena = Double.parseDouble(cijenaStr);
 			Long uslugaId = Long.parseLong(uslugaID);
 			Hotel pom = servis.findHotelById(hotelId);	
 			   
@@ -319,7 +319,7 @@ public class HotelController {
 			String newPrice = parts[1];
 			String hotelID = parts[2];
 			Long hotelId = Long.parseLong(hotelID);
-			int cijena = Integer.parseInt(newPrice);
+			double cijena = Double.parseDouble(newPrice);
 			Long roomId = Long.parseLong(roomID);
 			   
 			Hotel pom = servis.findHotelById(hotelId);	
@@ -831,14 +831,14 @@ public class HotelController {
 			}
 			
 			if(popusti.size() != 0) {
-				popusti.sort(Comparator.comparingInt(Usluga :: getPopust));	
+				popusti.sort(Comparator.comparingDouble(Usluga :: getPopust));	
 			}
 			
 			RezervacijaHotel rez = new RezervacijaHotel();
 			rez.setDatumDolaska(datumCheckIn);
 			rez.setDatumOdlaska(datumCheckOut);
 			int dani = daysBetween(datumCheckIn, datumCheckOut);
-			int cijena = 0;
+			double cijena = 0;
 			//popust na cijenu sobe dobija
 			for(int i = 0;i<sobe.size();i++) {
 				cijena += (dani*sobe.get(i).getCijena());
@@ -852,10 +852,10 @@ public class HotelController {
 				rez.setCijena(cijena);
 				povratna.setCijena(cijena);
 			}else {
-				System.out.println(cijena);
-				int popustMax = popusti.get(0).getPopust();
-				rez.setCijena((int)(cijena*((100-popustMax)/100)));
-				povratna.setCijena((int)(cijena*((100-popustMax)/100)));
+				System.out.println("usao ovdje "+cijena);
+				double popustMax = popusti.get(0).getPopust();
+				rez.setCijena(cijena*((100-popustMax)/100));
+				povratna.setCijena(cijena*((100-popustMax)/100));
 			}
 			for(Room room:sobe) {
 				Room soba = room;

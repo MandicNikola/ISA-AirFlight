@@ -39,7 +39,7 @@ public class RezervacijaHotel {
 	private boolean zavrsena;
 	
 	@Column(nullable = false)
-	private int cijena;
+	private double cijena;
 	
 	
 	//jedan rezervacija moze da sadrzi vise soba
@@ -81,11 +81,11 @@ public class RezervacijaHotel {
 	}
 
 
-	public int getCijena() {
+	public double getCijena() {
 		return cijena;
 	}
 
-	public void setCijena(int cijena) {
+	public void setCijena(double cijena) {
 		this.cijena = cijena;
 	}
 
