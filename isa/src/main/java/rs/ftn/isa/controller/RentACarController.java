@@ -80,13 +80,18 @@ public class RentACarController {
 		 //proveravamo da li se neki rent-a-car zove tako
 		 List<RentACar> sviRent=servis.findAll();
 		 List<RentACar> nadjeniRent=new ArrayList<RentACar>();
-			
+			System.out.println("Dobio je adresu "+nazivGrad);
 		 for(RentACar R : sviRent) {
-			 if(R.getAdresa().equalsIgnoreCase(nazivGrad)) {
+			 System.out.println("Adresa je "+R.getAdresa());
+			 String naziv=nazivGrad.toLowerCase();
+			 String gradRent=R.getAdresa().toLowerCase();
+			 String nazivRenta=R.getNaziv().toLowerCase();
+			 
+			 if(gradRent.contains(naziv)) {
 				 System.out.println("Pronadjen rent po gradu" + R.getNaziv());
 				 nadjeniRent.add(R);
 			 }
-			 if(R.getNaziv().equalsIgnoreCase(nazivGrad)) {
+			 if(nazivRenta.contains(naziv)) {
 				 System.out.println("Pronadjen rent po nazivu" + R.getNaziv());
 				 nadjeniRent.add(R);
 			 }
@@ -524,9 +529,18 @@ public class RentACarController {
 		}
 		
 		RentACar provera =servis.findOneByNaziv(newRent.getNaziv());
-		if(provera!=null && provera.getId()!=newRent.getId()) {
+		System.out.println("Pronadjen ID JE "+provera.getId());
+		System.out.println("Id od starog servisa je "+newRent.getId());
+		if(provera!=null) {
 			System.out.println("Postoji vec taj  naziv rent");
-			return null;
+			String kljuc1=provera.getId().toString();
+			String kljuc2=newRent.getId().toString();
+			if(kljuc1.equals(kljuc2)) {
+				System.out.println("U pitanju je taj rent-a-car ");
+			}else {
+				System.out.println("U pitanju je drugi rent-a-car koji ima uneti naziv");
+					return null;
+			}
 		}
 		
 		rent.setAdresa(newRent.getAdresa());

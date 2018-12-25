@@ -161,8 +161,12 @@ function findRent(){
 			success : function(data) {
 				if(data == null){
 					console.log('Prazno');
+					$("#ispisiTabelu").empty();
+					 
 				}else if(data.length==0){
 					console.log('Prazno');
+					$("#ispisiTabelu").empty();
+					 
 				}else{
 
 					console.log('Ima vozila');
