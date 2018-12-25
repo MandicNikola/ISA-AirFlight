@@ -39,6 +39,18 @@ public class RentACarController {
 	public List<RentACar> getAllRents(){		
 		return  servis.findAll();
 	}
+	@RequestMapping(value="/findRents/{podatak}",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<RentACar> findRents(@PathVariable String podatak){
+		
+		System.out.println("Usao u find rents "+podatak);
+		String[] niz=podatak.split("=");
+		String nazivGrad = niz[0];
+		String startDat=niz[1];
+		String endDat=niz[2];
+		return  null;
+	}
 	
 	@RequestMapping(value="/newrentacar",
 			method = RequestMethod.POST,
