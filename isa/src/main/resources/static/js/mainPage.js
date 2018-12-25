@@ -152,6 +152,24 @@ $(document).on("mouseleave", ".hoverName",function(){
 		
 	
 });
+$(document).ready(function(){
+	   $("li#odjava").click(function(){
+	    	console.log("usao u funkciju");
+	    	sessionStorage.setItem("ulogovan",null);
+	    	$.ajax({
+	    		method:'POST',
+	    		url: "/api/korisnici/logout",
+	    		success: function(ime){ 			
+					window.location.href = 'mainPage.html';
+
+	    		},
+	    		error : function(XMLHttpRequest, textStatus, errorThrown) {
+	    			alert("Greska");
+	    		}	});
+	 
+	    
+	    });
+});
 function visitCar(id){
 	console.log('Usao u visitCar, dobio id: '+id);
 	window.location="profileCar.html?id="+id;

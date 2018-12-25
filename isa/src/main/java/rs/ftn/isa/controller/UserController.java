@@ -123,6 +123,24 @@ public class UserController {
 		return "success";
 	}
 
+	@RequestMapping(value="/logout",
+			method = RequestMethod.POST)
+	public User odjava(@Context HttpServletRequest request){
+			
+		User korisnik = (User)request.getSession().getAttribute("ulogovan");		
+		
+		System.out.println("Usao u funkciju logour");
+		
+		request.getSession().invalidate();
+		if(korisnik == null) {
+			return null;
+		}
+		
+		return korisnik;
+	
+	
+	}
+
 	@RequestMapping(value="/aktiviraj/{mail}",
 				method = RequestMethod.GET)
 	public String activateUser(@PathVariable String mail){
