@@ -98,7 +98,7 @@ public class RentACarController {
 			 for(Filijala F : R.getFilijale()) {
 				 
 				 	for(Vehicle V : F.getVozila()) {
-				 			
+				 		
 				 		Set<RezervacijaRentCar> rezervacije = V.getRezervacije(); 
 						
 						//Provera 1 --> 
