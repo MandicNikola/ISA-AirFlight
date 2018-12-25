@@ -891,7 +891,7 @@ public class HotelController {
 	 }
 		 //metoda koja radi pretragu hotela sa pocetne strane
 		 @RequestMapping(value="/pronadjiHotele/{info}",
-					method = RequestMethod.GET,
+					method = RequestMethod.POST,
 					consumes = MediaType.APPLICATION_JSON_VALUE,
 					produces = MediaType.APPLICATION_JSON_VALUE)
 public ArrayList<Hotel> pronadjiHotele(@RequestBody ReservationHotelDTO rez,@PathVariable String info){
