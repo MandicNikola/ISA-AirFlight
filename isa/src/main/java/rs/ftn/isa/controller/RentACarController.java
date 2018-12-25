@@ -42,6 +42,7 @@ public class RentACarController {
 	public List<RentACar> getAllRents(){		
 		return  servis.findAll();
 	}
+	//pretraga svih rent servisa po nazivu ili gradu, i vremenskom periodom
 	@RequestMapping(value="/findRents/{podatak}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
@@ -94,46 +95,54 @@ public class RentACarController {
 		 List<RentACar> povratniRent=new ArrayList<RentACar>();
 			
 		 for(RentACar R : nadjeniRent) {
-			 
+			 //indikator da li postoji vozilo u filijali koje zadovoljava uslov
+			 boolean postojiVozilo = false;
 			 for(Filijala F : R.getFilijale()) {
 				 
 				 	for(Vehicle V : F.getVozila()) {
+				 		//proveravamo da li je makar jedno vozilo iz rent-servisa
+				 		//slobodno u izabranom terminu, ako jeste taj Rent prikazujemo korisniku
 				 		
 				 		Set<RezervacijaRentCar> rezervacije = V.getRezervacije(); 
-						
+				 		if(rezervacije.size()==0) {
+				 			postojiVozilo=true;
+				 			//vozilo nema rezervacija slobodno je 
+				 		}
 						//Provera 1 --> 
 						//ako je nas datum preuzimanja pre datuma vracanja iz rezervacije,
 						//Provera 2 --> 
 						//onda gledamo da li je i datum vracanja naseg vozila nakon datuma preuzimanja iz
 						//rezervacije
 						
-						boolean dozvolaPickUp = true;
 						//prolazimo kroz sve rezervacije koje su napravljene za ovo vozilo
-						/*for(RezervacijaRentCar rez : rezervacije) {	
+						for(RezervacijaRentCar rez : rezervacije) {	
 							//ako je datum preuzimanja vozila pre datuma vracanja iz rezervacije
-							if(rezervacija.getPickUp().before(R.getDatumVracanja())) {
-								System.out.println("provera1-> Datum preuzimanja je pre datuma vracanja iz liste rezervacije");
+							if(datPreuzimanja.before(rez.getDatumVracanja())) {
 								 //datum vracanja auta posle datuma preuzimanja iz rezervacije, preklapaju se termini, vozilo nam ne odgovara
-									if(rezervacija.getDropOff().after(R.getDatumPreuzimanja())){
-										dozvolaPickUp = false;
+									if(datVracanje.after(rez.getDatumPreuzimanja())){
 										System.out.println("provera2--> Datum vracanja je posle datuma preuzimanja iz rezervacije");
+									}else {
+										postojiVozilo=true;
 									}
+							}else {
+								postojiVozilo=true;
 							}
 							
 						}
-						*/
 						
 				 	}
+			 }
+			 //prosli smo kroz sva vozila svih filijali dovoljno je da je jedno vozilo ispunilo uslove
+			 if(postojiVozilo) {
+				 povratniRent.add(R);
 			 }
 		 }
 		
 		
-		
-		
-		
-		return  null;
+		return  povratniRent;
 	}
 	
+	//dodavanje novog servisa
 	@RequestMapping(value="/newrentacar",
 			method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -159,35 +168,7 @@ public class RentACarController {
 		return rentServis;
 	}
 
-	
-	/*@RequestMapping(value="/postavivozilo/{id}",
-			method = RequestMethod.POST,
-			consumes = MediaType.APPLICATION_JSON_VALUE
-			)
-	public @ResponseBody RentACar postaviVozilo(@PathVariable Long id, @RequestBody Vehicle vozilo){
-	
-		RentACar rentServis = servis.findOneById(id);		
-		System.out.println("Pronasao rent servis "+ rentServis.getNaziv());
-		
-		Vehicle novo = vozilo;
-		System.out.println(novo.getNaziv() + " " + novo.getCena());
-		System.out.println(novo.toString());
-		
-		
-		novo.setServisrent(rentServis);
-		Set<Vehicle> vozilaLista=rentServis.getVozila(); 
-		vozilaLista.add(novo);
-		rentServis.setVozila(vozilaLista);
-		
-	    //baza prilikom cuvanja izmeni id
-		RentACar povratna = servis.saveRentACar(rentServis);
-		
-		System.out.println("NOVI id od vozila je "+povratna.getId());
-		//treba mi za povratak na profil od ovog rent-a-car-a
-		String br=povratna.getId().toString();
-		povratna.setAdresa(br);
-		return povratna;
-	}*/
+//nastavak dodavanja vozila u filijalu
 	@RequestMapping(value="/poveziFilijalu/{podatak}",
 			method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE
@@ -235,6 +216,7 @@ public class RentACarController {
 		povratna.setAdresa(br);
 		return povratna;
 	}
+	//dodavanje filijale
 	@RequestMapping(value="/postavifilijalu/{id}",
 			method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE
@@ -262,6 +244,7 @@ public class RentACarController {
 		return povratna;
 	}
 	
+	//vrati filijalu odredjenog rent-a-car servisa
 	@RequestMapping(value="/getFilijale/{id}", method = RequestMethod.GET)
 	public  @ResponseBody ArrayList<Filijala> vratiFilijale(@PathVariable Long id){	
 		ArrayList<Filijala> rezultat = new ArrayList<Filijala>();
@@ -287,6 +270,7 @@ public class RentACarController {
 		}
 		return cenovnik;
 	}
+	
 	//vraca usluge odredjenog servisa odredjene kategorije
 	@RequestMapping(value="/katUsluge/{pom}", method = RequestMethod.GET)
 	public  @ResponseBody ArrayList<Usluga> vratiUslugeKategorije(@PathVariable String pom){	
@@ -295,7 +279,7 @@ public class RentACarController {
 		Long id = Long.parseLong(niz[0]);
 		String kat=niz[1];
 		
-		RentACar rent = servis.findOneById(id);
+		//vraca aktivni cenovnik odredjenog rent-a-car servisa
 		PricelistRentCar cenovnik =servis.findAktivanCenovnik(id);
 		
 		if(cenovnik == null) {
@@ -329,7 +313,7 @@ public class RentACarController {
 	}
 	
 	
-	
+	//vraca sva vozila odredjenog rent-a-car servisa
 	@RequestMapping(value="/getVozila/{id}", method = RequestMethod.GET)
 	public  List<Vehicle> vratiVozila(@PathVariable Long id){	
 		ArrayList<Vehicle> rezultat = new ArrayList<Vehicle>();
@@ -384,11 +368,11 @@ public class RentACarController {
 			noviCenovnik.setAktivan(true);
 			
 			int dana = Integer.parseInt(trajanje);
-			Usluga uslugaA = new Usluga(Integer.parseInt(cenaA),dana, "A");
-			Usluga uslugaB = new Usluga( Integer.parseInt(cenaB),dana, "B");
-			Usluga uslugaC = new Usluga( Integer.parseInt(cenaC),dana, "C");
-			Usluga uslugaD = new Usluga( Integer.parseInt(cenaD),dana, "D");
-			Usluga uslugaE = new Usluga( Integer.parseInt(cenaE),dana, "E");
+			Usluga uslugaA = new Usluga(Double.parseDouble(cenaA),dana, "A");
+			Usluga uslugaB = new Usluga(Double.parseDouble(cenaB),dana, "B");
+			Usluga uslugaC = new Usluga(Double.parseDouble(cenaC),dana, "C");
+			Usluga uslugaD = new Usluga(Double.parseDouble(cenaD),dana, "D");
+			Usluga uslugaE = new Usluga(Double.parseDouble(cenaE),dana, "E");
 			
 			uslugaA.setLista(noviCenovnik);
 			uslugaB.setLista(noviCenovnik);
@@ -420,11 +404,11 @@ public class RentACarController {
 
 			int dana = Integer.parseInt(trajanje);
 			
-			Usluga uslugaA = new Usluga(Integer.parseInt(cenaA),dana, "A");
-			Usluga uslugaB = new Usluga( Integer.parseInt(cenaB),dana, "B");
-			Usluga uslugaC = new Usluga( Integer.parseInt(cenaC),dana, "C");
-			Usluga uslugaD = new Usluga( Integer.parseInt(cenaD),dana, "D");
-			Usluga uslugaE = new Usluga( Integer.parseInt(cenaE),dana, "E");
+			Usluga uslugaA = new Usluga(Double.parseDouble(cenaA),dana, "A");
+			Usluga uslugaB = new Usluga( Double.parseDouble(cenaB),dana, "B");
+			Usluga uslugaC = new Usluga( Double.parseDouble(cenaC),dana, "C");
+			Usluga uslugaD = new Usluga(Double.parseDouble(cenaD),dana, "D");
+			Usluga uslugaE = new Usluga( Double.parseDouble(cenaE),dana, "E");
 			
 			uslugaA.setLista(cenovnik);
 			uslugaB.setLista(cenovnik);
@@ -455,7 +439,7 @@ public class RentACarController {
 	
 	}	
 	
-	
+	//izmena jedne usluge odredjene kategorije
 	@RequestMapping(value="/izmeniUslugu/{pomocna}", 
 			method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_VALUE)
@@ -472,7 +456,7 @@ public class RentACarController {
 				System.out.println("Usao u izmeniUslugu "+ rent.getNaziv());
 				//System.out.println("id je "+id+", naziv je "+naziv+ "cene : "+cenaA +" "+cenaB+ " "+cenaC+ " "+cenaD+ " "+cenaE);
 				
-				if(Integer.parseInt(novaVrednost) <=0) {
+				if(Double.parseDouble(novaVrednost) <=0) {
 					return null;
 				}
 				
@@ -501,7 +485,7 @@ public class RentACarController {
 						noviCenovnik.getUsluge().add(usl);
 				}
 			
-				stara.setCena(Integer.parseInt(novaVrednost));
+				stara.setCena(Double.parseDouble(novaVrednost));
 				stara.setLista(noviCenovnik);
 				noviCenovnik.getUsluge().add(stara);
 				
@@ -645,8 +629,6 @@ public class RentACarController {
 						System.out.println("Ne mogu stati putnici");
 				}
 				
-				int brojDana = daysBetween(rezervacija.getPickUp(), rezervacija.getDropOff());
-				System.out.println("Broj dana je "+brojDana);
 				
 				PricelistRentCar cenovnik = servis.findAktivanCenovnik(rent.getId());
 				if(cenovnik==null) {
@@ -672,6 +654,9 @@ public class RentACarController {
 					}
 				}
 				sortirane.sort(Comparator.comparingDouble(Usluga :: getCena));
+				int brojDana = daysBetween(rezervacija.getPickUp(), rezervacija.getDropOff());
+				System.out.println("Broj dana je "+brojDana);
+				
 				
 				cena= sortirane.get(0).getCena(); //uzima se najmanja cena
 				for(int j = 0;j < sortirane.size();j++) {
