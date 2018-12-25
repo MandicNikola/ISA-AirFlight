@@ -159,10 +159,14 @@ function findRent(){
 			type : 'GET',
 			url : "/api/rents/findRents/"+podatak,
 			success : function(data) {
-				if(data != null){
-					console.log('pronadjeni')
-				}else{
+				if(data == null){
 					console.log('Prazno');
+				}else if(data.length==0){
+					console.log('Prazno');
+				}else{
+
+					console.log('Ima vozila');
+					ispisiAutoservise(data);
 				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown){
