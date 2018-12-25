@@ -120,7 +120,7 @@ public class Usluga {
 	}
 
 
-	public int getPopust() {
+	public double getPopust() {
 		return popust;
 	}
 
