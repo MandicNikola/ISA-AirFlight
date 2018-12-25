@@ -32,6 +32,7 @@ $(document).on('submit','.logovanje',function(e){
 							 alert("Morate prvo aktivirati nalog.");
 								
 						}else{
+							sessionStorage.setItem('ulogovan',JSON.stringify(pov));
 							window.location.href = "mainpage.html";
 						
 						}

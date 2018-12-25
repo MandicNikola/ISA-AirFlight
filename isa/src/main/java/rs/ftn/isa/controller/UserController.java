@@ -1,5 +1,7 @@
 package rs.ftn.isa.controller;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +26,7 @@ import rs.ftn.isa.dto.UserDTO;
 import rs.ftn.isa.model.*;
 import rs.ftn.isa.service.EmailService;
 import rs.ftn.isa.service.UserService;
+import rs.ftn.isa.model.Role;
 
 @RestController
 @RequestMapping(value="api/korisnici")
@@ -65,7 +68,17 @@ public class UserController {
 		
 		if(provera == null) {	
 			System.out.println("Provera je null");
-		    User newUser= new User(novi.getIme(),novi.getPrezime(), novi.getMail(), novi.getTelefon(),novi.getGrad(),novi.getLozinka());
+			String password="";
+		    try {
+				 password = enkriptuj(novi.getLozinka());
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				password=novi.getLozinka();
+				e.printStackTrace();
+			}
+		    
+			User newUser= new User(novi.getIme(),novi.getPrezime(), novi.getMail(), novi.getTelefon(),novi.getGrad(),password);
+		    
 		    newUser.setVerifikovan("ne");
 			servis.saveUser(newUser);
 			
@@ -77,6 +90,23 @@ public class UserController {
 			return provera;
 		}
 	}	
+	
+	public String enkriptuj(String sifra) throws NoSuchAlgorithmException {
+		System.out.println("Usao da enkriptuje sifru " + sifra );
+		MessageDigest md = MessageDigest.getInstance("SHA-256"); 
+		  
+		 //pretvori sifru  u bajte
+         byte[] messageDigest = md.digest(sifra.getBytes()); 
+         
+         StringBuilder sb = new StringBuilder();
+         for (byte b : messageDigest) {
+             sb.append(String.format("%02x", b));
+         }
+        String povratna=sb.toString();
+        System.out.println("Rezultat enkripcije je "+povratna);
+    	
+        return povratna;
+	}
 	
 	@RequestMapping(value="/verifikacija/{mail}",
 				method = RequestMethod.GET)
@@ -100,7 +130,8 @@ public class UserController {
 		User user = servis.findUserByMail(mail);
 		//slanje emaila
 		user.setVerifikovan("da");	
-	    servis.removeUser(user.getId());
+		user.setTip(Role.REGISTROVAN);
+	    //servis.removeUser(user.getId());
 	    
 	    servis.saveUser(user);
 		//servis.verifikujKorisnika("da", mail);
@@ -125,16 +156,25 @@ public class UserController {
 				user.setVerifikovan("aktivacija");
 				return user;
 		}
+		String sifra = lozinka;
 		
-		
-		if(!user.getLozinka().equals(lozinka)) {
+	/*	try {
+			sifra = enkriptuj(lozinka);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
+		if(!user.getLozinka().equals(sifra)) {
 			//moraju se poklapati unesena lozinka i lozinka od korisnika sa unetim mailom 
 				user.setVerifikovan("");
 				return user;
 		}
 		
-		HttpSession session = request.getSession();
-		session.setAttribute("ulogovan", user);
+		System.out.println("Uspesno logovanje -> uneta loznika je "+lozinka);
+		System.out.println("Enktiptovana lozinka je "+sifra);
+		
+		request.getSession().setAttribute("ulogovan", user);
 		
 		System.out.println("Ulogovan je korisnik "+ user.getIme());
 		

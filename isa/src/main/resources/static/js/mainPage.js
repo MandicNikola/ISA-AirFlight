@@ -1,9 +1,19 @@
-/**
- * 
- */
-
 function onLoad(){
+	var user = sessionStorage.getItem("ulogovan");
+	console.log(user);
+	console.log('provera logovanja');
 	
+	if(user!=null && user!="null" && user!="undefined") {
+		console.log("Postoji ulogovan korisnik");
+		$("#logovanje").hide();
+		var korisnik = JSON.parse(user);
+		$("#imeKorisnika").text(korisnik.ime);
+	
+	}else{
+		$("#prikazKorisnika").hide();
+		$("#odjava").hide();
+			
+	}
 	$("#pozadinaAuto").hide();
 	$("#pozadinaHotel").hide();
 	$("#reserveCar").hide();

@@ -6,6 +6,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -42,8 +44,9 @@ public class User {
 	@Column(name="lozinka")
 	private String lozinka;
 	
+	@Enumerated(EnumType.STRING)
 	@Column(name="tip")
-	private String tip;
+	private Role tip;
 
 
 	//liste veza relacija u kojima se nalazi korisnik
@@ -89,6 +92,19 @@ public class User {
 		this.grad = grad;
 		this.verifikovan = verifikovan;
 		this.lozinka = lozinka;
+		this.tip = Role.valueOf(tip);
+	}
+
+
+
+	public User(String ime, String prezime, String mail, int telefon, String grad, String lozinka, Role tip) {
+		super();
+		this.ime = ime;
+		this.prezime = prezime;
+		this.mail = mail;
+		this.telefon = telefon;
+		this.grad = grad;
+		this.lozinka = lozinka;
 		this.tip = tip;
 	}
 
@@ -102,17 +118,21 @@ public class User {
 		this.telefon = telefon;
 		this.grad = grad;
 		this.lozinka = lozinka;
-		this.tip = "nereg";
+		this.tip = Role.NEREGISTROVAN;
 	}
 
 
-	public String getTip() {
+
+
+
+
+	public Role getTip() {
 		return tip;
 	}
 
 
 
-	public void setTip(String tip) {
+	public void setTip(Role tip) {
 		this.tip = tip;
 	}
 
