@@ -176,13 +176,13 @@ public class UserController {
 		}
 		String sifra = lozinka;
 		
-	/*	try {
+		try {
 			sifra = enkriptuj(lozinka);
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		*/
+		
 		if(!user.getLozinka().equals(sifra)) {
 			//moraju se poklapati unesena lozinka i lozinka od korisnika sa unetim mailom 
 				user.setVerifikovan("");
