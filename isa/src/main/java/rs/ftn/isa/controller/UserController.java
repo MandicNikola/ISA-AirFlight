@@ -123,6 +123,24 @@ public class UserController {
 		return "success";
 	}
 
+	@RequestMapping(value="/logout",
+			method = RequestMethod.POST)
+	public User odjava(@Context HttpServletRequest request){
+			
+		User korisnik = (User)request.getSession().getAttribute("ulogovan");		
+		
+		System.out.println("Usao u funkciju logour");
+		
+		request.getSession().invalidate();
+		if(korisnik == null) {
+			return null;
+		}
+		
+		return korisnik;
+	
+	
+	}
+
 	@RequestMapping(value="/aktiviraj/{mail}",
 				method = RequestMethod.GET)
 	public String activateUser(@PathVariable String mail){
@@ -158,13 +176,13 @@ public class UserController {
 		}
 		String sifra = lozinka;
 		
-	/*	try {
+		try {
 			sifra = enkriptuj(lozinka);
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		*/
+		
 		if(!user.getLozinka().equals(sifra)) {
 			//moraju se poklapati unesena lozinka i lozinka od korisnika sa unetim mailom 
 				user.setVerifikovan("");

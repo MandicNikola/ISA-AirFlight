@@ -118,6 +118,60 @@ function ispisiAutoservise(lista){
 	 
 	
 }
+function findRent(){
+	var ispravno = true;
+	
+	$("#errorName").text("");
+	$("#errorKraj").text("");
+	$("#errorPocetak").text("");
+	
+	console.log('usao u findRent');
+	var grad=$("#nameRent").val();
+	
+	if(grad == ""){
+		ispravno = false;
+		$("#errorName").text(" Fill out this field").css('color', 'red');
+	}
+	
+	var pocetak=$("#pocetak").val();
+	if(pocetak == ""){
+		ispravno = false;
+		$("#errorPocetak").text(" Fill out this field").css('color', 'red');
+	}
+	var kraj=$("#kraj").val();
+	if(kraj == ""){
+		ispravno=false;
+		$("#errorKraj").text(" Fill out this field").css('color', 'red');
+	}
+	var date1 = Date.parse(pocetak);
+	var date2 = Date.parse(kraj);
+	if (date1 > date2) {
+		$("#errorKraj").text("Drop-off date must be greater than pick-up date").css('color', 'red');
+		ispravno=false;
+	}
+	console.log(grad + " , "+pocetak+" , "+kraj);
+
+	if(ispravno){
+		
+		var podatak=grad+"="+pocetak+"="+kraj;
+		
+		$.ajax({
+			type : 'GET',
+			url : "/api/rents/findRents/"+podatak,
+			success : function(data) {
+				if(data != null){
+					console.log('pronadjeni')
+				}else{
+					console.log('Prazno');
+				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				alert('greska');
+			}
+		});
+		
+	}
+}
 function izmeniRent(id){
 	window.location = "izmeniRent.html?id="+id;
 
@@ -151,6 +205,25 @@ $(document).on("mouseleave", ".hoverName",function(){
     $(this).css("color", "black");
 		
 	
+});
+$(document).ready(function(){
+	   $("li#odjava").click(function(){
+	    	console.log("usao u funkciju");
+	    	sessionStorage.setItem("ulogovan",null);
+	    	$.ajax({
+	    		method:'POST',
+	    		url: "/api/korisnici/logout",
+	    		success: function(ime){ 			
+					window.location.href = 'mainPage.html';
+
+	    		},
+	    		error : function(XMLHttpRequest, textStatus, errorThrown) {
+	    			alert("Greska");
+	    		}	});
+	 
+	    
+	    });
+	   	
 });
 function visitCar(id){
 	console.log('Usao u visitCar, dobio id: '+id);
