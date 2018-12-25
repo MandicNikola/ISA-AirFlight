@@ -158,13 +158,13 @@ public class UserController {
 		}
 		String sifra = lozinka;
 		
-		try {
+	/*	try {
 			sifra = enkriptuj(lozinka);
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		*/
 		if(!user.getLozinka().equals(sifra)) {
 			//moraju se poklapati unesena lozinka i lozinka od korisnika sa unetim mailom 
 				user.setVerifikovan("");
@@ -174,8 +174,7 @@ public class UserController {
 		System.out.println("Uspesno logovanje -> uneta loznika je "+lozinka);
 		System.out.println("Enktiptovana lozinka je "+sifra);
 		
-		HttpSession session = request.getSession();
-		session.setAttribute("ulogovan", user);
+		request.getSession().setAttribute("ulogovan", user);
 		
 		System.out.println("Ulogovan je korisnik "+ user.getIme());
 		
