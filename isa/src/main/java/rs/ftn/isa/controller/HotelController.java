@@ -891,14 +891,16 @@ public class HotelController {
 	 }
 		 //metoda koja radi pretragu hotela sa pocetne strane
 		 @RequestMapping(value="/pronadjiHotele/{info}",
-					method = RequestMethod.GET,
+					method = RequestMethod.POST,
 					consumes = MediaType.APPLICATION_JSON_VALUE,
 					produces = MediaType.APPLICATION_JSON_VALUE)
-			public ArrayList<Hotel> pronadjiHotele(@RequestBody ReservationHotelDTO rez,@PathVariable String info){
+public ArrayList<Hotel> pronadjiHotele(@RequestBody ReservationHotelDTO rez,@PathVariable String info){
+			
+			 System.out.println("Usao u pronadji hotele "+info);
 			 ArrayList<Hotel> povratna = new ArrayList<Hotel>();
 			 List<Hotel> hoteli = servis.findAll();
 			 for(Hotel hotel:hoteli) {
-				if(hotel.getAdresa().equalsIgnoreCase(info) ) {
+				if(hotel.getAdresa().equalsIgnoreCase(info) || hotel.getNaziv().equalsIgnoreCase(info)) {
 					for(Room soba:hotel.getSobe()) {
 						//provjera za sobu da li zadovoljava uslove
 						Room room = soba;
@@ -929,7 +931,9 @@ public class HotelController {
 						
 						//odobrena je soba
 						if(odobrenCheckIN == true || odobrenCheckOUT == true) {
-							System.out.println("odobrena soba");
+							System.out.println("odobrena soba pa i hotel");
+							povratna.add(hotel);
+							break;
 						}
 						
 					}
@@ -937,10 +941,10 @@ public class HotelController {
 				} 
 				 
 			 }
-			 System.out.println("Usao u pronadji hotele "+info);
-				String naziv = info;
-				
-				
-				return null;
+			 	if(povratna.size() == 0) {
+			 		return new ArrayList<Hotel>();
+			 	}else {
+			 		return povratna;
+			 	}
 		 }
 }

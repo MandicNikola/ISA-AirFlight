@@ -215,8 +215,8 @@ function findHotels(){
 	if(ispravno){
 		
 		$.ajax({
-			type : 'GET',
-			url : "/api/hoteli/pronadjiHotele/"+grad,
+			type : 'POST',
+			url : "/api/hoteli/pronadjiHotele/"+hotel,
 			contentType : 'application/json',
 			dataType : "json",
 			data:preuzmiPodatke(),
@@ -224,13 +224,13 @@ function findHotels(){
 					
 					if(data == null){
 						console.log('nisu pronadjeni')
-						
+						nemaHotela();
 					}else if(data.length  == 0){
 						console.log('nisu pronadjeni')
-						
+						nemaHotela();
 					}else{
 						console.log('pronadjeni')
-						
+						ispisiHotele(data);
 					}	
 			},
 			error : function(XMLHttpRequest, textStatus, errorThrown) {
@@ -248,6 +248,21 @@ function preuzmiPodatke() {
 		"checkOut":$('#hotelCheckOut').val()
 	});
 	return kat;
+}
+function ispisiHotele(lista){
+	console.log('usao u ispisi hotele u js kad pretrazuje hotele');
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	$("#ispisiTabelu").empty();
+	$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaHotel\" ><tr><th> Name </th><th> Promotional description</th><th>Grade</th><th></th><th></th></tr>");
+		
+		$.each(pom, function(index, servis) {
+			$("#tabelaHotel").append("<tr><td class=\"hoverName\" onclick=\"hotelProfil('"+servis.id+"')\">"+servis.naziv+"</td><td > "+servis.opis+"</td><td > "+servis.ocena+"</td><td><button  class=\"btn btn-dark\" onclick=\"changeHotel('"+servis.id+"')\">Change</button></td><td><button  class=\"btn btn-dark\" onclick=\"deleteHotel('"+servis.id+"')\">Delete</button></td></tr>");
+		});
+	 $("#ispisiTabelu").append("</table>");
+}
+function nemaHotela(){
+	$("#ispisiTabelu").empty();
+	$("#ispisiTabelu").append("<div id=\"nemaPonuda\"><p><h2>Unfortunately we don't have rigth offer for you.</h2></p></div>");
 }
 function izmeniRent(id){
 	window.location = "izmeniRent.html?id="+id;
@@ -316,7 +331,6 @@ function addPlane(){
 }
 function addHotel(){
 	window.location = "newHotel.html";
-	
 	
 }
 function addCarHire(){
