@@ -83,11 +83,15 @@ public class RentACarController {
 			System.out.println("Dobio je adresu "+nazivGrad);
 		 for(RentACar R : sviRent) {
 			 System.out.println("Adresa je "+R.getAdresa());
-			 if(R.getAdresa().equalsIgnoreCase(nazivGrad)) {
+			 String naziv=nazivGrad.toLowerCase();
+			 String gradRent=R.getAdresa().toLowerCase();
+			 String nazivRenta=R.getNaziv().toLowerCase();
+			 
+			 if(gradRent.contains(naziv)) {
 				 System.out.println("Pronadjen rent po gradu" + R.getNaziv());
 				 nadjeniRent.add(R);
 			 }
-			 if(R.getNaziv().equalsIgnoreCase(nazivGrad)) {
+			 if(nazivRenta.contains(naziv)) {
 				 System.out.println("Pronadjen rent po nazivu" + R.getNaziv());
 				 nadjeniRent.add(R);
 			 }
