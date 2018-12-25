@@ -48,4 +48,7 @@ public class Flight {
 	@JsonIgnore
 	private  Set<Ticket> karte = new HashSet<Ticket>();
 	
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private AirPlane plane;
+	
 }

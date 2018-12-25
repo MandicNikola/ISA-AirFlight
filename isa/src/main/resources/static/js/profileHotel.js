@@ -645,6 +645,7 @@ function dodUsluga() {
 	});
 	return kat;
 }
+//ispisuje ponudu za pretrazene dane
 function izlistajPonudu(){
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);
@@ -656,7 +657,6 @@ function izlistajPonudu(){
 	
 	$("#reserveHotel").hide();
 	$("#korak").empty();
-	
 	$("#korak").append("<p><h2>Offers </h2></p>");
 	$("#korak").append("<p>FROM <span id=\"pocetak\">"+pocetak+"</span>TO <span id=\"kraj\">"+kraj+"</span></p>");
 	$("#korak").append("<p>FOR <span id=\"osobe\">"+osobe+"</span>  passengers</p>");
@@ -685,7 +685,6 @@ function izlistajPonudu(){
 		}
 	});
 
-	
 }
 
 function preuzmiPodatke() {
@@ -709,10 +708,8 @@ function ispisiPonude(lista){
 	console.log('ima ponuda');
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	
-	//$("#korak").empty();
 	 $("#korak").show();
 
-	// $("#reserveHotel").hide();
 	 $("#korak").append("<table class=\"table table-hover\" id=\"tabelaSoba\" ><tr><th>Room type </th><th>Capacity</th><th>Floor</th><th>Balkony</th><th>Price per night</th><th>Select</th></tr>");
 		
 
@@ -730,7 +727,6 @@ function ispisiPonude(lista){
 
 	   $(".cekiraj").change(function (event) {  
            event.preventDefault();
-           //do something
            
            var sList="";
      	  
@@ -742,12 +738,9 @@ function ispisiPonude(lista){
      		   
      		});
      	  if(sList==""){
-     		  console.log('zabranio');
-           $("#predjiNaDodatne").prop('disabled', true);
+     		  $("#predjiNaDodatne").prop('disabled', true);
      	  }else{
-
-     		  console.log('nije zabranio');
-     		 $("#predjiNaDodatne").prop('disabled', false);
+     		  $("#predjiNaDodatne").prop('disabled', false);
 	     	    
      	  }
      });
@@ -755,7 +748,9 @@ function ispisiPonude(lista){
 }
 function povratakPretraga(){
 	 $("#korak").hide();
-     $("#reserveHotel").show();	
+	 $("#korak").empty();
+	conole.log('pritisnuo back'); 
+	 $("#reserveHotel").show();	
 	
 }
 
@@ -843,7 +838,7 @@ function zavrsiRez(nizSoba){
 	  var adresa = window.location.search.substring(1);
 		console.log('adesa je '+adresa);
 		var id = adresa.split('=')[1];
-		
+		//ovo treba da obradim da vrati podatke
 	  
 	  $.ajax({
 			type : 'POST',
