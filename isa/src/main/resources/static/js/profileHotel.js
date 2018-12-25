@@ -813,18 +813,25 @@ function korak4bezUsluga(niz){
 }
 function korak4ispis(data,niz){
 	   $("#korak").hide();	
-	   
+	 
 	  	
 	   $("#korakDodatne").show();	
 	   $("#reserveHotel").hide();
 	   var lista = data == null ? [] : (data instanceof Array ? data : [ data ]);
 			
-		$("#korakDodatne").append("<table class=\"table table-hover\" id=\"tblDodatne\" ><tr><th>Service name </th><th>Rate</th><th></th></tr>");
+		$("#korakDodatne").append("<table class=\"table table-hover\" id=\"tblDodatne\" ><tr><th>Service name </th><th>Rate</th><th data-toggle=\"tooltip\" data-placement=\"top\" title=\"We will count the biggest discount for you\">Discount(%)</th></th><th></th></tr>");
 		$.each(lista, function(index, usluga) {
-				$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td>"+usluga.cena+"</td><td><input type=\"checkbox\" name= \"cekiraneUsluge\" id=\""+usluga.id+"\" value=\""+usluga.id+"\"></td></tr>");
+			if(usluga.konfiguracija == 'da'){
+				$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td>"+usluga.cena+"</td><td>"+usluga.popust+"</td><td><input type=\"checkbox\" name= \"cekiraneUsluge\" id=\""+usluga.id+"\" value=\""+usluga.id+"\"></td></tr>");
+			}else{
+				$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td>"+usluga.cena+"</td><td></td><td><input type=\"checkbox\" name= \"cekiraneUsluge\" id=\""+usluga.id+"\" value=\""+usluga.id+"\"></td></tr>");
+				
+			}
 		});
 	    $("#korakDodatne").append("</table>");                                                                                                     
 	    $("#korakDodatne").append("<p><button type=\"button\" onclick = \"povratakSobe()\" class=\"btn btn-outline-secondary\">Back</button><button onclick = \"zavrsiRez("+niz+")\" type=\"button\" class=\"btn btn-success\">Finish</button></p>")
+	   
+	   
 }
 function povratakSobe(){
 	 //praznim cekirano ne treba da cuva stanje
@@ -893,17 +900,17 @@ function zavrsiRez(nizSoba){
 			type : 'POST',
 			url : "/api/hoteli/rezervisi/"+info+"/sobe/"+nizSoba+"/nizUsluga/"+listaUsl+"/idHotela/"+id,
 			success : function(povratna) {
-						if(povratna.length==0){
-							console.log('neuspjesno');
-						}else if(povratna == 0){
-							console.log('neuspjesno');
-						}else{
-							console.log('uspjesno');
-						}
+					ispisiUspjesno(povratna);		
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown){
 				alert('greska');
 			}
 			});
 	  
+}
+function ispisiUspjesno(data){
+	 
+	$("#korakDodatne").empty();
+	$("#korakDodatne").append("<div id= \"obavj\"><p>You have successfully made a reservation.</p><p>Total price:"+data.cijena+"</p><p>We are looking forward to have you as our guests</p></div>");
+	
 }
