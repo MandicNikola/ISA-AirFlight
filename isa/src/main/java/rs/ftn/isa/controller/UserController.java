@@ -1,5 +1,7 @@
 package rs.ftn.isa.controller;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -77,6 +79,21 @@ public class UserController {
 			return provera;
 		}
 	}	
+	
+	public String enkriptuj(String sifra) throws NoSuchAlgorithmException {
+		 MessageDigest md = MessageDigest.getInstance("SHA-256"); 
+		  
+		 //pretvori sifru  u bajte
+         byte[] messageDigest = md.digest(sifra.getBytes()); 
+         
+         StringBuilder sb = new StringBuilder();
+         for (byte b : messageDigest) {
+             sb.append(String.format("%02x", b));
+         }
+         System.out.println(sb.toString());
+		
+		return "";
+	}
 	
 	@RequestMapping(value="/verifikacija/{mail}",
 				method = RequestMethod.GET)
