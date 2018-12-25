@@ -93,7 +93,7 @@ public class Usluga {
 	}
 
 
-	public Usluga(int cena, int prekoTrajanja, String kategorija) {
+	public Usluga(double cena, int prekoTrajanja, String kategorija) {
 		super();
 		this.cena = cena;
 		this.prekoTrajanja = prekoTrajanja;
