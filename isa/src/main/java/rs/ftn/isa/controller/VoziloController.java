@@ -128,9 +128,16 @@ public class VoziloController {
 			}
 			
 			Vehicle proveraImena = servis.findVehicleByNaziv(nova.getNaziv());
-			if(proveraImena != null && proveraImena.getId() != nova.getId()) {
-				System.out.println("Postoji vozilo sa tim ienom");
-				return null;
+			if(proveraImena != null) {
+				 String kljuc1= proveraImena.getId().toString();
+				 String kljuc2= nova.getId().toString();
+				 if(kljuc1.equals(kljuc2)) {
+					 System.out.println("Ne postoji isti naziv auta");
+				 }else {
+
+						System.out.println("Postoji vozilo sa tim ienom");
+						return null; 
+				 }
 			}
 			
 			System.out.println("Provere su prosle");
