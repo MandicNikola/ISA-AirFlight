@@ -1,6 +1,9 @@
 package rs.ftn.isa.controller;
 
+import static org.assertj.core.api.Assertions.setAllowComparingPrivateFields;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
@@ -49,6 +52,85 @@ public class RentACarController {
 		String nazivGrad = niz[0];
 		String startDat=niz[1];
 		String endDat=niz[2];
+		
+		String[] datP=startDat.split("-");
+		
+		int year=Integer.parseInt(datP[0]);
+		//meseci u javi od 0
+		int month=Integer.parseInt(datP[1])-1;
+		int day=Integer.parseInt(datP[2]);
+	
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year, month, day);
+		Date datPreuzimanja = calendar.getTime();
+		
+		String[] krajP=endDat.split("-");
+		
+		 year=Integer.parseInt(krajP[0]);
+		 //meseci u javi idu od 0
+		 month=Integer.parseInt(krajP[1])-1;
+		 day=Integer.parseInt(krajP[2]);
+		
+		 calendar.set(year, month, day);
+		 Date datVracanje = calendar.getTime();
+		
+		
+		 //imamo dva datuma i naziv ili grad od rent-a-car
+		 //proveravamo da li se neki rent-a-car zove tako
+		 List<RentACar> sviRent=servis.findAll();
+		 List<RentACar> nadjeniRent=new ArrayList<RentACar>();
+			
+		 for(RentACar R : sviRent) {
+			 if(R.getAdresa().equalsIgnoreCase(nazivGrad)) {
+				 System.out.println("Pronadjen rent po gradu" + R.getNaziv());
+				 nadjeniRent.add(R);
+			 }
+			 if(R.getNaziv().equalsIgnoreCase(nazivGrad)) {
+				 System.out.println("Pronadjen rent po nazivu" + R.getNaziv());
+				 nadjeniRent.add(R);
+			 }
+		 }
+		 
+		 List<RentACar> povratniRent=new ArrayList<RentACar>();
+			
+		 for(RentACar R : nadjeniRent) {
+			 
+			 for(Filijala F : R.getFilijale()) {
+				 
+				 	for(Vehicle V : F.getVozila()) {
+				 			
+				 		Set<RezervacijaRentCar> rezervacije = V.getRezervacije(); 
+						
+						//Provera 1 --> 
+						//ako je nas datum preuzimanja pre datuma vracanja iz rezervacije,
+						//Provera 2 --> 
+						//onda gledamo da li je i datum vracanja naseg vozila nakon datuma preuzimanja iz
+						//rezervacije
+						
+						boolean dozvolaPickUp = true;
+						//prolazimo kroz sve rezervacije koje su napravljene za ovo vozilo
+						/*for(RezervacijaRentCar rez : rezervacije) {	
+							//ako je datum preuzimanja vozila pre datuma vracanja iz rezervacije
+							if(rezervacija.getPickUp().before(R.getDatumVracanja())) {
+								System.out.println("provera1-> Datum preuzimanja je pre datuma vracanja iz liste rezervacije");
+								 //datum vracanja auta posle datuma preuzimanja iz rezervacije, preklapaju se termini, vozilo nam ne odgovara
+									if(rezervacija.getDropOff().after(R.getDatumPreuzimanja())){
+										dozvolaPickUp = false;
+										System.out.println("provera2--> Datum vracanja je posle datuma preuzimanja iz rezervacije");
+									}
+							}
+							
+						}
+						*/
+						
+				 	}
+			 }
+		 }
+		
+		
+		
+		
+		
 		return  null;
 	}
 	
