@@ -172,6 +172,75 @@ function findRent(){
 		
 	}
 }
+
+function findHotels(){
+	var ispravno = true;
+	
+	$("#errorName").text("");
+	$("#errorKraj").text("");
+	$("#errorPocetak").text("");
+	
+	var hotel=$("#nameHotel").val();
+	
+	if(hotel == ""){
+		ispravno = false;
+		$("#errorName").text(" Fill out this field").css('color', 'red');
+	}
+	
+	var pocetak=$("#hotelCheckIn").val();
+	if(pocetak == ""){
+		ispravno = false;
+		$("#errorPocetak").text(" Fill out this field").css('color', 'red');
+	}
+	var kraj=$("#hotelCheckOut").val();
+	if(kraj == ""){
+		ispravno=false;
+		$("#errorKraj").text(" Fill out this field").css('color', 'red');
+	}
+	var date1 = Date.parse(pocetak);
+	var date2 = Date.parse(kraj);
+	if (date1 > date2) {
+		$("#errorKraj").text("Check out date must be greater than check in date").css('color', 'red');
+		ispravno=false;
+	}
+	
+	if(ispravno){
+		
+		$.ajax({
+			type : 'GET',
+			url : "/api/hoteli/pronadjiHotele/"+grad,
+			contentType : 'application/json',
+			dataType : "json",
+			data:preuzmiPodatke(),
+			success : function(data) {
+					
+					if(data == null){
+						console.log('nisu pronadjeni')
+						
+					}else if(data.length  == 0){
+						console.log('nisu pronadjeni')
+						
+					}else{
+						console.log('pronadjeni')
+						
+					}	
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("greska pri unosu nove kat");
+				   
+			}
+		});
+	}
+}
+
+function preuzmiPodatke() {
+	
+	var kat = JSON.stringify({
+		"checkIn":$('#hotelCheckIn').val(),
+		"checkOut":$('#hotelCheckOut').val()
+	});
+	return kat;
+}
 function izmeniRent(id){
 	window.location = "izmeniRent.html?id="+id;
 

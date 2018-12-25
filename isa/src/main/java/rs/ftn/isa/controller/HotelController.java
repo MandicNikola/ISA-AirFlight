@@ -27,6 +27,7 @@ import rs.ftn.isa.model.Category;
 import rs.ftn.isa.model.CijenovnikSoba;
 import rs.ftn.isa.model.Hotel;
 import rs.ftn.isa.model.PricelistHotel;
+import rs.ftn.isa.model.RentACar;
 import rs.ftn.isa.model.RezervacijaHotel;
 import rs.ftn.isa.model.Room;
 import rs.ftn.isa.model.Usluga;
@@ -888,5 +889,58 @@ public class HotelController {
 		 public int daysBetween(Date d1, Date d2){
 	         return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
 	 }
-		
+		 //metoda koja radi pretragu hotela sa pocetne strane
+		 @RequestMapping(value="/pronadjiHotele/{info}",
+					method = RequestMethod.GET,
+					consumes = MediaType.APPLICATION_JSON_VALUE,
+					produces = MediaType.APPLICATION_JSON_VALUE)
+			public ArrayList<Hotel> pronadjiHotele(@RequestBody ReservationHotelDTO rez,@PathVariable String info){
+			 ArrayList<Hotel> povratna = new ArrayList<Hotel>();
+			 List<Hotel> hoteli = servis.findAll();
+			 for(Hotel hotel:hoteli) {
+				if(hotel.getAdresa().equalsIgnoreCase(info) ) {
+					for(Room soba:hotel.getSobe()) {
+						//provjera za sobu da li zadovoljava uslove
+						Room room = soba;
+						Set<RezervacijaHotel> rezervacije = room.getRezervacije(); 
+						
+						//moram provjeriti prvi slucaj: da li je check in > od krajeva svih rezervacija koje postoje za tu sobu
+						boolean odobrenCheckIN = true;
+						for(RezervacijaHotel pom:rezervacije) {	
+							
+							if(rez.getCheckIn().compareTo(pom.getDatumOdlaska())<=0) {
+								System.out.println("nije odobren check in");
+								odobrenCheckIN = false;
+								break;
+							}
+						}
+						//odobren check in,provjeravam check out ..da li je check out < od pocetaka svih rezervacija koje postoje za datu sobu
+						boolean odobrenCheckOUT= true;
+						
+							for(RezervacijaHotel pom:rezervacije) {	
+								
+								if(rez.getCheckOut().compareTo(pom.getDatumDolaska())>=0) {
+									System.out.println("nije odobren check out");
+									odobrenCheckOUT = false;
+									break;
+								}
+							}
+							
+						
+						//odobrena je soba
+						if(odobrenCheckIN == true || odobrenCheckOUT == true) {
+							System.out.println("odobrena soba");
+						}
+						
+					}
+					
+				} 
+				 
+			 }
+			 System.out.println("Usao u pronadji hotele "+info);
+				String naziv = info;
+				
+				
+				return null;
+		 }
 }

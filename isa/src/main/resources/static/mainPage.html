@@ -152,51 +152,39 @@ input[type="date"]:valid::before { display: none }
    			<div class="row">
 						<div class="col-md-12">
 									<div class="form-group">
-										<input class="form-control" type="text" required placeholder="Enter hotel or destination name">
+										<input class="form-control" id = "nameHotel" type="text" required placeholder="Enter hotel or destination name">
+											<span id="errorName"></span>
 									</div>
 						</div>
    			</div>
    		 <div class = "row">
-   		 	<div class="col-md-6">
+   		 	<div class="col-md-4">
 					<div class="form-group">
 						 <div class="input-group">
 						<span class="input-group-addon"> <i class="glyphicon glyphicon-calendar"></i></span>
-						<input class="form-control" type="date" required="required" data-placeholder="Check in">
+						<input class="form-control" type="date" id = "hotelCheckIn" required="required" data-placeholder="Check in">
+								<span id="errorPocetak"></span>
+									
 						</div>
 					</div>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-4">
 				<div class="form-group">
 							 <div class="input-group">
 							<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-							<input class="form-control" type="date" required="required"  data-placeholder="Check out">
+							<input class="form-control" type="date" id = "hotelCheckOut" required="required"  data-placeholder="Check out">
+										<span id="errorKraj"></span>
 							</div>
 				</div>
 			</div>
-		 </div>
-   		
-   		 <div class="row">
-   		  <div class="col-md-4">
-				<div class="form-group">
-					 <div class="input-group">	
-			   		<span class="input-group-addon"> <i class="glyphicon glyphicon-bed"></i></span>
-					<input class="form-control" type="number" min="1" required="required" placeholder="Rooms">		
-					</div>
-			</div>
-		 </div>
-		 <div class="col-md-4">
-				<div class="form-group">
-				 <div class="input-group">	
-				    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-					<input class="form-control" min="1" type="number" min="1" required="required" placeholder="Guests">
-			   </div></div>
-		 </div>
-		 <div class="col-md-4">
+			
+			<div class="col-md-4">
 					<div class="form-btn">
-					<button type="button" id="HotelDugme"  class="btn  btn-lg">Check availability</button>
+					<button type="button" id="HotelDugme" onclick="findHotels()" class="btn  btn-lg">Check availability</button>
 					</div>
+		    </div>
 		 </div>
-	</div>
+   	
    	 		</form>
    	</div>
    	</div>
