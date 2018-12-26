@@ -26,7 +26,7 @@
  	   
 	#booking{
 	    background-color: #fff;
-	    width: 70%;
+	    width: 75%;
 	    padding: 10px 30px 40px 30px;
 	    border-radius: 3px;
 	    font-family: 'Josefin Sans', sans-serif;
@@ -177,53 +177,71 @@
 						<div class="row">
 							<div class="col-md-6">
 										<div class="form-group">
-											<span class="form-label">Pick up location <i class="glyphicon glyphicon-map-marker"></i></span>
-											<select class="form-control" id="pickLocation">
-											</select>
+											 <span class="form-label">Pick up location </span>
+											 <div class="input-group">
+												<span class="input-group-addon"> <i class="glyphicon glyphicon-map-marker"></i></span>
+												<select class="form-control" id="pickLocation">
+												</select>
+											</div>
 										</div>
 							</div>
 							<div class="col-md-6">
 										<div class="form-group">
-											<span class="form-label">Drop off location <i class="glyphicon glyphicon-map-marker"></i></span>
-											<select class="form-control" id="dropLocation">
-											</select>	
+											<span class="form-label">Drop off location </span>
+											 <div class="input-group">
+												<span class="input-group-addon"> <i class="glyphicon glyphicon-map-marker"></i></span>
+												<select class="form-control" id="dropLocation">
+												</select>	
+											</div>
 										</div>
 							</div>
 						</div>
 						<div class="row">
 								<div class="col-md-6">
 										<div class="form-group">
-											<span class="form-label">Pick up date <i class="glyphicon glyphicon-calendar"></i></span>
-											<input class="form-control" id="pickDate" type="date" data-placeholder="Choose date" required>
-											<span id="error1"></span>
+											<span class="form-label">Pick up date </span>
+											<div class="input-group">
+												<span class="input-group-addon"> <i class="glyphicon glyphicon-calendar"></i></span>
+												<input class="form-control" id="pickDate" type="date" data-placeholder="Choose pick-up date" data-toggle="tooltip" data-placement="top" title="Date when you want to take vehicle" required>
+												<span id="error1"></span>
+											</div>
 										</div>
 							</div>
 							<div class="col-md-6">
 										<div class="form-group">
-											<span class="form-label">Drop off date <i class="glyphicon glyphicon-calendar"></i></span>
-											<input class="form-control" id="dropDate" type="date" data-placeholder="Choose date" required>
+										<span class="form-label">Drop off date </span>
+										 <div class="input-group">
+											<span class="input-group-addon"> <i class="glyphicon glyphicon-calendar"></i></span>
+											<input class="form-control" id="dropDate" type="date" data-placeholder="Choose drop-off date" data-toggle="tooltip" data-placement="top" title="Date when you want to return vehicle" required>
 											<span id="error2"></span>
+										 </div>
 										</div>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-4">
+							<div class="col-md-3">
 										<div class="form-group">
-											<span class="form-label">Category of car <i class="glyphicon glyphicon-star"></i></span>
-											<select class="form-control" id="tip">
-											      <option value="A" selected>A</option>
-											      <option value="B">B</option>
-											      <option value="C">C</option>
-											      <option value="D">D</option>
-											      <option value="E">E</option>
-											</select>
+											<span class="form-label">Category of car </span>
+											<div class="input-group">
+												<span class="input-group-addon"><i class="glyphicon glyphicon-star"></i></span>
+												<select class="form-control" id="tip">
+												      <option value="A" selected>A</option>
+												      <option value="B">B</option>
+												      <option value="C">C</option>
+												      <option value="D">D</option>
+												      <option value="E">E</option>
+												</select>
+											</div>
 										</div>
 							</div>
-							<div class="col-md-5">
+							<div class="col-md-6">
 										<div class="form-group">
-											<span class="form-label">Passengers <i class="glyphicon glyphicon-user"></i></span>
-											<input class="form-control" type="number" id="putnici" placeholder="Enter number of passengers" min="1" max="5" required>
-											<span id="error3"></span>
+											<span class="form-label">Passengers</span>
+											<div class="input-group">
+												<span class="input-group-addon"> <i class="glyphicon glyphicon-user"></i></span>
+												<input class="form-control" type="number" id="putnici" placeholder="Enter number of passengers" min="1" max="5" required>
+												<span id="error3"></span>
+											</div>
 										</div>
 							</div>
 							<div class="col-md-3">
