@@ -18,7 +18,7 @@ function onLoad(){
 	$("#pozadinaHotel").hide();
 	$("#reserveCar").hide();
 	$("#sortCar").hide();
-	
+	$("#sortHotele").hide();
 	$("#reserveHotel").hide();
 
 }
@@ -30,6 +30,7 @@ function planeShow(){
 	$("#ispisiTabelu").empty();
 	$("#reserveCar").hide();	
 	$("#sortCar").hide();
+	$("#sortHotele").hide();
 	$("#reserveHotel").hide();
 
 }
@@ -39,6 +40,7 @@ function hotelShow(){
 	$("#pozadinaHotel").show();
 	$("#ispisiTabelu").empty();
 	$("#reserveHotel").show();
+	$("#sortHotele").show();
 	$("#reserveCar").hide();
 	$("#sortCar").hide();
 
@@ -55,7 +57,26 @@ function hotelShow(){
 		}
 	});
 }
-
+function sortirajHotele(){
+	 console.log('usao u sortiraj hotele');
+	 var uslov=$("#sortHotel").val();
+	 console.log('uslov je '+uslov);
+	 
+	 $.ajax({
+			method:'GET',
+			url: "/api/hoteli/sort/"+uslov,
+			success: function(lista){
+				if(lista == null){
+					console.log('Nema hotela')
+				}else if(lista.length==0){
+					console.log('Nema hotela')
+				}else{
+					ispisiHotele(lista);
+					
+				}
+			}
+		});
+	}
 function ispisiHotele(lista){
 	console.log('usao u ispisi hotele u js');
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
@@ -93,7 +114,7 @@ function carShow(){
 	$("#sortCar").show();
 
 	$("#reserveHotel").hide();
-
+	$("#sortHotele").hide();
 	$("#pozadinaHotel").hide();	
 	 $("#ispisiTabelu").empty();
 		

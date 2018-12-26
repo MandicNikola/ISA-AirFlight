@@ -231,6 +231,29 @@ input[type="date"]:valid::before { display: none }
 		</div>
 	</div>
 </div>
+<div id="sortHotele">
+<div class="row">
+		<div class="col-md-9">
+		</div>
+		<div class="col-md-2">
+			<div class="form-group">
+						<span class="form-label">Sort by</span>
+						<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-sort"></i></span>
+										<select class="form-control" id="sortHotel" onchange="sortirajHotele()">
+									       <option hidden disabled selected> </option>
+									          <option value="NameA">Name [A-Z]</option>
+										      <option value="NameD">Name [Z-A]</option>
+										      <option value="CityA">City [A-Z]</option>
+										      <option value="CityD">City [Z-A]</option>
+										</select>
+						</div>
+			</div>
+		</div>	
+		<div class="col-md-1">
+		</div>			
+</div>
+</div>
 <div id="sortCar">
 <div class="row">
 		<div class="col-md-9">
