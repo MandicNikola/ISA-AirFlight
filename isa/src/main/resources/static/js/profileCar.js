@@ -412,6 +412,34 @@ function resetuj(){
 function rezervisi(){
 
 	$("#rezultat").empty();
+	$("#error1").text("");
+	$("#error2").text("");
+	$("#error3").text("");
+		
+	var ispravno = true;
+	
+	
+	var pocetak=$("#pickDate").val();
+	if(pocetak == ""){
+		ispravno = false;
+		$("#error1").text(" Fill out this field").css('color', 'red');
+	}
+	var kraj=$("#dropDate").val();
+	if(kraj == ""){
+		ispravno=false;
+		$("#error2").text(" Fill out this field").css('color', 'red');
+	}
+	var date1 = Date.parse(pocetak);
+	var date2 = Date.parse(kraj);
+	if (date1 > date2) {
+		$("#error2").text("Drop-off date must be greater than pick-up date").css('color', 'red');
+		ispravno=false;
+	}
+	var broj=$("#putnici").val();
+	if(broj == ""){
+		ispravno=false;
+		$("#error3").text(" Fill out this field").css('color', 'red');
+	}
 	
 	var pom=window.location.search.substring(1);
 	var id= pom.split('=')[1];
@@ -431,36 +459,39 @@ function rezervisi(){
 		sendReservation= JSON.stringify(newReservation);			
 		console.log('rezervacija je ' + sendReservation);
 		
+		if(ispravno == true){	
 		$("#anketa").hide();
-		 
+			 
 		$("#rezultat").empty();
-		
+			
 		$("#rezultat").append("<p><h2>Offers </h2></p>");
 		$("#rezultat").append("<p>FROM <span id=\"pocetak\">"+pocetak+"</span> TO <span id=\"kraj\">"+kraj+"</span></p>");
 		$("#rezultat").append("<p>FOR <span id=\"osobe\">"+osobe+"</span>  passengers</p>");
 		
-		$.ajax({
-		type : 'POST',
-		url : "/api/rents/checkRezervaciju",
-		contentType : "application/json",
-		data: sendReservation,
-		dataType : 'json',
-		success : function(povratna) {
-					if(povratna == null){
-						console.log('null je');
-						nemaPonuda();
-					}else if(povratna.length==0){
-
-						console.log('povratna je 0');
-						nemaPonuda();
-					}else{
-						izlistajPonude(povratna);
-					}
-		},
-		error: function(XMLHttpRequest, textStatus, errorThrown){
-			alert('greska');
+	
+			$.ajax({
+			type : 'POST',
+			url : "/api/rents/checkRezervaciju",
+			contentType : "application/json",
+			data: sendReservation,
+			dataType : 'json',
+			success : function(povratna) {
+						if(povratna == null){
+							console.log('null je');
+							nemaPonuda();
+						}else if(povratna.length==0){
+	
+							console.log('povratna je 0');
+							nemaPonuda();
+						}else{
+							izlistajPonude(povratna);
+						}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				alert('greska');
+			}
+			});
 		}
-		});
 
 }
 function nemaPonuda(){
