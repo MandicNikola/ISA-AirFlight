@@ -648,13 +648,50 @@ function dodUsluga() {
 }
 //ispisuje ponudu za pretrazene dane
 function izlistajPonudu(){
+	
+	
+	
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);
 	var id = adresa.split('=')[1];
-	
+	var ispravno = true;
 	var pocetak=$('#checkin').val();
 	var kraj=$('#checkout').val();
 	var osobe=$('#brojLjudi').val();
+	var sobe=$('#brojSoba').val();
+
+	
+	$("#errorKraj").text("");
+	$("#errorPocetak").text("");
+	$("#errorSobe").text("");
+	$("#errorLjudi").text("");
+	
+	if(pocetak == ""){
+		ispravno = false;
+		$("#errorPocetak").text(" Fill out this field").css('color', 'red');
+	}
+	if(kraj == ""){
+		ispravno=false;
+		$("#errorKraj").text(" Fill out this field").css('color', 'red');
+	}
+	var date1 = Date.parse(pocetak);
+	var date2 = Date.parse(kraj);
+	if (date1 > date2) {
+		$("#errorKraj").text("Check out date must be greater than check in date").css('color', 'red');
+		ispravno=false;
+	}
+	
+	if(osobe == ""){
+		ispravno = false;
+		$("#errorLjudi").text(" Fill out this field").css('color', 'red');
+	}
+	if(sobe ==""){
+		ispravno = false;
+		$("#errorSobe").text(" Fill out this field").css('color', 'red');
+		
+	}
+	if(ispravno){
+	
 	
 	$("#reserveHotel").hide();
 	$("#korak").empty();
@@ -685,7 +722,7 @@ function izlistajPonudu(){
 			   
 		}
 	});
-
+	}
 }
 
 function preuzmiPodatke() {
