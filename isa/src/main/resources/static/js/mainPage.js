@@ -17,6 +17,8 @@ function onLoad(){
 	$("#pozadinaAuto").hide();
 	$("#pozadinaHotel").hide();
 	$("#reserveCar").hide();
+	$("#sortCar").hide();
+	
 	$("#reserveHotel").hide();
 
 }
@@ -26,7 +28,8 @@ function planeShow(){
 	$("#pozadinaAuto").hide();
 	$("#pozadinaHotel").hide();
 	$("#ispisiTabelu").empty();
-	$("#reserveCar").hide();
+	$("#reserveCar").hide();	
+	$("#sortCar").hide();
 	$("#reserveHotel").hide();
 
 }
@@ -37,6 +40,8 @@ function hotelShow(){
 	$("#ispisiTabelu").empty();
 	$("#reserveHotel").show();
 	$("#reserveCar").hide();
+	$("#sortCar").hide();
+
 	
 	$.ajax({
 		method:'GET',
@@ -85,6 +90,8 @@ function carShow(){
 	$("#pozadinaAvion").hide();
 	$("#pozadinaAuto").show();
 	$("#reserveCar").show();
+	$("#sortCar").show();
+
 	$("#reserveHotel").hide();
 
 	$("#pozadinaHotel").hide();	
@@ -108,16 +115,34 @@ function ispisiAutoservise(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#ispisiTabelu").empty();
 	 
-	 $("#ispisiTabelu").append("<table class=\"table table-striped table-hover\" id=\"tabelaRent\" ><tr><th> Name </th><th> Promotional description</th><th></th><th></th></tr>");
+	 $("#ispisiTabelu").append("<table class=\"table table-striped table-hover\" id=\"tabelaRent\" ><tr><th> Name </th><th> Promotional description</th><th>Address</th><th></th><th></th></tr>");
 		
 		$.each(pom, function(index, servis) {
-			$("#tabelaRent").append("<tr><td class=\"hoverName\" onclick=\"visitCar('"+servis.id+"')\">"+servis.naziv+"</td><td > "+servis.opis+"</td><td><button  class=\"btn btn-info\" onclick=\"izmeniRent('"+servis.id+"')\">Izmeni</button><td><button  class=\"btn btn-info\" onclick=\"obrisiRent('"+servis.id+"')\">Obrisi</button></td></tr>");
+			$("#tabelaRent").append("<tr><td class=\"hoverName\" onclick=\"visitCar('"+servis.id+"')\">"+servis.naziv+"</td><td > "+servis.opis+"</td><td > "+servis.adresa+"</td><td><button  class=\"btn btn-info\" onclick=\"izmeniRent('"+servis.id+"')\">Izmeni</button><td><button  class=\"btn btn-info\" onclick=\"obrisiRent('"+servis.id+"')\">Obrisi</button></td></tr>");
 			
 		});
 	 $("#ispisiTabelu").append("</table>");
 	 
 	
 }
+function sortirajRent(){
+	 console.log('usao u sortiraj auto');
+	 var uslov=$("#sortAuto").val();
+	 $.ajax({
+			method:'GET',
+			url: "/api/rents/sort/"+uslov,
+			success: function(lista){
+				if(lista == null){
+					console.log('Nema servise')
+				}else if(lista.length==0){
+					console.log('Nema servise')
+				}else{
+					ispisiAutoservise(lista);
+					
+				}
+			}
+		});
+	}
 function findRent(){
 	var ispravno = true;
 	
