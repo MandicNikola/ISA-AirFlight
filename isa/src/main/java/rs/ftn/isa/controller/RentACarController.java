@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.setAllowComparingPrivateFields;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
@@ -41,6 +42,54 @@ public class RentACarController {
 	@RequestMapping(value="/all", method = RequestMethod.GET)
 	public List<RentACar> getAllRents(){		
 		return  servis.findAll();
+	}
+	//vraca rent servise sortirane po nekom kriterijumu
+	@RequestMapping(value="/sort/{uslov}", method = RequestMethod.GET)
+	public List<RentACar> getSortedRents(@PathVariable String uslov){		
+		System.out.println("Uslov je "+uslov);
+		List<RentACar> svi = servis.findAll();
+		List<RentACar> sortiranaLista=new ArrayList<RentACar>();
+		
+		if(uslov.equals("NameA")) {
+			//sortiraj po nazivu od A-Z
+			System.out.println("Sortiraj po imenu rastuce");
+			Collections.sort(svi, RentACar.RentNameComparator);
+			for(RentACar R : svi) {
+				System.out.println(R.getNaziv());
+				sortiranaLista.add(R);
+			}
+			
+		}else if(uslov.equals("NameD")) {
+			System.out.println("Sortiraj po imenu opadajuce");
+			//sortiraj po nazivu od Z-A
+			Collections.sort(svi, RentACar.RentNameComparator);
+			for(int i=svi.size()-1; i>=0; i--) {
+				System.out.println(svi.get(i).getNaziv());
+				sortiranaLista.add(svi.get(i));
+			}
+			
+		}else if(uslov.equals("CityA")) {
+			//sortiraj po gradu od A-Z
+			System.out.println("Sortiraj po gradu rastuce");
+
+			Collections.sort(svi, RentACar.RentCityComparator);
+			for(RentACar R : svi) {
+				System.out.println(R.getAdresa());
+				sortiranaLista.add(R);
+			}
+		}else {
+			//sortiraj po gradu od Z-A
+			System.out.println("Sortiraj po gradu rastuce");
+
+			Collections.sort(svi, RentACar.RentCityComparator);
+			for(int i=svi.size()-1; i>=0; i--) {
+				System.out.println(svi.get(i).getAdresa());
+				sortiranaLista.add(svi.get(i));
+			}
+		}
+		
+		
+		return sortiranaLista;
 	}
 	//pretraga svih rent servisa po nazivu ili gradu, i vremenskom periodom
 	@RequestMapping(value="/findRents/{podatak}",
