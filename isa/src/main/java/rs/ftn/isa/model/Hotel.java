@@ -1,5 +1,6 @@
 package rs.ftn.isa.model;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -141,5 +142,27 @@ public class Hotel {
 	}
 	
 	*/
+	 public static Comparator<Hotel> HotelNameComparator = new Comparator<Hotel>() {
+
+			public int compare(Hotel h1, Hotel h2) {
+			   String name1 = h1.getNaziv().toUpperCase();
+			   String name2 = h2.getNaziv().toUpperCase();
+
+			   //sortiranje od A-Z
+			   return name1.compareTo(name2);
+
+	}};
 	
+	 public static Comparator<Hotel> HotelCityComparator = new Comparator<Hotel>() {
+
+			public int compare(Hotel h1, Hotel h2) {
+			   String city1 = h1.getAdresa().toUpperCase();
+			   String city2 = h2.getAdresa().toUpperCase();
+
+			   //sortiranje od A-Z
+			   return city1.compareTo(city2);
+
+	}};
+
+
 }

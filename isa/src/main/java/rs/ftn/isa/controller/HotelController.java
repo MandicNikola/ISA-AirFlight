@@ -4,6 +4,7 @@ package rs.ftn.isa.controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
@@ -44,6 +45,56 @@ public class HotelController {
 			return  servis.findAll();
 		}
 		
+		//vraca hotele sortirane po nekom kriterijumu
+		@RequestMapping(value="/sort/{uslov}", method = RequestMethod.GET)
+		public List<Hotel> getSortedHotels(@PathVariable String uslov){		
+			
+			System.out.println("Uslov je "+uslov);
+			
+			List<Hotel> svi = servis.findAll();
+			List<Hotel> sortiranaLista=new ArrayList<Hotel>();
+			
+			if(uslov.equals("NameA")) {
+				//sortiraj po nazivu od A-Z
+				System.out.println("Sortiraj po imenu rastuce");
+				Collections.sort(svi, Hotel.HotelNameComparator);
+				for(Hotel H : svi) {
+					System.out.println(H.getNaziv());
+					sortiranaLista.add(H);
+				}
+				
+			}else if(uslov.equals("NameD")) {
+				System.out.println("Sortiraj po imenu opadajuce");
+				//sortiraj po nazivu od Z-A
+				Collections.sort(svi, Hotel.HotelNameComparator);
+				for(int i=svi.size()-1; i>=0; i--) {
+					System.out.println(svi.get(i).getNaziv());
+					sortiranaLista.add(svi.get(i));
+				}
+				
+			}else if(uslov.equals("CityA")) {
+				//sortiraj po gradu od A-Z
+				System.out.println("Sortiraj po gradu rastuce");
+
+				Collections.sort(svi, Hotel.HotelCityComparator);
+				for(Hotel H : svi) {
+					System.out.println(H.getAdresa());
+					sortiranaLista.add(H);
+				}
+			}else {
+				//sortiraj po gradu od Z-A
+				System.out.println("Sortiraj po gradu rastuce");
+
+				Collections.sort(svi, Hotel.HotelCityComparator);
+				for(int i=svi.size()-1; i>=0; i--) {
+					System.out.println(svi.get(i).getAdresa());
+					sortiranaLista.add(svi.get(i));
+				}
+			}
+			
+			
+			return sortiranaLista;
+		}
 		@RequestMapping(value="/getRooms/{id}", method = RequestMethod.GET)
 		public Set<Room> getAllRooms(@PathVariable Long id){	
 			Hotel pronadjeni = servis.findHotelById(id);
