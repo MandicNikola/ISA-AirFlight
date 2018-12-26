@@ -7,6 +7,7 @@ function onLoad(){
 	$("#sobe").hide();
 	$("#cijene").hide();
 	$("#rezervacije").hide();
+	
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);
 	var id = adresa.split('=')[1];
@@ -659,7 +660,8 @@ function izlistajPonudu(){
 	var kraj=$('#checkout').val();
 	var osobe=$('#brojLjudi').val();
 	var sobe=$('#brojSoba').val();
-
+	var today = new Date().toISOString().split('T')[0];
+	
 	
 	$("#errorKraj").text("");
 	$("#errorPocetak").text("");
@@ -676,6 +678,11 @@ function izlistajPonudu(){
 	}
 	var date1 = Date.parse(pocetak);
 	var date2 = Date.parse(kraj);
+	if(date1 < today){
+		$("#errorPocetak").text("You can not select the date that passed").css('color', 'red');
+		ispravno=false;
+		
+	}
 	if (date1 > date2) {
 		$("#errorKraj").text("Check out date must be greater than check in date").css('color', 'red');
 		ispravno=false;
