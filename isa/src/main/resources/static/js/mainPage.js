@@ -70,7 +70,7 @@ function hotelShow(){
 			if(lista == null){
 				console.log('Nema servise');
 			}else{
-				ispisiAviokompanije(lista);
+				ispisiHotele(lista);
 			}
 		}
 	});
@@ -94,20 +94,22 @@ function sortirajAvione(){
 	 var uslov=$("#sortPlane").val();
 	 console.log('uslov je '+uslov);
 	 
-	 $.ajax({
-			method:'GET',
-			url: "/api/avioni/sort/"+uslov,
-			success: function(lista){
-				if(lista == null){
-					console.log('Nema aviokompanija')
-				}else if(lista.length==0){
-					console.log('Nema aviokompanija')
-				}else{
-					ispisiAviokompanije(lista);
-					
+	 if(uslov!="none"){
+		 $.ajax({
+				method:'GET',
+				url: "/api/avioni/sort/"+uslov,
+				success: function(lista){
+					if(lista == null){
+						console.log('Nema aviokompanija')
+					}else if(lista.length==0){
+						console.log('Nema aviokompanija')
+					}else{
+						ispisiAviokompanije(lista);
+						
+					}
 				}
-			}
-		});
+			});
+	 }
 	}
 
 function sortirajHotele(){
@@ -115,20 +117,22 @@ function sortirajHotele(){
 	 var uslov=$("#sortHotel").val();
 	 console.log('uslov je '+uslov);
 	 
-	 $.ajax({
-			method:'GET',
-			url: "/api/hoteli/sort/"+uslov,
-			success: function(lista){
-				if(lista == null){
-					console.log('Nema hotela')
-				}else if(lista.length==0){
-					console.log('Nema hotela')
-				}else{
-					ispisiHotele(lista);
-					
+	 if(uslov!="none"){
+		 $.ajax({
+				method:'GET',
+				url: "/api/hoteli/sort/"+uslov,
+				success: function(lista){
+					if(lista == null){
+						console.log('Nema hotela')
+					}else if(lista.length==0){
+						console.log('Nema hotela')
+					}else{
+						ispisiHotele(lista);
+						
+					}
 				}
-			}
-		});
+			});
+	 }
 	}
 function ispisiHotele(lista){
 	console.log('usao u ispisi hotele u js');
@@ -202,20 +206,22 @@ function ispisiAutoservise(lista){
 function sortirajRent(){
 	 console.log('usao u sortiraj auto');
 	 var uslov=$("#sortAuto").val();
-	 $.ajax({
-			method:'GET',
-			url: "/api/rents/sort/"+uslov,
-			success: function(lista){
-				if(lista == null){
-					console.log('Nema servise')
-				}else if(lista.length==0){
-					console.log('Nema servise')
-				}else{
-					ispisiAutoservise(lista);
-					
+	 if(uslov!="none"){
+		 $.ajax({
+				method:'GET',
+				url: "/api/rents/sort/"+uslov,
+				success: function(lista){
+					if(lista == null){
+						console.log('Nema servise')
+					}else if(lista.length==0){
+						console.log('Nema servise')
+					}else{
+						ispisiAutoservise(lista);
+						
+					}
 				}
-			}
-		});
+			});
+	 }
 	}
 function findRent(){
 	var ispravno = true;
