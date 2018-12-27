@@ -20,6 +20,8 @@ function onLoad(){
 	$("#sortCar").hide();
 	$("#sortHotele").hide();
 	$("#reserveHotel").hide();
+	
+	planeShow();
 
 }
 
@@ -32,7 +34,20 @@ function planeShow(){
 	$("#sortCar").hide();
 	$("#sortHotele").hide();
 	$("#reserveHotel").hide();
-
+	$("#sortAvione").show();
+	$("#sortPlane").val("none");
+	
+	$.ajax({
+		method:'GET',
+		url: "/api/avioni/all",
+		success: function(lista){
+			if(lista == null){
+				console.log('Nema aviokompanija');
+			}else{
+				ispisiAviokompanije(lista);
+			}
+		}
+	});
 }
 function hotelShow(){
 	$("#pozadinaAvion").hide();
@@ -41,9 +56,12 @@ function hotelShow(){
 	$("#ispisiTabelu").empty();
 	$("#reserveHotel").show();
 	$("#sortHotele").show();
+	$("#sortHotel").val("none");
 	$("#reserveCar").hide();
 	$("#sortCar").hide();
-
+	$("#sortAvione").hide();
+	 $("#ispisiTabelu").empty();
+		
 	
 	$.ajax({
 		method:'GET',
@@ -52,11 +70,46 @@ function hotelShow(){
 			if(lista == null){
 				console.log('Nema servise');
 			}else{
-				ispisiHotele(lista);
+				ispisiAviokompanije(lista);
 			}
 		}
 	});
 }
+
+function ispisiAviokompanije(lista){
+	console.log('usao u ispisi aviokompanije');
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	 $("#ispisiTabelu").empty();
+		
+	$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaAvion\" ><tr><th> Name </th><th> Promotional description</th><th>Address</th></tr>");
+		
+		$.each(pom, function(index, avio) {
+			$("#tabelaAvion").append("<tr><td class=\"hoverName\" >"+avio.naziv+"</td><td > "+avio.opis+"</td><td > "+avio.adresa+"</td></tr>");
+		});
+	 $("#ispisiTabelu").append("</table>");
+}
+
+function sortirajAvione(){
+	 console.log('usao u sortiraj avione');
+	 var uslov=$("#sortPlane").val();
+	 console.log('uslov je '+uslov);
+	 
+	 $.ajax({
+			method:'GET',
+			url: "/api/avioni/sort/"+uslov,
+			success: function(lista){
+				if(lista == null){
+					console.log('Nema aviokompanija')
+				}else if(lista.length==0){
+					console.log('Nema aviokompanija')
+				}else{
+					ispisiAviokompanije(lista);
+					
+				}
+			}
+		});
+	}
+
 function sortirajHotele(){
 	 console.log('usao u sortiraj hotele');
 	 var uslov=$("#sortHotel").val();
@@ -109,10 +162,11 @@ function deleteHotel(id){
 }
 function carShow(){
 	$("#pozadinaAvion").hide();
+	$("#sortAvione").hide();
 	$("#pozadinaAuto").show();
 	$("#reserveCar").show();
 	$("#sortCar").show();
-
+	$("#sortAuto").val("none");
 	$("#reserveHotel").hide();
 	$("#sortHotele").hide();
 	$("#pozadinaHotel").hide();	
@@ -135,7 +189,6 @@ function carShow(){
 function ispisiAutoservise(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#ispisiTabelu").empty();
-	 
 	 $("#ispisiTabelu").append("<table class=\"table table-striped table-hover\" id=\"tabelaRent\" ><tr><th> Name </th><th> Promotional description</th><th>Address</th><th></th><th></th></tr>");
 		
 		$.each(pom, function(index, servis) {

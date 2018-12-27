@@ -1,5 +1,7 @@
 package rs.ftn.isa.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,13 @@ public class AirplaneServiceImpl implements AirplaneService{
 	public AirplaneCompany saveAirplaneCompany(AirplaneCompany company) {
 		// TODO Auto-generated method stub
 		return repository.save(company);
+	}
+
+
+	@Override
+	public List<AirplaneCompany> findAll() {
+		// TODO Auto-generated method stub
+		return repository.findAll();
 	}
 
 }
