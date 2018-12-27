@@ -229,7 +229,6 @@ $(document).on('submit','.konfiguracija',function(e){
 function resetProfil(){
 	$("#tabovi").show();
 	$("#informacije").show();
-	
 	$("#ispisiTabelu").hide();
 	
 }
@@ -304,7 +303,8 @@ $(document).ready(function(){
 		$("#cijene").show();
 		$("#konfig").hide();
 		$("#rezervacije").hide();
-
+		resetujGreske();
+	 	
     });
 });
 function ispisiKonfiguracije(){
