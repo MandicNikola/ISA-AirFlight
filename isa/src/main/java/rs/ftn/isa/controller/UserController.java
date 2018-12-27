@@ -73,6 +73,29 @@ public class UserController {
 					admini.add(user);
 				}
 			}
+		if(admini.size() == 0) {
+			return new ArrayList<User>();
+		}
+		return admini;
+	}
+	@RequestMapping(value="/getAdminsHotel/{id}", method = RequestMethod.GET)
+	public ArrayList<User> getAdminsOfHotel(@PathVariable Long id){
+		System.out.println("dosao u get admine hotela id hotela "+id);
+		String idString = id.toString();
+		List<User> korisnici = servis.findAll();
+		ArrayList<User> admini = new ArrayList<User>();
+		for(User user:korisnici) {
+				if(user.getTip()==Role.ADMIN_HOTEL) {
+					String servis = user.getServis().toString();
+					if(servis.equals(idString)) {
+						System.out.println("dosao po "+user.getIme());
+						admini.add(user);
+					}
+				}
+			}
+		if(admini.size() == 0) {
+			return new ArrayList<User>();
+		}
 		return admini;
 	}
 	
@@ -83,6 +106,31 @@ public class UserController {
 		servis.saveUser(korisnik);
 		System.out.println("sacuvan korisnik kao admin sistema");
 	}
+	
+	@RequestMapping(value="/newAdminHotel/{pomocna}", method = RequestMethod.POST)
+	public  void noviAdminHotela(@PathVariable String pomocna){
+		System.out.println("usao u izmjeni admina hotela dobio "+pomocna);
+		String[] pom = pomocna.split("-");
+		String userID = pom[0];
+		String hotelID = pom[1];
+		Long userid = Long.parseLong(userID);
+		Long hotelid = Long.parseLong(hotelID);
+		User korisnik = servis.findOneById(userid);
+		korisnik.setTip(Role.ADMIN_HOTEL);
+		korisnik.setServis(hotelid);
+		servis.saveUser(korisnik);
+		System.out.println("sacuvan korisnik kao admin hotela");
+	}
+	
+	@RequestMapping(value="/removeAdminHotel/{id}", method = RequestMethod.POST)
+	public  void removeAdminHotel(@PathVariable Long id){
+		User korisnik = servis.findOneById(id);
+		korisnik.setTip(Role.REGISTROVAN);	
+		korisnik.setServis(0L);
+		servis.saveUser(korisnik);
+		System.out.println("sacuvan korisnik kao registrovan");
+	}
+	
 	@RequestMapping(value="/test")
 	public String vrati() {
 		

@@ -45,7 +45,7 @@ public class User {
 	private String lozinka;
 	
 	@Column(name="servis")
-	private String servis;
+	private Long servis;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name="tip")
@@ -254,13 +254,13 @@ public class User {
 
 
 
-	public String getServis() {
+	public Long getServis() {
 		return servis;
 	}
 
 
 
-	public void setServis(String servis) {
+	public void setServis(Long servis) {
 		this.servis = servis;
 	}
 
