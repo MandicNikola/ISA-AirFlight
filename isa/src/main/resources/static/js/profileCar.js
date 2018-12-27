@@ -336,6 +336,7 @@ $(document).ready(function(){
    });
 
     $("a#res").click(function(){
+    	
     	$("#informacije").hide();
     	$("#cenovnik").hide();
      	$("#addUsluge").hide();
@@ -345,7 +346,8 @@ $(document).ready(function(){
     	$("#rezultat").empty();
 
     	$("#anketa").show();
-    		console.log('rezervacije');
+    	resetFormu();
+    	console.log('rezervacije');
    });
     $("a#price").click(function(){
     	
@@ -368,7 +370,15 @@ $(document).ready(function(){
     });
     
 });
-
+function resetFormu(){
+	$("#error1").text("");
+	$("#error2").text("");
+	$("#error3").text("");
+	$("#pickDate").val("");
+	$("#dropDate").val("");
+	$("#tip").val("A");
+	$("#putnici").val("");
+}
 $(document).on('submit','.dodavanje',function(e){
 	e.preventDefault();	
 	
