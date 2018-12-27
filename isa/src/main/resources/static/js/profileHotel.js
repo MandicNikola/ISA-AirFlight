@@ -231,6 +231,12 @@ function resetProfil(){
 function ucitajPocetnu(){
 	window.location = "mainPage.html";
 }
+function resetujGreske(){
+	$("#errorKraj").text("");
+	$("#errorPocetak").text("");
+	$("#errorSobe").text("");
+	$("#errorLjudi").text("");	
+}
 $(document).ready(function(){
 	$("#sobe").hide();
 	$("#cijene").hide();
@@ -247,7 +253,7 @@ $(document).ready(function(){
 		$("#cijene").hide();
 		$("#konfig").hide();
 		$("#rezervacije").hide();
-
+		resetujGreske();
     });
     $("#info").click(function(){
     	$("#informacije").show();
@@ -256,7 +262,7 @@ $(document).ready(function(){
 		$("#cijene").hide();
 		$("#konfig").hide();
 		$("#rezervacije").hide();
-
+		resetujGreske();
     });
     
     $("#reservation").click(function(){
@@ -266,7 +272,7 @@ $(document).ready(function(){
 		$("#cijene").hide();
 		$("#konfig").hide();
 		$("#rezervacije").show();
-
+		resetujGreske();
 		$("#korak").empty();
 		$("#korakDodatne").empty();
 		$("#reserveHotel").show();
@@ -279,7 +285,7 @@ $(document).ready(function(){
 		$("#sobe").hide();
 		$("#cijene").hide();
 		$("#rezervacije").hide();
-
+		resetujGreske();
 	 	
     });
     
