@@ -867,6 +867,7 @@ public class HotelController {
 					if(ss.getId() == idSobe) {
 						Room sobica = ss;
 						//povecaj broj aktivnih rez
+						System.out.println("broj rez je "+sobica.getBrojRezervacija());
 						int brojRez = ss.getBrojRezervacija()+1;
 						sobica.setBrojRezervacija(brojRez);
 						sobe.add(sobica);
