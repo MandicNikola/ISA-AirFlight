@@ -54,15 +54,11 @@ function ispisiProfilHotela(hotel){
 function ispisiSobe(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#sobe").empty();
-	 console.log('usao u ispisi sobe');
-	 
+	
 	 $("#sobe").append("<table class=\"table table-hover\" id=\"tabelaSoba\" ><tr><th>Room type </th><th>Capacity</th><th>Price per night</th><th></th><th></th><th></th></tr>");
 		
 		$.each(pom, function(index, data) {
-			 console.log('usao u ispisi sobe each');
-				
 			if(data.brojRezervacija == 0){
-				
 				$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.cijena+"</td><td><button type=\"button\" onclick=\"changePrice("+data.id+","+data.cijena+")\" class=\"btn btn-light\">Change the price</button></td><td><button type=\"button\" onclick=\"deleteRoom("+data.id+")\" class=\"btn btn-light\">Delete</button></td><td><button type=\"button\" onclick=\"changeRoom("+data.id+")\" class=\"btn btn-light\">Change</button></td></tr>");
 			}else{
 				$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.cijena+"</td><td><button type=\"button\" onclick=\"changePrice("+data.id+","+data.cijena+")\" class=\"btn btn-light\">Change the price</button></td><td><button type=\"button\" disabled = \"disabled\" onclick=\"deleteRoom("+data.id+")\" class=\"btn btn-light\">Delete</button></td><td><button type=\"button\" disabled = \"disabled\" onclick=\"changeRoom("+data.id+")\" class=\"btn btn-light\">Change</button></td></tr>");
@@ -72,7 +68,7 @@ function ispisiSobe(lista){
 		});
 		
 	 $("#sobe").append("</table>");
-	
+	 
 }
 //dodaje u select tipove soba
 function ispisiTipove(list){
@@ -87,22 +83,7 @@ function ispisiTipove(list){
 	 });
 	
 }
-function ispisiAdmine(){
-	
-	$.ajax({
-		method:'GET',
-		url: "/api/hoteli/vratiAdmine/"+id,
-		success: function(data){
-			if(data == null){
-				console.log('Nema admina');
-			}else{
-				tabelaAdmina(data);
-				
-			}
-		}
-	});
-	
-}
+
 function changeRoom(sobaID){
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);
@@ -295,21 +276,11 @@ $(document).ready(function(){
 	$("#rezervacije").hide();
 
 	
-	$("#admini").click(function(){
-    	ispisiAdmine();
-		$("#informacije").hide();
-		$("#ispisiTabelu").hide();
-		$("#cijene").hide();
-		$("#konfig").hide();
-		$("#sobe").hide();
-		$("#rezervacije").hide();
-		resetujGreske();
-    });  	
+	  	
  	
     $("#rooms").click(function(){
-    	$("#sobe").show();
     	listaSoba();
-    	$("#informacije").hide();
+		$("#informacije").hide();
 		$("#ispisiTabelu").hide();
 		$("#cijene").hide();
 		$("#konfig").hide();

@@ -276,8 +276,6 @@ function ispisiVozila(skup){
 				
 		}
 		
-		 
-        
 	});
     $("#pregledVozila").append("</table>");
  
