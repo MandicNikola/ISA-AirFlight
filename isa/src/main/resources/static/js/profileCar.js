@@ -330,7 +330,12 @@ $(document).ready(function(){
     	$("#automobili").hide();
     	$("#bg").hide();
     	$("#addUsluge").show();		
-
+    	$("#days").val("");
+    	$("#catA").val("");
+    	$("#catB").val("");
+    	$("#catC").val("");
+    	$("#catD").val("");
+    	$("#catE").val("");
    });
         
     $("a#veh").click(function(){
