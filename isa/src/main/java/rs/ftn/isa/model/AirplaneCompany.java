@@ -1,6 +1,7 @@
 package rs.ftn.isa.model;
 
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,15 +13,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
+@Table(name="kompanije")
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class AirplaneCompany {
-
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -105,5 +107,26 @@ public class AirplaneCompany {
 	}
 
 
+	 public static Comparator<AirplaneCompany> AirplaneNameComparator = new Comparator<AirplaneCompany>() {
+
+			public int compare(AirplaneCompany A1, AirplaneCompany A2) {
+			   String name1 = A1.getNaziv().toUpperCase();
+			   String name2 = A2.getNaziv().toUpperCase();
+
+			   //sortiranje od A-Z
+			   return name1.compareTo(name2);
+
+	}};
 	
+	 public static Comparator<AirplaneCompany> AirplaneCityComparator = new Comparator<AirplaneCompany>() {
+
+			public int compare(AirplaneCompany A1, AirplaneCompany A2) {
+			   String city1 = A1.getAdresa().toUpperCase();
+			   String city2 = A2.getAdresa().toUpperCase();
+
+			   //sortiranje od A-Z
+			   return city1.compareTo(city2);
+
+	}};
+
 	}
