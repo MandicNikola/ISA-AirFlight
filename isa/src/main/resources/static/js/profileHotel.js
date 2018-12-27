@@ -33,22 +33,55 @@ function ispisiProfilHotela(hotel){
 	var adresa=	adr.replace(" ", "%20");
     
 	$("#adresa").append("<div class=\"mapouter\"><div class=\"gmap_canvas\"><iframe width=\"600\" height=\"500\" id=\"gmap_canvas\" src=\"https://maps.google.com/maps?q="+adresa+"&t=&z=13&ie=UTF8&iwloc=&output=embed\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\"></iframe><a href=\"https://www.embedgooglemap.net\">embedgooglemap.net</a></div><style>.mapouter{text-align:right;height:500px;width:600px;}.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:600px;}</style></div>")
-   
+	
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	
+	$.ajax({
+		method:'GET',
+		url: "/api/hoteli/vratiTipoveSoba/"+id,
+		success: function(data){
+			if(data == null){
+				console.log('Nema soba');
+			}else{
+				ispisiTipove(data);
+				
+			}
+		}
+	});
 }
 
 function ispisiSobe(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#sobe").empty();
 	 $("#sobe").show();
-	 $("#sobe").append("<table class=\"table table-hover\" id=\"tabelaSoba\" ><tr><th>Room type </th><th>Capacity</th><th>Beds</th><th>Price per night</th><th></th><th></th></tr>");
+	 $("#sobe").append("<table class=\"table table-hover\" id=\"tabelaSoba\" ><tr><th>Room type </th><th>Capacity</th><th>Price per night</th><th></th><th></th><th></th></tr>");
 		
 		$.each(pom, function(index, data) {
-			$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.kreveti+"</td><td>"+data.cijena+"</td><td><button type=\"button\" onclick=\"changePrice("+data.id+","+data.cijena+")\" class=\"btn btn-light\">Change the price</button></td><td><button type=\"button\" onclick=\"deleteRoom("+data.id+")\" class=\"btn btn-light\">Delete</button></td><td><button type=\"button\" onclick=\"changeRoom("+data.id+")\" class=\"btn btn-light\">Change</button></td></tr>");
+			if(data.brojRezervacija == 0){
+				$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.cijena+"</td><td><button type=\"button\" onclick=\"changePrice("+data.id+","+data.cijena+")\" class=\"btn btn-light\">Change the price</button></td><td><button type=\"button\" onclick=\"deleteRoom("+data.id+")\" class=\"btn btn-light\">Delete</button></td><td><button type=\"button\" onclick=\"changeRoom("+data.id+")\" class=\"btn btn-light\">Change</button></td></tr>");
+			}else{
+				$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.cijena+"</td><td><button type=\"button\" onclick=\"changePrice("+data.id+","+data.cijena+")\" class=\"btn btn-light\">Change the price</button></td><td><button type=\"button\" disabled = \"disabled\" onclick=\"deleteRoom("+data.id+")\" class=\"btn btn-light\">Delete</button></td><td><button type=\"button\" onclick=\"changeRoom("+data.id+")\" class=\"btn btn-light\">Change</button></td></tr>");
+				
+			}
 			
 		});
 		
 	 $("#sobe").append("</table>");
 	 
+}
+//dodaje u select tipove soba
+function ispisiTipove(list){
+	
+	console.log('Usao u popuni select');
+	
+	var lista = list == null ? [] : (list instanceof Array ? list : [ list ]);
+	 $.each(lista, function(index, data) {
+		 
+		 $("#typeRoom").append("<option  value=\""+data+"\">"+data+"</option>");
+		 
+	 });
+	
 }
 
 function changeRoom(sobaID){
@@ -66,13 +99,10 @@ function deleteRoom(sobaID){
 		type : 'POST',
 		url : "/api/rooms/obrisiSobu/"+sobaID,
 		success : function(data) {
-			if(data == "uspjesno"){
+			
 				console.log('obrisana soba');
 				listaSoba();
-			}else{
-				console.log('nije obrisana soba');
-				
-			}
+			
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
 			alert('greska');
@@ -128,13 +158,11 @@ function ispisiSobeBezAdima(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#sobe").empty();
 	 $("#sobe").show();
-	 $("#sobe").append("<table class=\"table table-hover\" id=\"tabelaSoba\" ><tr><th>Room type </th><th>Capacity</th><th>Beds</th><th>Price for night</th></tr>");
+	 $("#sobe").append("<table class=\"table table-hover\" id=\"tabelaSoba\" ><tr><th>Room type </th><th>Capacity</th><th>Price for night</th></tr>");
 		
 		$.each(pom, function(index, data) {
-			$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.kreveti+"</td><td>"+data.cijena+"</td></tr>");
-			
+			$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.cijena+"</td></tr>");			
 		});
-		
 	 $("#sobe").append("</table>");
 	
 	
@@ -751,7 +779,8 @@ function preuzmiPodatke() {
 		"checkIn":$('#checkin').val(),
 		"checkOut":$('#checkout').val(),
 		"brojSoba":$('#brojSoba').val(),
-		"brojLjudi":$('#brojLjudi').val()
+		"brojLjudi":$('#brojLjudi').val(),
+		"brojKreveta":$('#typeRoom').val()
 	});
 	return kat;
 }
@@ -807,9 +836,8 @@ function ispisiPonude(lista){
 function povratakPretraga(){
 	 $("#korak").hide();
 	 $("#korakDodatne").hide();
-	 //praznim cekirano ne treba da cuva stanje
 	 $("#korak").empty();
-	console.log('pritisnuo back'); 
+	 console.log('pritisnuo back'); 
 	 $("#reserveHotel").show();	
 	
 }
@@ -830,7 +858,7 @@ function korak2get(){
 		    }
 		   
 		});
-	  console.log('niz je' +sList);
+	   console.log('niz je' +sList);
 	  //dodatne informacije za rezervaciju	
 	  	var pocetak=$('#checkin').val();
 		var kraj=$('#checkout').val();
@@ -918,6 +946,7 @@ function zavrsiRezBezUsluga(nizSoba){
 						}else if(povratna == 0){
 							console.log('neuspjesno');
 						}else{
+							ispisiUspjesno(povratna);		
 							console.log('uspjesno');
 						}
 			},

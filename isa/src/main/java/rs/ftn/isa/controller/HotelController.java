@@ -106,7 +106,24 @@ public class HotelController {
 			}
 		
 		}
-		
+		//metoda koja vraca tipove soba u odredjenom hotelu - jednokrevetna,dvokrevetna itd
+		@RequestMapping(value="/vratiTipoveSoba/{id}", method = RequestMethod.GET)
+		public ArrayList<Integer> getTipovaSoba(@PathVariable Long id){	
+			Hotel pronadjeni = servis.findHotelById(id);
+			Set<Room> sobe = pronadjeni.getSobe();
+			ArrayList<Integer> tipovi = new ArrayList<Integer>();
+			for(Room soba :sobe) {
+				int brojkreveta = soba.getKapacitet();
+				if(!tipovi.contains(brojkreveta)) {
+					tipovi.add(brojkreveta);
+				}
+			}
+			if(tipovi.size() == 0) {
+				return new ArrayList<Integer>();
+			}
+			
+			return tipovi;
+		}
 		@RequestMapping(value="/obrisiHotel/{id}", method = RequestMethod.POST)
 		public  void obrisiHotel(@PathVariable Long id){
 			System.out.println("brisanje hotel "+id);
@@ -689,8 +706,7 @@ public class HotelController {
 		public ArrayList<Room> vratiPonude(@RequestBody ReservationHotelDTO rez,@PathVariable Long id){		
 			Hotel hotel = servis.findHotelById(id);
 			
-			System.out.println(rez);
-			System.out.println("dosao da vrati ponude");
+			System.out.println("dosao da vrati ponude " + rez.getBrojKreveta());
 			ArrayList<Room> sobe = new ArrayList<Room>();
 			
 			for(Room soba:hotel.getSobe()) {
@@ -728,38 +744,26 @@ public class HotelController {
 				}
 				
 			}
-			//slucaj kad je trazio samo jednu sobu,provjerim da li je broj ljudi u svakoj pojedicnacno  jednak trazenom broju
-			if(rez.getBrojSoba()==1) {
-				ArrayList<Room> povratna = new ArrayList<Room>();
-				for(Room soba:sobe) {
-					if(soba.getKapacitet() == rez.getBrojLjudi()){
-						povratna.add(soba);
-					}
-					
-				}
-				//nema soba koji primaju trazeni broj gostiju
-				if(povratna.size() == 0) {
-					return new ArrayList<Room>();
-				}else {
-					return povratna;
-				}
-			}
-			//ako se trazi vise soba,one sa vecim ili jednakim kapacitetom izbacim
-			ArrayList<Room> povratna = new ArrayList<Room>();
 			
+			//ubacim samo sobe koje su trazenog tipa(jednokrevetne,dvokrevetne itd)
+			ArrayList<Room> pronadjeneSobe = new ArrayList<Room>();
 			for(Room soba:sobe) {
-				if(soba.getKapacitet() < rez.getBrojLjudi()){
-					povratna.add(soba);
+				if(soba.getKapacitet() == rez.getBrojKreveta()) {
+					System.out.println("ubacio sobu");
+					pronadjeneSobe.add(soba);
 				}
+				
 			}
+			
+		
 			//provjera da li imam dovoljan broj soba
-			if(povratna.size() < rez.getBrojSoba()) {
+			if(pronadjeneSobe.size() < rez.getBrojSoba()) {
 				System.out.println("nedovoljan broj soba");
 				
 				 return new ArrayList<Room>();
 			}
 			int suma = 0;
-			for(Room sobica:povratna) {
+			for(Room sobica:pronadjeneSobe) {
 				suma += sobica.getKapacitet();
 			}
 			
@@ -770,7 +774,7 @@ public class HotelController {
 				 return new ArrayList<Room>();
 			}
 			
-			return povratna;
+			return pronadjeneSobe;
 		}	
 		//metoda koja formira rezervaciju
 		@RequestMapping(value="/rezervisi/{info}/sobe/{nizSoba}/nizUsluga/{listaUsl}/idHotela/{id}", 

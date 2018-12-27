@@ -75,7 +75,9 @@ public class Room {
 	
 	public Room() {
 		super();
+		brojRezervacija = 0;
 	} 
+	
 	public Room(Long id, String tip, double ocjena, int kreveti, int sprat, double cijena,String balkon) {
 		super();
 		this.id = id;
