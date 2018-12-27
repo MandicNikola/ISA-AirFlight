@@ -269,7 +269,15 @@ function ispisiVozila(skup){
 		var filulica=vozilo.filijala.ulica;
 		var adresa=filpom + ", "+filulica;
 		console.log(filpom);
-		$("#tabelaVozilo").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+vozilo.naziv+"</td><td > "+vozilo.marka+"</td><td > "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td > "+vozilo.sedista+"</td><td > "+vozilo.kategorija+"</td><td > "+adresa+"</td><td><button class=\"btn btn-info\" onclick=\"izmeniVozilo('"+vozilo.id+"')\">Change</button></td><td><button class=\"btn btn-info\" onclick=\"obrisiVozilo('"+vozilo.id+"')\">Delete</button></td></tr>");
+		if(vozilo.broj == 0){
+			$("#tabelaVozilo").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+vozilo.naziv+"</td><td > "+vozilo.marka+"</td><td > "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td > "+vozilo.sedista+"</td><td > "+vozilo.kategorija+"</td><td > "+adresa+"</td><td><button  class=\"btn btn-info\" onclick=\"izmeniVozilo('"+vozilo.id+"')\">Change</button></td><td><button class=\"btn btn-info\"  onclick=\"obrisiVozilo('"+vozilo.id+"')\">Delete</button></td></tr>");
+		}else{
+			$("#tabelaVozilo").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+vozilo.naziv+"</td><td > "+vozilo.marka+"</td><td > "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td > "+vozilo.sedista+"</td><td > "+vozilo.kategorija+"</td><td > "+adresa+"</td><td><button  class=\"btn btn-info\" disabled=\"disabled\" onclick=\"izmeniVozilo('"+vozilo.id+"')\">Change</button></td><td><button class=\"btn btn-info\"  disabled=\"disabled\" onclick=\"obrisiVozilo('"+vozilo.id+"')\">Delete</button></td></tr>");
+				
+		}
+		
+		 
+        
 	});
     $("#pregledVozila").append("</table>");
  
@@ -555,7 +563,7 @@ function rezervisiVozilo(param){
 		}
 		});
 }
-function 	ispisiUspesno(){
+function ispisiUspesno(){
 	$("#anketa").hide();
 	 
 	$("#rezultat").empty();

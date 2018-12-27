@@ -55,6 +55,11 @@ public class Vehicle {
 	@Column(name = "ocena", nullable = false)
 	private double ocena;
 
+	//broj rezervacija
+	@Column(name = "broj", nullable = false)
+	private int broj;
+
+	
 	//svako vozilo pripada odredjenoj filijali
 	@ManyToOne( fetch = FetchType.EAGER)
     @JoinColumn(name = "filijala_id")
@@ -80,6 +85,7 @@ public class Vehicle {
 		this.kategorija = CategoryCar.valueOf(kategorija);
 		this.cena = cena;
 		this.ocena = ocena;
+		broj=0;
 	}
 
 
@@ -91,6 +97,7 @@ public class Vehicle {
 		this.godiste = godiste;
 		this.sedista = sedista;
 		this.kategorija =CategoryCar.valueOf(kategorija);
+		broj=0;
 	}
 
 
@@ -106,6 +113,7 @@ public class Vehicle {
 		this.kategorija = CategoryCar.valueOf(kategorija);
 		this.cena = cena;
 		this.ocena = ocena;
+		broj=0;
 	}
 
 
@@ -233,6 +241,16 @@ public class Vehicle {
 	public boolean equals(Object obj) {
 		// TODO Auto-generated method stub
 		return super.equals(obj);
+	}
+
+
+	public int getBroj() {
+		return broj;
+	}
+
+
+	public void setBroj(int broj) {
+		this.broj = broj;
 	}
 	
 	

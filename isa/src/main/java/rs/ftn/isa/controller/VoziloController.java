@@ -87,7 +87,7 @@ public class VoziloController {
 		}
 		
 		//servis.saveVehicle(novo);
-		
+		novo.setBroj(0);
 		return novo;
 		
 		}	
@@ -212,7 +212,7 @@ public class VoziloController {
 			System.out.println("Nasao je vozilo ");
 			rezervacija.setVozilo(vozilo);
 			vozilo.getRezervacije().add(rezervacija);
-			
+			vozilo.setBroj(vozilo.getBroj()+1);
 			servis.saveVehicle(vozilo);
 			Long idRent = vozilo.getFilijala().getServis().getId();
 			
