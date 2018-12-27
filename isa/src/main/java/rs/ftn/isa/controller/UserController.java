@@ -2,6 +2,7 @@ package rs.ftn.isa.controller;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +48,41 @@ public class UserController {
 		return  servis.findAll();
 	}
 	
+
+	@RequestMapping(value="/vratiAdmineSistema", method = RequestMethod.GET)
+	public ArrayList<User> getAllAdminSistem(){		
+		List<User> korisnici = servis.findAll();
+		ArrayList<User> admini = new ArrayList<User>();
+		for(User user:korisnici) {
+				if(user.getTip()==(Role.ADMIN_SISTEM)) {
+					admini.add(user);
+
+					System.out.println("usao" + user.getPrezime());
+				}
+			}
+		return admini;
+	}
+	
+	@RequestMapping(value="/getUsersForSistem", method = RequestMethod.GET)
+	public ArrayList<User> getUsersForSistem(){		
+		List<User> korisnici = servis.findAll();
+		ArrayList<User> admini = new ArrayList<User>();
+		for(User user:korisnici) {
+				if(user.getTip()==(Role.REGISTROVAN)) {
+					System.out.println("usao" + user.getPrezime());
+					admini.add(user);
+				}
+			}
+		return admini;
+	}
+	
+	@RequestMapping(value="/newAdminSistem/{id}", method = RequestMethod.POST)
+	public  void noviAdminSistema(@PathVariable Long id){
+		User korisnik = servis.findOneById(id);
+		korisnik.setTip(Role.ADMIN_SISTEM);
+		servis.saveUser(korisnik);
+		System.out.println("sacuvan korisnik kao admin sistema");
+	}
 	@RequestMapping(value="/test")
 	public String vrati() {
 		

@@ -15,6 +15,8 @@ function onLoad(){
 			
 	}
 	$("#pozadinaAuto").hide();
+	$("#ispisiSelect").hide();
+	
 	$("#pozadinaHotel").hide();
 	$("#reserveCar").hide();
 	$("#sortCar").hide();
@@ -29,6 +31,7 @@ function planeShow(){
 	$("#pozadinaAvion").show();
 	$("#pozadinaAuto").hide();
 	$("#pozadinaHotel").hide();
+	$("#ispisiSelect").hide();
 	$("#ispisiTabelu").empty();
 	$("#reserveCar").hide();	
 	$("#sortCar").hide();
@@ -52,6 +55,7 @@ function planeShow(){
 function hotelShow(){
 	$("#pozadinaAvion").hide();
 	$("#pozadinaAuto").hide();
+	
 	$("#pozadinaHotel").show();
 	$("#ispisiTabelu").empty();
 	$("#reserveHotel").show();
@@ -61,7 +65,8 @@ function hotelShow(){
 	$("#sortCar").hide();
 	$("#sortAvione").hide();
 	 $("#ispisiTabelu").empty();
-		
+	 $("#ispisiSelect").hide();
+			
 	
 	$.ajax({
 		method:'GET',
@@ -175,6 +180,7 @@ function carShow(){
 	$("#sortHotele").hide();
 	$("#pozadinaHotel").hide();	
 	 $("#ispisiTabelu").empty();
+	 $("#ispisiSelect").hide();
 		
 	
 	$.ajax({
@@ -445,6 +451,75 @@ function addHotel(){
 }
 function addCarHire(){
 	window.location = "newRentACar.html";
+		
+}
+
+function adminSistem(){
+	$("#ispisiSelect").show();
+	  
+	$("#ispisiTabelu").empty();
+	 $.ajax({
+			method:'GET',
+			url: "/api/korisnici/vratiAdmineSistema",
+			success: function(lista){
+				if(lista == null){
+					console.log('Nema admina')
+				}else if(lista.length==0){
+					console.log('Nema admina')
+				}else{
+					ispisiAdmineSistema(lista);
+					
+				}
+			}
+		});
+}
+function ispisiAdmineSistema(lista){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	console.log('dosao u ispisi adminaSistema')
+
+	$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaAdmini\" ><tr><th> Name </th><th> Surname</th></tr>");
+		$.each(pom, function(index, servis) {
+			$("#tabelaAdmini").append("<tr><td>"+servis.ime+"</td><td>"+servis.prezime+"</td></tr>");
+		});
+	 $("#ispisiTabelu").append("</table>");
+	 dodajNovogAdmina();
+}
+function dodajNovogAdmina(){
+	 $.ajax({
+			method:'GET',
+			url: "/api/korisnici/getUsersForSistem",
+			success: function(lista){
+				if(lista == null){
+					console.log('Nema admina')
+				}else if(lista.length==0){
+					console.log('Nema admina')
+				}else{
+					izborAdmina(lista);
+					
+				}
+			}
+		});
 	
+}
+function izborAdmina(lista){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	console.log('dosao u izbor admina')
+	$("#adminSelect").empty();
+	 $.each(pom, function(index, data) {
+		 	
+		 $("#adminSelect").append("<option value=\""+data.id+"\" >"+data.ime+" "+ data.prezime+"</option>");	 
+		 
+	 });
 	
+}
+function izmjeniAdmineSistema(){
+	var idUser =$('#adminSelect').val();
+	console.log('dosao u izmjeni adminaSistema '+idUser)
+	 $.ajax({
+			method:'POST',
+			url: "/api/korisnici/newAdminSistem/"+idUser,
+			success: function(lista){
+				adminSistem();
+			}
+		});
 }

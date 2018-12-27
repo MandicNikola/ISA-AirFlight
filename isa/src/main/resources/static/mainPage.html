@@ -76,7 +76,7 @@
     padding: 30px;
     border-radius: 3px;
 }
-  
+ 
   
  .btn-group btn-group-lg{
  	 background-color:#fff !important;
@@ -89,7 +89,15 @@
  #logoMargin{
  	margin-left:10px;
  }
- 
+ #dugmeAdminSelekt{
+ 	margin-left:40%;
+ 	margin-top: 5px;
+ 	margin-bottom: 10px;
+ }
+  #ispisiSelect{
+ 	 	width: 40%;
+  		
+ 	 }
  input[type="date"]::before { 
 	content: attr(data-placeholder);
 	width: 100%;
@@ -302,6 +310,13 @@ input[type="date"]:valid::before { display: none }
 		</div>			
 </div>
 </div>
+<div class="container" id="ispisiSelect">
+	<h3>Add new administrator of system</h3>
+	<select class="form-control" id="adminSelect">
+	</select>	
+	<div><button id="dugmeAdminSelekt"  class="btn btn-info" onclick="izmjeniAdmineSistema()" >Add</button></div>
+</div>
+
 <div class="container" id = "ispisiTabelu">
 	
 </div>
@@ -314,6 +329,8 @@ input[type="date"]:valid::before { display: none }
   	<button type="button" class="btn btn-secondary" onclick = "addPlane()">Add plane</button>
   	<button type="button" class="btn btn-secondary" onclick = "addHotel()">Add hotel</button>
   	<button type="button" class="btn btn-secondary" onclick = "addCarHire()">Add car-hire</button>
+  	<button type="button" class="btn btn-secondary" onclick = "adminSistem()">Administrators</button>
+  
    </div>
   <p>Copyrights Made By <a href="http://localhost:8080/mainPage.html">Airfinity</a></p> 
 </footer>

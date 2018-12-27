@@ -54,13 +54,15 @@ function ispisiProfilHotela(hotel){
 function ispisiSobe(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#sobe").empty();
-	
+	 $("#sobe").show();
+		
 	 $("#sobe").append("<table class=\"table table-hover\" id=\"tabelaSoba\" ><tr><th>Room type </th><th>Capacity</th><th>Price per night</th><th></th><th></th><th></th></tr>");
 		
 		$.each(pom, function(index, data) {
 			if(data.brojRezervacija == 0){
 				$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.cijena+"</td><td><button type=\"button\" onclick=\"changePrice("+data.id+","+data.cijena+")\" class=\"btn btn-light\">Change the price</button></td><td><button type=\"button\" onclick=\"deleteRoom("+data.id+")\" class=\"btn btn-light\">Delete</button></td><td><button type=\"button\" onclick=\"changeRoom("+data.id+")\" class=\"btn btn-light\">Change</button></td></tr>");
 			}else{
+				console.log('dosao ovdje');
 				$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.cijena+"</td><td><button type=\"button\" onclick=\"changePrice("+data.id+","+data.cijena+")\" class=\"btn btn-light\">Change the price</button></td><td><button type=\"button\" disabled = \"disabled\" onclick=\"deleteRoom("+data.id+")\" class=\"btn btn-light\">Delete</button></td><td><button type=\"button\" disabled = \"disabled\" onclick=\"changeRoom("+data.id+")\" class=\"btn btn-light\">Change</button></td></tr>");
 				
 			}
@@ -268,6 +270,10 @@ function resetujGreske(){
 	$("#errorPocetak").text("");
 	$("#errorSobe").text("");
 	$("#errorLjudi").text("");	
+	$("#checkin").val("");	
+	$("#checkout").val("");	
+	$("#brojSoba").val("");	
+	$("#brojLjudi").val("");	
 }
 $(document).ready(function(){
 	$("#sobe").hide();
@@ -275,17 +281,16 @@ $(document).ready(function(){
 	$("#konfig").hide();
 	$("#rezervacije").hide();
 
-	
-	  	
- 	
+
     $("#rooms").click(function(){
     	listaSoba();
-		$("#informacije").hide();
+    	$("#informacije").hide();
 		$("#ispisiTabelu").hide();
 		$("#cijene").hide();
 		$("#konfig").hide();
 		$("#rezervacije").hide();
-		resetujGreske();
+		$("#sobe").show();
+				
     });
     $("#info").click(function(){
     	$("#informacije").show();
@@ -294,21 +299,21 @@ $(document).ready(function(){
 		$("#cijene").hide();
 		$("#konfig").hide();
 		$("#rezervacije").hide();
-		resetujGreske();
-    });
+	    });
     
     $("#reservation").click(function(){
+    	resetujGreske();
+		
     	$("#informacije").hide();
 		$("#ispisiTabelu").hide();
 		$("#sobe").hide();
 		$("#cijene").hide();
 		$("#konfig").hide();
 		$("#rezervacije").show();
-		resetujGreske();
 		$("#korak").empty();
 		$("#korakDodatne").empty();
 		$("#reserveHotel").show();
-
+		
     });
     $("#config").click(function(){
     	ispisiKonfiguracije();
@@ -317,11 +322,19 @@ $(document).ready(function(){
 		$("#sobe").hide();
 		$("#cijene").hide();
 		$("#rezervacije").hide();
-		resetujGreske();
-	 	
+		
     });
     
-    
+    $("#admini").click(function(){
+    	ispisiAdmine();
+		$("#informacije").hide();
+		$("#ispisiTabelu").hide();
+		$("#cijene").hide();
+		$("#konfig").hide();
+		$("#sobe").hide();
+		$("#rezervacije").hide();
+		resetujGreske();
+    });  	
     $("#price").click(function(){
     	console.log('dosao u price');
     	showPrices();
