@@ -83,7 +83,22 @@ function ispisiTipove(list){
 	 });
 	
 }
-
+function ispisiAdmine(){
+	
+	$.ajax({
+		method:'GET',
+		url: "/api/hoteli/vratiAdmine/"+id,
+		success: function(data){
+			if(data == null){
+				console.log('Nema admina');
+			}else{
+				tabelaAdmina(data);
+				
+			}
+		}
+	});
+	
+}
 function changeRoom(sobaID){
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);
@@ -276,7 +291,16 @@ $(document).ready(function(){
 	$("#rezervacije").hide();
 
 	
-	  	
+	$("#admini").click(function(){
+    	ispisiAdmine();
+		$("#informacije").hide();
+		$("#ispisiTabelu").hide();
+		$("#cijene").hide();
+		$("#konfig").hide();
+		$("#sobe").hide();
+		$("#rezervacije").hide();
+		resetujGreske();
+    });  	
  	
     $("#rooms").click(function(){
     	listaSoba();

@@ -43,20 +43,13 @@ public class Hotel {
 	@OneToMany(mappedBy = "hotelski",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore
 	private  Set<PricelistHotel> cijenovnici;
-	
-	//nedostaje kofiguracija soba i cijenovnik usluga
 	//jedan hotel ima vise soba
 	
 	@OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore
 	private Set<Room> sobe = new HashSet<Room>();
 	
-	/*//jedan hotel ima vise rezervacija
-	@OneToMany(mappedBy = "rezHotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JsonIgnore
-	private Set<RezervacijaHotel> rezervacije = new HashSet<RezervacijaHotel>();
-	*/
-	@OneToMany(mappedBy = "hotelKat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "hotelKat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore
 	private Set<Category> kategorije = new HashSet<Category>();
 	
