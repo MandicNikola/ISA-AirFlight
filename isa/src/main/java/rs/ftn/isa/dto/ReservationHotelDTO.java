@@ -6,6 +6,8 @@ public class ReservationHotelDTO {
 	private String nazivHotela;
 	private int brojSoba;
 	private int brojLjudi;
+	private int brojKreveta;
+	
 	private Date checkIn;
 	private Date checkOut;
 	public ReservationHotelDTO() {
@@ -59,6 +61,14 @@ public class ReservationHotelDTO {
 	}
 	public void setCheckOut(Date checkOut) {
 		this.checkOut = checkOut;
+	}
+    
+	public int getBrojKreveta() {
+		return brojKreveta;
+	}
+
+	public void setBrojKreveta(int brojKreveta) {
+		this.brojKreveta = brojKreveta;
 	}
 
 	@Override
