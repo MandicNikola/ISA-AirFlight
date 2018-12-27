@@ -661,7 +661,8 @@ function izlistajPonudu(){
 	var osobe=$('#brojLjudi').val();
 	var sobe=$('#brojSoba').val();
 	var today = new Date().toISOString().split('T')[0];
-	
+	console.log(today);
+	console.log(pocetak);
 	
 	$("#errorKraj").text("");
 	$("#errorPocetak").text("");
@@ -671,18 +672,19 @@ function izlistajPonudu(){
 	if(pocetak == ""){
 		ispravno = false;
 		$("#errorPocetak").text(" Fill out this field").css('color', 'red');
+	}else if(pocetak < today){
+		$("#errorPocetak").text("You can not select the date that passed").css('color', 'red');
+		ispravno=false;
+		
 	}
 	if(kraj == ""){
 		ispravno=false;
 		$("#errorKraj").text(" Fill out this field").css('color', 'red');
 	}
 	var date1 = Date.parse(pocetak);
+	
 	var date2 = Date.parse(kraj);
-	if(date1 < today){
-		$("#errorPocetak").text("You can not select the date that passed").css('color', 'red');
-		ispravno=false;
-		
-	}
+	
 	if (date1 > date2) {
 		$("#errorKraj").text("Check out date must be greater than check in date").css('color', 'red');
 		ispravno=false;
@@ -762,7 +764,7 @@ function ispisiPonude(lista){
 			if(data.balkon == 'da'){
 				$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\" ></td><td>"+data.cijena+"</td><td><input type=\"checkbox\" id=\""+data.id+"\"  class=\"cekiraj\" name= \"cekirani\"  value=\""+data.id+"\"></td></tr>");	
 			}else{
-				$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td><input type=\"checkbox\"  disabled=\"disabled\" ></td><td>"+data.cijena+"</td><td>"+data.cijena+"</td><td><input type=\"checkbox\" name= \"cekirani\"  class=\"cekiraj\" id=\""+data.id+"\" value=\""+data.id+"\"></td></tr>");	
+				$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td><input type=\"checkbox\"  disabled=\"disabled\" ></td><td>"+data.cijena+"</td><td><input type=\"checkbox\" name= \"cekirani\"  class=\"cekiraj\" id=\""+data.id+"\" value=\""+data.id+"\"></td></tr>");	
 			}
 		});
 

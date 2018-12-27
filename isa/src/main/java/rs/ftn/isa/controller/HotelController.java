@@ -186,12 +186,12 @@ public class HotelController {
 				consumes = MediaType.APPLICATION_JSON_VALUE,
 				produces = MediaType.APPLICATION_JSON_VALUE)
 		public @ResponseBody Hotel dodajSobu(@RequestBody Room room,@PathVariable Long id){		
-				//jedinstven po nazivu
-			 Hotel pom = servis.findHotelById(id);	
+			
+			Hotel pom = servis.findHotelById(id);	
 			 
 			 if(pom == null) {
 		
-				 System.out.println(" ne postoji ti taj hotel ");
+				 System.out.println(" ne postoji hotel ");
 				 return null;
 			 }
 			 
@@ -728,30 +728,38 @@ public class HotelController {
 				}
 				
 			}
-			//slucaj kad je trazio samo jednu sobu,provjerim da li je broj ljudi u svakoj pojedicnacno veci ili jednak od trazenog broja
+			//slucaj kad je trazio samo jednu sobu,provjerim da li je broj ljudi u svakoj pojedicnacno  jednak trazenom broju
 			if(rez.getBrojSoba()==1) {
 				ArrayList<Room> povratna = new ArrayList<Room>();
 				for(Room soba:sobe) {
-					if(soba.getKapacitet() >= rez.getBrojLjudi()){
+					if(soba.getKapacitet() == rez.getBrojLjudi()){
 						povratna.add(soba);
 					}
 					
 				}
-				//nema soba koji primaju toliki broj gostiju
+				//nema soba koji primaju trazeni broj gostiju
 				if(povratna.size() == 0) {
 					return new ArrayList<Room>();
 				}else {
 					return povratna;
 				}
 			}
+			//ako se trazi vise soba,one sa vecim ili jednakim kapacitetom izbacim
+			ArrayList<Room> povratna = new ArrayList<Room>();
+			
+			for(Room soba:sobe) {
+				if(soba.getKapacitet() < rez.getBrojLjudi()){
+					povratna.add(soba);
+				}
+			}
 			//provjera da li imam dovoljan broj soba
-			if(sobe.size() < rez.getBrojSoba()) {
+			if(povratna.size() < rez.getBrojSoba()) {
 				System.out.println("nedovoljan broj soba");
 				
 				 return new ArrayList<Room>();
 			}
 			int suma = 0;
-			for(Room sobica:sobe) {
+			for(Room sobica:povratna) {
 				suma += sobica.getKapacitet();
 			}
 			
@@ -762,7 +770,7 @@ public class HotelController {
 				 return new ArrayList<Room>();
 			}
 			
-			return sobe;
+			return povratna;
 		}	
 		//metoda koja formira rezervaciju
 		@RequestMapping(value="/rezervisi/{info}/sobe/{nizSoba}/nizUsluga/{listaUsl}/idHotela/{id}", 

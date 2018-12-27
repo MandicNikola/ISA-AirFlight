@@ -30,19 +30,20 @@ public class RoomController {
 		System.out.println("dosao po sobe");
 		return  servis.findAll();
 	}
-	
+	//validacija dodavanja nove sobe
 	@RequestMapping(value="/newroom",
 			method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody Room newRoom(@RequestBody Room room) {
 			Room pomRoom = new Room();
-			System.out.println("tip je " + room.getTip()+" kreveti su " + room.getKreveti()+" ima balkon " + room.getBalkon());
+
+			
 		if(room.getTip().equals("") || room.getTip() == null || room.getTip().equals("undefined")) {
 			pomRoom.setTip("Tip");
 			return pomRoom;
 		}
-		if(room.getKreveti()<1) {
+		if(room.getKapacitet()<1) {
 			pomRoom.setTip("Kreveti");
 			return pomRoom;
 		}
@@ -80,15 +81,12 @@ public class RoomController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody Room izmjeniSobu(@RequestBody Room soba,@PathVariable Long id){		
 		Room stara = servis.findRoomById(id);
-		System.out.println("dosao da izmjeni sobu " + soba.getId());
 		stara.setBalkon(soba.getBalkon());
 		stara.setKapacitet(soba.getKapacitet());
-		stara.setKreveti(soba.getKreveti());
 		stara.setSprat(soba.getSprat());
 		stara.setTip(soba.getTip());
 		//automatski radi update po id sobe
 		servis.saveRoom(stara);
-		System.out.println("izmjenio sobu");
 		return stara;
 	}
 

@@ -111,7 +111,7 @@ function dodajHotelu(data){
 }
 function prikaziHotel(){
 	var adresa = window.location.search.substring(1);
-	console.log('adesa je '+adresa);
+	console.log('adresa je '+adresa);
 	var id = adresa.split('=')[1];
 	window.location = "profileHotel.html?id="+id;
 		
@@ -122,10 +122,9 @@ function formToJSON() {
 		rez = 'da';
 	}
 	return JSON.stringify({
-		"tip" : $('#tip').val(),
-		"kreveti" : $('#kreveti').val(),			
+		"tip" : $('#tip').val(),			
 		"sprat" : $('#sprat').val(),
-		"kapacitet": $('#kapacitet').val(),
+		"kapacitet": $('#kreveti').val(),
 		"cijena":$('#cijena').val(),
 		"balkon" : rez			
 	});

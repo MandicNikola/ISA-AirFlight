@@ -19,9 +19,8 @@ function onLoad(){
 
 }
 function popuniPolja(soba){
-	$("#kreveti").val(soba.kreveti);
+	$("#kreveti").val(soba.kapacitet);
 	$("#sprat").val(soba.sprat);
-	$("#kapacitet").val(soba.kapacitet);
 	if(soba.balkon == 'da'){
 		$("#balkon").prop('checked', true);
 	}
@@ -86,9 +85,8 @@ function formToJSON() {
 	}
 	return JSON.stringify({
 		"tip" : $('#tip').val(),
-		"kreveti" : $('#kreveti').val(),			
 		"sprat" : $('#sprat').val(),
-		"kapacitet": $('#kapacitet').val(),
+		"kapacitet": $('#kreveti').val(),
 		"balkon" : rez			
 	});
 }

@@ -235,6 +235,7 @@ function findHotels(){
 	$("#errorPocetak").text("");
 	
 	var hotel=$("#nameHotel").val();
+	var today = new Date().toISOString().split('T')[0];
 	
 	if(hotel == ""){
 		ispravno = false;
@@ -245,6 +246,10 @@ function findHotels(){
 	if(pocetak == ""){
 		ispravno = false;
 		$("#errorPocetak").text(" Fill out this field").css('color', 'red');
+	}else if(pocetak < today){
+		$("#errorPocetak").text("You can not select the date that passed").css('color', 'red');
+		ispravno=false;
+		
 	}
 	var kraj=$("#hotelCheckOut").val();
 	if(kraj == ""){
