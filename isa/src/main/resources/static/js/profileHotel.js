@@ -66,8 +66,13 @@ function deleteRoom(sobaID){
 		type : 'POST',
 		url : "/api/rooms/obrisiSobu/"+sobaID,
 		success : function(data) {
+			if(data == "uspjesno"){
 				console.log('obrisana soba');
 				listaSoba();
+			}else{
+				console.log('nije obrisana soba');
+				
+			}
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
 			alert('greska');

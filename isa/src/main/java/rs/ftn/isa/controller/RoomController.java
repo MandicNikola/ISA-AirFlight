@@ -58,11 +58,16 @@ public class RoomController {
 	}
 	
 	@RequestMapping(value="/obrisiSobu/{soba}", method = RequestMethod.POST)
-	public  void obrisiSobu(@PathVariable String soba){
+	public  String obrisiSobu(@PathVariable String soba){
 		System.out.println("brisanje sobe "+soba);
 		Long idSoba = Long.parseLong(soba);
-		servis.removeRoom(idSoba);
-	
+		Room room = servis.findRoomById(idSoba);
+		if(room.getBrojRezervacija() == 0) {
+			servis.removeRoom(idSoba);
+			return "uspjesno";
+		}
+		return "neuspjesno";
+		
 	}
 	
 	@RequestMapping(value="/vratiSobu/{id}",
