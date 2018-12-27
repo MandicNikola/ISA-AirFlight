@@ -61,7 +61,7 @@ function ispisiSobe(lista){
 			if(data.brojRezervacija == 0){
 				$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.cijena+"</td><td><button type=\"button\" onclick=\"changePrice("+data.id+","+data.cijena+")\" class=\"btn btn-light\">Change the price</button></td><td><button type=\"button\" onclick=\"deleteRoom("+data.id+")\" class=\"btn btn-light\">Delete</button></td><td><button type=\"button\" onclick=\"changeRoom("+data.id+")\" class=\"btn btn-light\">Change</button></td></tr>");
 			}else{
-				$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.cijena+"</td><td><button type=\"button\" onclick=\"changePrice("+data.id+","+data.cijena+")\" class=\"btn btn-light\">Change the price</button></td><td><button type=\"button\" disabled = \"disabled\" onclick=\"deleteRoom("+data.id+")\" class=\"btn btn-light\">Delete</button></td><td><button type=\"button\" onclick=\"changeRoom("+data.id+")\" class=\"btn btn-light\">Change</button></td></tr>");
+				$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.cijena+"</td><td><button type=\"button\" onclick=\"changePrice("+data.id+","+data.cijena+")\" class=\"btn btn-light\">Change the price</button></td><td><button type=\"button\" disabled = \"disabled\" onclick=\"deleteRoom("+data.id+")\" class=\"btn btn-light\">Delete</button></td><td><button type=\"button\" disabled = \"disabled\" onclick=\"changeRoom("+data.id+")\" class=\"btn btn-light\">Change</button></td></tr>");
 				
 			}
 			
@@ -797,7 +797,7 @@ function ispisiPonude(lista){
 	
 	 $("#korak").show();
 
-	 $("#korak").append("<table class=\"table table-hover\" id=\"tabelaSoba\" ><tr><th>Room type </th><th>Capacity</th><th>Floor</th><th>Balkony</th><th>Price per night</th><th>Select</th></tr>");
+	 $("#korak").append("<table class=\"table table-hover\" id=\"tabelaSoba\" ><tr><th>Room type </th><th>Capacity</th><th>Floor</th><th>Balkony</th><th>Total price</th><th>Select</th></tr>");
 		
 
 		$.each(pom, function(index, data) {
@@ -896,6 +896,7 @@ function korak4bezUsluga(niz){
 	    $("#korakDodatne").append("<p id = \"korak4css\">Unfortunately, we don't have any additional services rigth now.</p>");			                                                                                                    
 	    $("#korakDodatne").append("<p><button type=\"button\" onclick = \"povratakSobe()\" class=\"btn btn-outline-secondary\">Back</button><button onclick = \"zavrsiRezBezUsluga("+niz+")\" type=\"button\" class=\"btn btn-success\">Finish</button></p>")
 }
+//nudi se mogucnost korisniku da izabere dodatne usluge
 function korak4ispis(data,niz){
 	   $("#korak").hide();	
 	 
@@ -904,12 +905,12 @@ function korak4ispis(data,niz){
 	   $("#reserveHotel").hide();
 	   var lista = data == null ? [] : (data instanceof Array ? data : [ data ]);
 			
-		$("#korakDodatne").append("<table class=\"table table-hover\" id=\"tblDodatne\" ><tr><th>Service name </th><th>Rate</th><th data-toggle=\"tooltip\" data-placement=\"top\" title=\"We will count the biggest discount for you\">Discount(%)</th></th><th></th></tr>");
+		$("#korakDodatne").append("<table class=\"table table-hover\" id=\"tblDodatne\" ><tr><th>Service name </th><th>Rate</th><th data-toggle=\"tooltip\" data-placement=\"top\" title=\"We will count the biggest discount for you\">Discount(%)</th><th>Charge</th><th></th></tr>");
 		$.each(lista, function(index, usluga) {
 			if(usluga.konfiguracija == 'da'){
-				$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td>"+usluga.cena+"</td><td>"+usluga.popust+"</td><td><input type=\"checkbox\" name= \"cekiraneUsluge\" id=\""+usluga.id+"\" value=\""+usluga.id+"\"></td></tr>");
+				$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td>"+usluga.cena+"</td><td>"+usluga.popust+"</td><td> per person/day </td><td><input type=\"checkbox\" name= \"cekiraneUsluge\" id=\""+usluga.id+"\" value=\""+usluga.id+"\"></td></tr>");
 			}else{
-				$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td>"+usluga.cena+"</td><td></td><td><input type=\"checkbox\" name= \"cekiraneUsluge\" id=\""+usluga.id+"\" value=\""+usluga.id+"\"></td></tr>");
+				$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td>"+usluga.cena+"</td><td></td><td> per person/day </td><td><input type=\"checkbox\" name= \"cekiraneUsluge\" id=\""+usluga.id+"\" value=\""+usluga.id+"\"></td></tr>");
 				
 			}
 		});
@@ -980,7 +981,6 @@ function zavrsiRez(nizSoba){
 	  var adresa = window.location.search.substring(1);
 		console.log('adesa je '+adresa);
 		var id = adresa.split('=')[1];
-		//ovo treba da obradim da vrati podatke
 	  
 	  $.ajax({
 			type : 'POST',

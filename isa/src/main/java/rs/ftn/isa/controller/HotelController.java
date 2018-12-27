@@ -773,7 +773,14 @@ public class HotelController {
 				
 				 return new ArrayList<Room>();
 			}
-			
+
+			int dani = daysBetween(rez.getCheckIn(),rez.getCheckOut());
+			int pom = 0;
+			for(Room ss:pronadjeneSobe) {
+				double ukupnaCijena = ss.getCijena()*dani;
+				pronadjeneSobe.get(pom).setCijena(ukupnaCijena);
+				pom++;
+			}
 			return pronadjeneSobe;
 		}	
 		//metoda koja formira rezervaciju
