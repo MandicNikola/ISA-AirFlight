@@ -98,12 +98,13 @@ public class HotelController {
 		@RequestMapping(value="/getRooms/{id}", method = RequestMethod.GET)
 		public Set<Room> getAllRooms(@PathVariable Long id){	
 			Hotel pronadjeni = servis.findHotelById(id);
-			if(pronadjeni == null) {
-				System.out.println("Nisam pronasao hotel sa datim id");
-				return null;
-			}else{
-				return pronadjeni.getSobe();
+			System.out.println("id hoteal " +id);
+			for(Room ss:pronadjeni.getSobe()) {
+				System.out.println("id so "+ss.getId());
+				
 			}
+				return pronadjeni.getSobe();
+			
 		
 		}
 		//metoda koja vraca tipove soba u odredjenom hotelu - jednokrevetna,dvokrevetna itd
