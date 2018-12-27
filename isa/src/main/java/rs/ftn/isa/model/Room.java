@@ -52,6 +52,9 @@ public class Room {
 	@Column(name = "rezervisana")	
 	private boolean rezervisana; 
     
+	@Column(name = "broj_rezervacija")	
+	private int brojRezervacija; 
+    
     //jedna soba pripada jednog hotelu.
 	@ManyToOne( fetch = FetchType.EAGER)
 	 private Hotel hotel;
@@ -209,6 +212,12 @@ public class Room {
 	}
 	public void setRezervacije(Set<RezervacijaHotel> rezervacije) {
 		this.rezervacije = rezervacije;
+	}
+	public int getBrojRezervacija() {
+		return brojRezervacija;
+	}
+	public void setBrojRezervacija(int brojRezervacija) {
+		this.brojRezervacija = brojRezervacija;
 	}
 	
 	
