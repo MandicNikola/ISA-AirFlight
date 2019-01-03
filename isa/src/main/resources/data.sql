@@ -1,5 +1,5 @@
-insert into user ( id, ime, prezime, mail, telefon, grad, verifikovan, lozinka) values (4564,'Marko', 'Marković','marko@gmail.com', 063215258, 'Novi Sad', 'da', '074af2bf8e84854902eead553819b4517c2bac61c5d367a45831b05bf7789a81');
-insert into user ( id, ime, prezime, mail, telefon, grad, verifikovan, lozinka) values (42164,'Marina', 'Marić','marina@gmail.com', 0645691,'Beograd', 'ne','mare');
+insert into user ( id, ime, prezime, mail, telefon, grad, verifikovan, lozinka,tip) values (4564,'Marko', 'Marković','marko@gmail.com', 063215258, 'Novi Sad', 'da', '074af2bf8e84854902eead553819b4517c2bac61c5d367a45831b05bf7789a81','REGISTROVAN');
+insert into user ( id, ime, prezime, mail, telefon, grad, verifikovan, lozinka,tip) values (42164,'Marina', 'Marić','marina@gmail.com', 0645691,'Beograd', 'ne','mare','REGISTROVAN');
 insert into user ( id, ime, prezime, mail, telefon, grad, verifikovan, lozinka,tip) values (192,'AdminAVION', 'Avionic','avio@gmail.com', 0645691,'Beograd', 'da','074af2bf8e84854902eead553819b4517c2bac61c5d367a45831b05bf7789a81','REGISTROVAN');
 insert into user ( id, ime, prezime, mail, telefon, grad, verifikovan, lozinka,tip) values (193,'AdminHOTEL', 'Hotelic','hotel@gmail.com', 0645691,'Beograd', 'da','074af2bf8e84854902eead553819b4517c2bac61c5d367a45831b05bf7789a81','REGISTROVAN');
 insert into user ( id, ime, prezime, mail, telefon, grad, verifikovan, lozinka,tip) values (194,'AdminRENT', 'Rentic','rent@gmail.com', 0645691,'Beograd', 'da','074af2bf8e84854902eead553819b4517c2bac61c5d367a45831b05bf7789a81','REGISTROVAN');

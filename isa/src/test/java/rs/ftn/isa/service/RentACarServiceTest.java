@@ -1,5 +1,6 @@
 package rs.ftn.isa.service;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -94,4 +95,27 @@ public class RentACarServiceTest {
         verifyNoMoreInteractions(rentRepositoryMock);
 	}
 	
+	@Test
+	@Transactional
+	@Rollback(true)
+	public void testDeleteById() {
+		
+		when(rentRepositoryMock.findAll()).thenReturn(Arrays.asList(new RentACar(RentACarConstants.DB_ID, RentACarConstants.DB_NAZIV, RentACarConstants.DB_ADRESA, RentACarConstants.DB_OPIS),new RentACar(RentACarConstants.DB_NEW_NAZIV, RentACarConstants.DB_NEW_ADRESA, RentACarConstants.DB_NEW_OPIS)));
+		
+		int dbSizeBeforeRemove = rentService.findAll().size();
+		doNothing().when(rentRepositoryMock).deleteById(3L);;
+		rentService.removeRentACar(3l);
+		when(rentRepositoryMock.findAll()).thenReturn(Arrays.asList(new RentACar(RentACarConstants.DB_ID, RentACarConstants.DB_NAZIV, RentACarConstants.DB_ADRESA, RentACarConstants.DB_OPIS)));
+		
+		List<RentACar> rents = rentService.findAll();
+		assertThat(rents).hasSize(dbSizeBeforeRemove - 1);
+		
+		when(rentRepositoryMock.findOneById(3L)).thenReturn(null);
+		RentACar dbRent = rentService.findOneById(3L);
+		assertThat(dbRent).isNull();
+		verify(rentRepositoryMock, times(1)).deleteById(3L);
+		verify(rentRepositoryMock, times(2)).findAll();
+        verify(rentRepositoryMock, times(1)).findOneById(3L);
+        verifyNoMoreInteractions(rentRepositoryMock);
+	}
 }

@@ -560,7 +560,7 @@ public class RentACarController {
 					
 			}	
 			
-	@RequestMapping(value="/obrisiRent/{id}", method = RequestMethod.POST)
+	@RequestMapping(value="/obrisiRent/{id}", method = RequestMethod.DELETE)
 	public  void obrisiRent(@PathVariable Long id){
 		
 		servis.removeRentACar(id);

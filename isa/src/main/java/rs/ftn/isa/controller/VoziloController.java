@@ -9,6 +9,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -159,9 +162,11 @@ public class VoziloController {
 		@RequestMapping(value="/dodajRezervaciju/{podatak}", 
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE)
-		public @ResponseBody Vehicle dodajRezervaciju(@PathVariable String podatak){		
+		public @ResponseBody User dodajRezervaciju(@PathVariable String podatak, @Context HttpServletRequest request){		
 			//u podatku se nalazi idVozilo=datumPreuzimanja=datumVracanja=cena
 			System.out.println("usao u dodajRezervaciju "+podatak);
+			
+			User korisnik = (User)request.getSession().getAttribute("ulogovan");		
 			
 			String[] niz=podatak.split("=");
 			
@@ -202,6 +207,8 @@ public class VoziloController {
 			//prvo pronadjemo vozilo koje treba da se izmeni
 			RezervacijaRentCar rezervacija = new RezervacijaRentCar();
 			rezervacija.setCena(cena);
+			rezervacija.setKorisnik(korisnik);
+			korisnik.getRezRent().add(rezervacija);
 			System.out.println("Datum preuzimanja je "+datPreuzimanja);
 			System.out.println("Datum vracanja  je "+datVracanje);
 			rezervacija.setDatumPreuzimanja(datPreuzimanja);
@@ -213,11 +220,11 @@ public class VoziloController {
 			rezervacija.setVozilo(vozilo);
 			vozilo.getRezervacije().add(rezervacija);
 			vozilo.setBroj(vozilo.getBroj()+1);
+			System.out.println("Id od vozila je "+vozilo.getId());
 			servis.saveVehicle(vozilo);
 			Long idRent = vozilo.getFilijala().getServis().getId();
-			
-			vozilo.setModel(idRent.toString());	
-			return vozilo;
+			//vozilo.setModel(idRent.toString());	
+			return korisnik;
 
 		}
 
