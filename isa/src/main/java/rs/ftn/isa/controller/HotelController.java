@@ -13,7 +13,9 @@ import java.util.Set;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -173,18 +175,18 @@ public class HotelController {
 				method = RequestMethod.POST,
 				consumes = MediaType.APPLICATION_JSON_VALUE,
 				produces = MediaType.APPLICATION_JSON_VALUE)
-		public @ResponseBody Hotel newHotel(@RequestBody HotelDTO hotel){		
-		//jedinstven po nazivu
+		public ResponseEntity<HotelDTO> newHotel(@RequestBody HotelDTO hotel){		
+				//jedinstven po nazivu
 			 Hotel pom = servis.findHotelByNaziv(hotel.getNaziv());	
 			 
 			 if(pom == null) {
 		//inicijalno ocjena je 0
 				 Hotel newHotel = new Hotel(hotel.getNaziv(),hotel.getAdresa(),hotel.getOpis(),0);
 				 servis.saveHotel(newHotel);
-				 return newHotel; 
+				 return new ResponseEntity<>(new HotelDTO(newHotel), HttpStatus.CREATED); 
 			 }else {
 				 Hotel povratna = new Hotel(); 
-				 return povratna;
+				 return  new ResponseEntity<>(new HotelDTO(povratna), HttpStatus.CREATED);
 				 
 			 }
 		}

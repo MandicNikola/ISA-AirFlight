@@ -1,5 +1,7 @@
 package rs.ftn.isa.dto;
 
+import rs.ftn.isa.model.Hotel;
+
 public class HotelDTO {
 	private String naziv;
 	private String adresa;
@@ -14,6 +16,10 @@ public class HotelDTO {
 		this.naziv = naziv;
 		this.adresa = adresa;
 		this.opis = opis;
+	}
+	public HotelDTO(Hotel hotel) {
+		this(hotel.getNaziv(), hotel.getAdresa(),
+				hotel.getOpis());
 	}
 	@Override
 	public String toString() {

@@ -12,7 +12,7 @@ public class HotelConstants {
     public static final String DB_OPIS = "divno";
     
     public static final Long DB_ID_REFERENCED = 1L; 
-    public static final Long DB_ID_TO_DELETE = 3L;
+    public static final Long DB_ID_TO_DELETE = (long)1245;
     public static final int DB_COUNT = 2;
   
     
