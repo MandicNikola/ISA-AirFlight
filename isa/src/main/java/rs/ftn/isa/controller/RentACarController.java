@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -199,17 +201,18 @@ public class RentACarController {
 	//dodavanje novog servisa
 	@RequestMapping(value="/newrentacar",
 			method = RequestMethod.POST,
-			consumes = MediaType.APPLICATION_JSON_VALUE,
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody RentACar newRentACar(@RequestBody RentACarDTO newRent) {
+			consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<RentACar> newRentACar(@RequestBody RentACarDTO newRent) {
 		RentACar rent = servis.findOneByNaziv(newRent.getNaziv());
 		if(rent == null) {
 			RentACar novi = new RentACar(newRent.getNaziv(),newRent.getAdresa(),newRent.getOpis());
 			servis.saveRentACar(novi);
-			return novi;
+			return new ResponseEntity<>(novi, HttpStatus.CREATED);	
+
 		}else {
 			RentACar pom = new RentACar();
-			return pom;
+			return new ResponseEntity<>(pom, HttpStatus.OK);	
+
 		}
 	}	
 		
