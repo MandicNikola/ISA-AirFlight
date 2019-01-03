@@ -98,6 +98,13 @@
  	 	width: 40%;
   		
  	 }
+ 	 #jumb{
+ 	 background-color: #d6d6d6;
+ 	 	padding:140px 25px !important;
+ 	 }
+ 	 #historyRent, #historyAirplane, #historyHotel{
+ 	 	padding:10px;
+ 	 }
  input[type="date"]::before { 
 	content: attr(data-placeholder);
 	width: 100%;
@@ -319,6 +326,17 @@ input[type="date"]:valid::before { display: none }
 
 <div class="container" id = "ispisiTabelu">
 	
+</div>
+<div id="history">
+	<div id="jumb" class="jumbotron text-center" >
+ 		 <h2>You can see here the history of your reservations.</h2> 
+ 	</div>
+	<div class="container" id="historyAirplane">
+	</div>
+	<div class="container" id="historyHotel">
+	</div>
+	<div class="container" id="historyRent">
+	</div>
 </div>
 
 <div>

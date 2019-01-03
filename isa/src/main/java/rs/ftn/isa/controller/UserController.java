@@ -352,4 +352,34 @@ public class UserController {
 		System.out.println("vratio je sacuvanog");
 	return kor;
 	}
+	@RequestMapping(value="/istorijaHotela",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ArrayList<RezervacijaHotel> getHistoryHotel(@Context HttpServletRequest request){		
+	System.out.println("Usao u getHistoryHotel");
+		ArrayList<RezervacijaHotel> rezervacije = new ArrayList<RezervacijaHotel>();
+		User korisnik = (User)request.getSession().getAttribute("ulogovan");		
+		if(korisnik!=null) {
+				for(RezervacijaHotel rezervacija:korisnik.getRezHotela()) {
+						System.out.println("Dodata rezervacija sa check in"+rezervacija.getDatumDolaska());
+						rezervacije.add(rezervacija);
+					}
+		}
+		return rezervacije;
+	}
+	@RequestMapping(value="/istorijaRent",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ArrayList<RezervacijaRentCar> getHistoryRent(@Context HttpServletRequest request){		
+		ArrayList<RezervacijaRentCar> rezervacije = new ArrayList<RezervacijaRentCar>();
+		User korisnik = (User)request.getSession().getAttribute("ulogovan");		
+		if(korisnik!=null) {
+				for(RezervacijaRentCar rezervacija:korisnik.getRezRent()) {
+						System.out.println("Dodata rezervacija sa check in"+rezervacija.getDatumPreuzimanja());
+						rezervacije.add(rezervacija);
+					}
+		}
+		return rezervacije;
+	}
+
 }

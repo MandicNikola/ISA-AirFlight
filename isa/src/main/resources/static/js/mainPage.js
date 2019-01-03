@@ -8,10 +8,13 @@ function onLoad(){
 		$("#logovanje").hide();
 		var korisnik = JSON.parse(user);
 		$("#imeKorisnika").text(korisnik.ime);
+		$("#history").show();
+		ispisiIstoriju();
 	
 	}else{
 		$("#prikazKorisnika").hide();
 		$("#odjava").hide();
+		$("#history").hide();
 			
 	}
 	$("#pozadinaAuto").hide();
@@ -26,7 +29,92 @@ function onLoad(){
 	planeShow();
 
 }
+function ispisiIstoriju(){
+	console.log('Usao u ispisiIstoriju');
+		//dodajIstorijuPlane();
+		dodajIstorijuHotel();	
+		dodajIstorijuRent();
+	
+}
+function dodajIstorijuHotel(){
+	console.log('Usao u dodajistoriju Hotela');
+	$.ajax({
+		method:'GET',
+		url: "/api/korisnici/istorijaHotela",
+		success: function(lista){
+			if(lista == null){
+				console.log('Istorija je prazna');
+				istorijaPrazna();
+			}else if(lista.length == 0){
+				console.log('Istorija je prazna');
+				istorijaPrazna();
+			}else{
+				ispisiIstorijuHotel(lista);
+			}
+		}
+	});
 
+	
+}	
+function ispisiIstorijuHotel(lista){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	 $("#historyHotel").empty();
+		
+	$("#historyHotel").append("<table class=\"table table-striped\" id=\"histTableHotel\" ><tr><th>Check-in date</th><th>Check-out date</th><th>Price</th></tr>");
+		
+		$.each(pom, function(index, clan) {
+			var datDol=clan.datumDolaska;
+			var datOdl=clan.datumOdlaska;
+			var date1=datDol.split('T')[0];
+			var date2=datOdl.split('T')[0];
+
+			$("#histTableHotel").append("<tr><td class=\"hoverName\">"+date1+"</td><td > "+date2+"</td><td > "+clan.cijena+"</td></tr>");
+		});
+	 $("#historyHotel").append("</table>");
+
+}
+function dodajIstorijuRent(){
+	console.log('usao u dodajIstoriju rent');
+	$.ajax({
+		method:'GET',
+		url: "/api/korisnici/istorijaRent",
+		success: function(lista){
+			if(lista == null){
+				console.log('Istorija je prazna');
+				istorijaPrazna();
+			}else if(lista.length == 0){
+				console.log('Istorija je prazna');
+				istorijaPrazna();
+			}else{
+				ispisiIstorijuRent(lista);
+			}
+		}
+	});
+
+}
+function ispisiIstorijuRent(lista){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	 $("#historyRent").empty();
+		
+	$("#historyRent").append("<table class=\"table table-striped\" id=\"histTableRent\" ><tr><th>Model of car</th><th>Pick-up date</th><th>Drop-off date</th><th>Price</th></tr>");
+		
+		$.each(pom, function(index, clan) {
+			var datDol=clan.datumPreuzimanja;
+			var datOdl=clan.datumVracanja;
+			
+			var date1=datDol.split('T')[0];
+			var date2=datOdl.split('T')[0];
+			var voz=clan.vozilo;
+			
+			$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td > "+date2+"</td><td > "+clan.cena+"</td></tr>");
+		});
+	 $("#historyRent").append("</table>");
+
+}
+function istorijaPrazna(){
+	$("#historyHotel").append("<h3>There is no any record in your history.</h3>");
+	
+}
 function planeShow(){
 	$("#pozadinaAvion").show();
 	$("#pozadinaAuto").hide();
