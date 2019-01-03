@@ -52,8 +52,8 @@ public class UserServiceTest {
 		pozove određena metoda kombinacijom "when"-"then" Mockito metoda.
 		 */
 		when(userRepositoryMock.findAll()).thenReturn(Arrays.asList(new User(UserConstants.DB_NEW_ID, UserConstants.DB_NEW_IME, UserConstants.DB_NEW_PREZIME, UserConstants.DB_NEW_MAIL, UserConstants.DB_NEW_TELEFON, UserConstants.DB_NEW_GRAD)));
-		List<User> students = userService.findAll();
-		assertThat(students).hasSize(1);
+		List<User> users = userService.findAll();
+		assertThat(users).hasSize(1);
 		
 		/*
 		Možemo verifikovati ponašanje mokovanih objekata pozivanjem verify* metoda.
