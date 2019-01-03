@@ -330,4 +330,15 @@ public class UserController {
 		return user;
 	}
 
+	@RequestMapping(value="/dodajRez", 
+			method = RequestMethod.POST,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody User dodajRezervaciju(@RequestBody User korisnik ){		
+	System.out.println("Usao u sacuvaj korisnika");
+	System.out.println("Id je "+korisnik.getId());
+	System.out.println("Ispis korisnika je "+korisnik);
+	User kor=	servis.saveUser(korisnik);
+		System.out.println("vratio je sacuvanog");
+		return kor;
+	}
 }

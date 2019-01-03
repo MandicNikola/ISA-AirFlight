@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -86,4 +87,12 @@ public class RentACarControllerTest {
 		.andExpect(jsonPath("$.adresa").value(RentACarConstants.DB_ADRESA))
 		.andExpect(jsonPath("$.opis").value(RentACarConstants.DB_OPIS));
 	}
+	
+	@Test
+	@Transactional
+	@Rollback(true)
+	public void testDeleteRent() throws Exception {
+		this.mockMvc.perform(delete(URL_PREFIX + "/obrisiRent/" + RentACarConstants.DB_ID)).andExpect(status().isOk());
+	}
+	
 }

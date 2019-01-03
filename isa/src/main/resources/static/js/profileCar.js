@@ -338,13 +338,8 @@ $(document).ready(function(){
 	$("#addUsluge").hide();
 	$("#cenovnik").hide();
 	$("#bg").hide();
-<<<<<<< HEAD
 	$("#izvestaj").hide();
-	
-=======
 	$("#adminStrana").hide();
->>>>>>> e7cd3c4a92deb7df22b0a1894877db30fafd84ab
-	
     $("p#vozilo").click(function(){
 		window.location="addCar.html?id="+id;
 
@@ -378,17 +373,13 @@ $(document).ready(function(){
     	$("#cenovnik").hide();
      	$("#addUsluge").hide();		
      	$("#bg").hide();
-<<<<<<< HEAD
      	$("#izvestaj").hide();
     	
      	$("#automobili").show();
-=======
      	$("#adminStrana").hide();
     	
     	$("#automobili").show();
->>>>>>> e7cd3c4a92deb7df22b0a1894877db30fafd84ab
-    	
-    		console.log('vozilo');
+	console.log('vozilo');
    });
 
     $("a#res").click(function(){
@@ -397,12 +388,8 @@ $(document).ready(function(){
     	$("#cenovnik").hide();
      	$("#addUsluge").hide();
     	$("#automobili").hide();
-<<<<<<< HEAD
     	$("#izvestaj").hide();
-=======
-    	$("#adminStrana").hide();
-    	
->>>>>>> e7cd3c4a92deb7df22b0a1894877db30fafd84ab
+	$("#adminStrana").hide();
     	$("#bg").show();
     	$("#rezultat").empty();
 
@@ -417,11 +404,8 @@ $(document).ready(function(){
 		$("#automobili").hide();
 	 	$("#addUsluge").hide();		
 	 	$("#bg").hide();
-<<<<<<< HEAD
 	 	$("#izvestaj").hide();
-=======
 	 	$("#adminStrana").hide();
->>>>>>> e7cd3c4a92deb7df22b0a1894877db30fafd84ab
 		$("#cenovnik").show();
 		$("#cenovnikKategorije").empty();
     });
@@ -432,11 +416,8 @@ $(document).ready(function(){
     	$("#automobili").hide();
      	$("#addUsluge").hide();		
      	$("#bg").hide();
-<<<<<<< HEAD
     	$("#izvestaj").hide();
-=======
      	$("#adminStrana").hide();
->>>>>>> e7cd3c4a92deb7df22b0a1894877db30fafd84ab
     	$("#informacije").show();
     });
     $("a#admini").click(function(){
@@ -736,10 +717,35 @@ function rezervisiVozilo(param){
 		url : "/api/vozila/dodajRezervaciju/"+posalji,
 		success : function(povratna) {
 			console.log('zavrsena rezervacija');
-			ispisiUspesno();
+			poveziKorisnika(povratna);
+		//	ispisiUspesno();
 			//pozoviProfil(povratna.model);
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+		});
+}
+function poveziKorisnika(pom){
+	console.log('usao u poveziKorisnika');
+	console.log(pom);
+ var sending= JSON.stringify(pom);			
+	
+	console.log(sending);
+	
+	$.ajax({
+		type : 'POST',
+		url : "/api/korisnici/dodajRez",
+		contentType : "application/json",
+		data: sending,
+		dataType : 'json',		
+		success : function() {
+			console.log('usao u uspesno');
+			ispisiUspesno();
+			
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			console.log('usao u gresku');
 			alert('greska');
 		}
 		});
@@ -749,6 +755,7 @@ function ispisiUspesno(){
 	 
 	$("#rezultat").empty();
     $("#rezultat").append("<p><h2>You have successfully made a reservation</h2></p>");
+    
     popuniVozila();
 	
 }

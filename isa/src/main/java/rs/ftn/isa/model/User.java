@@ -73,7 +73,7 @@ public class User {
 	@JsonIgnore
 	private Set<RezervacijaHotel> rezHotela = new HashSet<RezervacijaHotel>();
 
-	@OneToMany(mappedBy = "korisnik", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "korisnik", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	@JsonIgnore
 	private Set<RezervacijaRentCar> rezRent = new HashSet<RezervacijaRentCar>();
 
@@ -310,6 +310,14 @@ public class User {
 
 	public void setResTicket(Set<ReservationTicket> resTicket) {
 		this.resTicket = resTicket;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", mail=" + mail + ", telefon=" + telefon
+				+ ", grad=" + grad + ", verifikovan=" + verifikovan + ", lozinka=" + lozinka + ", tip=" + tip + "]";
 	}
 
 

@@ -388,7 +388,7 @@ function obrisiRent(id){
 
 	
 	$.ajax({
-		type : 'POST',
+		type : 'DELETE',
 		url : "/api/rents/obrisiRent/"+id,
 		success : function(data) {
 				console.log('obrisan rent');
