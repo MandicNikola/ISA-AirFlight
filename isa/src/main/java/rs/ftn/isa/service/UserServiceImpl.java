@@ -50,5 +50,11 @@ public class UserServiceImpl implements UserService {
 	}
 */
 
+	@Override
+	public User findOneById(Long id) {
+		// TODO Auto-generated method stub
+		return repozitorijum.findOneById(id);
+	}
+
 	
 }

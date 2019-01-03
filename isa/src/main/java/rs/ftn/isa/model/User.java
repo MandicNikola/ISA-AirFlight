@@ -44,6 +44,9 @@ public class User {
 	@Column(name="lozinka")
 	private String lozinka;
 	
+	@Column(name="servis")
+	private Long servis;
+	
 	@Enumerated(EnumType.STRING)
 	@Column(name="tip")
 	private Role tip;
@@ -247,6 +250,54 @@ public class User {
 
 	public void setMail(String mail) {
 		this.mail = mail;
+	}
+
+
+
+	public Long getServis() {
+		return servis;
+	}
+
+
+
+	public void setServis(Long servis) {
+		this.servis = servis;
+	}
+
+
+
+	public Set<Relation> getRelatingRel() {
+		return relatingRel;
+	}
+
+
+
+	public void setRelatingRel(Set<Relation> relatingRel) {
+		this.relatingRel = relatingRel;
+	}
+
+
+
+	public Set<Relation> getRelatedRel() {
+		return relatedRel;
+	}
+
+
+
+	public void setRelatedRel(Set<Relation> relatedRel) {
+		this.relatedRel = relatedRel;
+	}
+
+
+
+	public Set<ReservationTicket> getResTicket() {
+		return resTicket;
+	}
+
+
+
+	public void setResTicket(Set<ReservationTicket> resTicket) {
+		this.resTicket = resTicket;
 	}
 
 

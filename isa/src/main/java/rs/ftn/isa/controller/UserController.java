@@ -2,6 +2,7 @@ package rs.ftn.isa.controller;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +48,136 @@ public class UserController {
 		return  servis.findAll();
 	}
 	
+
+	@RequestMapping(value="/vratiAdmineSistema", method = RequestMethod.GET)
+	public ArrayList<User> getAllAdminSistem(){		
+		List<User> korisnici = servis.findAll();
+		ArrayList<User> admini = new ArrayList<User>();
+		for(User user:korisnici) {
+				if(user.getTip()==(Role.ADMIN_SISTEM)) {
+					admini.add(user);
+
+					System.out.println("usao" + user.getPrezime());
+				}
+			}
+		return admini;
+	}
+	
+	@RequestMapping(value="/getUsersForSistem", method = RequestMethod.GET)
+	public ArrayList<User> getUsersForSistem(){		
+		List<User> korisnici = servis.findAll();
+		ArrayList<User> admini = new ArrayList<User>();
+		for(User user:korisnici) {
+				if(user.getTip()==(Role.REGISTROVAN)) {
+					System.out.println("usao" + user.getPrezime());
+					admini.add(user);
+				}
+			}
+		if(admini.size() == 0) {
+			return new ArrayList<User>();
+		}
+		return admini;
+	}
+	@RequestMapping(value="/getAdminsHotel/{id}", method = RequestMethod.GET)
+	public ArrayList<User> getAdminsOfHotel(@PathVariable Long id){
+		System.out.println("dosao u get admine hotela id hotela "+id);
+		String idString = id.toString();
+		List<User> korisnici = servis.findAll();
+		ArrayList<User> admini = new ArrayList<User>();
+		for(User user:korisnici) {
+				if(user.getTip()==Role.ADMIN_HOTEL) {
+					String servis = user.getServis().toString();
+					if(servis.equals(idString)) {
+						System.out.println("dosao po "+user.getIme());
+						admini.add(user);
+					}
+				}
+			}
+		if(admini.size() == 0) {
+			return new ArrayList<User>();
+		}
+		return admini;
+	}
+
+	@RequestMapping(value="/getAdminsRent/{id}", method = RequestMethod.GET)
+	public ArrayList<User> getAdminsOfRents(@PathVariable Long id){
+		System.out.println("dosao u get admine renta id servisa "+id);
+		String idString = id.toString();
+		List<User> korisnici = servis.findAll();
+		ArrayList<User> admini = new ArrayList<User>();
+		for(User user:korisnici) {
+				if(user.getTip()==Role.ADMIN_RENT) {
+					String servis = user.getServis().toString();
+					if(servis.equals(idString)) {
+						System.out.println("dosao po "+user.getIme());
+						admini.add(user);
+					}
+				}
+			}
+		if(admini.size() == 0) {
+			return new ArrayList<User>();
+		}
+		return admini;
+	}
+
+	
+	@RequestMapping(value="/newAdminSistem/{id}", method = RequestMethod.POST)
+	public  void noviAdminSistema(@PathVariable Long id){
+		User korisnik = servis.findOneById(id);
+		korisnik.setTip(Role.ADMIN_SISTEM);
+		servis.saveUser(korisnik);
+		System.out.println("sacuvan korisnik kao admin sistema");
+	}
+	
+	@RequestMapping(value="/newAdminHotel/{pomocna}", method = RequestMethod.POST)
+	public  void noviAdminHotela(@PathVariable String pomocna){
+		System.out.println("usao u izmjeni admina hotela dobio "+pomocna);
+		String[] pom = pomocna.split("-");
+		String userID = pom[0];
+		String hotelID = pom[1];
+		Long userid = Long.parseLong(userID);
+		Long hotelid = Long.parseLong(hotelID);
+		User korisnik = servis.findOneById(userid);
+		korisnik.setTip(Role.ADMIN_HOTEL);
+		korisnik.setServis(hotelid);
+		servis.saveUser(korisnik);
+		System.out.println("sacuvan korisnik kao admin hotela");
+	}
+	
+	@RequestMapping(value="/newAdminRent/{pomocna}", method = RequestMethod.POST)
+	public  void noviAdminRenta(@PathVariable String pomocna){
+		System.out.println("usao u izmjeni admina renta dobio "+pomocna);
+		String[] pom = pomocna.split("-");
+		String userID = pom[0];
+		String rentID = pom[1];
+		Long userid = Long.parseLong(userID);
+		Long rentid = Long.parseLong(rentID);
+		User korisnik = servis.findOneById(userid );
+		korisnik.setTip(Role.ADMIN_RENT);
+		korisnik.setServis(rentid);
+		servis.saveUser(korisnik);
+		System.out.println("sacuvan korisnik kao admin renta");
+	}
+	
+	
+	@RequestMapping(value="/removeAdminHotel/{id}", method = RequestMethod.POST)
+	public  void removeAdminHotel(@PathVariable Long id){
+		User korisnik = servis.findOneById(id);
+		korisnik.setTip(Role.REGISTROVAN);	
+		korisnik.setServis(0L);
+		servis.saveUser(korisnik);
+		System.out.println("sacuvan korisnik kao registrovan");
+	}
+	
+	
+	@RequestMapping(value="/removeAdminRent/{id}", method = RequestMethod.POST)
+	public  void removeAdminRent(@PathVariable Long id){
+		User korisnik = servis.findOneById(id);
+		korisnik.setTip(Role.REGISTROVAN);	
+		korisnik.setServis(0L);
+		servis.saveUser(korisnik);
+		System.out.println("sacuvan korisnik kao registrovan");
+	}
 	@RequestMapping(value="/test")
 	public String vrati() {
 		

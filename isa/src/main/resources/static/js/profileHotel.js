@@ -7,6 +7,7 @@ function onLoad(){
 	$("#sobe").hide();
 	$("#cijene").hide();
 	$("#rezervacije").hide();
+	$("#adminStrana").hide();
 	
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);
@@ -54,13 +55,15 @@ function ispisiProfilHotela(hotel){
 function ispisiSobe(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#sobe").empty();
-	
+	 $("#sobe").show();
+		
 	 $("#sobe").append("<table class=\"table table-hover\" id=\"tabelaSoba\" ><tr><th>Room type </th><th>Capacity</th><th>Price per night</th><th></th><th></th><th></th></tr>");
 		
 		$.each(pom, function(index, data) {
 			if(data.brojRezervacija == 0){
 				$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.cijena+"</td><td><button type=\"button\" onclick=\"changePrice("+data.id+","+data.cijena+")\" class=\"btn btn-light\">Change the price</button></td><td><button type=\"button\" onclick=\"deleteRoom("+data.id+")\" class=\"btn btn-light\">Delete</button></td><td><button type=\"button\" onclick=\"changeRoom("+data.id+")\" class=\"btn btn-light\">Change</button></td></tr>");
 			}else{
+				console.log('dosao ovdje');
 				$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.cijena+"</td><td><button type=\"button\" onclick=\"changePrice("+data.id+","+data.cijena+")\" class=\"btn btn-light\">Change the price</button></td><td><button type=\"button\" disabled = \"disabled\" onclick=\"deleteRoom("+data.id+")\" class=\"btn btn-light\">Delete</button></td><td><button type=\"button\" disabled = \"disabled\" onclick=\"changeRoom("+data.id+")\" class=\"btn btn-light\">Change</button></td></tr>");
 				
 			}
@@ -148,6 +151,103 @@ function changeR(roomID){
 		}
 	});
 	
+}
+
+function ispisiAdmine(){
+	 $.ajax({
+			method:'GET',
+			url: "/api/korisnici/getUsersForSistem",
+			success: function(lista){
+				if(lista == null){
+					console.log('Nema admina')
+				}else if(lista.length==0){
+					console.log('Nema admina')
+				}else{
+					izborAdmina(lista);
+					
+				}
+			}
+		});
+
+	
+}
+
+function izborAdmina(lista){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	console.log('dosao u izbor admina')
+	$("#adminSelect").empty();
+	 $.each(pom, function(index, data) {
+		 	
+		 $("#adminSelect").append("<option value=\""+data.id+"\" >"+data.ime+" "+ data.prezime+"</option>");	 
+		 
+	 });
+	adminiHotela();
+}
+
+function izmjeniAdmineHotela(){
+	var idUser =$('#adminSelect').val();
+	console.log('dosao u izmjeni adminaHotela '+idUser);
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	var pomocna = idUser + "-" + id;
+	 $.ajax({
+			method:'POST',
+			url: "/api/korisnici/newAdminHotel/"+pomocna,
+			success: function(lista){
+				console.log('izmjenio');
+				ispisiAdmine();
+				//adminSistem();
+			}
+		});
+}
+function adminiHotela(){
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	 $.ajax({
+			method:'GET',
+			url: "/api/korisnici/getAdminsHotel/"+id,
+			success: function(lista){
+				if(lista == null){
+					nemaAdmina();
+					console.log('Nema admina');
+				}else if(lista.length==0){
+					nemaAdmina();
+					console.log('Nema admina');
+				}else{
+					ispisiAdmineHotela(lista);
+					
+				}
+			}
+		});
+	
+}
+function nemaAdmina(){
+	$("#adminDiv").empty();
+	 $("#adminDiv").append("<div><h3 id = \"h2Ad\">No registered administrators</h3></div>");
+	
+}
+function ispisiAdmineHotela(lista){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	console.log('dosao u ispisi adminaHotela')
+
+	$("#adminDiv").empty();
+	$("#adminDiv").append("<table class=\"table table-striped\" id=\"tabelaAdmini\" ><tr><th> Name </th><th> Surname</th><th></th></tr>");
+		$.each(pom, function(index, servis) {
+			$("#tabelaAdmini").append("<tr><td>"+servis.ime+"</td><td>"+servis.prezime+"</td><td><button  class=\"btn btn-light\" onclick=\"removeAdmin('"+servis.id+"')\">Remove</button></td><td></tr>");
+		});
+	 $("#adminDiv").append("</table>");
+
+}
+function removeAdmin(id){
+	 $.ajax({
+			method:'POST',
+			url: "/api/korisnici/removeAdminHotel/"+id,
+			success: function(lista){
+				console.log('obrisao');
+				ispisiAdmine();
+				
+			}
+		});
 }
 function prikaziProfil(id){
 	console.log(id);
@@ -268,24 +368,30 @@ function resetujGreske(){
 	$("#errorPocetak").text("");
 	$("#errorSobe").text("");
 	$("#errorLjudi").text("");	
+	$("#checkin").val("");	
+	$("#checkout").val("");	
+	$("#brojSoba").val("");	
+	$("#brojLjudi").val("");	
 }
 $(document).ready(function(){
 	$("#sobe").hide();
 	$("#cijene").hide();
 	$("#konfig").hide();
 	$("#rezervacije").hide();
-
+	$("#adminStrana").hide();
 	
-	  	
- 	
+
+
     $("#rooms").click(function(){
     	listaSoba();
-		$("#informacije").hide();
+    	$("#informacije").hide();
 		$("#ispisiTabelu").hide();
 		$("#cijene").hide();
 		$("#konfig").hide();
 		$("#rezervacije").hide();
-		resetujGreske();
+		$("#sobe").show();
+		$("#adminStrana").hide();
+			
     });
     $("#info").click(function(){
     	$("#informacije").show();
@@ -294,21 +400,24 @@ $(document).ready(function(){
 		$("#cijene").hide();
 		$("#konfig").hide();
 		$("#rezervacije").hide();
-		resetujGreske();
+		$("#adminStrana").hide();
+		
     });
     
     $("#reservation").click(function(){
+    	resetujGreske();
+		
     	$("#informacije").hide();
 		$("#ispisiTabelu").hide();
 		$("#sobe").hide();
 		$("#cijene").hide();
 		$("#konfig").hide();
 		$("#rezervacije").show();
-		resetujGreske();
 		$("#korak").empty();
 		$("#korakDodatne").empty();
 		$("#reserveHotel").show();
-
+		$("#adminStrana").hide();
+		
     });
     $("#config").click(function(){
     	ispisiKonfiguracije();
@@ -317,11 +426,21 @@ $(document).ready(function(){
 		$("#sobe").hide();
 		$("#cijene").hide();
 		$("#rezervacije").hide();
-		resetujGreske();
-	 	
+		$("#adminStrana").hide();
+		
     });
     
-    
+    $("#admini").click(function(){
+    	ispisiAdmine();
+		$("#informacije").hide();
+		$("#ispisiTabelu").hide();
+		$("#cijene").hide();
+		$("#konfig").hide();
+		$("#sobe").hide();
+		$("#rezervacije").hide();
+		$("#adminStrana").show();
+		
+    });  	
     $("#price").click(function(){
     	console.log('dosao u price');
     	showPrices();
@@ -331,8 +450,8 @@ $(document).ready(function(){
 		$("#cijene").show();
 		$("#konfig").hide();
 		$("#rezervacije").hide();
-		resetujGreske();
-	 	
+		$("#adminStrana").hide();
+			 	
     });
 });
 function ispisiKonfiguracije(){

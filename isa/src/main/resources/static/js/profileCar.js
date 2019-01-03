@@ -1,4 +1,5 @@
 function loadPodatke(){
+	$("#adminStrana").hide();
 	
 	var podatak = window.location.search.substring(1);
 	console.log("Usao u loadPodatke, dobio je "+ podatak);
@@ -337,8 +338,12 @@ $(document).ready(function(){
 	$("#addUsluge").hide();
 	$("#cenovnik").hide();
 	$("#bg").hide();
+<<<<<<< HEAD
 	$("#izvestaj").hide();
 	
+=======
+	$("#adminStrana").hide();
+>>>>>>> e7cd3c4a92deb7df22b0a1894877db30fafd84ab
 	
     $("p#vozilo").click(function(){
 		window.location="addCar.html?id="+id;
@@ -355,6 +360,7 @@ $(document).ready(function(){
     	$("#cenovnik").hide();
     	$("#informacije").hide();
     	$("#automobili").hide();
+    	$("#adminStrana").hide();
     	$("#bg").hide();
     	$("#izvestaj").hide();
     	$("#addUsluge").show();		
@@ -364,16 +370,23 @@ $(document).ready(function(){
     	$("#catC").val("");
     	$("#catD").val("");
     	$("#catE").val("");
-   });
+   
+    });
         
     $("a#veh").click(function(){
     	$("#informacije").hide();
     	$("#cenovnik").hide();
      	$("#addUsluge").hide();		
      	$("#bg").hide();
+<<<<<<< HEAD
      	$("#izvestaj").hide();
     	
      	$("#automobili").show();
+=======
+     	$("#adminStrana").hide();
+    	
+    	$("#automobili").show();
+>>>>>>> e7cd3c4a92deb7df22b0a1894877db30fafd84ab
     	
     		console.log('vozilo');
    });
@@ -384,7 +397,12 @@ $(document).ready(function(){
     	$("#cenovnik").hide();
      	$("#addUsluge").hide();
     	$("#automobili").hide();
+<<<<<<< HEAD
     	$("#izvestaj").hide();
+=======
+    	$("#adminStrana").hide();
+    	
+>>>>>>> e7cd3c4a92deb7df22b0a1894877db30fafd84ab
     	$("#bg").show();
     	$("#rezultat").empty();
 
@@ -399,7 +417,11 @@ $(document).ready(function(){
 		$("#automobili").hide();
 	 	$("#addUsluge").hide();		
 	 	$("#bg").hide();
+<<<<<<< HEAD
 	 	$("#izvestaj").hide();
+=======
+	 	$("#adminStrana").hide();
+>>>>>>> e7cd3c4a92deb7df22b0a1894877db30fafd84ab
 		$("#cenovnik").show();
 		$("#cenovnikKategorije").empty();
     });
@@ -410,8 +432,23 @@ $(document).ready(function(){
     	$("#automobili").hide();
      	$("#addUsluge").hide();		
      	$("#bg").hide();
+<<<<<<< HEAD
     	$("#izvestaj").hide();
+=======
+     	$("#adminStrana").hide();
+>>>>>>> e7cd3c4a92deb7df22b0a1894877db30fafd84ab
     	$("#informacije").show();
+    });
+    $("a#admini").click(function(){
+    	ispisiAdmine();
+    	$("#informacije").hide();
+		$("#automobili").hide();
+	 	$("#addUsluge").hide();		
+	 	$("#cenovnik").hide();
+	 	$("#bg").hide();
+	 	$("#adminStrana").show();
+		
+		
     });
     
     $("a#business").click(function(){
@@ -426,6 +463,102 @@ $(document).ready(function(){
 
     
 });
+
+function ispisiAdmine(){
+	 $.ajax({
+			method:'GET',
+			url: "/api/korisnici/getUsersForSistem",
+			success: function(lista){
+				if(lista == null){
+					console.log('Nema admina')
+				}else if(lista.length==0){
+					console.log('Nema admina')
+				}else{
+					izborAdmina(lista);
+					
+				}
+			}
+		});
+	
+}
+
+function izborAdmina(lista){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	console.log('dosao u izbor admina')
+	$("#adminSelect").empty();
+	 $.each(pom, function(index, data) {
+		 	
+		 $("#adminSelect").append("<option value=\""+data.id+"\" >"+data.ime+" "+ data.prezime+"</option>");	 
+		 
+	 });
+	adminiRenta();
+}
+
+function izmjeniAdmineRenta(){
+	var idUser =$('#adminSelect').val();
+	console.log('dosao u izmjeni adminaHotela '+idUser);
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	var pomocna = idUser + "-" + id;
+	 $.ajax({
+			method:'POST',
+			url: "/api/korisnici/newAdminRent/"+pomocna,
+			success: function(lista){
+				console.log('izmjenio');
+				ispisiAdmine();
+				//adminSistem();
+			}
+		});
+}
+function adminiRenta(){
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	 $.ajax({
+			method:'GET',
+			url: "/api/korisnici/getAdminsRent/"+id,
+			success: function(lista){
+				if(lista == null){
+					nemaAdmina();
+					console.log('Nema admina');
+				}else if(lista.length==0){
+					nemaAdmina();
+					console.log('Nema admina');
+				}else{
+					ispisiAdmineRenta(lista);
+					
+				}
+			}
+		});
+	
+}
+function nemaAdmina(){
+	$("#adminDiv").empty();
+	$("#adminDiv").append("<div><h3 id = \"h2Ad\">No registered administrators</h3></div>");
+}
+function ispisiAdmineRenta(lista){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	console.log('dosao u ispisi adminaHotela')
+
+	$("#adminDiv").empty();
+	$("#adminDiv").append("<table class=\"table table-striped\" id=\"tabelaAdmini\" ><tr><th> Name </th><th> Surname</th><th></th></tr>");
+		$.each(pom, function(index, servis) {
+			$("#tabelaAdmini").append("<tr><td>"+servis.ime+"</td><td>"+servis.prezime+"</td><td><button  class=\"btn btn-light\" onclick=\"removeAdmin('"+servis.id+"')\">Remove</button></td><td></tr>");
+		});
+	 $("#adminDiv").append("</table>");
+	
+}
+function removeAdmin(id){
+	 $.ajax({
+			method:'POST',
+			url: "/api/korisnici/removeAdminRent/"+id,
+			success: function(lista){
+				console.log('obrisao');
+				ispisiAdmine();
+				
+			}
+		});
+}
+
 function resetFormu(){
 	$("#error1").text("");
 	$("#error2").text("");

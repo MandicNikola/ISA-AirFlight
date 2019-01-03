@@ -57,6 +57,13 @@
  	 	margin-top: 5px;
  	 	
  	 }
+ 	 #hAdmin,#h2Ad{
+ 		margin-left:25px;
+ 	 	text-color:#bfbfbf;
+ 	 	font-family: "Times New Roman", Times, serif;
+ 		 margin-bottom:8px;
+ 	 
+ 	 }
  	 #dodatne{
  	 	width: 40%;
   		
@@ -79,19 +86,25 @@
   		padding: 12px 12px;
   		 margin: 8px 0;
  	 }
- 	 #katNaziv,#newPrice,#uslugaNaziv,#uslugaCijena{
+ 	 #katNaziv,#newPrice,#uslugaNaziv,#uslugaCijena,#ispisiSelect{
  	 	width: 40%;
   		padding: 12px 20px;
  		 margin: 8px 0;
  	 }
  	 
+ 	#dugmeAdminSelekt{
+ 	margin-left:65%;
+ 	margin-top: 5px;
+ 	margin-bottom: 10px;
+ 	}
+  
  	#booking{
     background-color: #fff;
     width: 50%;
     padding: 10px 30px 40px 30px;
     border-radius: 3px;
    
-}
+	}
 
  #HotelDugme{
   background-color: #404040 !important;
@@ -155,6 +168,14 @@ input[type="date"]:valid::before { display: none }
 			  </div>
 			 <div id="adminStrana" class="container-fluid">
 			  		<section >
+			  			<div class="container" id="ispisiSelect">
+							<h3 id = "hAdmin">Add new administrator of hotel</h3>
+									<select class="form-control" id="adminSelect">
+									</select>	
+									<div>
+						  <button id="dugmeAdminSelekt"  class="btn btn-info" onclick="izmjeniAdmineHotela()" >Add</button>
+									</div>
+						</div>
 			  			 <div id ="adminDiv"></div>
 				    </section>
 			  </div>
