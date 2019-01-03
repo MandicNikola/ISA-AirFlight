@@ -95,8 +95,7 @@ public class HotelControllerTest {
 		.andExpect(jsonPath("$.[*].id").value(hasItem(RoomConstants.DB_ID.intValue())))
 		.andExpect(jsonPath("$.[*].tip").value(hasItem(RoomConstants.DB_TIP)))
 		.andExpect(jsonPath("$.[*].balkon").value(hasItem(RoomConstants.DB_BALKON)))
-		.andExpect(jsonPath("$.[*].sprat").value(hasItem(RoomConstants.DB_SPRAT)))
-		.andExpect(jsonPath("$.[*].cijena").value(hasItem(RoomConstants.DB_CIJENA)));
+		.andExpect(jsonPath("$.[*].sprat").value(hasItem(RoomConstants.DB_SPRAT)));
 	}
 
 }
