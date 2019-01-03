@@ -98,6 +98,7 @@ public class Vehicle {
 		this.sedista = sedista;
 		this.kategorija =CategoryCar.valueOf(kategorija);
 		broj=0;
+		ocena=0;
 	}
 
 
