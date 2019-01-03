@@ -77,4 +77,21 @@ public class RentACarServiceTest {
         verify(rentRepositoryMock, times(1)).save(newRent);
         verifyNoMoreInteractions(rentRepositoryMock);
 	}
+	
+	@Test
+	public void testFindById() {
+		
+		when(rentRepositoryMock.findOneById(RentACarConstants.DB_ID)).thenReturn(new RentACar(RentACarConstants.DB_ID, RentACarConstants.DB_NAZIV, RentACarConstants.DB_ADRESA, RentACarConstants.DB_OPIS));
+		RentACar dbRent = rentService.findOneById(RentACarConstants.DB_ID);
+		
+		assertThat(dbRent).isNotNull();
+		
+		assertThat(dbRent.getId()).isEqualTo(RentACarConstants.DB_ID);
+		assertThat(dbRent.getNaziv()).isEqualTo(RentACarConstants.DB_NAZIV);
+	    assertThat(dbRent.getAdresa()).isEqualTo(RentACarConstants.DB_ADRESA);
+	    assertThat(dbRent.getOpis()).isEqualTo(RentACarConstants.DB_OPIS);
+	    verify(rentRepositoryMock, times(1)).findOneById(RentACarConstants.DB_ID);
+        verifyNoMoreInteractions(rentRepositoryMock);
+	}
+	
 }
