@@ -88,8 +88,7 @@ public class Room {
 		this.cijena = cijena;
 		this.balkon = balkon;
 	}
-	
-	
+		
 	public Room(String tip, int kreveti, int sprat,int kapacitet,String balkon) {
 		super();
 		

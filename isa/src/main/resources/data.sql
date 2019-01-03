@@ -15,3 +15,7 @@ insert into cenovnik( id, datum_primene,aktivan) values (128,'2017-11-11',false)
 insert into rentacar ( id, naziv, adresa, opis, ocena) values (1245,'Fast car', 'Kisacka 10','Dobrodosli',0);
 insert into rentacar ( id, naziv, adresa, opis, ocena) values (1255,'Rent a car', 'Kosovska 18','sigurno i lako',0);
 insert into rentacar ( id, naziv, adresa, opis, ocena) values (1265,'NS the best', 'Dunavska 22','samo brzo',0);
+
+insert into room ( id, tip, sprat, cijena,kapacitet, balkon,kreveti,ocena,broj_rezervacija,rezervisana,hotel_id) values (252,'Apartman', 2,4000,3,'da',3,3,0,false,1245);
+insert into room ( id, tip, sprat, cijena,kapacitet ,balkon,kreveti,ocena,broj_rezervacija,rezervisana,hotel_id) values (150,'apartman', 2,3000,2,'da',2,5,0,false,1245);
+

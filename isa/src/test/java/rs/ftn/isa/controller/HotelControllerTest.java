@@ -88,5 +88,15 @@ public class HotelControllerTest {
 		this.mockMvc.perform(post(URL_PREFIX + "/obrisiHotel/" + HotelConstants.DB_ID)).andExpect(status().isOk());
 	}
 	
+	@Test
+	public void testGetHotelRooms() throws Exception {
+		mockMvc.perform(get(URL_PREFIX + "/getRooms/" + HotelConstants.DB_ID_REFERENCED)).andExpect(status().isOk())
+		.andExpect(content().contentType(contentType)).andExpect(jsonPath("$", hasSize(RoomConstants.DB_COUNT)))
+		.andExpect(jsonPath("$.[*].id").value(hasItem(RoomConstants.DB_ID.intValue())))
+		.andExpect(jsonPath("$.[*].tip").value(hasItem(RoomConstants.DB_TIP)))
+		.andExpect(jsonPath("$.[*].balkon").value(hasItem(RoomConstants.DB_BALKON)))
+		.andExpect(jsonPath("$.[*].sprat").value(hasItem(RoomConstants.DB_SPRAT)))
+		.andExpect(jsonPath("$.[*].cijena").value(hasItem(RoomConstants.DB_CIJENA)));
+	}
 
 }
