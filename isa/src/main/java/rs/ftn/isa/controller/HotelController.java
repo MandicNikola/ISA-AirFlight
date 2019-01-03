@@ -11,6 +11,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +35,7 @@ import rs.ftn.isa.model.PricelistHotel;
 import rs.ftn.isa.model.RentACar;
 import rs.ftn.isa.model.RezervacijaHotel;
 import rs.ftn.isa.model.Room;
+import rs.ftn.isa.model.User;
 import rs.ftn.isa.model.Usluga;
 import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.service.HotelService;
@@ -792,11 +795,13 @@ public class HotelController {
 				produces = MediaType.APPLICATION_JSON_VALUE
 				)
 		public @ResponseBody RezervacijaHotel rezervacija(@PathVariable("info") String info,
-	            @PathVariable("nizSoba") String nizSoba,@PathVariable("listaUsl") String listaUsl,@PathVariable("id") Long id){
+	            @PathVariable("nizSoba") String nizSoba,@PathVariable("listaUsl") String listaUsl,@PathVariable("id") Long id,@Context HttpServletRequest request){
 			System.out.println("uusao u rezervisi u rezervaciji");
 			System.out.println("info "+info);
 			System.out.println("nizSoba "+nizSoba);
 			System.out.println("listaUsl "+listaUsl);
+			
+			User korisnik = (User)request.getSession().getAttribute("ulogovan");		
 			
 			//info 2018-12-30*2019-01-01*2
 			//nizSoba 4
@@ -935,11 +940,16 @@ public class HotelController {
 				rez.setCijena(cijena*((100-popustMax)/100));
 				povratna.setCijena(cijena*((100-popustMax)/100));
 			}
+			if(korisnik != null) {
+			rez.setUserHotel(korisnik);
+			korisnik.getRezHotela().add(rez);
+				System.out.println("dodao korisnika u rez "+korisnik.getIme());
+			}
 			for(Room room:sobe) {
 				Room soba = room;
 				hotel.getSobe().remove(room);
 				Set<RezervacijaHotel> rezSobe = room.getRezervacije();
-				rezSobe.add(rez);
+				rezSobe.add(rez);				
 				soba.setRezervacije(rezSobe);
 				hotel.getSobe().add(soba);
 			}

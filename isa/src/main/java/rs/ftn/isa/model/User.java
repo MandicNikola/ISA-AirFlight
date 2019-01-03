@@ -69,7 +69,7 @@ public class User {
 	
 	
 	//jedna korisnik moze da ima vise rezervacija u jednom hotelu 
-	@OneToMany(mappedBy = "userHotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "userHotel", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	@JsonIgnore
 	private Set<RezervacijaHotel> rezHotela = new HashSet<RezervacijaHotel>();
 

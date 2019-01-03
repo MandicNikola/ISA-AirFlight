@@ -1105,13 +1105,34 @@ function zavrsiRez(nizSoba){
 			type : 'POST',
 			url : "/api/hoteli/rezervisi/"+info+"/sobe/"+nizSoba+"/nizUsluga/"+listaUsl+"/idHotela/"+id,
 			success : function(povratna) {
-					ispisiUspjesno(povratna);		
-			},
+					dodajUseruRez(povratna);
+					},
 			error: function(XMLHttpRequest, textStatus, errorThrown){
 				alert('greska');
 			}
 			});
 	  
+}
+function dodajUseruRez(data){
+	 console.log('dosao je da doda rez korisniku');
+	 var rezervacija= JSON.stringify(data);
+	  $.ajax({
+			type : 'POST',
+			url : "/api/korisnici/addRezSobe",
+			contentType : "application/json",
+			data: rezervacija,
+			dataType : 'json',		
+			success : function() {
+				console.log('usao u uspesno');
+				 ispisiUspjesno(data);
+					
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				console.log('usao u gresku');
+				alert('greska');
+			}
+			});
+	
 }
 function ispisiUspjesno(data){
 	 

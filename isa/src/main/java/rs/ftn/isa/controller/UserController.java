@@ -341,4 +341,15 @@ public class UserController {
 		System.out.println("vratio je sacuvanog");
 		return kor;
 	}
+	
+	@RequestMapping(value="/addRezSobe", 
+			method = RequestMethod.POST,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody User dodajRezSobe(@RequestBody RezervacijaHotel rez ){		
+		System.out.println("Usao u sacuvaj korisnika pri rez sobe"+rez.getUserHotel().getId());
+		User korisnik = rez.getUserHotel();
+		User kor=	servis.saveUser(korisnik);
+		System.out.println("vratio je sacuvanog");
+	return kor;
+	}
 }
