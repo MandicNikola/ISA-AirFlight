@@ -84,6 +84,18 @@ public class User {
 
 
 
+	public User(Long id, String ime, String prezime, String mail, int telefon, String grad) {
+		super();
+		this.id = id;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.mail = mail;
+		this.telefon = telefon;
+		this.grad = grad;
+	}
+
+
+
 	public User(Long id, String ime, String prezime, String mail, int telefon, String grad, String verifikovan,
 			String lozinka, String tip) {
 		super();
