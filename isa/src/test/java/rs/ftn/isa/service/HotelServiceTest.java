@@ -1,6 +1,7 @@
 package rs.ftn.isa.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -39,9 +40,9 @@ public class HotelServiceTest {
 		Kako za testove koristimo mokovane repository objekte moramo da definišemo šta će se desiti kada se
 		pozove određena metoda kombinacijom "when"-"then" Mockito metoda.
 		 */
-		when(hotelRepositoryMock.findAll()).thenReturn(Arrays.asList(new Hotel(HotelConstants.DB_ID, HotelConstants.DB_NAZIV, HotelConstants.DB_ADRESA, HotelConstants.DB_OPIS)));
+		when(hotelRepositoryMock.findAll()).thenReturn(Arrays.asList(new Hotel(HotelConstants.NEW_ID, HotelConstants.NEW_NAZIV, HotelConstants.NEW_ADRESA, HotelConstants.NEW_OPIS)));
 		List<Hotel> hotels = hotelService.findAll();
-		assertThat(hotels).hasSize(3); //tvrdimo da hoteli zadovoljavaju uslov da im je size 1
+		assertThat(hotels).hasSize(1); //tvrdimo da hoteli zadovoljavaju uslov da im je size 1
 		
 		/*
 		Možemo verifikovati ponašanje mokovanih objekata pozivanjem verify* metoda.
@@ -50,4 +51,13 @@ public class HotelServiceTest {
         verifyNoMoreInteractions(hotelRepositoryMock);
 	}	
 
+	@Test 
+	public void testFindOneById() {
+		
+		when(hotelRepositoryMock.findOneById(HotelConstants.DB_ID)).thenReturn(hotelMock);
+		Hotel dbHotel = hotelService.findHotelById(HotelConstants.DB_ID);
+		assertEquals(hotelMock, dbHotel);
+        verify(hotelRepositoryMock, times(1)).findOneById(HotelConstants.DB_ID);
+        verifyNoMoreInteractions(hotelRepositoryMock);
+	}	
 }
