@@ -12,7 +12,7 @@ public class UserConstants {
 	    
 	    public static final Long DB_ID = (long) 4564;
 	    public static final String DB_IME = "Marko";
-	    public static final String DB_PREZIME = "Markovic";
+	    public static final String DB_PREZIME = "Marković";
 	    public static final String DB_MAIL = "marko@gmail.com";
 	    
 	    
