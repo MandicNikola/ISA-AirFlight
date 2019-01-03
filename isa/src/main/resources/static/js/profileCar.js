@@ -21,6 +21,8 @@ function iscrtajStranicu(servis){
 	console.log('usao u iscrtaj stranicu dobio je '+ servis);
 	
     $("#naslov").text(servis.naziv);
+    $("#prosecnaOcena").append(servis.ocena);
+    
     $("#adresa").append(servis.adresa);
     var pom= servis.adresa;
     var adr= pom.replace(" ", "%20");
@@ -204,10 +206,35 @@ function popuniVozila(){
 				console.log('Nema Vozila');
 			}else{
 			    ispisiVozila(data);
+			    ispisiAdminuVozila(data);
 			}
 		}
 	});
 	
+}
+function ispisiAdminuVozila(skup){
+	$("#izvestajVozila").empty();
+	console.log('usao u ispisivozila');
+	var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
+		
+	$("#izvestajVozila").append("<table class=\"table table-hover\" id=\"tabVozilo\" ><thead><tr><th>Name</th><th>Brand</th><th>Model</th><th>Model year</th><th>Number of seats </th><th>Category</th><th>Branch office</th><th>Rating</th><th></th><th></th></tr></thead>");
+	
+	$.each(lista, function(index, vozilo) {
+		var filpom=vozilo.filijala.grad;
+		var filulica=vozilo.filijala.ulica;
+		var adresa=filpom + ", "+filulica;
+		console.log(filpom);
+		if(vozilo.broj == 0){
+			$("#tabVozilo").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+vozilo.naziv+"</td><td > "+vozilo.marka+"</td><td > "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td > "+vozilo.sedista+"</td><td > "+vozilo.kategorija+"</td><td > "+adresa+"</td><td > "+vozilo.ocena+"</td><td><button  class=\"btn btn-info\" onclick=\"izmeniVozilo('"+vozilo.id+"')\">Change</button></td><td><button class=\"btn btn-info\"  onclick=\"obrisiVozilo('"+vozilo.id+"')\">Delete</button></td></tr>");
+		}else{
+			$("#tabVozilo").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+vozilo.naziv+"</td><td > "+vozilo.marka+"</td><td > "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td > "+vozilo.sedista+"</td><td > "+vozilo.kategorija+"</td><td > "+adresa+"</td><td > "+vozilo.ocena+"</td><td><button  class=\"btn btn-info\" disabled=\"disabled\" data-toggle=\"tooltip\" data-placement=\"right\" title=\"You can't change a car if it's in use\" onclick=\"izmeniVozilo('"+vozilo.id+"')\">Change</button></td><td><button class=\"btn btn-info\"  disabled=\"disabled\" data-toggle=\"tooltip\" data-placement=\"right\" title=\"You can't delete a car if it's in use\" onclick=\"obrisiVozilo('"+vozilo.id+"')\">Delete</button></td></tr>");
+				
+		}
+		
+	});
+    $("#izvestajVozila").append("</table>");
+ 
+
 }
 function ispisiFilijale(skup){
 	
@@ -310,6 +337,8 @@ $(document).ready(function(){
 	$("#addUsluge").hide();
 	$("#cenovnik").hide();
 	$("#bg").hide();
+	$("#izvestaj").hide();
+	
 	
     $("p#vozilo").click(function(){
 		window.location="addCar.html?id="+id;
@@ -327,6 +356,7 @@ $(document).ready(function(){
     	$("#informacije").hide();
     	$("#automobili").hide();
     	$("#bg").hide();
+    	$("#izvestaj").hide();
     	$("#addUsluge").show();		
     	$("#days").val("");
     	$("#catA").val("");
@@ -341,7 +371,9 @@ $(document).ready(function(){
     	$("#cenovnik").hide();
      	$("#addUsluge").hide();		
      	$("#bg").hide();
-    	$("#automobili").show();
+     	$("#izvestaj").hide();
+    	
+     	$("#automobili").show();
     	
     		console.log('vozilo');
    });
@@ -352,7 +384,7 @@ $(document).ready(function(){
     	$("#cenovnik").hide();
      	$("#addUsluge").hide();
     	$("#automobili").hide();
-    	
+    	$("#izvestaj").hide();
     	$("#bg").show();
     	$("#rezultat").empty();
 
@@ -367,6 +399,7 @@ $(document).ready(function(){
 		$("#automobili").hide();
 	 	$("#addUsluge").hide();		
 	 	$("#bg").hide();
+	 	$("#izvestaj").hide();
 		$("#cenovnik").show();
 		$("#cenovnikKategorije").empty();
     });
@@ -377,8 +410,20 @@ $(document).ready(function(){
     	$("#automobili").hide();
      	$("#addUsluge").hide();		
      	$("#bg").hide();
+    	$("#izvestaj").hide();
     	$("#informacije").show();
     });
+    
+    $("a#business").click(function(){
+    	$("#informacije").hide();
+    	$("#cenovnik").hide();
+     	$("#addUsluge").hide();		
+     	$("#bg").hide();
+    	$("#automobili").hide();
+    	$("#izvestaj").show();
+    	  console.log('izvestaj');
+   });
+
     
 });
 function resetFormu(){

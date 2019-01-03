@@ -33,6 +33,9 @@ public class RentACar {
 	@Column(name="opis",nullable = false)
 	private String opis;
 
+	@Column(name="ocena",nullable = false)
+	private double ocena;
+	
 	@OneToMany(mappedBy = "servis", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore
 	private Set<Filijala> filijale = new HashSet<Filijala>();
@@ -41,6 +44,7 @@ public class RentACar {
 	@JsonIgnore
      private Set<PricelistRentCar> cenovnici= new HashSet<PricelistRentCar>();
 
+	
 	
 	public RentACar() {
 		
@@ -51,6 +55,7 @@ public class RentACar {
 		this.naziv = naziv;
 		this.adresa = adresa;
 		this.opis = opis;
+		ocena=0;
 	}
 	
 	public RentACar(Long id, String naziv, String adresa, String opis) {
@@ -59,6 +64,7 @@ public class RentACar {
 		this.naziv = naziv;
 		this.adresa = adresa;
 		this.opis = opis;
+		ocena=0;
 	}
 	
 	
@@ -101,7 +107,17 @@ public class RentACar {
 	}
 	
 	
-	 public static Comparator<RentACar> RentNameComparator = new Comparator<RentACar>() {
+	
+	 public double getOcena() {
+		return ocena;
+	}
+	public void setOcena(double ocena) {
+		this.ocena = ocena;
+	}
+
+
+
+	public static Comparator<RentACar> RentNameComparator = new Comparator<RentACar>() {
 
 			public int compare(RentACar u1, RentACar u2) {
 			   String name1 = u1.getNaziv().toUpperCase();
