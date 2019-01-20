@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Company profile</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script type="text/javascript"  src="/js/profilCompany.js"></script>
+
+  <style>
+  	header{
+			background-color: white;
+   			font-size: 36px;
+   			font-weight: bold;
+ 		 	font-family: "Comic Sans MS", cursive, serif;
+		    border-bottom: 2px solid #C3C3C3;
+		    padding: 4px;
+ 	}
+ 	
+ 	 .jumbotron{
+ 	 	border: 2px solid #C3C3C3;
+ 	 	border-radius: 5px;
+ 	 	padding-left: 15px;
+ 	 }
+ 	 .okvir{
+ 	    border: 2px solid #C3C3C3;
+ 	 	border-radius: 5px;
+ 	 	padding : 5px;
+ 	 	text-color:#bfbfbf !important;
+ 	 	margin-top:2px;
+ 	 }
+ 	 
+ 	 .okvir:hover{
+ 	 	background-color: #C3C3C3;
+ 	 }
+ 	 .col-md-2{
+ 	 	text-color:#bfbfbf;
+ 	 	text-align: center;
+ 	 	margin-top:2px;
+ 	 }
+ 	 .row{
+ 	 padding-right: 13px;
+ 	 }
+ 	 .container{
+ 	 	margin-left:5px;
+ 	 	margin-top:1px;
+ 	 }
+ 	 h3{
+ 	  margin-left:25px;
+ 	 	text-color:#bfbfbf;
+ 	 	font-family: "Times New Roman", Times, serif;
+ 		 margin-bottom:0px;
+ 	 }
+ 	 button[type = submit],#buttonID{
+ 	 	margin-left:30%;
+ 	 	margin-top: 5px;
+ 	 	
+ 	 }
+ 	 #hAdmin,#h2Ad{
+ 		margin-left:25px;
+ 	 	text-color:#bfbfbf;
+ 	 	font-family: "Times New Roman", Times, serif;
+ 		 margin-bottom:8px;
+ 	 
+ 	 }
+ 	 #dodatne{
+ 	 	width: 40%;
+  		
+ 	 }
+ 	 #buttonID{
+ 	 	margin-left:15px;
+ 	 }
+ 	 #dugmePopust{
+ 	 		margin-left:300px;
+ 			padding:3px;
+ 	 		margin-top:2px;
+ 	 		margin-bottom:3px;
+ 	 }
+ 	 #typeRoom{
+  		padding: 0px 0px;
+  		 margin: 0px 0;
+ 	 }
+ 	 #popust{
+ 	 	width: 40%;
+  		padding: 12px 12px;
+  		 margin: 8px 0;
+ 	 }
+ 	 #katNaziv,#newPrice,#uslugaNaziv,#uslugaCijena,#ispisiSelect{
+ 	 	width: 40%;
+  		padding: 12px 20px;
+ 		 margin: 8px 0;
+ 	 }
+ 	 
+ 	#dugmeAdminSelekt{
+ 	margin-left:65%;
+ 	margin-top: 5px;
+ 	margin-bottom: 10px;
+ 	}
+  
+ 	#booking{
+    background-color: #fff;
+    width: 50%;
+    padding: 10px 30px 40px 30px;
+    border-radius: 3px;
+   
+	}
+
+	 #HotelDugme{
+	  background-color: #404040 !important;
+		padding:6px;	
+		color: white;
+		font-weight: bold;
+	  }
+	 .booking-form {
+	    max-width: 768px;
+	    width: 100%;
+	    margin: auto;
+	    padding: 30px;
+	    border-radius: 3px;
+	     font-family: 'Josefin Sans', sans-serif;
+	}
+	  
+	  
+	.form-header,#korak4css,#obavj{
+		text-align: center;
+	    margin-bottom: 20px;
+	}
+	 	  input[type="date"]::before { 
+		content: attr(data-placeholder);
+		width: 100%;
+	}
+	input[type="date"]:focus::before,
+	input[type="date"]:valid::before { display: none }
+	 .bg-4 { 
+	    background-color: #2f2f2f;
+	    color: #ffffff;
+	}
+  </style>
+</head>
+
+<body onload="onLoad()">
+	<div class = "container-fluid">
+		<header>AirFinity</header>	
+		<article>
+			<div class="jumbotron">
+				<h2 id="naziv"> </h2>
+				<p> Surrounded by beautiful landscape and wonderful views, our hotel is the place where you can rest your eyes, hike, spend your holidays or  <br> have business conferences. 
+					 <br> Settle into a comfortable and spacious guest room or suite at our hotel,equipped with everything you need to relax.
+				</p>
+				<p>If you are on a business trip natural light in meeting rooms will help you to stay focus and productive. <br>We are waiting for you!
+				</p>
+			</div>
+		</article>
+		<div>
+			<div class="row">
+				<div class= "col-md-10" id = "levo">
+					<div class="container-fluid" id="tabovi">
+					   <ul class="nav nav-tabs">
+					   		<li class="active"><a id="info" >Information</a></li>
+						    <li><a id="planes" >Planes</a></li>
+						    <li><a id="flights" >Flights</a></li>
+						    <li><a id="fastTickets" >Fast tickets</a></li>	
+						    <li><a id="izvestaj" >Report</a></li>	  
+						  	<li><a id="admini" >Administrators</a></li>			  
+					  </ul>
+			  		</div>
+			  		
+			  		<div id="informacije" class="container-fluid">
+			  			<section>
+							<p id="opis"></p>
+							<p id="adresa"><i class="glyphicon glyphicon-home"></i>You can find us here </p>
+				   		</section>
+			 		</div>	
+			  		
+			  		<!-- potrebna mi je dorada -->
+			  		<div id="adminStrana" class="container-fluid">
+			  			<section>
+				  			<div class="container" id="ispisiSelect">
+								<h3 id = "CompanyAdmin">Add new administrator of company</h3>
+										<select class="form-control" id="adminSelect">
+											</select>	
+										<div>
+							  	<button id="dugmeAdminSelekt"  class="btn btn-info" onclick="izmeniAdminCompany()" >Add</button>
+										</div>
+							</div>
+				  			 <div id ="adminDiv"></div>
+					    </section>
+			 	 	</div>
+			  		
+			  		<div id="flightsStrana">
+			  		</div>
+			  		
+			  		<div id="planesStrana">
+			  		</div>	
+			  		
+			  		<div id="reportsStrana">
+			  		</div>	
+			  			  			  		
+				</div>
+				<aside class="col-md-2">
+					<div class="okvir" id ="admin">
+						<button onclick = "addPlane()" type="button" class="btn btn-link">Add plane</button>
+					</div>
+					<div class="okvir" id = "adminKonf" >
+						<button onclick = "addConfiguration()" type="button" class="btn btn-link">Add segments</button>
+					</div>
+				
+					<div class="okvir">
+						<button  type="button" class="btn btn-link">Add destinations</button>
+					</div>
+					<div class="okvir">
+						<button type="button" class="btn btn-link">Add discount</button>
+					</div>
+					
+				</aside>
+			</div>
+		</div>
+	</div>
+</body >
+
+
+</html>

@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import rs.ftn.isa.model.AirplaneCompany;
-import rs.ftn.isa.repository.AirplaneRepository;
+import rs.ftn.isa.repository.AirCompRepository;
+import rs.ftn.isa.repository.AirplaneCompanyRepository;
+
 @Service
-public class AirplaneServiceImpl implements AirplaneService{
+public class AirplaneServiceCompanyImpl implements AirplaneServiceCompany{
 	@Autowired
-	private AirplaneRepository repository;
+	private AirCompRepository repository;
 
 	
 	@Override
@@ -18,6 +20,7 @@ public class AirplaneServiceImpl implements AirplaneService{
 		// TODO Auto-generated method stub
 		 
 		return repository.findOneByNaziv(naziv);
+	
 	}
 
 
@@ -33,5 +36,23 @@ public class AirplaneServiceImpl implements AirplaneService{
 		// TODO Auto-generated method stub
 		return repository.findAll();
 	}
+
+
+	@Override
+	public void removeAirPlaneCompany(Long id) {
+		// TODO Auto-generated method stub
+		repository.deleteById(id);
+		
+	}
+
+
+	@Override
+	public AirplaneCompany findAirplaneCompanyById(Long id) {
+		// TODO Auto-generated method stub
+		return repository.findOneById(id);
+	}
+	
+	
+	
 
 }

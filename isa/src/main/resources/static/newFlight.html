@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript"  src="/js/newhotel.js"></script>
+  <style>
+  	div{
+  		width:250px;
+  	}
+  	body{
+     background-color: #fdecd5;
+	 text-align: center;
+  	}
+  	form {
+	 	text-align: center;
+	    display: inline-block;
+	}
+	.form-group{
+			text-align: left;
+		}
+  	#unos{
+  	            padding: 5%;
+ 	 	    	margin-top: 1%;
+  				border: 3px solid #666;
+   		        border-radius: 8px;
+   		     	background-color: rgba(255,255,255,0.8);
+  	}
+  	button{
+  		margin-top:5px;
+  		border-radius: 2px;
+  	}
+  	h2{
+  		margin:45px 0px;
+  	}
+  </style>	
+<title>New flight</title>
+</head>
+<body>
+  <div class="container">
+    <h2>New flight</h2>
+    	<form method="post" class="flight" id="unos" >	
+		    
+		    <div class="form-group">
+		      <i class="glyphicon glyphicon-bed"></i> <label for="lokacijaPoletanje">Lokacija poletanje:</label>
+		      <input  type = "date" class="form-control" id="lokacijaPoletanje" placeholder="Lokacija poletanja" >
+		      <div id="greskaDatumP"></div>	
+		    </div>
+		    
+		    <div class="form-group">
+		      <i class="glyphicon glyphicon-bed"></i> <label for="lokacijaSletanje">Lokacija sletanje:</label>
+		      <input  type = "date" class="form-control" id="lokacijaSletanje" placeholder="Lokacija sletanja" >
+		      <div id="greskaDatumP"></div>	
+		    </div>
+		    	    
+		    <div class="form-group">
+		      <i class="glyphicon glyphicon-bed"></i> <label for="datumPoletanja">Datum poletanja:</label>
+		      <input  type = "date" class="form-control" id="datumPoletanja" placeholder="Datum poletanja" >
+		      <div id="greskaDatumP"></div>	
+		    </div>
+		    
+		    <div class="form-group">
+		    <i class="glyphicon glyphicon-map-marker"></i> <label for="vremePoletanja">Vreme poletanja:</label>
+		      <input type="time" class="form-control" id="vremePoletanja" placeholder="Vreme poletanja" >
+		   	 <div id="greskaVremeP"></div>
+		    </div>
+		    
+		    <div class="form-group">
+		      <i class="glyphicon glyphicon-bed"></i> <label for="datumSletanja">Datum sletanja:</label>
+		      <input  type = "date" class="form-control" id="datumSletanja" placeholder="Datum sletanja" >
+		      <div id="greskaDatumS"></div>	
+		    </div>
+		    
+		    <div class="form-group">
+		    <i class="glyphicon glyphicon-map-marker"></i> <label for="vremeSletanja">Vreme sletanja:</label>
+		      <input type="time" class="form-control" id="vremeSletanja" placeholder="Vreme sletanja" >
+		   	 <div id="greskaAdresaS"></div>
+		    </div>
+		    
+		    <div class="form-group">
+		   	<i class=" glyphicon glyphicon-comment"></i> <label for="duzinaPutovanja">Duzina puta:</label>
+		    	
+		      <input type="number" class="form-control" id="duzinaPutovanja" placeholder="Duzina putovanja" >
+		    </div>
+		    
+		    <div class="form-group">
+		   	<i class=" glyphicon glyphicon-comment"></i> <label for="cenaPutovanja">Cena karte:</label>
+		    	
+		      <input type="number" class="form-control" id="cenaPutovanja" placeholder="Cena karte" >
+		    </div>
+		    
+		    
+		    
+		    <button type="submit" class="btn btn-default">Add</button>
+		  
+		  </form>
+</div>
+   
+</body>
+</html>

@@ -7,7 +7,8 @@ import rs.ftn.isa.model.AirplaneCompany;
 import rs.ftn.isa.model.Hotel;
 
 @Repository
-public interface AirplaneRepository extends JpaRepository<AirplaneCompany,Long>{
+public interface AirplaneCompanyRepository extends JpaRepository<AirplaneCompany,Long>{
 	 AirplaneCompany findOneByNaziv(String name);
+	
 		
 }

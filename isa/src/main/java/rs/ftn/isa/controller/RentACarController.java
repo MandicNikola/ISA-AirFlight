@@ -1,6 +1,6 @@
 package rs.ftn.isa.controller;
 
-import static org.assertj.core.api.Assertions.setAllowComparingPrivateFields;
+//import static org.assertj.core.api.Assertions.setAllowComparingPrivateFields;
 
 import java.util.ArrayList;
 import java.util.Calendar;

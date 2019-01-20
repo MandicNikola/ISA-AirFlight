@@ -35,7 +35,9 @@ public class AirPlane {
 	private  Set<Flight> letovi = new HashSet<Flight>();
 	
 	
-	
+	@OneToMany(mappedBy = "plane",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	private Set<Segment> segments = new HashSet<Segment>();
 	
 	
 	

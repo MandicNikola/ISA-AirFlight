@@ -130,7 +130,7 @@ function planeShow(){
 	
 	$.ajax({
 		method:'GET',
-		url: "/api/avioni/all",
+		url: "/api/kompanije/all",
 		success: function(lista){
 			if(lista == null){
 				console.log('Nema aviokompanija');
@@ -177,10 +177,35 @@ function ispisiAviokompanije(lista){
 	$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaAvion\" ><tr><th> Name </th><th> Promotional description</th><th>Address</th></tr>");
 		
 		$.each(pom, function(index, avio) {
-			$("#tabelaAvion").append("<tr><td class=\"hoverName\" >"+avio.naziv+"</td><td > "+avio.opis+"</td><td > "+avio.adresa+"</td></tr>");
+			$("#tabelaAvion").append("<tr><td class=\"hoverName\" >"+avio.naziv+"</td><td > "+avio.opis+"</td><td > "+avio.adresa+"</td><td><button  class=\"btn btn-info\" onclick=\"profileCompany('"+avio.id+"')\">Profile</button></td><td><button  class=\"btn btn-info\" onclick=\"deleteCompany('"+avio.id+"')\">Delete</button></td></tr>");
 		});
 	 $("#ispisiTabelu").append("</table>");
 }
+
+
+function profileCompany(id)
+{
+	console.log('Usao u profileComp, dobio id: '+id);
+	window.location="AirCompProfile.html?id="+id;
+
+}
+
+function deleteCompany(id)
+{
+	$.ajax(
+			{
+				method:'POST',
+				url: "/api/kompanije/obrisiKompaniju/"+id,
+				success: function(data)
+				{
+					window.location="mainPage.html";
+				}
+			});
+
+}
+
+
+
 
 function sortirajAvione(){
 	 console.log('usao u sortiraj avione');
@@ -190,7 +215,7 @@ function sortirajAvione(){
 	 if(uslov!="none"){
 		 $.ajax({
 				method:'GET',
-				url: "/api/avioni/sort/"+uslov,
+				url: "/api/kompanije/sort/"+uslov,
 				success: function(lista){
 					if(lista == null){
 						console.log('Nema aviokompanija')
@@ -530,8 +555,16 @@ function hotelProfil(id){
 	window.location = "profileHotel.html?id="+id;
 }
 
+function visitCompany(id)
+{
+	console.log('Usao u visitCar, dobio id: '+id);
+	window.location="profilCompany.html?id="+id;
+
+}
+
+
 function addPlane(){
-	window.location = "newHotel.html";
+	window.location = "newAirplane.html";
 }
 function addHotel(){
 	window.location = "newHotel.html";

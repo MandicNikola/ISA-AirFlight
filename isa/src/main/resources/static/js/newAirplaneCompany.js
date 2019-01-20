@@ -26,7 +26,7 @@ $(document).on('submit','.airplane',function(e){
 	if(ispravno == true){
 	$.ajax({
 		type : 'POST',
-		url : "/api/avioni/novaAvioKompanija",
+		url : "/api/kompanije/novaAvioKompanija",
 		contentType : 'application/json',
 		dataType : "json",
 		data:formToJSON(),

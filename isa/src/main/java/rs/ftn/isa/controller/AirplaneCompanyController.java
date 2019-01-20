@@ -15,15 +15,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.AirplaneDTO;
 import rs.ftn.isa.model.AirplaneCompany;
+import rs.ftn.isa.model.Hotel;
 import rs.ftn.isa.model.RentACar;
-import rs.ftn.isa.service.AirplaneServiceImpl;
+import rs.ftn.isa.service.AirplaneServiceCompanyImpl;
+
 
 @RestController
-@RequestMapping(value="api/avioni")
-public class AirplaneController {
+@RequestMapping(value="api/kompanije")
+public class AirplaneCompanyController {
 	
 	@Autowired
-	private AirplaneServiceImpl service ;
+	private AirplaneServiceCompanyImpl service ;
 	
 	@RequestMapping(value="/novaAvioKompanija", 
 			method = RequestMethod.POST,
@@ -96,6 +98,31 @@ public class AirplaneController {
 		
 		return sortiranaLista;
 	}
+	
+	@RequestMapping(value="/obrisiKompaniju/{id}", method = RequestMethod.POST)
+	public  void obrisiHotel(@PathVariable Long id){
+		System.out.println("brisanje hotel "+id);
+		service.removeAirPlaneCompany(id);
+	
+	}
+	 
+	
+	@RequestMapping(value = "/findById/{id}",
+			method = RequestMethod.GET)
+	public @ResponseBody AirplaneCompany findCompanyById(@PathVariable Long id)
+	{
+		System.out.println("find"  + id);
+		
+		AirplaneCompany pronadjeni = service.findAirplaneCompanyById(id);
+			if(pronadjeni == null) {
+				return pronadjeni;
+			}else{
+				return pronadjeni;
+			}
+	}
+
+	
+	
 	
 
 }

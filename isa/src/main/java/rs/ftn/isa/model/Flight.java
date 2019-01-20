@@ -31,13 +31,13 @@ public class Flight {
 	
 	
 	@Column(name = "vreme", nullable = false)
-	private int vreme;
+	private String vreme;
 	
 	@Column(name = "duzina", nullable = false)
-	private int duzina;
+	private String duzina;
 	
 	@Column(name = "cena", nullable = false)
-	private int cena;
+	private double cena;
 	
 	
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

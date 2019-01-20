@@ -27,6 +27,10 @@ public class Ticket {
 	@Column(name = "popust", nullable = true)
 	private int popust;
 	
+	
+	@Column(name = "rezervisano", nullable = false)
+	private boolean rezervisano;
+	
 	//da znamo kom letu pripada kada mi treba
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Flight let;
