@@ -564,7 +564,7 @@ function visitCompany(id)
 
 
 function addPlane(){
-	window.location = "newAirplane.html";
+	window.location = "newAirplaneCompany.html";
 }
 function addHotel(){
 	window.location = "newHotel.html";

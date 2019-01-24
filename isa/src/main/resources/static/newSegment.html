@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript"  src="/js/newSegment.js"></script>
+  <style>
+  	div{
+  		width:250px;
+  	}
+  	body{
+     background-color: #fdecd5;
+	 text-align: center;
+  	}
+  	form {
+	 	text-align: center;
+	    display: inline-block;
+	}
+	.form-group{
+			text-align: left;
+		}
+  	#unos{
+  	            padding: 20%;
+ 	 	    	margin-top: 1%;
+  				border: 3px solid #666;
+   		        border-radius: 8px;
+   		     	background-color: rgba(255,255,255,0.8);
+  	}
+  	button{
+  		margin-top:5px;
+  		border-radius: 2px;
+  	}
+  	h2{
+  		margin:45px 0px;
+  	}
+  </style>	
+<title>New Segment</title>
+</head>
+<body>
+  <div class="container">
+    <h2>New segment</h2>
+    	<form method="post" class="airplane" id="unos" >	
+		    <div class="form-group">
+		      <i class="glyphicon glyphicon-plane"></i> <label for="naziv">Name:</label>
+		      <input  type = "text" class="form-control" id="naziv" placeholder="Segment ime">
+		      <div id="greskaNaziv"></div>	
+		    </div>
+		    
+		    <div class="form-group">
+		    <i class="glyphicon glyphicon-map-marker"></i> <label for="address">Broj mesta:</label>
+		      <input type="number" class="form-control" id="brojMesta" placeholder="Broj mesta" >
+		   	 <div id="greskaBrojMesta"></div>
+		    	
+		    </div>
+		    <div class="form-group">
+		     <i class="glyphicon glyphicon-map-marker"></i> <label for="brojKolona">Broj mesta u redu:</label>
+		      <input type="number" class="form-control" id="brojKolona" placeholder="Broj mesta u redu" >
+		   	 <div id="greskaBrojKolona"></div>
+		    	
+		    </div>
+		    <div class="form-group">
+		     <i class="glyphicon glyphicon-map-marker"></i> <label for="brojMesta">Faktor:</label>
+		      <input type="number" class="form-control" id="faktor" placeholder="Faktor" >
+		   	 <div id="greskaFaktor"></div>
+		    	
+		    </div>
+		    
+		    
+		    <button type="submit" class="btn btn-default">Add</button>
+		  
+		  </form>
+</div>
+   
+</body>
+</html>
