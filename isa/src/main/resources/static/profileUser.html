@@ -9,7 +9,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
    <script type="text/javascript"  src="/js/profile.js"></script>
 </head>
-<body>
+<body onload="onLoad()">
 <div class="container">
 	<div class="row">
 		<div class="col-md-3 ">
@@ -21,7 +21,7 @@
             </div> 
 		</div>
 		<div class="col-md-9">
-		    <div class="card">
+		    <div class="card" id="profile">
 		        <div class="card-body">
 		            <div class="row">
 		                <div class="col-md-12">
@@ -79,6 +79,161 @@
 		            
 		        </div>
 		    </div>
+		    <div class="card" id="Friends">
+		    	<div class="card-body">
+		    		<div class="row">
+		                <div class="col-md-12">
+		                    <h4>Friends</h4>
+		                    <hr>
+		                </div>
+		            </div>
+		            <div class="row">
+		            	<div class = "col-md-12">
+            
+							  <table class="table table-condensed" id="friendsTable">
+							    <thead>
+							      <tr>
+							        <th>Firstname</th>
+							        <th>Lastname</th>
+							        <th>Email</th>
+							      </tr>
+							    </thead>
+							    <tbody>
+							      <tr>
+							        <td>John</td>
+							        <td>Doe</td>
+							        <td>john@example.com</td>
+							      </tr>
+							      <tr>
+							        <td>Mary</td>
+							        <td>Moe</td>
+							        <td>mary@example.com</td>
+							      </tr>
+							      <tr>
+							        <td>July</td>
+							        <td>Dooley</td>
+							        <td>july@example.com</td>
+							      </tr>
+							    </tbody>
+							  </table>
+		            	</div>
+		            </div>
+		    	</div>
+		    </div>
+		    <div class="card" id="Requests">
+		    	<div class="card-body">
+		    		<div class="row">
+		                <div class="col-md-12">
+		                    <h4>Friends</h4>
+		                    <hr>
+		                </div>
+		            </div>
+		            <div class="row">
+		            	<div class = "col-md-12">
+            
+							  <table class="table table-condensed" id="requestsTable">
+							    <thead>
+							      <tr>
+							        <th>Firstname</th>
+							        <th>Lastname</th>
+							        <th>Email</th>
+							      </tr>
+							    </thead>
+							    <tbody>
+							      <tr>
+							        <td>John</td>
+							        <td>Doe</td>
+							        <td>john@example.com</td>
+							      </tr>
+							      <tr>
+							        <td>Mary</td>
+							        <td>Moe</td>
+							        <td>mary@example.com</td>
+							      </tr>
+							      <tr>
+							        <td>July</td>
+							        <td>Dooley</td>
+							        <td>july@example.com</td>
+							      </tr>
+							    </tbody>
+							  </table>
+		            	</div>
+		            </div>
+		    	</div>
+		    </div>
+		    
+		      <div class="card" id="Search">
+		    	<div class="card-body">
+		    		<div class="row">
+		                <div class="col-md-12">
+		                    <h4>Friends</h4>
+		                    <hr>
+		                </div>
+		            </div>
+		            <div class="row">
+		                <div class="col-md-12">
+		                    <h4>Friends</h4>
+		                    <hr>
+		                </div>
+		            </div>
+		            <div class="row">
+		                <div class="col-md-4" align="right">
+		                    <form class="form-search">
+					            <div class="input-append">
+					            	<label>Ime:</label>
+					                <input type="text" class="span2" id="nameSearch">
+					            </div>
+				        	</form>
+		                </div>
+		                <div class="col-md-8">
+		                     <form class="form-search">
+					            <div class="input-append">
+					           		<label>Prezime:</label>
+					                <input type="text" class="span2" id="lastNameSearch">
+					                <button type="button" class="btn btn-info">
+								      <span class="glyphicon glyphicon-search"></span> Search
+								    </button>
+					            </div>
+				        	</form>
+		                </div>
+		            </div>
+		            <div class="row">
+		            	<div class = "col-md-12">
+            
+							  <table class="table table-condensed" id="searchTable">
+							    <thead>
+							      <tr>
+							        <th>Firstname</th>
+							        <th>Lastname</th>
+							        <th>Email</th>
+							      </tr>
+							    </thead>
+							    <tbody>
+							      <tr>
+							        <td>John</td>
+							        <td>Doe</td>
+							        <td>john@example.com</td>
+							      </tr>
+							      <tr>
+							        <td>Mary</td>
+							        <td>Moe</td>
+							        <td>mary@example.com</td>
+							      </tr>
+							      <tr>
+							        <td>July</td>
+							        <td>Dooley</td>
+							        <td>july@example.com</td>
+							      </tr>
+							    </tbody>
+							  </table>
+		            	</div>
+		            </div>
+		    	</div>
+		    </div>
+		    		    
+		    
+		    
+		    
 		</div>
 	</div>
 </div>

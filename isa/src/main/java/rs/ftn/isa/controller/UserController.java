@@ -64,11 +64,10 @@ public class UserController {
 		return admini;
 	}
 	
-	@RequestMapping(value="/{id}", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody User getUser(@PathVariable Long id){		
+	@RequestMapping(value="/user", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody User getUser(@Context HttpServletRequest request){		
 		
-		User user = servis.findOneById(id);
-		user.setLozinka("");
+		User user = (User) request.getSession().getAttribute("ulogovan");
 		
 		return user;
 	}
@@ -101,10 +100,10 @@ public class UserController {
 		return null;
 	}
 	
-	@RequestMapping(value="/requests/{id}", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
-	public ArrayList<String> getUserRequests(@PathVariable Long id){		
+	@RequestMapping(value="/requests", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ArrayList<String> getUserRequests(@Context HttpServletRequest request){		
 		
-		User user = servis.findOneById(id);
+		User user = (User) request.getSession().getAttribute("ulogovan");
 		user.setLozinka("");
 		
 		Set<Relation> relations = user.getRelatedRel();
@@ -117,7 +116,7 @@ public class UserController {
 				if( relation.getTip().equals("ZAHTEV"))
 				{
 					String friendName = relation.getRelated().getIme();
-					String friendLastName = relation.getRelated().getIme();
+					String friendLastName = relation.getRelated().getPrezime();
 					Long friendID = relation.getRelated().getId();					
 					retVal.add(friendName+"-"+friendLastName+"-"+friendID+"-"+relation.getTip());				
 				}
@@ -127,15 +126,38 @@ public class UserController {
 		
 		return null;
 	}
-	
-	
-	@RequestMapping(value="/search/{id}", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
-	public ArrayList<String> search(@PathVariable String id){		
+	/*
+	 * Prvo saljem ime pa onda saljem prezime
+	 * 
+	 */
+	@RequestMapping(value="/search/{path}", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<User> search(@PathVariable("path") String path,@Context HttpServletRequest request){		
 		
 		
-	
+		String[] tokens = path.split("-");
 		
-		return null;
+		String name = tokens[0];
+		String lastName = tokens[1];
+		
+		User user = (User) request.getSession().getAttribute("ulogovan");
+		
+		if(user == null)
+			return null;
+		
+		if(name.equals("nothing"))
+			name = "%%";
+		else
+			name = "%"+name+"%";
+		
+		if(lastName.equals("nothing"))
+			lastName = "%%";
+		else
+			lastName = "%"+lastName+"%";
+		
+		//korisnici koji su mi rezultati pretrage koja mi treba
+		List<User> korisnici = servis.findUserByImeAndPrz(name, lastName);
+		
+		return korisnici;
 	}
 	
 	

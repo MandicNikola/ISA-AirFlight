@@ -1,5 +1,7 @@
 package rs.ftn.isa.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -13,6 +15,11 @@ public interface UserRepository extends JpaRepository<User,Long> {
 		
 	User findOneByMail(String mail);
 	User findOneById(Long id);
+	
+	@Query("select u.ime,u.prezime " + 
+			"from User u  " + 
+			"where u.prezime like '?2' AND u.ime like '?1'")
+	List<User> findUsersByImeAndPrezime(String ime, String prezime);
 	
 //	@Query("select s from Student s where s.lastName = ?1")
 	

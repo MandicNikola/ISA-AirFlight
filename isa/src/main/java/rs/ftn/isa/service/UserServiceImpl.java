@@ -56,5 +56,14 @@ public class UserServiceImpl implements UserService {
 		return repozitorijum.findOneById(id);
 	}
 
+	@Override
+	public List<User> findUserByImeAndPrz(String ime, String prezime) {
+		
+		
+		return repozitorijum.findUsersByImeAndPrezime(ime, prezime);
+	}
+	
+	
+
 	
 }

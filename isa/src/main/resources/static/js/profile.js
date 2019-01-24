@@ -9,6 +9,8 @@ function onLoad()
 	console.log('user je '+adresa);
 	user = adresa.split('=')[1];
 	
+	$("#profile").hide();
+	
 	
 	
 

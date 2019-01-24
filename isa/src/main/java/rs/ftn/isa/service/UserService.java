@@ -14,4 +14,7 @@ public interface UserService {
 		User saveUser(User korisnik);
 		void removeUser(Long id);
 		User findOneById(Long id);
+		
+		List<User> findUserByImeAndPrz(String ime, String prezime);
+		
 }
