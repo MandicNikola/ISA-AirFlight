@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -62,6 +63,82 @@ public class UserController {
 			}
 		return admini;
 	}
+	
+	@RequestMapping(value="/{id}", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody User getUser(@PathVariable Long id){		
+		
+		User user = servis.findOneById(id);
+		user.setLozinka("");
+		
+		return user;
+	}
+	
+	
+	@RequestMapping(value="/friends/{id}", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ArrayList<String> getUserFriends(@PathVariable Long id){		
+		
+		User user = servis.findOneById(id);
+		user.setLozinka("");
+		
+		Set<Relation> relations = user.getRelatingRel();
+		if(relations.size() > 0)
+		{
+			ArrayList<String> retVal = new ArrayList<String>();
+			
+			for(Relation relation : relations)
+			{
+				if(relation.getTip().equals("FRIENDS") || relation.getTip().equals("ZAHTEV"))
+				{
+					String friendName = relation.getRelated().getIme();
+					String friendLastName = relation.getRelated().getIme();
+					Long friendID = relation.getRelated().getId();					
+					retVal.add(friendName+"-"+friendLastName+"-"+friendID+"-"+relation.getTip());				
+				}
+			}
+			return retVal;
+		}
+		
+		return null;
+	}
+	
+	@RequestMapping(value="/requests/{id}", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ArrayList<String> getUserRequests(@PathVariable Long id){		
+		
+		User user = servis.findOneById(id);
+		user.setLozinka("");
+		
+		Set<Relation> relations = user.getRelatedRel();
+		if(relations.size() > 0)
+		{
+			ArrayList<String> retVal = new ArrayList<String>();
+			
+			for(Relation relation : relations)
+			{
+				if( relation.getTip().equals("ZAHTEV"))
+				{
+					String friendName = relation.getRelated().getIme();
+					String friendLastName = relation.getRelated().getIme();
+					Long friendID = relation.getRelated().getId();					
+					retVal.add(friendName+"-"+friendLastName+"-"+friendID+"-"+relation.getTip());				
+				}
+			}
+			return retVal;
+		}
+		
+		return null;
+	}
+	
+	
+	@RequestMapping(value="/search/{id}", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ArrayList<String> search(@PathVariable String id){		
+		
+		
+	
+		
+		return null;
+	}
+	
+	
 	
 	@RequestMapping(value="/getUsersForSistem", method = RequestMethod.GET)
 	public ArrayList<User> getUsersForSistem(){		
