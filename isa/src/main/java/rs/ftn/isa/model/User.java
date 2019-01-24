@@ -61,6 +61,10 @@ public class User {
 	@JsonIgnore
 	private Set<Relation> relatedRel = new HashSet<Relation>();
 	
+	//pregled pozivnica
+	@OneToMany(mappedBy = "korisnik", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	private Set<Pozivnica> pozivnice = new HashSet<Pozivnica>();
 	
 	//rez karata
 	@OneToMany(mappedBy = "korisnik", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

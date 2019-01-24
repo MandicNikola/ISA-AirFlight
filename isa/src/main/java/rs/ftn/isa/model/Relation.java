@@ -27,6 +27,47 @@ public class Relation {
 	//koji prima zazhtev
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private User related;
+
+	public Relation()
+	{
+		
+	}
+	
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getTip() {
+		return tip;
+	}
+
+	public void setTip(String tip) {
+		this.tip = tip;
+	}
+
+	public User getRelating() {
+		return relating;
+	}
+
+	public void setRelating(User relating) {
+		this.relating = relating;
+	}
+
+	public User getRelated() {
+		return related;
+	}
+
+	public void setRelated(User related) {
+		this.related = related;
+	}
+	
+	
+	
 	
 	
 }

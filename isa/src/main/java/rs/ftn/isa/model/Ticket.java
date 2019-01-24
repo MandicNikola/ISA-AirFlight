@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 //fale mi jos dorade za tabele i sve ostalo
 @Entity
@@ -34,6 +36,11 @@ public class Ticket {
 	//da znamo kom letu pripada kada mi treba
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Flight let;
+	
+	@OneToOne(mappedBy = "ticket", cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY, optional = false)
+	private Pozivnica pozivnica;
+	
 	
 	
 	

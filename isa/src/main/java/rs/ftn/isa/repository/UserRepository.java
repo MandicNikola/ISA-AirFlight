@@ -13,7 +13,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
 		
 	User findOneByMail(String mail);
 	User findOneById(Long id);
-		
 	
 //	@Query("select s from Student s where s.lastName = ?1")
 	
