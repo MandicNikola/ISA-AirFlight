@@ -1142,6 +1142,9 @@ function ispisiUspjesno(data){
 }
 
 function changeData(){
-	window.location = "changePersonalData.html";
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	
+	window.location = "changePersonalData.html?id="+id;
 	
 }

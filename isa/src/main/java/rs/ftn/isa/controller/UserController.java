@@ -530,6 +530,49 @@ public @ResponseBody User changePassAdmin(@RequestParam String oldPass,@RequestP
 		
 		return user;
 }
+	@RequestMapping(value="/changePersonalData", 
+			method = RequestMethod.POST,
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+public @ResponseBody User changePersonalData(@RequestBody UserDTO novi,@Context HttpServletRequest request){		
+
+		System.out.println("Usao u promjeni podatke, mail je "+ novi.getMail());
+		
+		//provera da li je mail jedinstven
+		User user = (User) request.getSession().getAttribute("ulogovan");
+		if(!user.getMail().equals(novi.getMail())) {
+			User provera = servis.findUserByMail(novi.getMail());
+			
+			if(provera != null) {
+				System.out.println("Mejl nije jedinstven");
+				provera.setVerifikovan("null");
+				return provera;
+		
+			}
+			user.setMail(novi.getMail());
+		}
+		
+			if(!user.getIme().equals(novi.getIme())) {
+				user.setIme(novi.getIme());
+			}
+			if(!user.getPrezime().equals(novi.getPrezime())) {
+				user.setPrezime(novi.getPrezime());
+			}
+			
+			if(user.getTelefon() != novi.getTelefon()) {
+				user.setTelefon(novi.getTelefon());
+			}
+			if(!user.getGrad().equals(novi.getGrad())) {
+				user.setGrad(novi.getGrad());	
+				
+			}
+			
+		    servis.saveUser(user);
+			
+			System.out.println("Update korisnika");
+			return user;
+		
+}	
 
 
 }
