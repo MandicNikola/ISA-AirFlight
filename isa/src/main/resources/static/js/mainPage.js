@@ -77,7 +77,7 @@ function dodajIstorijuRent(){
 	console.log('usao u dodajIstoriju rent');
 	$.ajax({
 		method:'GET',
-		url: "/api/korisnici/istorijaRent",
+		url: "/api/rezervacijerent/istorijaRent",
 		success: function(lista){
 			if(lista == null){
 				console.log('Istorija je prazna');
@@ -96,20 +96,53 @@ function ispisiIstorijuRent(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#historyRent").empty();
 		
-	$("#historyRent").append("<table class=\"table table-striped\" id=\"histTableRent\" ><tr><th>Model of car</th><th>Pick-up date</th><th>Drop-off date</th><th>Price</th></tr>");
+	$("#historyRent").append("<table class=\"table table-striped\" id=\"histTableRent\" ><tr><th>Model of car</th><th>Pick-up date</th><th>Drop-off date</th><th>Price</th><th></th><th></th><th></th><th></th></tr>");
 		
 		$.each(pom, function(index, clan) {
+			console.log(clan);
+			
+			
 			var datDol=clan.datumPreuzimanja;
 			var datOdl=clan.datumVracanja;
 			
 			var date1=datDol.split('T')[0];
 			var date2=datOdl.split('T')[0];
 			var voz=clan.vozilo;
-			
-			$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td > "+date2+"</td><td > "+clan.cena+"</td></tr>");
-		});
+			var idRez=clan.id;
+			var nazRent = "oceniR"+idRez;
+			var nazVozilo = "oceniV"+idRez;
+			if(clan.zavrsena == true){
+				$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td > "+date2+"</td><td> "+clan.cena+"</td></tr>");
+			}else{
+				$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazRent+"></td><td><button  class=\"btn btn-info\" onclick=\"oceniRent("+voz.id+","+clan.id+")\">Rate Rent Service</button></td><td> <input type=\"number\" id="+nazVozilo+" min=\"1\" max=\"5\"></td><td><button  class=\"btn btn-info\" onclick=\"oceniVozilo("+voz.id+","+clan.id+")\">Rate Car</button></td></tr>");
+			}
+			});
 	 $("#historyRent").append("</table>");
 
+}
+function oceniVozilo(idVoz,idRez){
+	console.log('Usao u oceniVozilo ');
+	console.log(idVoz);
+	console.log(idRez);
+	var nazVozilo = "oceniV"+idRez;
+	
+	var ocena =  $("#"+nazVozilo).val();
+	console.log(ocena);
+	if(ocena<1 || ocena>5){
+		alert('Grade must be between 1 and 5');
+	}
+}
+function oceniRent(idVoz,idRez){
+	console.log('Usao u oceniRent');
+	console.log(idVoz);
+	console.log(idRez);
+	var nazRent = "oceniR"+idRez;
+	
+	var ocena =  $("#"+nazRent).val();
+	console.log(ocena);
+	if(ocena<1 || ocena>5){
+		alert('Grade must be between 1 and 5');
+	}
 }
 function istorijaPrazna(){
 	$("#historyHotel").append("<h3>There is no any record in your history.</h3>");
