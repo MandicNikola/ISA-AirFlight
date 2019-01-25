@@ -282,4 +282,43 @@ public class VoziloController {
 			}
 		
 		}		
+		@RequestMapping(value="/cekirajOcenu/{podatak}", 
+				method = RequestMethod.POST,
+				produces = MediaType.APPLICATION_JSON_VALUE)
+		public @ResponseBody Vehicle cekirajOcenu(@PathVariable String podatak){		
+		  System.out.println("Usao u oceni vozilo");
+		  String[] niz = podatak.split("=");
+		    String idVoz=niz[0];
+		    Integer novaOcena =Integer.parseInt(niz[1]);
+		    String idRez= niz[2];
+		    
+			Vehicle vozilo = servis.findVehicleById(Long.parseLong(idVoz));
+			
+			if(vozilo!=null) {
+					
+					Set<RezervacijaRentCar> rez=vozilo.getRezervacije();
+					RezervacijaRentCar res=null;
+					for(RezervacijaRentCar r : rez) {
+						String idR=r.getId().toString();
+						if(idR.equals(idRez)) {
+							res=r;
+							break;
+						}
+					}
+					if(res == null) {
+						return null;
+					}
+					vozilo.getRezervacije().remove(res);
+					//setujemo da je rent-a-car servis ocenjen da korisnik ne bi vise puta mogao da oceni servis
+					res.setOcenjenRent(true);;
+					vozilo.getRezervacije().add(res);
+					
+					servis.saveVehicle(vozilo);
+					vozilo.setOcena((double)novaOcena);
+					return vozilo;
+			}else {
+				return vozilo;
+			}
+		
+		}
 }

@@ -35,6 +35,9 @@ public class RentACar {
 
 	@Column(name="ocena",nullable = false)
 	private double ocena;
+
+	@Column(name="brojac")
+	private Integer brojac;
 	
 	@OneToMany(mappedBy = "servis", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore
@@ -47,8 +50,8 @@ public class RentACar {
 	
 	
 	public RentACar() {
-		
-		
+		ocena=0;
+		brojac=0;
 	}
 	public RentACar(String naziv, String adresa, String opis) {
 		super();
@@ -56,6 +59,7 @@ public class RentACar {
 		this.adresa = adresa;
 		this.opis = opis;
 		ocena=0;
+		brojac=0;
 	}
 	
 	public RentACar(Long id, String naziv, String adresa, String opis) {
@@ -65,6 +69,7 @@ public class RentACar {
 		this.adresa = adresa;
 		this.opis = opis;
 		ocena=0;
+		brojac=0;
 	}
 	
 	
@@ -86,6 +91,13 @@ public class RentACar {
 	}
 	public void setAdresa(String adresa) {
 		this.adresa = adresa;
+	}
+
+	public Integer getBrojac() {
+		return brojac;
+	}
+	public void setBrojac(Integer brojac) {
+		this.brojac = brojac;
 	}
 	public String getOpis() {
 		return opis;

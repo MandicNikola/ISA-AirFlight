@@ -75,6 +75,9 @@ public class Vehicle {
 
 	
 	public Vehicle() {
+		broj=0;
+		ocena=0;
+		brojac=0;
 	}
 
 	
@@ -90,6 +93,7 @@ public class Vehicle {
 		this.cena = cena;
 		this.ocena = ocena;
 		broj=0;
+		brojac=0;
 	}
 
 
@@ -103,6 +107,7 @@ public class Vehicle {
 		this.kategorija =CategoryCar.valueOf(kategorija);
 		broj=0;
 		ocena=0;
+		brojac=0;
 	}
 
 
