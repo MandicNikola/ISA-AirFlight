@@ -1140,3 +1140,8 @@ function ispisiUspjesno(data){
 	$("#korakDodatne").append("<div id= \"obavj\"><p>You have successfully made a reservation.</p><p>Total price:"+data.cijena+"</p><p>We are looking forward to have you as our guests</p></div>");
 	
 }
+
+function changeData(){
+	window.location = "changePersonalData.html";
+	
+}
