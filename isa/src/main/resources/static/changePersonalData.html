@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript"  src="/js/changePersonalData.js"></script>
+  <style>
+ 	header{
+ 	 	margin-top:2%;
+ 	 	text-align: center !important;
+ 	 	font-size: 50px;
+ 	 	font-weight: bold;
+ 	 	font-family: "Comic Sans MS", cursive, sans-serif	
+ 	 	
+ 	 	}
+ 	   body{
+			background-color: #EFEFEF;
+			width:100%;
+			height:100%;			
+			background-size:cover;
+			color: #666;
+  		    font-family: 'Lato', sans-serif;    
+  		    font-size: 16px;
+ 	   }
+ 	   .col-xs-6{
+ 	 			margin-left:25%;
+ 	 			margin-right:25%;
+ 	 }
+ 	 h2{
+ 	 			text-align: center;
+ 	 			
+ 	 }
+ 	 #polje{
+ 	 		padding: 1%;
+ 	 		margin-top: 1%;
+ 	 		max-width: 500px;
+ 	 	 	background-color: rgba(255,255,255,0.8);
+ 	 	 	border: 3px solid #C3C3C3;
+   		     border-radius: 8px;
+ 	 }
+ 	 #potvrdiBtn{
+ 	 			padding : 10px;
+ 	 }
+  	form{
+ 	 		text-align: center;
+ 	 	}
+ 	.form-group{
+			text-align: left;
+ 	 }  	
+  </style>	  
+<title>Change personal data</title>
+</head>
+
+
+<body onload = "onLoad()">
+  <div class="container">
+    <h2>Change personal data</h2>
+    	<form method="post" class="user" id="unosUsera" >	
+		    
+		       <div class="form-group row ">				      	
+				        <div class="col-xs-6">
+						       <i class="glyphicon glyphicon-user"></i>
+						      <label for="ime"><span > </span>Name:</label>
+						      <input type="text" class="form-control"  required id="ime" placeholder="Enter your name" >
+						   	  <div id= "imeError"></div>
+				   		</div>
+				    </div>
+				    <div class="form-group row">
+				      <div class="col-xs-6">
+				       		  <i class="glyphicon glyphicon-user"></i>
+						      <label for="prezime">Surname:</label>
+						      <input type="text" class="form-control" required id="prezime" placeholder="Enter your surname">
+						      <div id= "prezimeError"></div>
+				      </div>
+				    </div>
+			    	<div class="form-group row">			    	
+				        <div class="col-xs-6">
+				              <i class="glyphicon glyphicon-phone"></i>
+				              <label for="broj">Number:</label>
+						      <input type="number" class="form-control" required id="telefon" placeholder="Enter your number" >
+						      <div id= "brojError"></div>
+				    	</div>
+				    </div>
+				    <div class="form-group row">				    
+				        <div class="col-xs-6">	
+				           	 <i class="glyphicon glyphicon-map-marker"></i>
+				              <label for="grad">City:</label>
+						      <input type="text" class="form-control" required id="grad" placeholder="Enter your city">
+						      <div id= "gradError"></div>
+				    	</div>
+				    </div>
+			    	<div class="form-group row">
+			    		 <div class="col-xs-6">	
+			    	     	 <i class="glyphicon glyphicon-envelope"></i>
+						      <label for="email">E-mail:</label>
+						      <input type="email" class="form-control" id="mail" placeholder="Enter your e-mail" name="email">
+						   	  <div id= "mailError"></div>
+						 </div>
+				    </div>
+				    <div class="form-group row">
+				        <div class="col-xs-6">	
+				            <i class="glyphicon glyphicon-eye-close"></i>
+				            <label for="pwd">Old Password:</label>
+					        <input type="password" class="form-control" id="lozinkaOld" placeholder="Enter old password" name="loz1">
+					  	    <div id= "lozinkaError"></div>
+				        </div>
+				    </div>
+				    <div class="form-group row">
+				        <div class="col-xs-6">	
+				            <i class="glyphicon glyphicon-eye-close"></i>
+				            <label for="pwd">New password:</label>
+					        <input type="password" class="form-control" id="lozinka1" placeholder="Enter new password" name="loz1">
+					  	    <div id= "lozinkaError"></div>
+				        </div>
+				    </div>
+					<div class="form-group row">
+					      <div class="col-xs-6">
+						      <i class="glyphicon glyphicon-eye-close"></i>
+				              <label for="pwd">New password:</label>
+						      <input type="password" class="form-control" id="lozinka2" placeholder="Repeat new password" name="loz2">
+						      <div id='poruka'></div>	
+						  </div>			      
+				    </div>		    				    
+			    <button type="submit" id="potvrdiBtn" class="btn btn-default btn-lg">Save changes</button>
+		    
+		  </form>
+</div>
+   
+</body>
+</html>
