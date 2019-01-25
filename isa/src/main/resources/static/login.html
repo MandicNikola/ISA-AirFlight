@@ -23,7 +23,37 @@
  	 	 	border: 3px solid #C3C3C3;
    		     border-radius: 8px;
  	 }
+ 	 #pass{
+ 	        padding: 3%;
+ 	 		margin-top: 3%;
+ 	 		max-width: 400px;
+ 			background-color: rgba(255,255,255,0.8);
+ 	 	 	border: 3px solid #C3C3C3;
+   		    border-radius: 8px;
  	 
+ 	 }
+ 	 
+ 	 #lozinkaOld{
+ 			padding: 3%;
+ 	 		margin-top: 3%;
+ 	 		max-width: 600px;
+ 			background-color: rgba(255,255,255,0.8);
+ 	 	 
+ 	 }
+ 	 #lozinka1{
+ 			padding: 3%;
+ 	 		margin-top: 3%;
+ 	 		max-width: 600px;
+ 			background-color: rgba(255,255,255,0.8);
+ 	 	 
+ 	 }
+ 	 #lozinka2{
+	        padding: 3%;
+	 		margin-top: 3%;
+	 		max-width: 600px;
+			background-color: rgba(255,255,255,0.8);
+	 	 	
+ 	 }
  	 header{
  	 	margin-top:5%;
  	 	text-align: center !important;
@@ -46,7 +76,8 @@
  	 }
  </style>
 </head>
-<body>
+<body onload= "onload()">
+<div id = "divLogin">
 <header>
 		<p>AirFinity</p>
 </header>
@@ -73,6 +104,38 @@
 			  <p>If you don't have account <a href="registration.html">register</a></p>
 	</div>
 
-
+</div>
+<div id = "divChangePass">
+		<div class="container" id="pass">
+  				<form method="post" class="changePassword" >  					
+				     <div class="form-group row">
+				        <div class="col-xs-6">	
+				            <i class="glyphicon glyphicon-eye-close"></i>
+				            <label for="pwd">Old password:</label>
+					        <input type="password"  required class="form-control" id="lozinkaOld" placeholder="Enter your password" name="loz1">
+					  	    <div id= "lozinkaError"></div>
+				        </div>
+				    </div>
+					<div class="form-group row">
+					      <div class="col-xs-6">
+						      <i class="glyphicon glyphicon-eye-close"></i>
+				              <label for="pwd">New password:</label>
+						      <input type="password" class="form-control" required id="lozinka1" placeholder="Enter new password" name="loz2">
+						      <div id='poruka'></div>	
+						  </div>			      
+				    </div>
+				    <div class="form-group row">
+					      <div class="col-xs-6">
+						      <i class="glyphicon glyphicon-eye-close"></i>
+				              <label for="pwd">Repeat new password:</label>
+						      <input type="password" class="form-control" required id="lozinka2" placeholder="Repeat password" name="loz2">
+						      <div id='poruka'></div>	
+						  </div>			      
+				    </div>  				    
+			    <button type="submit" id="potvrdiBtn1" class="btn btn-default btn-lg">Confirm</button>
+			  </form>
+	</div>
+			
+</div>
 </body>
 </html>
