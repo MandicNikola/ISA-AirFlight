@@ -755,4 +755,39 @@ public class RentACarController {
 	 public int daysBetween(Date d1, Date d2){
          return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
  }
+		@RequestMapping(value="/oceniRent", 
+				method = RequestMethod.POST,
+				consumes = MediaType.APPLICATION_JSON_VALUE,
+				produces = MediaType.APPLICATION_JSON_VALUE)
+		public @ResponseBody RentACar oceniRent(@RequestBody Vehicle vozilo){		
+		  System.out.println("Usao u oceni rent");
+		System.out.println(vozilo);
+		    Integer novaOcena =(int) vozilo.getOcena();
+		    Long idRent = vozilo.getFilijala().getServis().getId();
+			System.out.println("Id rent-a je "+idRent);
+		    RentACar rent = servis.findOneById(idRent);
+		    
+			if(rent!=null) {
+				System.out.println("Brojac jee"+ rent.getBrojac());
+					int brojOcena=rent.getBrojac();
+					System.out.println("Broj ocena je "+brojOcena+ " trenutna ocena je "+rent.getOcena());
+					double ukOcena = rent.getOcena()*brojOcena;
+					System.out.println("Pomnozena ocena "+ukOcena);
+					ukOcena = ukOcena+novaOcena;
+					System.out.println("Dodata ocena "+ukOcena);
+					brojOcena++;
+					ukOcena=(double)ukOcena/brojOcena;
+					System.out.println("Podeljena ocena je "+ukOcena);
+					
+					rent.setBrojac(brojOcena);
+					rent.setOcena(ukOcena);
+					
+					servis.saveRentACar(rent);
+					
+					return rent;
+			}else {
+				return null;
+			}
+		
+		}	
 }
