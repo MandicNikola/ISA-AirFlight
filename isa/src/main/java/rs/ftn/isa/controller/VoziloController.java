@@ -25,6 +25,7 @@ import rs.ftn.isa.dto.UserDTO;
 import rs.ftn.isa.model.Filijala;
 import rs.ftn.isa.model.RentACar;
 import rs.ftn.isa.model.RezervacijaRentCar;
+import rs.ftn.isa.model.StatusRezervacije;
 import rs.ftn.isa.model.User;
 import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.service.VoziloService;
@@ -206,6 +207,7 @@ public class VoziloController {
 	        	
 			//prvo pronadjemo vozilo koje treba da se izmeni
 			RezervacijaRentCar rezervacija = new RezervacijaRentCar();
+			rezervacija.setStatus(StatusRezervacije.AKTIVNA);
 			rezervacija.setCena(cena);
 			rezervacija.setKorisnik(korisnik);
 			korisnik.getRezRent().add(rezervacija);
@@ -227,5 +229,57 @@ public class VoziloController {
 			return korisnik;
 
 		}
-
+		
+		
+		@RequestMapping(value="/oceniVozilo/{podatak}", 
+				method = RequestMethod.POST,
+				produces = MediaType.APPLICATION_JSON_VALUE)
+		public @ResponseBody Vehicle oceniVozilo(@PathVariable String podatak){		
+		  System.out.println("Usao u oceni vozilo");
+			String[] niz = podatak.split("=");
+		    String idVoz=niz[0];
+		    Integer novaOcena =Integer.parseInt(niz[1]);
+		    String idRez= niz[2];
+		    
+			Vehicle vozilo = servis.findVehicleById(Long.parseLong(idVoz));
+			
+			if(vozilo!=null) {
+					int brojOcena=vozilo.getBrojac();
+					System.out.println("Broj ocena je "+brojOcena+ " trenutna ocena je "+vozilo.getOcena());
+					double ukOcena = vozilo.getOcena()*brojOcena;
+					System.out.println("Pomnozena ocena "+ukOcena);
+					ukOcena = ukOcena+novaOcena;
+					System.out.println("Dodata ocena "+ukOcena);
+					brojOcena++;
+					ukOcena=(double)ukOcena/brojOcena;
+					System.out.println("Podeljena ocena je "+ukOcena);
+					
+					vozilo.setBrojac(brojOcena);
+					vozilo.setOcena(ukOcena);
+					
+					Set<RezervacijaRentCar> rez=vozilo.getRezervacije();
+					RezervacijaRentCar rezervacija=null;
+					for(RezervacijaRentCar r : rez) {
+						String idR=r.getId().toString();
+						if(idR.equals(idRez)) {
+							rezervacija=r;
+							break;
+						}
+					}
+					if(rezervacija == null) {
+						return null;
+					}
+					vozilo.getRezervacije().remove(rezervacija);
+					//setujemo da je vozilo ocenjeno da korisnik ne bi vise puta mogao da oceni vozilo
+					rezervacija.setOcenjenVozilo(true);
+					vozilo.getRezervacije().add(rezervacija);
+					
+					servis.saveVehicle(vozilo);
+					
+					return vozilo;
+			}else {
+				return vozilo;
+			}
+		
+		}		
 }
