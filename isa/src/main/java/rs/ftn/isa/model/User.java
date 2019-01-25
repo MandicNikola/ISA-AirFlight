@@ -47,11 +47,15 @@ public class User {
 	@Column(name="servis")
 	private Long servis;
 	
+
+	@Column(name="adminPotvrdio")
+	private boolean adminPotvrdio;
+	
 	@Enumerated(EnumType.STRING)
 	@Column(name="tip")
 	private Role tip;
-
-
+	
+	
 	//liste veza relacija u kojima se nalazi korisnik
 	@OneToMany(mappedBy = "relating", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore
@@ -87,7 +91,6 @@ public class User {
 	}
 
 
-
 	public User(Long id, String ime, String prezime, String mail, int telefon, String grad) {
 		super();
 		this.id = id;
@@ -101,7 +104,7 @@ public class User {
 
 
 	public User(Long id, String ime, String prezime, String mail, int telefon, String grad, String verifikovan,
-			String lozinka, String tip) {
+			String lozinka, String tip,boolean adminPotvrdio) {
 		super();
 		this.id = id;
 		this.ime = ime;
@@ -112,6 +115,7 @@ public class User {
 		this.verifikovan = verifikovan;
 		this.lozinka = lozinka;
 		this.tip = Role.valueOf(tip);
+		this.adminPotvrdio = adminPotvrdio;
 	}
 
 
@@ -322,6 +326,18 @@ public class User {
 	public String toString() {
 		return "User [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", mail=" + mail + ", telefon=" + telefon
 				+ ", grad=" + grad + ", verifikovan=" + verifikovan + ", lozinka=" + lozinka + ", tip=" + tip + "]";
+	}
+
+
+
+	public boolean isAdminPotvrdio() {
+		return adminPotvrdio;
+	}
+
+
+
+	public void setAdminPotvrdio(boolean adminPotvrdio) {
+		this.adminPotvrdio = adminPotvrdio;
 	}
 
 

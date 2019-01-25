@@ -224,6 +224,7 @@ public class UserController {
 	public  void noviAdminSistema(@PathVariable Long id){
 		User korisnik = servis.findOneById(id);
 		korisnik.setTip(Role.ADMIN_SISTEM);
+		korisnik.setAdminPotvrdio(false);
 		servis.saveUser(korisnik);
 		System.out.println("sacuvan korisnik kao admin sistema");
 	}
@@ -239,6 +240,7 @@ public class UserController {
 		User korisnik = servis.findOneById(userid);
 		korisnik.setTip(Role.ADMIN_HOTEL);
 		korisnik.setServis(hotelid);
+		korisnik.setAdminPotvrdio(false);
 		servis.saveUser(korisnik);
 		System.out.println("sacuvan korisnik kao admin hotela");
 	}
@@ -254,6 +256,7 @@ public class UserController {
 		User korisnik = servis.findOneById(userid );
 		korisnik.setTip(Role.ADMIN_RENT);
 		korisnik.setServis(rentid);
+		korisnik.setAdminPotvrdio(false);
 		servis.saveUser(korisnik);
 		System.out.println("sacuvan korisnik kao admin renta");
 	}
@@ -480,5 +483,53 @@ public class UserController {
 		}
 		return rezervacije;
 	}
+	
+	@RequestMapping(value="/changePass",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+public @ResponseBody User changePassAdmin(@RequestParam String oldPass,@RequestParam String lozinka1,@RequestParam String lozinka2 ,@Context HttpServletRequest request){
+		User user = (User) request.getSession().getAttribute("ulogovan");
+		System.out.println("ulogovan je "+user.getIme()+" a tip mu je "+user.getTip());
+		
+		String starasifra = oldPass;
+		String novasifra = lozinka1;
+		String ponovljenasifra = lozinka2;
+		String  sifraStara = "";
+		
+		try {
+			sifraStara = enkriptuj(starasifra);
+			if(!sifraStara.equals(user.getLozinka())) {
+				user = new User();
+				user.setVerifikovan("stara");
+				return user;
+		
+			}
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(!novasifra.equals(ponovljenasifra)) {
+			user = new User();
+			user.setVerifikovan("ponavljanje");
+			return user;
+		}
+		
+		
+		try {
+			String newSifra = enkriptuj(novasifra);
+			user.setAdminPotvrdio(true);
+			user.setLozinka(newSifra);
+			//System.out.println("usao da sacuva promjenjenu sifru");
+			servis.saveUser(user);
+			
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return user;
+}
+
 
 }
