@@ -8,6 +8,8 @@ function onLoad(){
 	$("#cijene").hide();
 	$("#rezervacije").hide();
 	$("#adminStrana").hide();
+	$("#promjenaLozinke").hide();
+ 	
 	
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);
@@ -120,7 +122,8 @@ function changePrice(roomID,roomCijena){
 	 $("#tabovi").hide();
 	 $("#sobe").hide();
 	 $("#konfig").hide();
-		
+     $("#promjenaLozinke").hide();
+	
 	 $("#izmjena").empty();
 	 $("#izmjena").show();
 			 
@@ -283,6 +286,7 @@ function addConfiguration(){
 	$("#cijene").hide();
 	$("#konfig").hide();
 	$("#rezervacije").hide();
+	$("#promjenaLozinke").hide();
 
 	
 	$("#ispisiTabelu").show();
@@ -379,7 +383,8 @@ $(document).ready(function(){
 	$("#konfig").hide();
 	$("#rezervacije").hide();
 	$("#adminStrana").hide();
-	
+	$("#promjenaLozinke").hide();
+
 
 
     $("#rooms").click(function(){
@@ -391,6 +396,8 @@ $(document).ready(function(){
 		$("#rezervacije").hide();
 		$("#sobe").show();
 		$("#adminStrana").hide();
+		$("#promjenaLozinke").hide();
+
 			
     });
     $("#info").click(function(){
@@ -401,6 +408,8 @@ $(document).ready(function(){
 		$("#konfig").hide();
 		$("#rezervacije").hide();
 		$("#adminStrana").hide();
+		$("#promjenaLozinke").hide();
+
 		
     });
     
@@ -412,6 +421,8 @@ $(document).ready(function(){
 		$("#sobe").hide();
 		$("#cijene").hide();
 		$("#konfig").hide();
+		$("#promjenaLozinke").hide();
+
 		$("#rezervacije").show();
 		$("#korak").empty();
 		$("#korakDodatne").empty();
@@ -424,6 +435,8 @@ $(document).ready(function(){
     	$("#informacije").hide();
 		$("#ispisiTabelu").hide();
 		$("#sobe").hide();
+		$("#promjenaLozinke").hide();
+
 		$("#cijene").hide();
 		$("#rezervacije").hide();
 		$("#adminStrana").hide();
@@ -439,7 +452,8 @@ $(document).ready(function(){
 		$("#sobe").hide();
 		$("#rezervacije").hide();
 		$("#adminStrana").show();
-		
+		$("#promjenaLozinke").hide();
+
     });  	
     $("#price").click(function(){
     	console.log('dosao u price');
@@ -451,7 +465,8 @@ $(document).ready(function(){
 		$("#konfig").hide();
 		$("#rezervacije").hide();
 		$("#adminStrana").hide();
-			 	
+		$("#promjenaLozinke").hide();
+
     });
 });
 function ispisiKonfiguracije(){
@@ -758,7 +773,8 @@ function addUsluga(){
 	$("#informacije").hide();
 	$("#cijene").hide();
 	$("#konfig").hide();
-	
+	$("#promjenaLozinke").hide();
+
 	
 	$("#ispisiTabelu").show();
 	$("#ispisiTabelu").empty();
@@ -1140,7 +1156,61 @@ function ispisiUspjesno(data){
 	$("#korakDodatne").append("<div id= \"obavj\"><p>You have successfully made a reservation.</p><p>Total price:"+data.cijena+"</p><p>We are looking forward to have you as our guests</p></div>");
 	
 }
+function changePass(){
+	 $("#tabovi").hide();
+	 $("#sobe").hide();
+	 $("#konfig").hide();
+	 $("#cijene").hide();
+     $("#rezervacije").hide();
+     $("#adminStrana").hide();
+     $("#informacije").hide();
 
+ 	 $('#lozinkaOld').html('');
+ 	 $('#lozinka1').html('');
+ 	 $('#lozinka2').html('');	
+ 		prikaziPromjenu();
+	
+}
+function prikaziPromjenu(){
+    $("#promjenaLozinke").show();
+
+}
+
+$(document).on('submit','.changePassword',function(e){
+	e.preventDefault();	
+	
+	var oldLoz =  $('#lozinkaOld').val();
+	var loz1 = $('#lozinka1').val();
+	var loz2 = $('#lozinka2').val();
+			 
+				$.ajax({
+					type : 'GET',
+					url : "/api/korisnici/changePass?oldPass="+oldLoz+ "&lozinka1="+loz1+"&lozinka2="+loz2,
+					success : function(pov) {
+						if( pov.verifikovan == "stara"){	
+							 alert("Old password is not valid");
+								
+						}else if(pov.verifikovan == "ponavljanje"){
+							 alert("Passwords do not match.");										
+						}else {
+							alert("Izmjenio .");
+							ispisiHotel();		
+						}
+					},
+					error: function(XMLHttpRequest, textStatus, errorThrown){
+						alert('greska');
+					}
+				});
+		
+	});
+//prikaze profil hotela posle promjene lozinke admina
+function ispisiHotel(){
+	$("#informacije").show();
+	 $("#promjenaLozinke").hide();
+	 $("#tabovi").show();
+		
+ 	
+}
 function changeData(){
 	var adresa = window.location.search.substring(1);
 	var id = adresa.split('=')[1];

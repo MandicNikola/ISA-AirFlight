@@ -186,7 +186,38 @@ input[type="date"]:valid::before { display: none }
 						<p id="adresa"><i class="glyphicon glyphicon-home"></i>You can find us here </p>
 				    </section>
 			  </div>
+			 <div id = "promjenaLozinke">
 			 
+								 		<div class="container" id="pass">
+					  				<form method="post" class="changePassword" >  					
+									     <div class="form-group row">
+									        <div class="col-xs-6">	
+									            <i class="glyphicon glyphicon-eye-close"></i>
+									            <label for="pwd">Old password:</label>
+										        <input type="password"  required class="form-control" id="lozinkaOld" placeholder="Enter your password" name="loz1">
+										  	    <div id= "lozinkaError"></div>
+									        </div>
+									    </div>
+										<div class="form-group row">
+										      <div class="col-xs-6">
+											      <i class="glyphicon glyphicon-eye-close"></i>
+									              <label for="pwd">New password:</label>
+											      <input type="password" class="form-control" required id="lozinka1" placeholder="Enter new password" name="loz2">
+											      <div id='poruka'></div>	
+											  </div>			      
+									    </div>
+									    <div class="form-group row">
+										      <div class="col-xs-6">
+											      <i class="glyphicon glyphicon-eye-close"></i>
+									              <label for="pwd">Repeat new password:</label>
+											      <input type="password" class="form-control" required id="lozinka2" placeholder="Repeat password" name="loz2">
+											      <div id='poruka'></div>	
+											  </div>			      
+									    </div>  				    
+								    <button type="submit" id="potvrdiBtn1" class="btn btn-default btn-lg">Confirm</button>
+								  </form>
+						</div>
+			 </div>
 			 <div id="rezervacije" class="container-fluid">
 				  <section >
 				<div id="korak"></div>
@@ -304,6 +335,9 @@ input[type="date"]:valid::before { display: none }
 		</div>
 		<div class="okvir">
 			<button onclick = "changeData()" type="button" class="btn btn-link">Change personal data</button>
+		</div>
+		<div class="okvir" id = "adminPass" >
+			<button onclick = "changePass()" type="button" class="btn btn-link">Change password</button>
 		</div>
 		
 		</aside>

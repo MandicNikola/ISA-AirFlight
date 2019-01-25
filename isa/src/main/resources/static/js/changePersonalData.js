@@ -78,7 +78,6 @@ $(document).on('submit','.user',function(e){
 							 alert("Mail is already in use.");
 						}else{
 							goBack();
-							alert('Uspesno ste se registrovali');
 						}
 					},
 					error: function(XMLHttpRequest, textStatus, errorThrown){
@@ -89,5 +88,10 @@ $(document).on('submit','.user',function(e){
 	});
 function goBack(){
 	alert('dosao je');
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+
+	window.location = "profileHotel.html?id="+id;
+	
 	
 }
