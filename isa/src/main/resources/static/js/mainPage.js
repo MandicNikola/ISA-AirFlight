@@ -111,11 +111,31 @@ function ispisiIstorijuRent(lista){
 			var idRez=clan.id;
 			var nazRent = "oceniR"+idRez;
 			var nazVozilo = "oceniV"+idRez;
-			if(clan.zavrsena == true){
+			var btnRent = "rentB"+idRez;
+			var btnCar = "carB"+idRez;
+			console.log(clan.status);
+			
+			if(clan.status == "ZAVRSENA"){
 				$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td > "+date2+"</td><td> "+clan.cena+"</td></tr>");
 			}else{
-				$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazRent+"></td><td><button  class=\"btn btn-info\" onclick=\"oceniRent("+voz.id+","+clan.id+")\">Rate Rent Service</button></td><td> <input type=\"number\" id="+nazVozilo+" min=\"1\" max=\"5\"></td><td><button  class=\"btn btn-info\" onclick=\"oceniVozilo("+voz.id+","+clan.id+")\">Rate Car</button></td></tr>");
+				//nije ocenio ni vozilo ni rent-a-car servis
+				if(clan.ocenjenVozilo == false && clan.ocenjenRent == false){
+					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazRent+"></td><td><button  class=\"btn btn-info\" id="+btnRent+" onclick=\"oceniRent("+voz.id+","+clan.id+")\">Rate Rent Service</button></td><td> <input type=\"number\" id="+nazVozilo+" min=\"1\" max=\"5\"></td><td><button  class=\"btn btn-info\" id="+btnCar+" onclick=\"oceniVozilo("+voz.id+","+clan.id+")\">Rate Car</button></td></tr>");
+				}else if(clan.ocenjenVozilo == false){
+					//nije ocenio vozilo, ali je ocenio rent-a-car
+					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazRent+"></td><td> <input type=\"number\" id="+nazVozilo+" min=\"1\" max=\"5\"></td><td><button  class=\"btn btn-info\" id="+btnCar+" onclick=\"oceniVozilo("+voz.id+","+clan.id+")\">Rate Car</button></td></tr>");
+						
+				}else if(clan.ocenjenRent == false){
+					//nije ocenio rent-a-car ali je ocenio vozilo
+					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazRent+"></td><td><button  class=\"btn btn-info\" id="+btnRent+" onclick=\"oceniRent("+voz.id+","+clan.id+")\">Rate Rent Service</button></td></tr>");
+					
+				}else{
+					//ocenio je i rent-a-car i vozilo
+					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td> "+date2+"</td></tr>");
+					
+				}
 			}
+			
 			});
 	 $("#historyRent").append("</table>");
 
@@ -125,11 +145,32 @@ function oceniVozilo(idVoz,idRez){
 	console.log(idVoz);
 	console.log(idRez);
 	var nazVozilo = "oceniV"+idRez;
+	var butCar = "carB"+idRez;
 	
 	var ocena =  $("#"+nazVozilo).val();
 	console.log(ocena);
 	if(ocena<1 || ocena>5){
 		alert('Grade must be between 1 and 5');
+	}else{
+		var salji = idVoz+"="+ocena+"="+idRez;
+		$.ajax({
+			type : 'POST',
+			url : "/api/vozila/oceniVozilo/"+salji,
+			success : function(pov) {
+				if( pov == null){	
+					alert('Prazno');
+				}else{
+					$("#"+butCar).prop('disabled', true);
+					$("#"+nazVozilo).prop('disabled',true);
+			     	alert('You have successfully rated the car')
+				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				alert('greska');
+			}
+		});
+
+		
 	}
 }
 function oceniRent(idVoz,idRez){
@@ -142,6 +183,8 @@ function oceniRent(idVoz,idRez){
 	console.log(ocena);
 	if(ocena<1 || ocena>5){
 		alert('Grade must be between 1 and 5');
+	}else{
+		
 	}
 }
 function istorijaPrazna(){

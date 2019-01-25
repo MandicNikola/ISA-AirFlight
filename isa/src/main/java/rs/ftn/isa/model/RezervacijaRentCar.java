@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,8 +26,15 @@ public class RezervacijaRentCar {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+	@Enumerated(EnumType.STRING)
+	@Column(name="status")
+	private StatusRezervacije status;
+	
 	@Column(nullable = false)
-	private boolean zavrsena;
+	private boolean ocenjenRent;
+	
+	@Column(nullable = false)
+	private boolean ocenjenVozilo;
 	
 	
 	@Column(nullable = true)
@@ -53,7 +62,10 @@ public class RezervacijaRentCar {
 	@Column(nullable = false)
 	private int cena;
 	
-	public RezervacijaRentCar() {}
+	public RezervacijaRentCar() {
+		this.status=StatusRezervacije.AKTIVNA;
+		
+	}
 
 	
 	public RezervacijaRentCar(String mestoPreuzimanja, String mestoVracanja, Date datumPreuzimanja, Date datumVracanja,
@@ -65,7 +77,9 @@ public class RezervacijaRentCar {
 		this.datumVracanja = datumVracanja;
 		this.korisnik = korisnik;
 		this.vozilo = vozilo;
-		this.zavrsena=false;
+		this.status=StatusRezervacije.AKTIVNA;
+		this.ocenjenRent=false;
+		this.ocenjenVozilo=false;
 	}
 
 
@@ -79,6 +93,9 @@ public class RezervacijaRentCar {
 		this.korisnik = korisnik;
 		this.vozilo = vozilo;
 		this.cena = cena;
+		this.status=StatusRezervacije.AKTIVNA;
+		this.ocenjenRent=false;
+		this.ocenjenVozilo=false;
 	}
 
 
@@ -148,23 +165,33 @@ public class RezervacijaRentCar {
 		this.vozilo = vozilo;
 	}
 
-
-	
-
-	@Override
-	public String toString() {
-		return "RezervacijaRentCar [zavrsena=" + zavrsena + ", mestoPreuzimanja=" + mestoPreuzimanja
-				+ ", mestoVracanja=" + mestoVracanja + ", datumPreuzimanja=" + datumPreuzimanja + ", datumVracanja="
-				+ datumVracanja + ", korisnik=" + korisnik + ", vozilo=" + vozilo + ", cena=" + cena + "]";
+	public StatusRezervacije getStatus() {
+		return status;
 	}
 
 
-	public boolean isZavrsena() {
-		return zavrsena;
+	public void setStatus(StatusRezervacije status) {
+		this.status = status;
 	}
 
-	public void setZavrsena(boolean zavrsena) {
-		this.zavrsena = zavrsena;
+
+	public boolean isOcenjenRent() {
+		return ocenjenRent;
+	}
+
+
+	public void setOcenjenRent(boolean ocenjenRent) {
+		this.ocenjenRent = ocenjenRent;
+	}
+
+
+	public boolean isOcenjenVozilo() {
+		return ocenjenVozilo;
+	}
+
+
+	public void setOcenjenVozilo(boolean ocenjenVozilo) {
+		this.ocenjenVozilo = ocenjenVozilo;
 	}
 
 

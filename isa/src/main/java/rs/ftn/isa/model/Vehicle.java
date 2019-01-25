@@ -51,6 +51,10 @@ public class Vehicle {
 	
 	@Column(name = "cena", nullable = false)
 	private double cena;
+
+	//brojac ocena
+	@Column(name = "brojac", nullable = false)
+	private int brojac;
 	
 	@Column(name = "ocena", nullable = false)
 	private double ocena;
@@ -252,6 +256,16 @@ public class Vehicle {
 
 	public void setBroj(int broj) {
 		this.broj = broj;
+	}
+
+
+	public int getBrojac() {
+		return brojac;
+	}
+
+
+	public void setBrojac(int brojac) {
+		this.brojac = brojac;
 	}
 	
 	
