@@ -1032,4 +1032,81 @@ public ArrayList<Hotel> pronadjiHotele(@RequestBody ReservationHotelDTO rez,@Pat
 			 		return povratna;
 			 	}
 		 }
+	@RequestMapping(value="/oceniHotel/{podatak}", 
+					method = RequestMethod.POST,
+					produces = MediaType.APPLICATION_JSON_VALUE )
+	public Hotel oceniHotel(@PathVariable String podatak){
+		 System.out.println("Usao u oceni hotel");
+		String[] niz = podatak.split("=");
+		Integer ocena = Integer.parseInt(niz[1]);
+		String idRez=niz[0];
+		
+		List<Hotel> sviHoteli = servis.findAll();
+		RezervacijaHotel rezervacija = null;
+		Hotel hotel = null;	 
+		
+		for(Hotel H : sviHoteli) {
+			for(Room R : H.getSobe()) {
+				   for(RezervacijaHotel rez: R.getRezervacije()) {
+					    String idRezervacije = rez.getId().toString();
+					    	if(idRez.equals(idRezervacije)) {
+					    		System.out.println("Pronadjena soba sa tom rezervacijom");
+					    		hotel=H;
+					    		rezervacija=rez;
+					    		break;
+					    	}
+				   }
+			}
+		}
+		//treba promeniti ocenu u hotelu
+
+		if(hotel!=null) {
+				System.out.println("Brojac jee"+ hotel.getBrojac());
+					int brojOcena=hotel.getBrojac();
+					System.out.println("Broj ocena je "+brojOcena+ " trenutna ocena je "+hotel.getOcena());
+					double ukOcena = hotel.getOcena()*brojOcena;
+					System.out.println("Pomnozena ocena "+ukOcena);
+					ukOcena = ukOcena+ocena;
+					System.out.println("Dodata ocena "+ukOcena);
+					brojOcena++;
+					ukOcena=(double)ukOcena/brojOcena;
+					System.out.println("Podeljena ocena je "+ukOcena);
+					
+					hotel.setBrojac(brojOcena);
+					hotel.setOcena(ukOcena);
+					
+					//potrebno je podesiti u rezervaciji da je hotel vec ocenjen
+					Set<Room> sobe = hotel.getSobe();
+					for(Room room : sobe) {
+							Set<RezervacijaHotel> rezSobe = room.getRezervacije();
+							RezervacijaHotel rezIzmena = null;
+							//prolazimo kroz rezervacije sobe da vidimo da li je
+							//ta rezervacija koja treba da se izmeni vezana za sobu
+								for(RezervacijaHotel rH : rezSobe) {
+										String idrH = rH.getId().toString();
+										if(idrH.equals(idRez)) {
+											rezIzmena=rH;
+											System.out.println("Pronadjena rez u sobi "+room.getId()+" a hotel je "+hotel.getNaziv());
+											break;
+										}
+								}
+								if(rezIzmena!=null) {
+									hotel.getSobe().remove(room);
+									room.getRezervacije().remove(rezIzmena);
+									rezIzmena.setOcenjenHotel(true);
+									room.getRezervacije().add(rezIzmena);
+									hotel.getSobe().add(room);
+								}
+					}
+					servis.saveHotel(hotel);
+					
+					return hotel;
+
+		}else {
+			return null;
+		}
+		 
+	}
+		 
+			
 }

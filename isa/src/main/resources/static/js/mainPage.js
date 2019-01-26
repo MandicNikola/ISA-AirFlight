@@ -40,17 +40,20 @@ function dodajIstorijuHotel(){
 	console.log('Usao u dodajistoriju Hotela');
 	$.ajax({
 		method:'GET',
-		url: "/api/korisnici/istorijaHotela",
+		url: "/api/rezervacijehotel/istorijaHotela",
 		success: function(lista){
 			if(lista == null){
 				console.log('Istorija je prazna');
 				istorijaPrazna();
 			}else if(lista.length == 0){
 				console.log('Istorija je prazna');
-				istorijaPrazna();
+				istorijaPrazna(1);
 			}else{
 				ispisiIstorijuHotel(lista);
 			}
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
 		}
 	});
 
@@ -60,18 +63,72 @@ function ispisiIstorijuHotel(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#historyHotel").empty();
 		
-	$("#historyHotel").append("<table class=\"table table-striped\" id=\"histTableHotel\" ><tr><th>Check-in date</th><th>Check-out date</th><th>Price</th></tr>");
+	$("#historyHotel").append("<table class=\"table table-striped\" id=\"histTableHotel\" ><tr><th>Check-in date</th><th>Check-out date</th><th>Price</th><th></th><th></th></tr>");
+		console.log('Ispisujemo niz rez hotela');
+		console.log(pom);
 		
 		$.each(pom, function(index, clan) {
+		    console.log(clan);
 			var datDol=clan.datumDolaska;
 			var datOdl=clan.datumOdlaska;
+			console.log('Datum dolaska je '+datDol);
+			console.log('Datum odlaska je '+datOdl);
 			var date1=datDol.split('T')[0];
 			var date2=datOdl.split('T')[0];
-
-			$("#histTableHotel").append("<tr><td class=\"hoverName\">"+date1+"</td><td > "+date2+"</td><td > "+clan.cijena+"</td></tr>");
+			var idRez= clan.id;
+			var nazHot = "oceniH"+idRez;
+			var btnHot = "hotelB"+idRez;
+	
+		
+			if(clan.status=='ZAVRSEN'){
+				$("#histTableHotel").append("<tr><td class=\"hoverName\">"+date1+"</td><td > "+date2+"</td><td > "+clan.cijena+"</td></tr>");
+						
+			}else{
+				//nije ocenjen hotel
+				if(clan.ocenjenHotel == false){
+					$("#histTableHotel").append("<tr><td class=\"hoverName\">"+date1+"</td><td > "+date2+"</td><td > "+clan.cijena+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazHot+"></td><td><button  class=\"btn btn-info\" id="+btnHot+" onclick=\"oceniHotel("+clan.id+")\">Rate Hotel</button></td></tr>");
+						
+				}else{
+					//hotel je vec ocenjen
+					$("#histTableHotel").append("<tr><td class=\"hoverName\">"+date1+"</td><td > "+date2+"</td><td > "+clan.cijena+"</td></tr>");
+					
+				}
+			}
 		});
 	 $("#historyHotel").append("</table>");
 
+}
+function oceniHotel(idRez){
+	console.log('Usao u oceniRent ');
+	console.log(idRez);
+	var nazHot = "oceniH"+idRez;
+	var btnHot = "hotelB"+idRez;
+	var ocena =  $("#"+nazHot).val();
+
+	console.log(ocena);
+	if(ocena<1 || ocena>5){
+		alert('Grade must be between 1 and 5');
+	}else{
+		var podatak = idRez+"="+ocena;
+		$.ajax({
+			type : 'POST',
+			url : "/api/hoteli/oceniHotel/"+podatak,
+			success : function(pov) {
+				if( pov == null){	
+					alert('Prazno');
+				}else{
+					$("#"+btnHot).prop('disabled', true);
+					$("#"+nazHot).prop('disabled',true);
+			     	alert('You have successfully rated the hotel')
+				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				alert('greska');
+			}
+		});
+
+		
+	}	
 }
 function dodajIstorijuRent(){
 	console.log('usao u dodajIstoriju rent');
@@ -84,10 +141,13 @@ function dodajIstorijuRent(){
 				istorijaPrazna();
 			}else if(lista.length == 0){
 				console.log('Istorija je prazna');
-				istorijaPrazna();
+				istorijaPrazna(2);
 			}else{
 				ispisiIstorijuRent(lista);
 			}
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
 		}
 	});
 
@@ -97,7 +157,8 @@ function ispisiIstorijuRent(lista){
 	 $("#historyRent").empty();
 		
 	$("#historyRent").append("<table class=\"table table-striped\" id=\"histTableRent\" ><tr><th>Model of car</th><th>Pick-up date</th><th>Drop-off date</th><th>Price</th><th></th><th></th><th></th><th></th></tr>");
-		
+		console.log('Ispisujemo niz rez rent');	
+		console.log(pom);
 		$.each(pom, function(index, clan) {
 			console.log(clan);
 			var datDol=clan.datumPreuzimanja;
@@ -238,8 +299,14 @@ function cekirajOcenuRent(vozilo){
 	});	
 
 }
-function istorijaPrazna(){
-	$("#historyHotel").append("<h3>There is no any record in your history.</h3>");
+function istorijaPrazna(broj){
+	if(broj==1){
+		$("#historyHotel").append("<h3>There is no any record in your history.</h3>");
+			
+	}else{
+		$("#historyRent").append("<h3>There is no any record in your history.</h3>");
+		
+	}
 	
 }
 function planeShow(){

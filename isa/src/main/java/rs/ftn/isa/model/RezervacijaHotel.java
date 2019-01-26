@@ -7,6 +7,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,18 +30,22 @@ public class RezervacijaHotel {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	
 	@Column(nullable = false)
 	private Date datumDolaska;
 	
 	@Column(nullable = false)
 	private Date datumOdlaska;
 	
-	@Column
-	private boolean zavrsena;
+	@Column(nullable = false)
+	private boolean ocenjenHotel;
+	
 	
 	@Column(nullable = false)
 	private double cijena;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name="status")
+	private StatusRezervacije status;
 	
 	
 	//jedan rezervacija moze da sadrzi vise soba
@@ -62,12 +68,17 @@ public class RezervacijaHotel {
 
 	public RezervacijaHotel() {
 		super();
+		this.status=StatusRezervacije.AKTIVNA;
+		this.ocenjenHotel=false;
+		
 	}
 
 	public RezervacijaHotel(Date datumDolaska, Date datumOdlaska) {
 		super();
 		this.datumDolaska = datumDolaska;
 		this.datumOdlaska = datumOdlaska;
+		this.status=StatusRezervacije.AKTIVNA;
+		this.ocenjenHotel=false;
 	}
 
 
@@ -108,17 +119,6 @@ public class RezervacijaHotel {
 		this.datumOdlaska = datumOdlaska;
 	}
 
-
-	public boolean isZavrsena() {
-		return zavrsena;
-	}
-
-
-	public void setZavrsena(boolean zavrsena) {
-		this.zavrsena = zavrsena;
-	}
-
-
 	public Set<Room> getSobe() {
 		return sobe;
 	}
@@ -147,6 +147,23 @@ public class RezervacijaHotel {
 	public void setUsluge(Set<Usluga> usluge) {
 		this.usluge = usluge;
 	}
+
+	public StatusRezervacije getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusRezervacije status) {
+		this.status = status;
+	}
+
+	public boolean isOcenjenHotel() {
+		return ocenjenHotel;
+	}
+
+	public void setOcenjenHotel(boolean ocenjenHotel) {
+		this.ocenjenHotel = ocenjenHotel;
+	}
+	
 
 	/*public Hotel getRezHotel() {
 		return rezHotel;

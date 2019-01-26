@@ -40,6 +40,9 @@ public class Hotel {
 	@Column(name = "ocena", nullable = false)	
 	private double ocena;
 	
+	@Column(name="brojac")
+	private Integer brojac;
+	
 	@OneToMany(mappedBy = "hotelski",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore
 	private  Set<PricelistHotel> cijenovnici;
@@ -63,6 +66,7 @@ public class Hotel {
 		this.adresa = adresa;
 		this.opis = opis;
 		this.ocena = ocena;
+		this.brojac=0;
 	}
 	public Hotel(Long id, String naziv, String adresa, String opis) {
 		super();
@@ -70,6 +74,7 @@ public class Hotel {
 		this.naziv = naziv;
 		this.adresa = adresa;
 		this.opis = opis;
+		this.brojac=0;
 	}
 	public Hotel(String naziv, String adresa, String opis,double ocena) {
 		super();
@@ -133,7 +138,15 @@ public class Hotel {
 	public void setKategorije(Set<Category> kategorije) {
 		this.kategorije = kategorije;
 	}
-/*	public Set<RezervacijaHotel> getRezervacije() {
+	
+    public Integer getBrojac() {
+		return brojac;
+	}
+	public void setBrojac(Integer brojac) {
+		this.brojac = brojac;
+	}
+
+	/*	public Set<RezervacijaHotel> getRezervacije() {
 		return rezervacije;
 	}
 	public void setRezervacije(Set<RezervacijaHotel> rezervacije) {

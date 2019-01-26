@@ -8,8 +8,8 @@ insert into user ( id, ime, prezime, mail, telefon, grad, verifikovan, lozinka,t
 insert into kompanije ( id, naziv, adresa, opis) values (575,'Fly', 'Dunavska','Punctual');
 insert into kompanije ( id, naziv, adresa, opis) values (757,'BrrClouds', 'Matice Srpska','Fast');
 
-insert into hotel ( id, naziv, adresa, opis, ocena) values (1245,'Marinas', 'Temerinska 10','divno', 10);
-insert into hotel ( id, naziv, adresa, opis, ocena) values (1115,'Anjica', 'Fruskogorska 18','divno', 3);
+insert into hotel ( id, naziv, adresa, opis, ocena, brojac) values (1245,'Marinas', 'Temerinska 10','divno', 4, 0);
+insert into hotel ( id, naziv, adresa, opis, ocena, brojac) values (1115,'Anjica', 'Fruskogorska 18','divno',0, 0);
 insert into cenovnik( id, datum_primene,aktivan) values (125,'2018-11-11',false);
 insert into cenovnik( id, datum_primene,aktivan) values (128,'2017-11-11',false);
 insert into rentacar ( id, naziv, adresa, opis, ocena, brojac) values (1245,'Fast car', 'Kisacka 10','Dobrodosli',0, 0);
