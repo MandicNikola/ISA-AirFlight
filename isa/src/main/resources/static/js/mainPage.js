@@ -63,14 +63,14 @@ function ispisiIstorijuHotel(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#historyHotel").empty();
 		
-	$("#historyHotel").append("<table class=\"table table-striped\" id=\"histTableHotel\" ><tr><th>Check-in date</th><th>Check-out date</th><th>Price</th><th></th><th></th></tr>");
+	$("#historyHotel").append("<table class=\"table table-striped\" id=\"histTableHotel\" ><tr><th>Hotel</th><th>Check-in date</th><th>Check-out date</th><th>Price</th><th></th><th></th></tr>");
 		console.log('Ispisujemo niz rez hotela');
 		console.log(pom);
 		
 		$.each(pom, function(index, clan) {
 		    console.log(clan);
-			var datDol=clan.datumDolaska;
-			var datOdl=clan.datumOdlaska;
+			var datDol=clan.checkIn;
+			var datOdl=clan.checkOut;
 			console.log('Datum dolaska je '+datDol);
 			console.log('Datum odlaska je '+datOdl);
 			var date1=datDol.split('T')[0];
@@ -78,19 +78,19 @@ function ispisiIstorijuHotel(lista){
 			var idRez= clan.id;
 			var nazHot = "oceniH"+idRez;
 			var btnHot = "hotelB"+idRez;
-	
+			var hotel=clan.nazivHotela;
 		
 			if(clan.status=='ZAVRSEN'){
-				$("#histTableHotel").append("<tr><td class=\"hoverName\">"+date1+"</td><td > "+date2+"</td><td > "+clan.cijena+"</td></tr>");
+				$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td></tr>");
 						
 			}else{
 				//nije ocenjen hotel
 				if(clan.ocenjenHotel == false){
-					$("#histTableHotel").append("<tr><td class=\"hoverName\">"+date1+"</td><td > "+date2+"</td><td > "+clan.cijena+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazHot+"></td><td><button  class=\"btn btn-info\" id="+btnHot+" onclick=\"oceniHotel("+clan.id+")\">Rate Hotel</button></td></tr>");
+					$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazHot+"></td><td><button  class=\"btn btn-info\" id="+btnHot+" onclick=\"oceniHotel("+clan.id+")\">Rate Hotel</button></td></tr>");
 						
 				}else{
 					//hotel je vec ocenjen
-					$("#histTableHotel").append("<tr><td class=\"hoverName\">"+date1+"</td><td > "+date2+"</td><td > "+clan.cijena+"</td></tr>");
+					$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td></tr>");
 					
 				}
 			}

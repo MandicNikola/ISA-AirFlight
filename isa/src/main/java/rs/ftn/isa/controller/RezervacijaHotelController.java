@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.ReservationHotelDTO;
 import rs.ftn.isa.model.RezervacijaHotel;
-import rs.ftn.isa.model.RezervacijaRentCar;
 import rs.ftn.isa.model.Room;
 import rs.ftn.isa.model.User;
 import rs.ftn.isa.service.RezervacijaHotelServiceImp;
@@ -38,20 +38,16 @@ public class RezervacijaHotelController {
 	@RequestMapping(value="/istorijaHotela",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ArrayList<RezervacijaHotel> getHistoryHotel(@Context HttpServletRequest request){		
+	public @ResponseBody ArrayList<ReservationHotelDTO> getHistoryHotel(@Context HttpServletRequest request){		
 	System.out.println("Usao u getHistoryHotel");
-		ArrayList<RezervacijaHotel> rezervacije = new ArrayList<RezervacijaHotel>();
+		ArrayList<ReservationHotelDTO> rezervacije = new ArrayList<ReservationHotelDTO>();
 		User korisnik = (User)request.getSession().getAttribute("ulogovan");		
 			if(korisnik!=null) {
 				System.out.println("Neko je ulogovan");
 				Long idKor=korisnik.getId();
 				String idKorS=idKor.toString();
 				System.out.println("Id je "+idKor);
-				ArrayList<RezervacijaHotel> pomRez=new ArrayList<RezervacijaHotel>();
-				for(RezervacijaHotel rezervacija : servis.findAll()) {
-							pomRez.add(rezervacija);
-							System.out.println("Dodata reze");
-				}
+				List<RezervacijaHotel> pomRez=servis.findAll();
 				
 				System.out.println("Broj rez "+pomRez.size());
 				
@@ -61,10 +57,14 @@ public class RezervacijaHotelController {
 	
 						if(idKorS.equals(idRezS)) {
 							System.out.println("Ima rezervacija");
-							System.out.println("Id je "+rezervacija.getId());
-							System.out.println("Dat dolaska "+rezervacija.getDatumDolaska());
-							System.out.println("Dat odlaska "+rezervacija.getDatumOdlaska());
-							rezervacije.add(rezervacija);
+							String nazivHotela="";
+							for(Room r:rezervacija.getSobe()) {
+								 nazivHotela=r.getHotel().getNaziv();
+								 break;
+							}
+							ReservationHotelDTO newRez= new ReservationHotelDTO(nazivHotela, rezervacija.getId(),rezervacija.getDatumDolaska(), rezervacija.getDatumOdlaska(),rezervacija.getCijena(),rezervacija.isOcenjenHotel(),rezervacija.getStatus()); 
+							System.out.println(newRez);
+							rezervacije.add(newRez);
 						}
 					}
 				return rezervacije;
