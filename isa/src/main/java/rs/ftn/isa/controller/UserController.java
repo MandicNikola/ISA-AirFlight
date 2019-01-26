@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.ftn.isa.dto.UserDTO;
 import rs.ftn.isa.model.*;
 import rs.ftn.isa.service.EmailService;
+import rs.ftn.isa.service.RelationService;
 import rs.ftn.isa.service.UserService;
 import rs.ftn.isa.model.Role;
 
@@ -42,6 +43,9 @@ public class UserController {
 	
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private RelationService relationService;
 	
 	
 	@RequestMapping(value="/all", method = RequestMethod.GET)
@@ -73,38 +77,42 @@ public class UserController {
 	}
 	
 	
-	@RequestMapping(value="/friends/{id}", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
-	public ArrayList<String> getUserFriends(@PathVariable Long id){		
+	@RequestMapping(value="/friends", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ArrayList<String> getUserFriends(@Context HttpServletRequest request){		
 		
-		User user = servis.findOneById(id);
-		user.setLozinka("");
+		User user = (User) request.getSession().getAttribute("ulogovan");
 		
+		if(user == null)
+			return null;
+		ArrayList<String> retVal = new ArrayList<String>();
 		Set<Relation> relations = user.getRelatingRel();
 		if(relations.size() > 0)
 		{
-			ArrayList<String> retVal = new ArrayList<String>();
+			
 			
 			for(Relation relation : relations)
 			{
 				if(relation.getTip().equals("FRIENDS") || relation.getTip().equals("ZAHTEV"))
 				{
 					String friendName = relation.getRelated().getIme();
-					String friendLastName = relation.getRelated().getIme();
+					String friendLastName = relation.getRelated().getPrezime();
 					Long friendID = relation.getRelated().getId();					
-					retVal.add(friendName+"-"+friendLastName+"-"+friendID+"-"+relation.getTip());				
+					retVal.add(friendName+"-"+friendLastName+"-"+friendID+"-"+relation.getTip()+"-"+relation.getId());				
 				}
 			}
 			return retVal;
 		}
 		
-		return null;
+		return retVal;
 	}
 	
 	@RequestMapping(value="/requests", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
 	public ArrayList<String> getUserRequests(@Context HttpServletRequest request){		
 		
 		User user = (User) request.getSession().getAttribute("ulogovan");
-		user.setLozinka("");
+		
+		if(user == null)
+			return null;
 		
 		Set<Relation> relations = user.getRelatedRel();
 		if(relations.size() > 0)
@@ -118,7 +126,7 @@ public class UserController {
 					String friendName = relation.getRelated().getIme();
 					String friendLastName = relation.getRelated().getPrezime();
 					Long friendID = relation.getRelated().getId();					
-					retVal.add(friendName+"-"+friendLastName+"-"+friendID+"-"+relation.getTip());				
+					retVal.add(friendName+"-"+friendLastName+"-"+friendID+"-"+relation.getTip()+"-"+relation.getId());				
 				}
 			}
 			return retVal;
@@ -158,6 +166,108 @@ public class UserController {
 		List<User> korisnici = servis.findUserByImeAndPrz(name, lastName);
 		
 		return korisnici;
+	}
+	
+	@RequestMapping(value="/changeInfo", method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
+	public String changeProfileInfo(@RequestBody User novi,@Context HttpServletRequest request){		
+		
+		
+		
+		User user = (User) request.getSession().getAttribute("ulogovan");
+		if(!user.getMail().equals(novi.getMail())) {
+			User provera = servis.findUserByMail(novi.getMail());
+			
+			if(provera != null) {
+				System.out.println("Mejl nije jedinstven");
+				provera.setVerifikovan("null");
+				return "Mejl nije jedinstven";
+		
+			}
+			user.setMail(novi.getMail());
+		}
+		
+			if(!user.getIme().equals(novi.getIme())) {
+				user.setIme(novi.getIme());
+			}
+			if(!user.getPrezime().equals(novi.getPrezime())) {
+				user.setPrezime(novi.getPrezime());
+			}
+			
+			if(user.getTelefon() != novi.getTelefon()) {
+				user.setTelefon(novi.getTelefon());
+			}
+			if(!user.getGrad().equals(novi.getGrad())) {
+				user.setGrad(novi.getGrad());	
+				
+			}
+			
+		    servis.saveUser(user);
+		    
+		    
+		    return "uspesno";
+		    
+	}
+	
+	
+	@RequestMapping(value="/accept/{id}", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	public String acceptFriend(@Context HttpServletRequest request,@PathVariable Long id){		
+		
+		User user = (User) request.getSession().getAttribute("ulogovan");
+		if(user == null)
+			return "neuspesno";
+		
+		
+		Relation relacija = relationService.findOneById(id);
+		if(relacija == null)
+			return "nesupesno";
+		
+		relacija.setTip("FRIENDS");
+		relationService.saveRelation(relacija);
+		
+
+		return "uspesno";
+	}
+	
+	
+	/*
+		isti metod kao i za odbijanje zahteva
+	 */
+	@RequestMapping(value="/remove/{id}", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	public String removeFriend(@Context HttpServletRequest request,@PathVariable Long id){		
+		
+		User user = (User) request.getSession().getAttribute("ulogovan");
+		if(user == null)
+			return "neuspesno";
+		
+		relationService.deleteRelation(id);
+		
+
+		return "uspesno";
+	}
+	
+	@RequestMapping(value="/add/{id}", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	public String addFriend(@Context HttpServletRequest request,@PathVariable Long id){		
+		
+		User user = (User) request.getSession().getAttribute("ulogovan");
+		if(user == null)
+			return "neuspesno";
+		
+		User userFriend = servis.findOneById(id);
+		
+		Relation relation = new Relation();
+		relation.setRelated(userFriend);
+		relation.setRelating(user);
+		relation.setTip("ZAHTEV");
+		
+		user.getRelatingRel().add(relation);
+		userFriend.getRelatedRel().add(relation);
+		
+		servis.saveUser(user);
+		servis.saveUser(userFriend);
+		relationService.saveRelation(relation);
+		
+
+		return "uspesno";
 	}
 	
 	
