@@ -62,7 +62,16 @@ public class RezervacijaHotelController {
 								 nazivHotela=r.getHotel().getNaziv();
 								 break;
 							}
+							//treba proveriti da li je broj soba u rezervaciji jednak broju ocenjenih soba
+							//ako nije jednak onda postoje sobe koje treba oceniti
+							//imacemo indikator brojSoba, ako je nula tad nema soba za ocenjivanje, 1 ima soba
 							ReservationHotelDTO newRez= new ReservationHotelDTO(nazivHotela, rezervacija.getId(),rezervacija.getDatumDolaska(), rezervacija.getDatumOdlaska(),rezervacija.getCijena(),rezervacija.isOcenjenHotel(),rezervacija.getStatus()); 
+							if(rezervacija.getSobe().size() == rezervacija.getOcenjeneSobe().size()) {
+									newRez.setBrojLjudi(0);
+							}else {
+									newRez.setBrojLjudi(1);
+							}
+							
 							System.out.println(newRez);
 							rezervacije.add(newRez);
 						}

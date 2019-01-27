@@ -1,7 +1,9 @@
 package rs.ftn.isa.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -51,6 +53,11 @@ public class RezervacijaHotel {
 	//jedan rezervacija moze da sadrzi vise soba
 	@ManyToMany(mappedBy = "rezervacije")
 	private Set<Room> sobe = new HashSet<Room>();
+	
+	//ovde cuvamo sve sobe koje su ocenjene
+	@ManyToMany(mappedBy = "ocenjeneRezervacije")
+	private List<Room> ocenjeneSobe = new ArrayList<Room>();
+	
 	
 	//jedna rezervicija pripada tacno jednom korisniku
 	@ManyToOne( fetch = FetchType.EAGER)
@@ -162,6 +169,14 @@ public class RezervacijaHotel {
 
 	public void setOcenjenHotel(boolean ocenjenHotel) {
 		this.ocenjenHotel = ocenjenHotel;
+	}
+
+	public List<Room> getOcenjeneSobe() {
+		return ocenjeneSobe;
+	}
+
+	public void setOcenjeneSobe(List<Room> ocenjeneSobe) {
+		this.ocenjeneSobe = ocenjeneSobe;
 	}
 	
 

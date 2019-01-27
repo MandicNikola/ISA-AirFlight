@@ -1,6 +1,8 @@
 package rs.ftn.isa.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -67,6 +69,16 @@ public class Room {
 	        inverseJoinColumns = { @JoinColumn(name = "rezervacijaHotel_id") }
 	  )
 	private Set<RezervacijaHotel> rezervacije = new HashSet<RezervacijaHotel>();
+	
+	//ovde cuvamo rezervacije u kojima je soba ocenjena
+	@ManyToMany(cascade = {CascadeType.ALL})
+	@JoinTable(
+	        name = "Ocenjene_Rezervacije", 
+	        joinColumns = { @JoinColumn(name = "room_id") }, 
+	        inverseJoinColumns = { @JoinColumn(name = "rezervacijaHotel_id") }
+	  )
+	private List<RezervacijaHotel> ocenjeneRezervacije = new ArrayList<RezervacijaHotel>();
+	
 	
 	//jedna soba ima vise cjenovnika
 	@OneToMany(mappedBy = "soba", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -219,6 +231,14 @@ public class Room {
 	}
 	public void setBrojRezervacija(int brojRezervacija) {
 		this.brojRezervacija = brojRezervacija;
+	}
+
+	public List<RezervacijaHotel> getOcenjeneRezervacije() {
+		return ocenjeneRezervacije;
+	}
+
+	public void setOcenjeneRezervacije(List<RezervacijaHotel> ocenjeneRezervacije) {
+		this.ocenjeneRezervacije = ocenjeneRezervacije;
 	}
 	
 	
