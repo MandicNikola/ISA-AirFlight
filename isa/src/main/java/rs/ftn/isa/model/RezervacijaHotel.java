@@ -56,7 +56,7 @@ public class RezervacijaHotel {
 	
 	//ovde cuvamo sve sobe koje su ocenjene
 	@ManyToMany(mappedBy = "ocenjeneRezervacije")
-	private List<Room> ocenjeneSobe = new ArrayList<Room>();
+	private Set<Room> ocenjeneSobe = new HashSet<Room>();
 	
 	
 	//jedna rezervicija pripada tacno jednom korisniku
@@ -171,23 +171,13 @@ public class RezervacijaHotel {
 		this.ocenjenHotel = ocenjenHotel;
 	}
 
-	public List<Room> getOcenjeneSobe() {
+	public Set<Room> getOcenjeneSobe() {
 		return ocenjeneSobe;
 	}
 
-	public void setOcenjeneSobe(List<Room> ocenjeneSobe) {
+	public void setOcenjeneSobe(Set<Room> ocenjeneSobe) {
 		this.ocenjeneSobe = ocenjeneSobe;
 	}
-	
 
-	/*public Hotel getRezHotel() {
-		return rezHotel;
-	}
-
-	public void setRezHotel(Hotel rezHotel) {
-		this.rezHotel = rezHotel;
-	}
-	
-*/
 
 }

@@ -12,7 +12,7 @@ public class RezervacijaHotelServiceImp implements RezervacijaHotelService {
     @Autowired
     RezervacijaHotelRepository repozitorijum;
 	@Override
-	public RezervacijaHotel findRoomById(Long id) {
+	public RezervacijaHotel findReservationById(Long id) {
 		// TODO Auto-generated method stub
 		return repozitorijum.findOneById(id);
 	}

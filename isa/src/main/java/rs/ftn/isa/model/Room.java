@@ -77,7 +77,7 @@ public class Room {
 	        joinColumns = { @JoinColumn(name = "room_id") }, 
 	        inverseJoinColumns = { @JoinColumn(name = "rezervacijaHotel_id") }
 	  )
-	private List<RezervacijaHotel> ocenjeneRezervacije = new ArrayList<RezervacijaHotel>();
+	private Set<RezervacijaHotel> ocenjeneRezervacije = new HashSet<RezervacijaHotel>();
 	
 	
 	//jedna soba ima vise cjenovnika
@@ -233,13 +233,7 @@ public class Room {
 		this.brojRezervacija = brojRezervacija;
 	}
 
-	public List<RezervacijaHotel> getOcenjeneRezervacije() {
-		return ocenjeneRezervacije;
-	}
 
-	public void setOcenjeneRezervacije(List<RezervacijaHotel> ocenjeneRezervacije) {
-		this.ocenjeneRezervacije = ocenjeneRezervacije;
-	}
 	
 	
 

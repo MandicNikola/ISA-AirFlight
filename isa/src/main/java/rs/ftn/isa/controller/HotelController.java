@@ -948,6 +948,7 @@ public class HotelController {
 				hotel.getSobe().remove(room);
 				Set<RezervacijaHotel> rezSobe = room.getRezervacije();
 				rezSobe.add(rez);				
+				System.out.println("Dodao je rezervaciju "+rez.getId());
 				soba.setRezervacije(rezSobe);
 				hotel.getSobe().add(soba);
 			}
@@ -1076,8 +1077,12 @@ public ArrayList<Hotel> pronadjiHotele(@RequestBody ReservationHotelDTO rez,@Pat
 					hotel.setOcena(ukOcena);
 					
 					//potrebno je podesiti u rezervaciji da je hotel vec ocenjen
-					Set<Room> sobe = hotel.getSobe();
-					for(Room room : sobe) {
+					ArrayList<Room> sveSobe = new ArrayList<Room>();
+					for(Room rr : hotel.getSobe()) {
+						sveSobe.add(rr);
+					}
+					
+					for(Room room : sveSobe) {
 							Set<RezervacijaHotel> rezSobe = room.getRezervacije();
 							RezervacijaHotel rezIzmena = null;
 							//prolazimo kroz rezervacije sobe da vidimo da li je

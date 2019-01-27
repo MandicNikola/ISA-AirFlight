@@ -93,7 +93,7 @@ function ispisiIstorijuHotel(lista){
 						
 					}else{
 						console.log('Ima soba za ocenjivanje');
-						$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazHot+"></td><td><button  class=\"btn btn-info\" id="+btnHot+" onclick=\"oceniHotel("+clan.id+")\">Rate Hotel</button></td><td><button  class=\"btn btn-info\" id="+btnRoom+" onclick=\"oceniSobe("+clan.id+")\">Rate rooms</button></td></tr>");
+						$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazHot+"></td><td><button  class=\"btn btn-info\" id="+btnHot+" onclick=\"oceniHotel("+clan.id+")\">Rate Hotel</button></td><td><button  class=\"btn btn-info\" id="+btnRoom+" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Click this button to see the rooms that you can rate.\" onclick=\"oceniSobe("+clan.id+")\">Rate rooms</button></td></tr>");
 						
 					}
 						
@@ -102,7 +102,7 @@ function ispisiIstorijuHotel(lista){
 					if(clan.brojLjudi==0){
 						$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td></tr>");
 					}else{
-						$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td><button  class=\"btn btn-info\" id="+btnRoom+" onclick=\"oceniSobe("+clan.id+")\">Rate rooms</button></td></tr>");
+						$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td><button  class=\"btn btn-info\" id="+btnRoom+" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Click this button to see the rooms that you can rate.\" onclick=\"oceniSobe("+clan.id+")\">Rate rooms</button></td></tr>");
 							
 					}
 				}
@@ -113,9 +113,64 @@ function ispisiIstorijuHotel(lista){
 
 }
 function oceniSobe(idRez){
-	console.log('Usao u oceni sobe');
+	console.log('Usao u oceni sve sobe');
 	console.log(idRez);
+	
+	$.ajax({
+		method:'GET',
+		url: "/api/rezervacijehotel/listaSoba/"+idRez,
+		success: function(lista){
+			if(lista == null){
+				console.log('Nema soba');
+			}else if(lista.length == 0){
+				console.log('Nema soba');
+			}else{
+				prikaziSobe(lista);
+			}
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+	});
+
+	
 }
+function prikaziSobe(lista){
+	console.log('Usao u prikazi sobe');
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	 $("#ratingRooms").empty();
+	
+	 $("#ratingRooms").append("<table class=\"table table-striped\" id=\"rateRoomTable\" ><tr><th>Hotel</th><th>Tip</th><th></th><th></th></tr>");
+
+	$.each(pom, function(index, soba) {
+		var nazSobe = "oceniS"+soba.id+"3"+soba.idRez;
+		var btnSoba = "sobaBtn"+soba.id+"3"+soba.idRez;
+		
+		console.log("Param " +btnSoba);
+		console.log("Naziv " + nazSobe);
+		
+		$("#rateRoomTable").append("<tr><td class=\"hoverName\">"+soba.hotel+"</td><td> "+soba.tip+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazSobe+"></td><td><button  class=\"btn btn-info\" id="+btnSoba+" onclick=\"rateRoom("+soba.id+","+soba.idRez+")\">Rate</button></td></tr>");
+		
+	});
+	 $("#ratingRooms").append("</table>");
+
+}
+function rateRoom(idSobe, idRez){
+	console.log('Usao u rateRoom ');
+	console.log(idSobe+ " , "+idRez);
+	var nazSobe = "oceniS"+idSobe+"3"+idRez;
+	var btnSoba = "sobaBtn"+idSobe+"3"+idRez;
+	
+	var ocena =  $("#"+nazSobe).val();
+	
+	console.log(ocena);
+	if(ocena<1 || ocena>5){
+		alert('Grade must be between 1 and 5');
+	}else{
+		
+	}
+}
+
 function oceniHotel(idRez){
 	console.log('Usao u oceniRent ');
 	console.log(idRez);
@@ -339,7 +394,8 @@ function planeShow(){
 	$("#reserveHotel").hide();
 	$("#sortAvione").show();
 	$("#sortPlane").val("none");
-	
+	$("#ratingRooms").empty();
+	 
 	$.ajax({
 		method:'GET',
 		url: "/api/kompanije/all",
@@ -366,7 +422,8 @@ function hotelShow(){
 	$("#sortAvione").hide();
 	 $("#ispisiTabelu").empty();
 	 $("#ispisiSelect").hide();
-			
+	 $("#ratingRooms").empty();
+	 
 	
 	$.ajax({
 		method:'GET',
@@ -505,6 +562,7 @@ function carShow(){
 	$("#sortHotele").hide();
 	$("#pozadinaHotel").hide();	
 	 $("#ispisiTabelu").empty();
+	 $("#ratingRooms").empty();
 	 $("#ispisiSelect").hide();
 		
 	

@@ -6,7 +6,7 @@ import rs.ftn.isa.model.RezervacijaHotel;
 
 public interface RezervacijaHotelService {
 
-	RezervacijaHotel findRoomById(Long id);
+	RezervacijaHotel findReservationById(Long id);
 	
 	List<RezervacijaHotel> findAll();
 	
