@@ -121,8 +121,12 @@ function oceniSobe(idRez){
 		url: "/api/rezervacijehotel/listaSoba/"+idRez,
 		success: function(lista){
 			if(lista == null){
+				 $("#ratingRooms").empty();
+					
 				console.log('Nema soba');
 			}else if(lista.length == 0){
+				 $("#ratingRooms").empty();
+					
 				console.log('Nema soba');
 			}else{
 				prikaziSobe(lista);
@@ -168,6 +172,24 @@ function rateRoom(idSobe, idRez){
 		alert('Grade must be between 1 and 5');
 	}else{
 		
+		var podatak = idRez+"="+idSobe+"="+ocena;
+		$.ajax({
+			type : 'POST',
+			url : "/api/hoteli/oceniSobu/"+podatak,
+			success : function(pov) {
+				if( pov == null){	
+					alert('Prazno');
+				}else{
+					$("#"+btnSoba).prop('disabled', true);
+					$("#"+nazSobe).prop('disabled',true);
+			     	alert('You have successfully rated the room')
+				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				alert('greska');
+			}
+		});
+
 	}
 }
 

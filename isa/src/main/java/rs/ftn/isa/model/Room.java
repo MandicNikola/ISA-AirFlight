@@ -48,6 +48,9 @@ public class Room {
 	@Column(name = "kapacitet", nullable = false)	
 	private int kapacitet; //da ako ima,ne nema
     
+	@Column(name="brojac")
+	private Integer brojac;
+	
 	@Column(name = "balkon", nullable = false)	
 	private String balkon; //da ako ima,ne nema
 	
@@ -88,6 +91,7 @@ public class Room {
 	public Room() {
 		super();
 		brojRezervacija = 0;
+		brojac = 0;
 	} 
 	
 	public Room(Long id, String tip, double ocjena, int kreveti, int sprat, double cijena,String balkon) {
@@ -99,6 +103,7 @@ public class Room {
 		this.sprat = sprat;
 		this.cijena = cijena;
 		this.balkon = balkon;
+		brojac = 0;
 	}
 		
 	public Room(String tip, int kreveti, int sprat,int kapacitet,String balkon) {
@@ -231,6 +236,22 @@ public class Room {
 	}
 	public void setBrojRezervacija(int brojRezervacija) {
 		this.brojRezervacija = brojRezervacija;
+	}
+
+	public Integer getBrojac() {
+		return brojac;
+	}
+
+	public void setBrojac(Integer brojac) {
+		this.brojac = brojac;
+	}
+
+	public Set<RezervacijaHotel> getOcenjeneRezervacije() {
+		return ocenjeneRezervacije;
+	}
+
+	public void setOcenjeneRezervacije(Set<RezervacijaHotel> ocenjeneRezervacije) {
+		this.ocenjeneRezervacije = ocenjeneRezervacije;
 	}
 
 

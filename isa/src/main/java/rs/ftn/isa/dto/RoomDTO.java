@@ -7,6 +7,11 @@ public class RoomDTO {
 	private double ocena;
 	private String hotel; //hotel kome pripada soba
 	private Long idRez;
+	private int sprat;
+	private int kapacitet;
+	private double cijena;
+	private String balkon;
+
 	
 	public RoomDTO() {}
 	
@@ -18,12 +23,57 @@ public class RoomDTO {
 		this.hotel = hotel;
 		this.idRez = idRez;
 	}
+	
+	public RoomDTO(Long id, String tip, double ocena, int sprat, int kapacitet, double cijena, String balkon) {
+		super();
+		this.id = id;
+		this.tip = tip;
+		this.ocena = ocena;
+		this.sprat = sprat;
+		this.kapacitet = kapacitet;
+		this.cijena = cijena;
+		this.balkon = balkon;
+	}
+
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	public int getSprat() {
+		return sprat;
+	}
+
+	public void setSprat(int sprat) {
+		this.sprat = sprat;
+	}
+
+	public int getKapacitet() {
+		return kapacitet;
+	}
+
+	public void setKapacitet(int kapacitet) {
+		this.kapacitet = kapacitet;
+	}
+
+	public double getCijena() {
+		return cijena;
+	}
+
+	public void setCijena(double cijena) {
+		this.cijena = cijena;
+	}
+
+	public String getBalkon() {
+		return balkon;
+	}
+
+	public void setBalkon(String balkon) {
+		this.balkon = balkon;
+	}
+
 	public String getTip() {
 		return tip;
 	}

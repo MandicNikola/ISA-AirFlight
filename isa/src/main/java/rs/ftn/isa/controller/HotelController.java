@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.HotelDTO;
 import rs.ftn.isa.dto.ReservationHotelDTO;
+import rs.ftn.isa.dto.RoomDTO;
 import rs.ftn.isa.model.Category;
 import rs.ftn.isa.model.CijenovnikSoba;
 import rs.ftn.isa.model.Hotel;
@@ -707,7 +708,7 @@ public class HotelController {
 		@RequestMapping(value="/vratiPonude/{id}", 
 				method = RequestMethod.POST,
 				consumes = MediaType.APPLICATION_JSON_VALUE)
-		public ArrayList<Room> vratiPonude(@RequestBody ReservationHotelDTO rez,@PathVariable Long id){		
+		public ArrayList<RoomDTO> vratiPonude(@RequestBody ReservationHotelDTO rez,@PathVariable Long id){		
 			Hotel hotel = servis.findHotelById(id);
 			
 			System.out.println("dosao da vrati ponude " + rez.getBrojKreveta());
@@ -750,11 +751,11 @@ public class HotelController {
 			}
 			
 			//ubacim samo sobe koje su trazenog tipa(jednokrevetne,dvokrevetne itd)
-			ArrayList<Room> pronadjeneSobe = new ArrayList<Room>();
+			ArrayList<RoomDTO> pronadjeneSobe = new ArrayList<RoomDTO>();
 			for(Room soba:sobe) {
 				if(soba.getKapacitet() == rez.getBrojKreveta()) {
 					System.out.println("ubacio sobu");
-					pronadjeneSobe.add(soba);
+					pronadjeneSobe.add(new RoomDTO(soba.getId(), soba.getTip(), soba.getOcjena(), soba.getSprat(), soba.getKapacitet(), soba.getCijena(), soba.getBalkon()));
 				}
 				
 			}
@@ -764,10 +765,10 @@ public class HotelController {
 			if(pronadjeneSobe.size() < rez.getBrojSoba()) {
 				System.out.println("nedovoljan broj soba");
 				
-				 return new ArrayList<Room>();
+				 return new ArrayList<RoomDTO>();
 			}
 			int suma = 0;
-			for(Room sobica:pronadjeneSobe) {
+			for(RoomDTO sobica:pronadjeneSobe) {
 				suma += sobica.getKapacitet();
 			}
 			
@@ -775,12 +776,12 @@ public class HotelController {
 			if(rez.getBrojLjudi() > suma) {
 				System.out.println("nedovoljan kapacitet");
 				
-				 return new ArrayList<Room>();
+				 return new ArrayList<RoomDTO>();
 			}
 
 			int dani = daysBetween(rez.getCheckIn(),rez.getCheckOut());
 			int pom = 0;
-			for(Room ss:pronadjeneSobe) {
+			for(RoomDTO ss:pronadjeneSobe) {
 				double ukupnaCijena = ss.getCijena()*dani;
 				pronadjeneSobe.get(pom).setCijena(ukupnaCijena);
 				pom++;
@@ -1112,6 +1113,78 @@ public ArrayList<Hotel> pronadjiHotele(@RequestBody ReservationHotelDTO rez,@Pat
 		}
 		 
 	}
-		 
+		@RequestMapping(value="/oceniSobu/{podatak}", 
+				method = RequestMethod.POST,
+				produces = MediaType.APPLICATION_JSON_VALUE )
+	public Hotel oceniSobu(@PathVariable String podatak){
+	 System.out.println("Usao u oceni sobu");
+	 //podatak sadrzi idRez = idSobe = ocena
+	String[] niz = podatak.split("=");
+	Integer ocena = Integer.parseInt(niz[2]);
+	String idRez = niz[0];
+	String idSobe =  niz[1];
+	
+	
+	List<Hotel> sviHoteli = servis.findAll();
+	RezervacijaHotel rezervacija = null;
+	Room soba = null;
+	Hotel hotel = null;	 
+	
+	for(Hotel H : sviHoteli) {
+		for(Room R : H.getSobe()) {
+			   String idS=R.getId().toString();
+			   if(idS.equals(idSobe)) {
+				   soba=R;
+				   hotel = R.getHotel();
+				   break;
+			   }
+		}
+	}
+	
+	if(soba!=null) {
+		
+		Set<RezervacijaHotel> rezSobe = soba.getRezervacije();
+		//trazimo rezervaciju u kojoj je soba ocenjena
+		for(RezervacijaHotel rH : rezSobe) {
+					String idrH = rH.getId().toString();
+					if(idrH.equals(idRez)) {
+						rezervacija=rH;
+						System.out.println("Pronadjena rez u sobi "+soba.getId()+" a hotel je "+hotel.getNaziv());
+						break;
+					}
+	   }
+		if(rezervacija==null) {
+			return null;
+		}
+
+		hotel.getSobe().remove(soba);
+
+		System.out.println("Brojac jee"+ soba.getBrojac());
+		int brojOcena=soba.getBrojac();
+		System.out.println("Broj ocena je "+brojOcena+ " trenutna ocena je "+soba.getOcjena());
+		double ukOcena = soba.getOcjena()*brojOcena;
+		System.out.println("Pomnozena ocena "+ukOcena);
+		ukOcena = ukOcena+ocena;
+		System.out.println("Dodata ocena "+ukOcena);
+		brojOcena++;
+		ukOcena=(double)ukOcena/brojOcena;
+		System.out.println("Podeljena ocena je "+ukOcena);
+		
+		soba.setBrojac(brojOcena);
+		soba.setOcjena(ukOcena);
+		
+		soba.getOcenjeneRezervacije().add(rezervacija);
+		hotel.getSobe().add(soba);
+
+		servis.saveHotel(hotel);
+				
+		return hotel;
+	
+	}else {
+		return null;
+	}
+	 
+	}
+			 
 			
 }
