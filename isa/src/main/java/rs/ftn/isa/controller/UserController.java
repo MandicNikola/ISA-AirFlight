@@ -152,6 +152,9 @@ public class UserController {
 		if(user == null)
 			return null;
 		
+		System.out.println(name);
+		System.out.println(lastName);
+		
 		if(name.equals("nothing"))
 			name = "%%";
 		else
@@ -164,6 +167,11 @@ public class UserController {
 		
 		//korisnici koji su mi rezultati pretrage koja mi treba
 		List<User> korisnici = servis.findUserByImeAndPrz(name, lastName);
+		
+		
+		
+		
+		
 		
 		return korisnici;
 	}
@@ -224,6 +232,8 @@ public class UserController {
 		relacija.setTip("FRIENDS");
 		relationService.saveRelation(relacija);
 		
+		
+		
 
 		return "uspesno";
 	}
@@ -252,18 +262,14 @@ public class UserController {
 		if(user == null)
 			return "neuspesno";
 		
+		System.out.println(id);
+		
 		User userFriend = servis.findOneById(id);
-		
 		Relation relation = new Relation();
-		relation.setRelated(userFriend);
-		relation.setRelating(user);
 		relation.setTip("ZAHTEV");
+		relation.setRelated(user);
+		relation.setRelating(userFriend);
 		
-		user.getRelatingRel().add(relation);
-		userFriend.getRelatedRel().add(relation);
-		
-		servis.saveUser(user);
-		servis.saveUser(userFriend);
 		relationService.saveRelation(relation);
 		
 

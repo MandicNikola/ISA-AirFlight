@@ -16,9 +16,9 @@ public interface UserRepository extends JpaRepository<User,Long> {
 	User findOneByMail(String mail);
 	User findOneById(Long id);
 	
-	@Query("select u.ime,u.prezime " + 
+	@Query("select u " + 
 			"from User u  " + 
-			"where u.prezime like '?2' AND u.ime like '?1'")
+			"where u.prezime like ?2 AND u.ime LIKE ?1")
 	List<User> findUsersByImeAndPrezime(String ime, String prezime);
 	
 //	@Query("select s from Student s where s.lastName = ?1")

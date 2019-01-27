@@ -78,11 +78,11 @@ function friends()
 									$('#friendsTable').append("<tr><td>"+name+"</td><td>"+lastname+"</td><td>");
 									if(type == "FRIENDS")
 									{
-										$('#friendsTable').append('<button type="button" class="btn btn-primary">Remove</button>');
+										$('#friendsTable').append('<button type="button" class="btn btn-primary" id="'+relID+'" onclick="decline(this)">Remove</button>');
 									}
 									else
 									{
-										$('#friendsTable').append('<button type="button" class="btn btn-primary">Cancel Request</button>');
+										$('#friendsTable').append('<button type="button" class="btn btn-primary" id="'+relID+'" onclick="decline(this)">Cancel Request</button>');
 									}
 									
 									$('#friendsTable').append('</td></tr>');
@@ -134,8 +134,8 @@ function requests()
 									var relID = data1[4];
 									
 									$('#requestsTable').append("<tr><td>"+name+"</td><td>"+lastname+"</td><td>");								
-									$('#requestsTable').append('<button type="button" class="btn btn-primary">Accept</button><td><button type="button" class="btn btn-danger">Decline</button></td>');
-									$('#requestsTable').append('</td></tr>');
+									$('#requestsTable').append('<button type="button" class="btn btn-primary" id="'+relID+'" onclick="accept(this)">Accept</button></td><td><button type="button" class="btn btn-danger" id="'+relID+'" onclick="decline(this)">Decline</button></td>');
+									$('#requestsTable').append('</tr>');
 																	
 								});	
 						
@@ -152,6 +152,86 @@ function requests()
 	
 
 }
+
+
+function accept(pom)
+{
+	var id = pom.id;
+	
+	$.ajax(
+			{
+				method : 'POST',
+				url: "/api/korisnici/accept/"+id,
+				success : function(data)
+						{
+							if(data == "neuspesno")
+							{
+								alert("Neuspesno!");
+							}
+							else
+							{
+								alert("Dodavanje prijatelja uspesno!");
+								window.location="profileUser.html";
+							}
+					
+						}
+				
+			});
+	
+}
+
+function decline(pom)
+{
+	var id = pom.id;
+	
+	$.ajax(
+			{
+				method : 'POST',
+				url: "/api/korisnici/remove/"+id,
+				success : function(data)
+						{
+							if(data == "neuspesno")
+							{
+								alert("Neuspesno!");
+							}
+							else
+							{
+								alert("Dodavanje prijatelja uspesno!");
+								window.location="profileUser.html";
+							}
+					
+						}
+				
+			});
+}
+
+
+function add(pom)
+{
+	var id = pom.id;
+	$.ajax(
+			{
+				method : 'POST',
+				url: "/api/korisnici/add/"+id,
+				success : function(data)
+						{
+							if(data == "neuspesno")
+							{
+								alert("Neuspesno!");
+							}
+							else
+							{
+								alert("Dodavanje prijatelja uspesno!");
+								search();
+							}
+					
+						}
+				
+			});
+	
+	
+}
+
 
 function searchTable()
 {
@@ -178,9 +258,6 @@ function search()
 	{
 		prezime = "nothing";
 	}
-	
-	$.ajax(
-			{
 				
 				$.ajax(
 						{
@@ -188,7 +265,7 @@ function search()
 							url: "/api/korisnici/search/"+ime+"-"+prezime,
 							success : function(data)
 							{
-								var korisnik = data;
+								
 								if(data == null)
 								{
 									alert("Ne postoji ulogovan korisnik!");
@@ -205,18 +282,18 @@ function search()
 												var korisnik = value;
 												
 												
-												$('#searchTable').append("<tr><td>"+korisnik.ime+"</td><td>"+korisnik.prezime+"</td><td>");								
+												$('#searchTable').append("<tr><td>"+korisnik.ime+"</td><td>"+korisnik.prezime+"</td><td>"+'<button type="button" class="btn btn-primary" id="'+korisnik.id+'" onclick="add(this)">Add friend</button>');								
 												$('#searchTable').append('</td></tr>');
 																				
 											});	
 									
-									$('#searchTable').append('/tbody');
+									$('#searchTable').append('</tbody>');
 								}				
 							}			
 							
 						});
 				
-			});
+			
 }
 
 $(document).on('submit','.user',function(e){
@@ -258,6 +335,11 @@ $(document).on('submit','.user',function(e){
 			}
 		});
 });
+
+
+
+
+
 
 
 

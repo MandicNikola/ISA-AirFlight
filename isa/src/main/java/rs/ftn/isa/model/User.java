@@ -57,11 +57,11 @@ public class User {
 	
 	
 	//liste veza relacija u kojima se nalazi korisnik
-	@OneToMany(mappedBy = "relating", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "relating", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JsonIgnore
 	private Set<Relation> relatingRel = new HashSet<Relation>();
 	
-	@OneToMany(mappedBy = "related", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "related", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JsonIgnore
 	private Set<Relation> relatedRel = new HashSet<Relation>();
 	
@@ -340,6 +340,40 @@ public class User {
 		this.adminPotvrdio = adminPotvrdio;
 	}
 
-
+	
+	public void addRelationRelating(Relation relating)
+	{
+		addRelationRelating(relating,true);
+	}
+	
+	public void addRelationRelating(Relation relating, boolean set)
+	{
+		if(relating != null)
+		{
+			getRelatingRel().add(relating);
+		}
+		if(set)
+		{
+			relating.setRelating(this,false);
+		}
+	}
+	
+	public void addRelationRelated(Relation related)
+	{
+		addRelationRelated(related,true);
+	}
+	
+	public void addRelationRelated(Relation related, boolean set)
+	{
+		if(related != null)
+		{
+			getRelatedRel().add(related);
+		}
+		if(set)
+		{
+			related.setRelated(this,false);
+		}
+	}
+	
 		
 }

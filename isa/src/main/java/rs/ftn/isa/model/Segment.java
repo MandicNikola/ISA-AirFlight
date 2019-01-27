@@ -22,11 +22,12 @@ public class Segment {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+	@Column(name = "naziv", nullable = false)
+	private String naziv;
+	
 	@Column(name = "redovi", nullable = false)
 	private int redovi;
 	
-	@Column(name = "kolone", nullable = false)
-	private int kolone;
 	
 	//faktor segmenta kojim mnozim cenu karte za faktorom npr.ako je biznis klasa ili ostalo
 	@Column(name = "faktor", nullable = false)

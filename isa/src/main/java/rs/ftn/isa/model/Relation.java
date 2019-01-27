@@ -54,18 +54,41 @@ public class Relation {
 		return relating;
 	}
 
-	public void setRelating(User relating) {
-		this.relating = relating;
-	}
+
 
 	public User getRelated() {
 		return related;
 	}
 
-	public void setRelated(User related) {
-		this.related = related;
+
+
+	public void setRelating(User relating) {
+		setRelating(relating, true);
 	}
 	
+	public void setRelating(User relating,boolean set)
+	{
+		this.relating = relating;
+		if(relating != null && set)
+		{
+			relating.addRelationRelating(this, false);
+		}
+				
+	}
+	
+	public void setRelated(User related) {
+		setRelated(related, true);
+	}
+	
+	public void setRelated(User related,boolean set)
+	{
+		this.related = related;
+		if(related != null && set)
+		{
+			related.addRelationRelated(this, false);
+		}
+				
+	}
 	
 	
 	
