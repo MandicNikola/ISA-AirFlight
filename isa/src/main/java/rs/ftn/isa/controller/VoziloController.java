@@ -321,4 +321,41 @@ public class VoziloController {
 			}
 		
 		}
+		@RequestMapping(value="/otkaziVozilo/{podatak}", 
+				method = RequestMethod.POST,
+				produces = MediaType.APPLICATION_JSON_VALUE)
+		public @ResponseBody Vehicle otkaziVozilo(@PathVariable String podatak){		
+		  System.out.println("Usao u otkazi vozilo");
+			String[] niz = podatak.split("=");
+		    String idVoz=niz[0];
+		    String idRez= niz[1];
+		    
+			Vehicle vozilo = servis.findVehicleById(Long.parseLong(idVoz));
+			
+			if(vozilo!=null) {
+					Set<RezervacijaRentCar> rez=vozilo.getRezervacije();
+					RezervacijaRentCar rezervacija=null;
+					for(RezervacijaRentCar r : rez) {
+						String idR=r.getId().toString();
+						if(idR.equals(idRez)) {
+							rezervacija=r;
+							break;
+						}
+					}
+					if(rezervacija == null) {
+						return null;
+					}
+					vozilo.getRezervacije().remove(rezervacija);
+					//setujemo da je vozilo ocenjeno da korisnik ne bi vise puta mogao da oceni vozilo
+					rezervacija.setStatus(StatusRezervacije.OTKAZANA);
+					vozilo.getRezervacije().add(rezervacija);
+					
+					servis.saveVehicle(vozilo);
+					
+					return vozilo;
+			}else {
+				return vozilo;
+			}
+		
+		}		
 }

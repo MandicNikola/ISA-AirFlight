@@ -80,6 +80,10 @@ function ispisiIstorijuHotel(lista){
 			var btnHot = "hotelB"+idRez;
 			var hotel=clan.nazivHotela;
 			var btnRoom = "roomB"+idRez;
+			var today = new Date().toISOString().split('T')[0];
+
+			var total_days = (today - date1) / (1000 * 60 * 60 * 24);
+			console.log("Broj dana je "+total_days);
 			
 			if(clan.status=='ZAVRSEN'){
 				$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td></tr>");
@@ -251,7 +255,7 @@ function ispisiIstorijuRent(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#historyRent").empty();
 		
-	$("#historyRent").append("<table class=\"table table-striped\" id=\"histTableRent\" ><tr><th>Model of car</th><th>Pick-up date</th><th>Drop-off date</th><th>Price</th><th></th><th></th><th></th><th></th></tr>");
+	$("#historyRent").append("<table class=\"table table-striped\" id=\"histTableRent\" ><tr><th>Model of car</th><th>Pick-up date</th><th>Drop-off date</th><th>Price</th><th>Status</th><th></th><th></th><th></th><th></th></tr>");
 		console.log('Ispisujemo niz rez rent');	
 		console.log(pom);
 		$.each(pom, function(index, clan) {
@@ -267,36 +271,82 @@ function ispisiIstorijuRent(lista){
 			var nazVozilo = "oceniV"+idRez;
 			var btnRent = "rentB"+idRez;
 			var btnCar = "carB"+idRez;
+			var btnOtk = "otkB"+idRez;
+			var statId="stat"+idRez
 			console.log(clan.status);
+			var today = new Date().toISOString().split('T')[0];
+		
+			const timeDiff  = (new Date(today)) - (new Date(date1));
+			const numberDays = timeDiff / (1000 * 60 * 60 * 24)
+		
+			console.log("Broj dana je "+numberDays);
 			
-			if(clan.status == "ZAVRSENA"){
-				$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td > "+date2+"</td><td> "+clan.cena+"</td></tr>");
-			}else{
+			if(clan.status == "AKTIVNA"){
+				if(numberDays >= 3){
+					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td id=\""+statId+"\"> "+clan.status+"</td><td><button  class=\"btn btn-info\" id="+btnOtk+" onclick=\"otkaziVozilo("+voz.id+","+clan.id+")\">Cancel</button></td></tr>");
+						
+				}else{
+					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td > "+clan.status+"</td></tr>");
+							
+				}
+			}else if(clan.status == "ZAVRSENA"){
 				//nije ocenio ni vozilo ni rent-a-car servis
 				if(clan.ocenjenVozilo == false && clan.ocenjenRent == false){
 					console.log("1");
-					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazRent+"></td><td><button  class=\"btn btn-info\" id="+btnRent+" onclick=\"oceniRent("+voz.id+","+clan.id+")\">Rate Rent Service</button></td><td> <input type=\"number\" id="+nazVozilo+" min=\"1\" max=\"5\"></td><td><button  class=\"btn btn-info\" id="+btnCar+" onclick=\"oceniVozilo("+voz.id+","+clan.id+")\">Rate Car</button></td></tr>");
+					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> "+clan.status+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazRent+"></td><td><button  class=\"btn btn-info\" id="+btnRent+" onclick=\"oceniRent("+voz.id+","+clan.id+")\">Rate Rent Service</button></td><td> <input type=\"number\" id="+nazVozilo+" min=\"1\" max=\"5\"></td><td><button  class=\"btn btn-info\" id="+btnCar+" onclick=\"oceniVozilo("+voz.id+","+clan.id+")\">Rate Car</button></td></tr>");
 				}else if(clan.ocenjenVozilo == false){
 					//nije ocenio vozilo, ali je ocenio rent-a-car
 					console.log("2");
-					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td> <td><input type=\"number\" id="+nazVozilo+" min=\"1\" max=\"5\"></td><td><button  class=\"btn btn-info\" id="+btnCar+" onclick=\"oceniVozilo("+voz.id+","+clan.id+")\">Rate Car</button></td></tr>");
+					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> "+clan.status+"</td> <td><input type=\"number\" id="+nazVozilo+" min=\"1\" max=\"5\"></td><td><button  class=\"btn btn-info\" id="+btnCar+" onclick=\"oceniVozilo("+voz.id+","+clan.id+")\">Rate Car</button></td></tr>");
 						
 				}else if(clan.ocenjenRent == false){
 					//nije ocenio rent-a-car ali je ocenio vozilo
 					console.log("3");
-					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazRent+"></td><td><button  class=\"btn btn-info\" id="+btnRent+" onclick=\"oceniRent("+voz.id+","+clan.id+")\">Rate Rent Service</button></td></tr>");
+					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> "+clan.status+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazRent+"></td><td><button  class=\"btn btn-info\" id="+btnRent+" onclick=\"oceniRent("+voz.id+","+clan.id+")\">Rate Rent Service</button></td></tr>");
 					
 				}else{
 					//ocenio je i rent-a-car i vozilo
 					console.log("4");
-					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td> "+date2+"</td></tr>");
+					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td> "+date2+"</td><td> "+clan.status+"</td></tr>");
 					
 				}
+			}else{
+				//otkazana je
+				$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td > "+clan.status+"</td></tr>");
+				
 			}
 			
 			});
 	 $("#historyRent").append("</table>");
 
+}
+function otkaziVozilo(idVoz, idRez){
+	console.log('Usao u otkazi vozilo');
+	console.log(idVoz+" "+idRez);
+	var podatak = idVoz+"="+idRez;
+	var btnCar = "otkB"+idRez;
+	var statId="stat"+idRez;
+	
+	$.ajax({
+		type : 'POST',
+		url : "/api/vozila/otkaziVozilo/"+podatak,
+		success : function(pov) {
+			if( pov == null){	
+				alert('Prazno');
+			}else{
+				 $("#"+statId).html('OTKAZANA');
+
+				$("#"+btnCar).hide();
+				
+				alert('You have successfully cancelled the reservation.')
+			}
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+	});
+
+	
 }
 function oceniVozilo(idVoz,idRez){
 	console.log('Usao u oceniVozilo ');
