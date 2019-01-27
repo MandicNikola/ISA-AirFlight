@@ -988,7 +988,7 @@ function korak2get(){
 	  $('input[name = "cekirani"]').each(function () {
 		  console.log('usao ovdje');
 		  if(this.checked){
-			  sList += (sList=="" ? $(this).val() : "," + $(this).val());
+			  sList += (sList=="" ? $(this).val() : "." + $(this).val());
 				  
 		    }
 		   
@@ -1004,7 +1004,7 @@ function korak2get(){
 		$("#korakDodatne").append("<p><h2>Offers </h2></p>");
 		$("#korakDodatne").append("<p>FROM <span id=\"pocetak\">"+pocetak+"</span>TO <span id=\"kraj\">"+kraj+"</span></p>");
 		$("#korakDodatne").append("<p>FOR <span id=\"osobe\">"+osobe+"</span>  passengers</p>");
-		
+
 	$.ajax({
 		method:'GET',
 		url: "/api/hoteli/getUsluge/"+id,
@@ -1024,7 +1024,8 @@ function korak2get(){
 	
 }
 function korak4bezUsluga(niz){
-		$("#revervacija").show();
+		console.log('dosao ovdje u korak 4 bez usluga'+niz);
+	    $("#revervacija").show();
 		$("#korakDodatne").show();
 		$("#korak").hide();
 	    $("#reserveHotel").hide();
@@ -1035,7 +1036,8 @@ function korak4bezUsluga(niz){
 function korak4ispis(data,niz){
 	   $("#korak").hide();	
 	 
-	  	
+	   console.log('sobe u suluga '+niz);
+		
 	   $("#korakDodatne").show();	
 	   $("#reserveHotel").hide();
 	   var lista = data == null ? [] : (data instanceof Array ? data : [ data ]);
@@ -1067,7 +1069,8 @@ function zavrsiRezBezUsluga(nizSoba){
 	var kraj=$('#checkout').val();
 	var osobe=$('#brojLjudi').val();
 	var info = pocetak+"*" + kraj+"*"+osobe;	  
-	
+	console.log('zavrsi bez rez'+nizSoba);
+	//var pom = nizSoba.split(',');
 	var listaUsl="nema";
 	var adresa = window.location.search.substring(1);
     var id = adresa.split('=')[1];
@@ -1098,13 +1101,15 @@ function zavrsiRez(nizSoba){
 	var osobe=$('#brojLjudi').val();
 	var info = pocetak+"*" + kraj+"*"+osobe;	  
 	console.log(info);
+	console.log(nizSoba);
+	
 	var listaUsl="";
 	  
 	
 	  $('input[name = "cekiraneUsluge"]').each(function () {
 		  console.log('usao ovdje');
 		  if(this.checked){
-			  listaUsl += (listaUsl=="" ? $(this).val() : "," + $(this).val());
+			  listaUsl += (listaUsl=="" ? $(this).val() : "." + $(this).val());
 				  
 		    }
 		   

@@ -811,8 +811,8 @@ public class HotelController {
 			int brLjudi = Integer.parseInt(broj);
 			ArrayList<String> indexSoba = new ArrayList<String>() {};
 			
-			if(nizSoba.contains(",")) {
-				String[] pomocna = nizSoba.split(",");
+			if(nizSoba.contains(".")) {
+				String[] pomocna = nizSoba.split("\\.");
 				for(int i = 0;i<pomocna.length;i++) {
 					indexSoba.add(pomocna[i]);
 				}
@@ -826,8 +826,8 @@ public class HotelController {
 			ArrayList<String> indexUsluga = new ArrayList<String>() {};
 			
 			if(imaUsluga == true) {
-				if(listaUsl.contains(",")) {
-					String[] pomocna = listaUsl.split(",");
+				if(listaUsl.contains(".")) {
+					String[] pomocna = listaUsl.split("\\.");
 					for(int i = 0;i<pomocna.length;i++) {
 						indexUsluga.add(pomocna[i]);
 					}
