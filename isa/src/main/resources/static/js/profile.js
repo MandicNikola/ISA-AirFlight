@@ -75,20 +75,19 @@ function friends()
 									var type = data[3];
 									var relID = data[4];
 									
-									$('#friendsTable').append("<tr><td>"+name+"</td><td>"+lastname+"</td><td>");
+									$('#friendsTable').append("<tr><td>"+name+"</td><td>"+lastname+"</td>");
 									if(type == "FRIENDS")
 									{
-										$('#friendsTable').append('<button type="button" class="btn btn-primary" id="'+relID+'" onclick="decline(this)">Remove</button>');
+										$('#friendsTable').append('<td><button type="button" class="btn btn-primary" id="'+relID+'" onclick="decline(this)">Remove</button></td></tr>');
 									}
 									else
 									{
-										$('#friendsTable').append('<button type="button" class="btn btn-primary" id="'+relID+'" onclick="decline(this)">Cancel Request</button>');
+										$('#friendsTable').append('<td><button type="button" class="btn btn-primary" id="'+relID+'" onclick="decline(this)">Cancel Request</button></td></tr>');
 									}
 									
-									$('#friendsTable').append('</td></tr>');
 								});	
 						
-						$('#friendsTable').append('/tbody');
+						$('#friendsTable').append('</tbody>');
 					}
 					
 				}			
@@ -139,7 +138,7 @@ function requests()
 																	
 								});	
 						
-						$('#requestsTable').append('/tbody');
+						$('#requestsTable').append('</tbody>');
 					}				
 				}			
 				
@@ -196,7 +195,6 @@ function decline(pom)
 							}
 							else
 							{
-								alert("Dodavanje prijatelja uspesno!");
 								window.location="profileUser.html";
 							}
 					
@@ -322,16 +320,16 @@ $(document).on('submit','.user',function(e){
 			url : "/api/korisnici/changeInfo",
 			contentType : "application/json",
 			data: senduser,
-			dataType : 'json',
 			success : function(pov) {
 				if( pov == "Mejl nije jedinstven"){	
 					 alert("Mail is already in use.");
 				}else{
+					alert("Profil izmenjen uspesno!");
 					window.location="profileUser.html";
 				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown){
-				alert('greska');
+				alert(textStatus);
 			}
 		});
 });

@@ -21,11 +21,11 @@ public class Relation {
 	private String tip;
 	
 	//onaj koji salje zahtev 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, cascade =CascadeType.DETACH)
 	private User relating;
 	
 	//koji prima zazhtev
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, cascade =CascadeType.DETACH)
 	private User related;
 
 	public Relation()

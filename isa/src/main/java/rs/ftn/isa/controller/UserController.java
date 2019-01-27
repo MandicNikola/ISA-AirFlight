@@ -123,9 +123,9 @@ public class UserController {
 			{
 				if( relation.getTip().equals("ZAHTEV"))
 				{
-					String friendName = relation.getRelated().getIme();
-					String friendLastName = relation.getRelated().getPrezime();
-					Long friendID = relation.getRelated().getId();					
+					String friendName = relation.getRelating().getIme();
+					String friendLastName = relation.getRelating().getPrezime();
+					Long friendID = relation.getRelating().getId();					
 					retVal.add(friendName+"-"+friendLastName+"-"+friendID+"-"+relation.getTip()+"-"+relation.getId());				
 				}
 			}
@@ -169,11 +169,42 @@ public class UserController {
 		List<User> korisnici = servis.findUserByImeAndPrz(name, lastName);
 		
 		
+		List<User> retUsers = new ArrayList<User>();
+		
+		Set<Relation> relating = user.getRelatingRel();
+		Set<Relation> related = user.getRelatedRel();
+		
+		for(User korisnik : korisnici)
+		{
+			if(!korisnik.getId().equals(user.getId()))
+			{
+			
+				boolean dodaj = true;
+				for(Relation relacija: relating)
+				{
+					if(korisnik.getId().equals(relacija.getRelated().getId()))
+					{
+						dodaj = false;
+					}
+				}
+				if(dodaj)
+				{
+					for(Relation relacija: related)
+					{
+						if(korisnik.getId().equals(relacija.getRelating().getId()))
+						{
+							dodaj = false;
+						}
+					}
+					if(dodaj)
+						retUsers.add(korisnik);
+				}
+			}
+		}
 		
 		
 		
-		
-		return korisnici;
+		return retUsers;
 	}
 	
 	@RequestMapping(value="/changeInfo", method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
@@ -217,14 +248,14 @@ public class UserController {
 	}
 	
 	
-	@RequestMapping(value="/accept/{id}", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/accept/{id}", method = RequestMethod.POST)
 	public String acceptFriend(@Context HttpServletRequest request,@PathVariable Long id){		
 		
 		User user = (User) request.getSession().getAttribute("ulogovan");
 		if(user == null)
 			return "neuspesno";
 		
-		
+		Long userID = user.getId();
 		Relation relacija = relationService.findOneById(id);
 		if(relacija == null)
 			return "nesupesno";
@@ -232,30 +263,41 @@ public class UserController {
 		relacija.setTip("FRIENDS");
 		relationService.saveRelation(relacija);
 		
-		
-		
+		request.getSession().setAttribute("ulogovan", servis.findOneById(userID));
 
 		return "uspesno";
 	}
 	
 	
 	/*
-		isti metod kao i za odbijanje zahteva
+		metod za brisanje prijatelja
 	 */
-	@RequestMapping(value="/remove/{id}", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/remove/{id}", method = RequestMethod.POST)
 	public String removeFriend(@Context HttpServletRequest request,@PathVariable Long id){		
 		
 		User user = (User) request.getSession().getAttribute("ulogovan");
+		
 		if(user == null)
 			return "neuspesno";
 		
-		relationService.deleteRelation(id);
+		Long idUser = user.getId();
 		
+		Relation relacija = relationService.findOneById(id);
+		user = relacija.getRelated();
+		User user1 = relacija.getRelating();
+		user.getRelatedRel().remove(relacija);
+		user1.getRelatingRel().remove(relacija);
+		relationService.deleteRelation(relacija.getId());
+		
+		
+		request.getSession().setAttribute("ulogovan", servis.findOneById(idUser));
 
 		return "uspesno";
 	}
 	
-	@RequestMapping(value="/add/{id}", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	
+	
+	@RequestMapping(value="/add/{id}", method = RequestMethod.POST)
 	public String addFriend(@Context HttpServletRequest request,@PathVariable Long id){		
 		
 		User user = (User) request.getSession().getAttribute("ulogovan");
@@ -263,14 +305,15 @@ public class UserController {
 			return "neuspesno";
 		
 		System.out.println(id);
-		
+		User user1 = servis.findOneById(user.getId());
 		User userFriend = servis.findOneById(id);
 		Relation relation = new Relation();
 		relation.setTip("ZAHTEV");
-		relation.setRelated(user);
-		relation.setRelating(userFriend);
+		relation.setRelated(userFriend);
+		relation.setRelating(user1);
 		
 		relationService.saveRelation(relation);
+		request.getSession().setAttribute("ulogovan", user1);
 		
 
 		return "uspesno";
