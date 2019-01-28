@@ -24,7 +24,7 @@ public class Seat {
 	private int kolona;
 	
 	//segment kome pripadaju sedista
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Segment segment;
 	
 	

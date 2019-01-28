@@ -161,9 +161,9 @@
 					   		<li class="active"><a id="info" >Information</a></li>
 						    <li><a id="planes" >Planes</a></li>
 						    <li><a id="flights" >Flights</a></li>
-						    <li><a id="fastTickets" >Fast tickets</a></li>	
-						    <li><a id="izvestaj" >Report</a></li>	  
-						  	<li><a id="admini" >Administrators</a></li>			  
+						    <li><a id="fastTickets" >Fast tickets</a></li>	  
+						  	<li><a id="admini" >Administrators</a></li>	
+						  	<li><a id="cenovnik" >Pricelist</a></li>			  
 					  </ul>
 			  		</div>
 			  		
@@ -182,7 +182,7 @@
 										<select class="form-control" id="adminSelect">
 											</select>	
 										<div>
-							  	<button id="dugmeAdminSelekt"  class="btn btn-info" onclick="izmeniAdminCompany()" >Add</button>
+							  	<button id="dugmeAdminSelekt"  class="btn btn-info">Add</button>
 										</div>
 							</div>
 				  			 <div id ="adminDiv"></div>
@@ -195,25 +195,31 @@
 			  		<div id="planesStrana">
 			  		</div>	
 			  		
-			  		<div id="reportsStrana">
+			  		<div id="fastTicketsStrana">
 			  		</div>	
-			  			  			  		
+			  		
+			  		<div id="priceListStrana">
+			  		</div>	
+			  				  			  		
 				</div>
 				<aside class="col-md-2">
 					<div class="okvir" id ="admin">
 						<button onclick = "addPlane()" type="button" class="btn btn-link">Add plane</button>
 					</div>
-					<div class="okvir" id = "adminKonf" >
-						<button onclick = "addConfiguration()" type="button" class="btn btn-link">Add segments</button>
+					<div class="okvir" id = "adminLet" >
+						<button  type="button" class="btn btn-link">Add flight</button>
 					</div>
-				
-					<div class="okvir">
-						<button  type="button" class="btn btn-link">Add Configuration</button>
-					</div>
-					<div class="okvir">
-						<button type="button" class="btn btn-link">Add Destination</button>
+					<div class="okvir" id = "adminDestinacija">
+						<button  type="button" class="btn btn-link" >Add destination</button>
 					</div>
 					
+					<div class="okvir" id = "adminIzvestaj">
+						<button  type="button" class="btn btn-link" >Report</button>
+					</div>
+					<div class="okvir">
+						<button type="button" class="btn btn-link" id="adminProfile">My profile</button>
+					</div>
+							
 				</aside>
 			</div>
 		</div>
