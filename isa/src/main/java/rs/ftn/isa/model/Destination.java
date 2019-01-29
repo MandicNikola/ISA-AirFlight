@@ -49,6 +49,54 @@ public class Destination {
 		this.id = id;
 		this.naziv = naziv;
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNaziv() {
+		return naziv;
+	}
+
+	public void setNaziv(String naziv) {
+		this.naziv = naziv;
+	}
+
+	public Set<AirplaneCompany> getKompanije() {
+		return kompanije;
+	}
+
+	public void setKompanije(Set<AirplaneCompany> kompanije) {
+		this.kompanije = kompanije;
+	}
+
+	public Set<Flight> getLetovi() {
+		return letovi;
+	}
+
+	public void setLetovi(Set<Flight> letovi) {
+		this.letovi = letovi;
+	}
+
+	public Set<Flight> getPoletanja() {
+		return poletanja;
+	}
+
+	public void setPoletanja(Set<Flight> poletanja) {
+		this.poletanja = poletanja;
+	}
+
+	public Set<Flight> getSletanja() {
+		return sletanja;
+	}
+
+	public void setSletanja(Set<Flight> sletanja) {
+		this.sletanja = sletanja;
+	}
 	
 	
 }

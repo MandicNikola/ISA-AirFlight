@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.AirplaneDTO;
+import rs.ftn.isa.dto.DestinationDTO;
 import rs.ftn.isa.dto.HotelDTO;
 import rs.ftn.isa.model.AirPlane;
 import rs.ftn.isa.model.AirplaneCompany;
@@ -31,6 +33,8 @@ import rs.ftn.isa.model.Room;
 import rs.ftn.isa.model.Usluga;
 import rs.ftn.isa.service.AirPlaneServiceImpl;
 import rs.ftn.isa.service.AirplaneServiceCompanyImpl;
+import rs.ftn.isa.service.DestinationService;
+import rs.ftn.isa.service.DestinationServiceImp;
 import rs.ftn.isa.service.FlightService;
 
 
@@ -46,6 +50,9 @@ public class AirplaneCompanyController {
 	
 	@Autowired
 	private AirPlaneServiceImpl planeService;
+	
+	@Autowired 
+	private DestinationServiceImp destinationService;
 	
 	@RequestMapping(value="/novaAvioKompanija", 
 			method = RequestMethod.POST,
@@ -189,10 +196,16 @@ public class AirplaneCompanyController {
 	@RequestMapping(value="/addDestination/{id}", 
 			method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
-	public String addDestination(@RequestBody Destination destination,@PathVariable Long id){		
+	public  String addDestination(@RequestBody DestinationDTO destination,@PathVariable Long id){		
 		
+		//System.out.println("usao u metodu koja mi treba");
 		AirplaneCompany company = service.findAirplaneCompanyById(id);
-		company.getDestinacije().add(destination);
+		Destination destinationNew = new Destination();
+		
+		destinationNew.setNaziv(destination.getNaziv());
+		company.getDestinacije().add(destinationNew);
+		
+		destinationService.saveDestination(destinationNew);
 		service.saveAirplaneCompany(company);
 		
 		 return "uspesno";
