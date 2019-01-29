@@ -63,7 +63,7 @@ function ispisiIstorijuHotel(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#historyHotel").empty();
 		
-	$("#historyHotel").append("<table class=\"table table-striped\" id=\"histTableHotel\" ><tr><th>Hotel</th><th>Check-in date</th><th>Check-out date</th><th>Price</th><th></th><th></th><th></th></tr>");
+	$("#historyHotel").append("<table class=\"table table-striped\" id=\"histTableHotel\" ><tr><th>Hotel</th><th>Check-in date</th><th>Check-out date</th><th>Price</th><th>Status</th><th></th><th></th><th></th></tr>");
 		console.log('Ispisujemo niz rez hotela');
 		console.log(pom);
 		
@@ -82,31 +82,44 @@ function ispisiIstorijuHotel(lista){
 			var btnRoom = "roomB"+idRez;
 			var today = new Date().toISOString().split('T')[0];
 
-			var total_days = (today - date1) / (1000 * 60 * 60 * 24);
-			console.log("Broj dana je "+total_days);
+			var statId="statH"+idRez
 			
-			if(clan.status=='ZAVRSEN'){
-				$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td></tr>");
+			const timeDiff  = (new Date(date1)) - (new Date(today));
+			const numberDays = timeDiff / (1000 * 60 * 60 * 24)
+			var btnOtkH = "otkH"+idRez;
+			
+			console.log("Broj dana je "+numberDays);
+			if(clan.status == "AKTIVNA"){
+				if(numberDays >=3 ){
+					$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td id=\""+statId+"\"> "+clan.status+"</td><td><button  class=\"btn btn-info\" id="+btnOtkH+" onclick=\"otkaziHotel("+clan.id+")\">Cancel</button></td></tr>");
+							
+				}else{
+					$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> "+clan.status+"</td></tr>");
+		
+				}
+			}else if(clan.status=='OTKAZANA'){
+				$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> "+clan.status+"</td></tr>");
 						
 			}else{
+				console.log('zavrsena je')
 				//nije ocenjen hotel
 				if(clan.ocenjenHotel == false){
 					if(clan.brojLjudi==0){
 						console.log('Sve sobe su ocenjene');
-						$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazHot+"></td><td><button  class=\"btn btn-info\" id="+btnHot+" onclick=\"oceniHotel("+clan.id+")\">Rate Hotel</button></td></tr>");
+						$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> "+clan.status+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazHot+"></td><td><button  class=\"btn btn-info\" id="+btnHot+" onclick=\"oceniHotel("+clan.id+")\">Rate Hotel</button></td></tr>");
 						
 					}else{
 						console.log('Ima soba za ocenjivanje');
-						$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazHot+"></td><td><button  class=\"btn btn-info\" id="+btnHot+" onclick=\"oceniHotel("+clan.id+")\">Rate Hotel</button></td><td><button  class=\"btn btn-info\" id="+btnRoom+" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Click this button to see the rooms that you can rate.\" onclick=\"oceniSobe("+clan.id+")\">Rate rooms</button></td></tr>");
+						$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> "+clan.status+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazHot+"></td><td><button  class=\"btn btn-info\" id="+btnHot+" onclick=\"oceniHotel("+clan.id+")\">Rate Hotel</button></td><td><button  class=\"btn btn-info\" id="+btnRoom+" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Click this button to see the rooms that you can rate.\" onclick=\"oceniSobe("+clan.id+")\">Rate rooms</button></td></tr>");
 						
 					}
 						
 				}else{
 					//hotel je vec ocenjen
 					if(clan.brojLjudi==0){
-						$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td></tr>");
+						$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> "+clan.status+"</td></tr>");
 					}else{
-						$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td><button  class=\"btn btn-info\" id="+btnRoom+" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Click this button to see the rooms that you can rate.\" onclick=\"oceniSobe("+clan.id+")\">Rate rooms</button></td></tr>");
+						$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> "+clan.status+"</td><td><button  class=\"btn btn-info\" id="+btnRoom+" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Click this button to see the rooms that you can rate.\" onclick=\"oceniSobe("+clan.id+")\">Rate rooms</button></td></tr>");
 							
 					}
 				}
@@ -114,6 +127,30 @@ function ispisiIstorijuHotel(lista){
 			}
 		});
 	 $("#historyHotel").append("</table>");
+
+}
+function otkaziHotel(idRez){
+	console.log('otkaziHotel')
+	var statId="statH"+idRez
+	var btnOtkH = "otkH"+idRez;
+	
+	$.ajax({
+		type : 'POST',
+		url : "/api/hoteli/otkaziHotel/"+idRez,
+		success : function(pov) {
+			if( pov == null){	
+				alert('Prazno');
+			}else{
+				    $("#"+statId).html('OTKAZANA');
+					$("#"+btnOtkH).hide();
+
+		     	alert('You have successfully canceled the reservation')
+			}
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+	});
 
 }
 function oceniSobe(idRez){
@@ -276,7 +313,7 @@ function ispisiIstorijuRent(lista){
 			console.log(clan.status);
 			var today = new Date().toISOString().split('T')[0];
 		
-			const timeDiff  = (new Date(today)) - (new Date(date1));
+			const timeDiff  = (new Date(date1)) - (new Date(today));
 			const numberDays = timeDiff / (1000 * 60 * 60 * 24)
 		
 			console.log("Broj dana je "+numberDays);

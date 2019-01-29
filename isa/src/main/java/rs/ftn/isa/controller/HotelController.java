@@ -34,6 +34,7 @@ import rs.ftn.isa.model.PricelistHotel;
 import rs.ftn.isa.model.RentACar;
 import rs.ftn.isa.model.RezervacijaHotel;
 import rs.ftn.isa.model.Room;
+import rs.ftn.isa.model.StatusRezervacije;
 import rs.ftn.isa.model.User;
 import rs.ftn.isa.model.Usluga;
 import rs.ftn.isa.model.Vehicle;
@@ -1186,5 +1187,66 @@ public ArrayList<Hotel> pronadjiHotele(@RequestBody ReservationHotelDTO rez,@Pat
 	 
 	}
 			 
+		@RequestMapping(value="/otkaziHotel/{idRez}", 
+				method = RequestMethod.POST,
+				produces = MediaType.APPLICATION_JSON_VALUE )
+public Hotel otkaziHotel(@PathVariable String idRez){
+	System.out.println("Usao u otkazi hotel");
+	
+	List<Hotel> sviHoteli = servis.findAll();
+	Hotel hotel = null;	 
+	
+	for(Hotel H : sviHoteli) {
+		for(Room R : H.getSobe()) {
+			   for(RezervacijaHotel rez: R.getRezervacije()) {
+				    String idRezervacije = rez.getId().toString();
+				    	if(idRez.equals(idRezervacije)) {
+				    		System.out.println("Pronadjena soba sa tom rezervacijom");
+				    		hotel=H;
+				    		break;
+				    	}
+			   }
+		}
+	}
+	//treba promeniti ocenu u hotelu
+
+	if(hotel!=null) {
+				
+				//potrebno je podesiti u rezervaciji da je hotel vec ocenjen
+				ArrayList<Room> sveSobe = new ArrayList<Room>();
+				for(Room rr : hotel.getSobe()) {
+					sveSobe.add(rr);
+				}
+				
+				for(Room room : sveSobe) {
+						Set<RezervacijaHotel> rezSobe = room.getRezervacije();
+						RezervacijaHotel rezIzmena = null;
+						//prolazimo kroz rezervacije sobe da vidimo da li je
+						//ta rezervacija koja treba da se izmeni vezana za sobu
+							for(RezervacijaHotel rH : rezSobe) {
+									String idrH = rH.getId().toString();
+									if(idrH.equals(idRez)) {
+										rezIzmena=rH;
+										System.out.println("Pronadjena rez u sobi "+room.getId()+" a hotel je "+hotel.getNaziv());
+										break;
+									}
+							}
+							if(rezIzmena!=null) {
+								hotel.getSobe().remove(room);
+								room.getRezervacije().remove(rezIzmena);
+								rezIzmena.setStatus(StatusRezervacije.OTKAZANA);
+								room.getRezervacije().add(rezIzmena);
+								hotel.getSobe().add(room);
+							}
+				}
+				servis.saveHotel(hotel);
+				
+				return hotel;
+
+	}else {
+		return null;
+	}
+	 
+}
 			
 }
