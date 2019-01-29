@@ -1,6 +1,7 @@
 package rs.ftn.isa.model;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -38,8 +39,36 @@ public class Segment {
 	@JsonIgnore
 	private  Set<Seat> seats = new HashSet<Seat>();
 	
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private AirPlane plane;
+	
+	
+	
+	
+	
+	
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Segment c = (Segment) o;
+        if(c.id == null || id == null) {
+            return false;
+        }
+        return Objects.equals(id, c.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+	
+	
+	
 	
 	
 }

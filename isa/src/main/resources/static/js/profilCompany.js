@@ -42,7 +42,50 @@ function ispisiProfilKompanije(kompanija){
 
 function addPlane()
 {
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	window.location = "newAirplane.html?id="+id;
 	
+}
+
+function addFlight()
+{
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	window.location = "newFlight.html?id="+id;
+
+}
+
+function addDestination()
+{
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	window.location = "newDestination.html?id="+id;
+}
+
+
+function showPlanes()
+{
+	
+
+
+}
+
+function showFlights()
+{
+	
+
+}
+
+function showFastTickets()
+{
+	
+}
+
+function showAdministrators()
+{
+	
+
 
 }
 

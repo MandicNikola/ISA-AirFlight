@@ -1,5 +1,7 @@
 package rs.ftn.isa.model;
 
+import java.util.Objects;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -89,6 +91,29 @@ public class Relation {
 		}
 				
 	}
+	
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Relation c = (Relation) o;
+        if(c.id == null || id == null) {
+            return false;
+        }
+        return Objects.equals(id, c.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+	
+	
+	
 	
 	
 	

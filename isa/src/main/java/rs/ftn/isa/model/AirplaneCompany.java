@@ -3,6 +3,7 @@ package rs.ftn.isa.model;
 
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -12,6 +13,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -48,6 +52,15 @@ public class AirplaneCompany {
 	private  Set<Flight> letovi = new HashSet<Flight>();
 	
 	
+	 @ManyToMany(cascade = { CascadeType.ALL })
+	    @JoinTable(
+	        name = "kompanija_destinacija", 
+	        joinColumns = { @JoinColumn(name="company_id",referencedColumnName="id")}, 
+	        inverseJoinColumns = { @JoinColumn(name="destination_id",referencedColumnName="id")}
+	    )
+	 Set<Destination> destinacije;
+	
+	
 	
 	
 	public AirplaneCompany() {
@@ -67,6 +80,16 @@ public class AirplaneCompany {
 		this.opis = opis;
 	}
 
+	
+	
+	
+	
+	public Set<Destination> getDestinacije() {
+		return destinacije;
+	}
+	public void setDestinacije(Set<Destination> destinacije) {
+		this.destinacije = destinacije;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -129,4 +152,48 @@ public class AirplaneCompany {
 
 	}};
 
+
+
+
+	public Set<AirPlane> getAvioni() {
+		return avioni;
 	}
+	public void setAvioni(Set<AirPlane> avioni) {
+		this.avioni = avioni;
+	}
+	public Set<Flight> getLetovi() {
+		return letovi;
+	}
+	public void setLetovi(Set<Flight> letovi) {
+		this.letovi = letovi;
+	}
+
+
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        AirplaneCompany c = (AirplaneCompany) o;
+        if(c.id == null || id == null) {
+            return false;
+        }
+        return Objects.equals(id, c.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+
+	
+	
+	
+	
+	
+	
+	
+}

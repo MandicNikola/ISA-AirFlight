@@ -159,10 +159,10 @@
 					<div class="container-fluid" id="tabovi">
 					   <ul class="nav nav-tabs">
 					   		<li class="active"><a id="info" >Information</a></li>
-						    <li><a id="planes" >Planes</a></li>
-						    <li><a id="flights" >Flights</a></li>
-						    <li><a id="fastTickets" >Fast tickets</a></li>	  
-						  	<li><a id="admini" >Administrators</a></li>	
+						    <li><a id="planes" onclick="showPlanes()">Planes</a></li>
+						    <li><a id="flights" onclick="showFlights()">Flights</a></li>
+						    <li><a id="fastTickets" onclick="showFastTickets()">Fast tickets</a></li>	  
+						  	<li><a id="admini" onclick="showAdministrators()">Administrators</a></li>	
 						  	<li><a id="cenovnik" >Pricelist</a></li>			  
 					  </ul>
 			  		</div>
@@ -207,17 +207,20 @@
 						<button onclick = "addPlane()" type="button" class="btn btn-link">Add plane</button>
 					</div>
 					<div class="okvir" id = "adminLet" >
-						<button  type="button" class="btn btn-link">Add flight</button>
+						<button  type="button" class="btn btn-link" onclick="addFlight()">Add flight</button>
 					</div>
 					<div class="okvir" id = "adminDestinacija">
-						<button  type="button" class="btn btn-link" >Add destination</button>
+						<button  type="button" class="btn btn-link" onclick="addDestination()">Add destination</button>
 					</div>
 					
 					<div class="okvir" id = "adminIzvestaj">
-						<button  type="button" class="btn btn-link" >Report</button>
+						<button  type="button" class="btn btn-link" onclick="report()">Report</button>
+					</div>
+						<div class="okvir" id = "adminAddAdmins">
+						<button  type="button" class="btn btn-link" onclick="addAdmins()">Add administrators</button>
 					</div>
 					<div class="okvir">
-						<button type="button" class="btn btn-link" id="adminProfile">My profile</button>
+						<button type="button" class="btn btn-link" id="adminProfile" onclick="profileAdmin()">My profile</button>
 					</div>
 							
 				</aside>
