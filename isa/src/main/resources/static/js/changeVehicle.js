@@ -18,7 +18,6 @@ function loadInformacije(){
 
 function iscrtajStranicu(vozilo){
 	
-	$("#ime").val(vozilo.naziv);
 	$("#marka").val(vozilo.marka);
 	$("#model").val(vozilo.model);
 	$("#godiste").val(vozilo.godiste);
@@ -38,7 +37,6 @@ $(document).on('submit','.izmeni',function(e){
 	
 	var newVehicle={
 			id: idVozilo,
-			naziv : $('#ime').val(),
 			marka : $('#marka').val(),
 			model : $('#model').val(),
 			godiste : $('#godiste').val(),

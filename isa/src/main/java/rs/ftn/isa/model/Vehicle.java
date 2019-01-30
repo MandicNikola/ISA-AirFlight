@@ -30,9 +30,6 @@ public class Vehicle {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@Column(name = "naziv", nullable = false)
-	private String naziv;
-	
 	@Column(name = "marka", nullable = false)
 	private String marka;
 	
@@ -81,10 +78,9 @@ public class Vehicle {
 	}
 
 	
-	public Vehicle(String naziv, String marka, String model, int godiste, int sedista, String kategorija, double cena,
+	public Vehicle( String marka, String model, int godiste, int sedista, String kategorija, double cena,
 			double ocena) {
 		super();
-		this.naziv = naziv;
 		this.marka = marka;
 		this.model = model;
 		this.godiste = godiste;
@@ -97,9 +93,8 @@ public class Vehicle {
 	}
 
 
-	public Vehicle(String naziv, String marka, String model, int godiste, int sedista, String kategorija) {
+	public Vehicle( String marka, String model, int godiste, int sedista, String kategorija) {
 		super();
-		this.naziv = naziv;
 		this.marka = marka;
 		this.model = model;
 		this.godiste = godiste;
@@ -111,11 +106,10 @@ public class Vehicle {
 	}
 
 
-	public Vehicle(Long id, String naziv, String marka, String model, int godiste, int sedista, String kategorija, double cena,
+	public Vehicle(Long id, String marka, String model, int godiste, int sedista, String kategorija, double cena,
 			double ocena) {
 		super();
 		this.id = id;
-		this.naziv = naziv;
 		this.marka = marka;
 		this.model = model;
 		this.godiste = godiste;
@@ -138,9 +132,7 @@ public class Vehicle {
 	}
 
 
-	public String getNaziv() {
-		return naziv;
-	}
+	
 
 
 	public Filijala getFilijala() {
@@ -162,10 +154,6 @@ public class Vehicle {
 		this.rezervacije = rezervacije;
 	}
 
-
-	public void setNaziv(String naziv) {
-		this.naziv = naziv;
-	}
 
 
 	public String getMarka() {
@@ -240,10 +228,13 @@ public class Vehicle {
 	}
 
 
+
+
 	@Override
 	public String toString() {
-		return "Vehicle [id=" + id + ", naziv=" + naziv + ", marka=" + marka + ", model=" + model + ", godiste=" + godiste
-				+ ", sedista=" + sedista + ", kategorija=" + kategorija + ", cena=" + cena + ", ocena=" + ocena + "]";
+		return "Vehicle [id=" + id + ", marka=" + marka + ", model=" + model + ", godiste=" + godiste + ", sedista="
+				+ sedista + ", kategorija=" + kategorija + ", cena=" + cena + ", brojac=" + brojac + ", ocena=" + ocena
+				+ ", broj=" + broj + ", filijala=" + filijala + ", rezervacije=" + rezervacije + "]";
 	}
 
 

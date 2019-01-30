@@ -21,12 +21,6 @@ public class VoziloServiceImpl implements VoziloService{
 		return repozitorijum.findOneById(id);
 	}
 
-	@Override
-	public Vehicle findVehicleByNaziv(String naziv) {
-		// TODO Auto-generated method stub
-		
-		return repozitorijum.findOneByNaziv(naziv);
-	}
 
 	@Override
 	public List<Vehicle> findAll() {

@@ -318,7 +318,7 @@ function ispisiIstorijuRent(lista){
 		
 			console.log("Broj dana je "+numberDays);
 			
-			if(clan.status == "AKTIVNA"){
+			if(clan.status == "ZAVRSENA"){
 				if(numberDays >= 3){
 					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td id=\""+statId+"\"> "+clan.status+"</td><td><button  class=\"btn btn-info\" id="+btnOtk+" onclick=\"otkaziVozilo("+voz.id+","+clan.id+")\">Cancel</button></td></tr>");
 						
@@ -326,7 +326,7 @@ function ispisiIstorijuRent(lista){
 					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td > "+clan.status+"</td></tr>");
 							
 				}
-			}else if(clan.status == "ZAVRSENA"){
+			}else if(clan.status == "AKTIVNA"){
 				//nije ocenio ni vozilo ni rent-a-car servis
 				if(clan.ocenjenVozilo == false && clan.ocenjenRent == false){
 					console.log("1");

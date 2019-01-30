@@ -9,7 +9,6 @@ public interface VoziloService {
 	Vehicle findVehicleById(Long id);
 	
 	List<Vehicle> findAll();
-	Vehicle findVehicleByNaziv(String naziv);
 	Vehicle saveVehicle(Vehicle Vehicle);
 	void removeVehicle(Long id);
 }
