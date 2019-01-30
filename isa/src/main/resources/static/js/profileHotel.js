@@ -859,8 +859,6 @@ function dodUsluga() {
 //ispisuje ponudu za pretrazene dane
 function izlistajPonudu(){
 	
-	
-	
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);
 	var id = adresa.split('=')[1];
@@ -1280,6 +1278,10 @@ function showRoomsForDiscounts(){
 	
 	
 }
+function pomocnaFA(){
+	showRoomsForDiscounts();
+	
+}
 function writeRoomsForDiscounts(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#sobePopusti").empty();
@@ -1290,6 +1292,8 @@ function writeRoomsForDiscounts(lista){
 		
 		$.each(pom, function(index, data) {
 			if(data.imapopust){
+				console.log('ima popust');
+				
 				$("#tabelaSoba1").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td><button type=\"button\" onclick=\"addDiscountForRooms("+data.id+")\" class=\"btn btn-light\">Add discount</button></td><td><button type=\"button\" onclick=\"listOfDiscount("+data.id+")\" class=\"btn btn-light\">Discounts</button></td></tr>");
 			}else{
 				$("#tabelaSoba1").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td><button type=\"button\" onclick=\"addDiscountForRooms("+data.id+")\" class=\"btn btn-light\">Add discount</button></td><td></td></tr>");
@@ -1303,11 +1307,74 @@ function writeRoomsForDiscounts(lista){
 	
 }
 function addDiscountForRooms(idRoom){
+	$("#sobePopusti").hide();
+
 	$("#dugmePopust").empty();
 	$("#dugmePopust").append("<button type=\"button\"  class=\"btn btn-lg\" onclick = \"dodajPopustSistem("+idRoom+")\">Add</button></div>");				
 	$("#dodajPopust").show();
 }
 function dodajPopustSistem(idRoom){
 	console.log(idRoom);
+	$("#dodajPopust").hide();
+	var pocetak=$('#sincewhen').val();
+	var kraj=$('#untilwhen').val();
+	var bodovi=$('#brojBodova').val();
+	var procenat=$('#procenat').val();
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	$('#sincewhen').val('');
+	$('#untilwhen').val('');
+	$('#brojBodova').val("");
+	$('#procenat').val("");
+	
+	$.ajax({
+		type : 'POST',
+		url : "/api/hoteli/definisiPopust/"+id+"/soba/"+idRoom+"/pocetak/"+pocetak+"/kraj/"+kraj+"/bodovi/"+bodovi+"/procenat/"+procenat,
+		success : function(povratna) {
+						console.log('uspjesno');
+						pomocnaFA();
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+		});
+
 	
 }
+function listOfDiscount(idRoom){
+	$("#sobePopusti").hide();
+	var adresa = window.location.search.substring(1);
+	console.log('adesa je '+adresa);
+	var id = adresa.split('=')[1];
+
+	$.ajax({
+		method:'GET',
+		url: "/api/hoteli/getRoomDiscount/"+id+"/idRoom/"+idRoom,
+		success: function(lista){
+				writeDiscountsOfRoom(lista);
+			
+		}
+	});
+}
+function writeDiscountsOfRoom(lista){
+	 var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	 $("#postojeciPopusti").empty();
+	 $("#postojeciPopusti").show();
+	//public RoomDTO(Long id, String tip, int kapacitet, int sprat,boolean imapopust) 
+			
+	 $("#postojeciPopusti").append("<table class=\"table table-hover\" id=\"popustiTab\" ><tr><th>Since when </th><th>Until when</th><th>Number of user pointst</th><th>Discount percentage</th><th></th></tr>");
+		
+		$.each(pom, function(index, data) {
+				$("#popustiTab").append("<tr><td class=\"hoverName\">"+data.datumod+"</td><td> "+data.datumdo+"</td><td>"+data.bodovi+"</td><td>"+data.vrijednost+"</td><td><button type=\"button\" onclick=\"removeDisc("+data.id+")\" class=\"btn btn-light\">Remove</button></td></tr>");
+			
+			
+		});
+		
+	 $("#postojeciPopusti").append("</table>");
+
+}
+
+function removeDisc(idPopust){
+	console.log(idPopust);
+}
+

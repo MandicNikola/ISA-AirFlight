@@ -111,6 +111,14 @@ public class RoomDTO {
 	public void setIdRez(Long idRez) {
 		this.idRez = idRez;
 	}
+
+	public boolean isImapopust() {
+		return imapopust;
+	}
+
+	public void setImapopust(boolean imapopust) {
+		this.imapopust = imapopust;
+	}
 	
 	
 	

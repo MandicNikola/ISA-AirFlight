@@ -29,6 +29,7 @@ import rs.ftn.isa.dto.ReservationHotelDTO;
 import rs.ftn.isa.dto.RoomDTO;
 import rs.ftn.isa.model.Category;
 import rs.ftn.isa.model.CijenovnikSoba;
+import rs.ftn.isa.model.Discount;
 import rs.ftn.isa.model.Hotel;
 import rs.ftn.isa.model.PricelistHotel;
 import rs.ftn.isa.model.RentACar;
@@ -1263,5 +1264,98 @@ public Hotel otkaziHotel(@PathVariable String idRez){
 	}
 	 
 }
+		//url : "/api/hoteli/definisiPopust/"+id+"/soba/"+idRoom+"/pocetak/"+pocetak+"/kraj/"+kraj+"/bodovi/"+bodovi+"/procenat/"+procenat,
+		
+		@RequestMapping(value="/definisiPopust/{id}/soba/{idRoom}/pocetak/{pocetak}/kraj/{kraj}/bodovi/{bodovi}/procenat/{procenat}", 
+				method = RequestMethod.POST,
+				produces = MediaType.APPLICATION_JSON_VALUE
+				)
+		public @ResponseBody Room popustZaSobu(@PathVariable("id") Long id,
+	            @PathVariable("idRoom") Long idRoom,@PathVariable("pocetak") String pocetak,@PathVariable("kraj") String kraj,@PathVariable("bodovi") String bodovi,@PathVariable("procenat") String procenat){
+			System.out.println("dosao u fu dobio"+id+" id sobe "+idRoom+" pocetak "+pocetak+" kraj "+kraj+" bodovi "+bodovi+" procenti "+procenat);
+			int bod = Integer.parseInt(bodovi);
+			int proc = Integer.parseInt(procenat);
+			Hotel pronadjeni = servis.findHotelById(id);
+			String idRoomString = idRoom.toString();
+			Room room  = null;
+			for(Room soba:pronadjeni.getSobe()) {
+				if(soba.getId().toString().equals(idRoomString)) {
+					room = soba;
+					break;
+				}
+			}
+			pronadjeni.getSobe().remove(room);
 			
+			Discount popust = new Discount();
+			String[] datIN=pocetak.split("-");
+			int godina=Integer.parseInt(datIN[0]);
+			//mjesec krece od 0
+			int mjesec=Integer.parseInt(datIN[1])-1;
+			int dan=Integer.parseInt(datIN[2]);
+		
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(godina, mjesec, dan);
+			Date datumOd = calendar.getTime();
+				
+			
+			System.out.println("Daatum je "+datumOd);
+			String[] datOUT=kraj.split("-");
+			
+			 godina=Integer.parseInt(datOUT[0]);
+			//mjesec krece od 0
+			 mjesec=Integer.parseInt(datOUT[1])-1;
+			 dan=Integer.parseInt(datOUT[2]);
+			 calendar.set(godina, mjesec, dan);
+			 Date datumDo = calendar.getTime();
+			 popust.setDatumdo(datumDo);
+			 popust.setDatumod(datumOd);
+			 popust.setBodovi(bod);
+			 popust.setVrijednost(proc);
+			 //slucaj kada mjenja postojeci popust
+			 Discount postojeciPopust = null;
+			 boolean flag = false;
+			 for(Discount disc:room.getPopusti()) {
+				 if(disc.getBodovi() == bod){
+					 flag = true;
+					 postojeciPopust = disc;
+					 break;
+				 }
+			 }
+			 if(flag) {
+				 room.getPopusti().remove(postojeciPopust);
+			 }
+			 popust.setSobapopust(room);
+			 room.getPopusti().add(popust);
+			 
+			 if(!room.isImapopusta()) {
+				 room.setImapopusta(true);
+			 }
+			 
+			 pronadjeni.getSobe().add(room);
+			 servis.saveHotel(pronadjeni);
+			return room;
+		}
+
+		//url: "/api/hoteli/getRoomDiscount/"+id+"/idRoom/"+idRoom,
+		
+		@RequestMapping(value="/getRoomDiscount/{id}/idRoom/{idRoom}", 
+				method = RequestMethod.GET,
+				produces = MediaType.APPLICATION_JSON_VALUE
+				)
+		public @ResponseBody ArrayList<Discount> popustiSobe(@PathVariable("id") Long id,@PathVariable("idRoom") Long idRoom){
+			Hotel pronadjeni = servis.findHotelById(id);
+			String idRoomString = idRoom.toString();
+			Room room  = null;
+			for(Room soba:pronadjeni.getSobe()) {
+				if(soba.getId().toString().equals(idRoomString)) {
+					room = soba;
+					break;
+				}
+			}
+			ArrayList<Discount> popusti = new ArrayList<Discount>();
+			for(Discount dis:room.getPopusti()) {
+				popusti.add(dis);
+			}
+			return popusti;
+		}					
 }
