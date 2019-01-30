@@ -1,4 +1,5 @@
-/**
+/*
+*IZVRSITI IZMENE KOJE SU MI POTERBNE ZA RAD
  * 
  */
 
@@ -9,7 +10,8 @@ function formToJSON() {
 	});
 }
 
-$(document).on('submit','.destinacija',function(e){
+$(document).on('submit','.flight',function(e){
+	e.preventDefault();
 	var adresa = window.location.search.substring(1);
 	var idKompanija = adresa.split('=')[1];
 	
@@ -22,11 +24,11 @@ $(document).on('submit','.destinacija',function(e){
 		contentType : 'application/json; charset=utf-8',
 		data:formToJSON(),
 		success : function(data) {
-				if(data == "uspesno"){
-					alert('dodavanje super');
-					window.location="AirCompProfile?id="+idKompanija;
+				if(data == null){
+					alert('neuspesno dodavanje')
 				}else{
-					alert('dodavanje nije super');	
+					alert('Dodavanje uspesno!');
+					window.location = "AirCompProfile.html?id="+data;
 				}	
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {

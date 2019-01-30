@@ -151,13 +151,16 @@ public class AirplaneCompanyController {
 	
 	@RequestMapping(value = "/airplanes/{id}",
 			method = RequestMethod.GET)
-	public Set<AirPlane> getAirPlanes(@PathVariable Long id)
+	public ResponseEntity<Set<AirPlane>> getAirPlanes(@PathVariable Long id)
 	{
 		System.out.println("find"  + id);
 		
 		AirplaneCompany pronadjeni = service.findAirplaneCompanyById(id);
+		if(pronadjeni == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
-		return pronadjeni.getAvioni();
+		
+		return new ResponseEntity<Set<AirPlane>>(pronadjeni.getAvioni(), HttpStatus.OK);
 		
 	}
 	
@@ -195,9 +198,9 @@ public class AirplaneCompanyController {
 	}
 	
 	@RequestMapping(value="/addDestination/{id}", 
-			method = {RequestMethod.POST,RequestMethod.GET},
+			method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
-	public  String addDestination(@RequestBody DestinationDTO destination,@PathVariable Long id){		
+	public  ResponseEntity<Long> addDestination(@RequestBody DestinationDTO destination,@PathVariable Long id){		
 		
 		//System.out.println("usao u metodu koja mi treba");
 		AirplaneCompany company = service.findAirplaneCompanyById(id);
@@ -209,7 +212,7 @@ public class AirplaneCompanyController {
 		destinationService.saveDestination(destinationNew);
 		service.saveAirplaneCompany(company);
 		
-		 return "uspesno";
+		return new ResponseEntity<Long>(id, HttpStatus.OK);
 			 
 	}
 	
@@ -231,7 +234,7 @@ public class AirplaneCompanyController {
 	@RequestMapping(value="/addFlight", 
 			method = {RequestMethod.POST,RequestMethod.GET},
 			consumes = MediaType.APPLICATION_JSON_VALUE)
-	public String addFlight(@RequestBody FlightDTO flight,@PathVariable Long id){		
+	public ResponseEntity<Long> addFlight(@RequestBody FlightDTO flight,@PathVariable Long id){		
 		
 		 AirPlane plane = planeService.findAirPlaneById(flight.getIdAviona());
 		 AirplaneCompany company = plane.getAirComp();
@@ -269,7 +272,7 @@ public class AirplaneCompanyController {
 		 flightNew.setVremePoletanja(formirajDate(flight.getDatumPoletanja(), flight.getVremePoletanja()));
 		 flightNew.setVremeSletanja(formirajDate(flight.getDatumSletanja(), flight.getVremeSletanja()));
 		
-		 return "uspesno";
+		 return new ResponseEntity<Long>(company.getId(), HttpStatus.OK);
 			 
 	}
 	

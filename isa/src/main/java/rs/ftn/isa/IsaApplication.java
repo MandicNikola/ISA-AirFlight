@@ -35,6 +35,13 @@ import rs.ftn.isa.service.VoziloServiceImpl;
 import rs.ftn.isa.model.Filijala;
 import rs.ftn.isa.model.Hotel;
 import rs.ftn.isa.model.PricelistHotel;
+import rs.ftn.isa.model.*;
+import rs.ftn.isa.repository.*;
+import rs.ftn.isa.service.*;
+import rs.ftn.isa.controller.*;
+
+
+
 
 @SpringBootApplication
 public class IsaApplication {

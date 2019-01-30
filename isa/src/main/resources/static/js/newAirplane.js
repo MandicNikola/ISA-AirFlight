@@ -9,6 +9,7 @@ function formToJSON() {
 }
 
 $(document).on('submit','.airplane',function(e){
+	e.preventDefault();
 	var adresa = window.location.search.substring(1);
 	var idKompanija = adresa.split('=')[1];
 	
@@ -20,10 +21,11 @@ $(document).on('submit','.airplane',function(e){
 		contentType : 'application/json',
 		data:formToJSON(),
 		success : function(data) {
-				if(data == "uspesno"){
-					alert('dodavanje super');
+				if(data == null){
+					alert('dodavanje neuspesno');
 				}else{
-					alert('dodavanje nije super');	
+					alert('Dodavanje uspesno!');
+					window.location = "AirCompProfile.html?id="+data;
 				}	
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {

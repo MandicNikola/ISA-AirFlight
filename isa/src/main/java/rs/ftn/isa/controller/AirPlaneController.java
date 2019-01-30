@@ -3,7 +3,9 @@ package rs.ftn.isa.controller;
 import javax.ws.rs.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,21 +56,19 @@ public class AirPlaneController {
 	@RequestMapping(value="/addNewPlane/{id}", 
 			method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
-	public String addNewPlane(@RequestBody AirplaneDTO airplane, @PathVariable Long id)
+	public ResponseEntity<Long> addNewPlane(@RequestBody AirplaneDTO airplane, @PathVariable Long id)
 	{
 		AirPlane planeNew = new AirPlane();
 		planeNew.setNaziv(airplane.getNaziv());
 		AirplaneCompany company = companyService.findAirplaneCompanyById(id);
 		
 		if(company == null)
-			return "neuspesno";
+			new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		planeNew.setAirComp(company);
 		company.getAvioni().add(planeNew);
 		companyService.saveAirplaneCompany(company);
-		servis.saveAirPlane(planeNew);
-		
-		return "uspesno";
+		return new ResponseEntity<Long>(id, HttpStatus.OK);
 	}
 	
 	
