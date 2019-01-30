@@ -17,19 +17,20 @@ $(document).on('submit','.destinacija',function(e){
 	
 	
 	$.ajax({
-		method : 'POST',
+		type : 'POST',
 		url : "/api/kompanije/addDestination/"+idKompanija,
-		contentType : 'application/json',
+		contentType : 'application/json; charset=utf-8',
 		data:formToJSON(),
 		success : function(data) {
 				if(data == "uspesno"){
 					alert('dodavanje super');
+					window.location="AirCompProfile?id="+idKompanija;
 				}else{
 					alert('dodavanje nije super');	
 				}	
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("greska pri unosu nove aviokompanije");
+			alert(textStatus);
 			   
 		}
 	});

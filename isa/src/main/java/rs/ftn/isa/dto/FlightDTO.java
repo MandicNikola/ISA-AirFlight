@@ -13,6 +13,9 @@ public class FlightDTO {
 	
 	private Long idAviona;
 	private Long idKompanije;
+	
+	private String datumPoletanja;
+	private String datumSletanja;
 	private String vremePoletanja;
 	private String vremeSletanja;
 	private double vreme;	
@@ -33,6 +36,38 @@ public class FlightDTO {
 	
 	
 	
+	public String getDatumPoletanja() {
+		return datumPoletanja;
+	}
+
+
+
+
+
+	public void setDatumPoletanja(String datumPoletanja) {
+		this.datumPoletanja = datumPoletanja;
+	}
+
+
+
+
+
+	public String getDatumSletanja() {
+		return datumSletanja;
+	}
+
+
+
+
+
+	public void setDatumSletanja(String datumSletanja) {
+		this.datumSletanja = datumSletanja;
+	}
+
+
+
+
+
 	public Long getIdAviona() {
 		return idAviona;
 	}

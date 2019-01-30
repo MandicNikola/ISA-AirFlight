@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.AirplaneDTO;
 import rs.ftn.isa.dto.DestinationDTO;
+import rs.ftn.isa.dto.FlightDTO;
 import rs.ftn.isa.dto.HotelDTO;
 import rs.ftn.isa.model.AirPlane;
 import rs.ftn.isa.model.AirplaneCompany;
@@ -194,7 +195,7 @@ public class AirplaneCompanyController {
 	}
 	
 	@RequestMapping(value="/addDestination/{id}", 
-			method = RequestMethod.POST,
+			method = {RequestMethod.POST,RequestMethod.GET},
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 	public  String addDestination(@RequestBody DestinationDTO destination,@PathVariable Long id){		
 		
@@ -224,6 +225,86 @@ public class AirplaneCompanyController {
 		
 			 
 	}
+	
+	
+	
+	@RequestMapping(value="/addFlight", 
+			method = {RequestMethod.POST,RequestMethod.GET},
+			consumes = MediaType.APPLICATION_JSON_VALUE)
+	public String addFlight(@RequestBody FlightDTO flight,@PathVariable Long id){		
+		
+		 AirPlane plane = planeService.findAirPlaneById(flight.getIdAviona());
+		 AirplaneCompany company = plane.getAirComp();
+		 
+		 Flight flightNew = new Flight();
+		 
+		 //kupim sve destinacije koje su mi potrebne za let
+		 Destination poletanje = destinationService.findDestinationById(flight.getLokacijaPoletanja());
+		 Destination sletanje = destinationService.findDestinationById(flight.getLokacijaSletanja());
+		 
+		 flightNew.setPlane(plane);
+		 plane.getLetovi().add(flightNew);
+		 
+		 flightNew.setAvioKomp(company);
+		 company.getLetovi().add(flightNew);
+		 
+		 flightNew.setPoletanje(poletanje);
+		 flightNew.setSletanje(sletanje);
+		 poletanje.getPoletanja().add(flightNew);
+		 sletanje.getSletanja().add(flightNew);
+	 
+		 //**kupim presedanja leta sva koja mi trebaju
+		 
+		 for(Long idDest : flight.getPresedanja())
+		 {
+			 Destination destinacijaPresedanje = destinationService.findDestinationById(idDest);
+			 flightNew.getPresedanja().add(destinacijaPresedanje);
+			 destinacijaPresedanje.getLetovi().add(flightNew); 
+		 }
+		 
+		 flightNew.setDuzina(flight.getDuzina());
+		 flightNew.setCena(flight.getCena());
+		 flightNew.setVreme(flight.getVreme());
+		 
+		 flightNew.setVremePoletanja(formirajDate(flight.getDatumPoletanja(), flight.getVremePoletanja()));
+		 flightNew.setVremeSletanja(formirajDate(flight.getDatumSletanja(), flight.getVremeSletanja()));
+		
+		 return "uspesno";
+			 
+	}
+	
+	
+	@SuppressWarnings("deprecation")
+	public Date formirajDate(String date, String time)
+	{
+		String[] podaci = date.split("-");
+		
+		 int godina=Integer.parseInt(podaci[0]);
+		 int mesec=Integer.parseInt(podaci[1])-1;
+		 int dan=Integer.parseInt(podaci[2]);
+		
+		 String[] vreme = time.split(":");
+		 
+		 int hours = Integer.parseInt(vreme[0]);
+		 int minutes = Integer.parseInt(vreme[1]);
+		 
+		 return new Date(godina-1900, mesec, dan, hours, minutes);
+		 
+	}
+	
+	
+	@RequestMapping(value="/flight/{id}", 
+			method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	public Flight getFlight(@PathVariable Long id){		
+		
+		//System.out.println("usao u metodu koja mi treba");
+		Flight flight = flightService.findOneFlightById(id);
+		
+		return flight;
+			 
+	}
+	
+	
 	
 	
 	

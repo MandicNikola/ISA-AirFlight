@@ -29,8 +29,16 @@ public class FlightService {
 		return repozitorujum.findFlights(date, id);
 	}
 	
+	public Flight findOneFlightById(Long id)
+	{
+		return repozitorujum.findOneById(id);
+	}
 	
 	
+	public void saveFlight(Flight f)
+	{
+		repozitorujum.save(f);
+	}
 	
 	
 }

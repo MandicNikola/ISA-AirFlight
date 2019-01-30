@@ -66,7 +66,7 @@ public class Flight {
 	        joinColumns = { @JoinColumn(name="company_id",referencedColumnName="id")}, 
 	        inverseJoinColumns = { @JoinColumn(name="destination_id",referencedColumnName="id")}
 	    )
-	 Set<Destination> presedanja;
+	 Set<Destination> presedanja = new HashSet<Destination>();
 	
 	 
 	 @ManyToOne(fetch = FetchType.EAGER)
