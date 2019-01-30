@@ -6,6 +6,7 @@ function onLoad(){
 	$("#konfig").hide();
 	$("#sobe").hide();
 	$("#cijene").hide();
+	$("#divPopust").hide();
 	$("#rezervacije").hide();
 	$("#adminStrana").hide();
 	$("#promjenaLozinke").hide();
@@ -284,6 +285,7 @@ function addConfiguration(){
 	$("#sobe").hide();
 	$("#informacije").hide();
 	$("#cijene").hide();
+	$("#divPopust").hide();
 	$("#konfig").hide();
 	$("#rezervacije").hide();
 	$("#promjenaLozinke").hide();
@@ -380,6 +382,7 @@ function resetujGreske(){
 $(document).ready(function(){
 	$("#sobe").hide();
 	$("#cijene").hide();
+	$("#divPopust").hide();
 	$("#konfig").hide();
 	$("#rezervacije").hide();
 	$("#adminStrana").hide();
@@ -392,6 +395,7 @@ $(document).ready(function(){
     	$("#informacije").hide();
 		$("#ispisiTabelu").hide();
 		$("#cijene").hide();
+		$("#divPopust").hide();		
 		$("#konfig").hide();
 		$("#rezervacije").hide();
 		$("#sobe").show();
@@ -405,6 +409,7 @@ $(document).ready(function(){
 		$("#ispisiTabelu").hide();
 		$("#sobe").hide();
 		$("#cijene").hide();
+		$("#divPopust").hide();
 		$("#konfig").hide();
 		$("#rezervacije").hide();
 		$("#adminStrana").hide();
@@ -420,6 +425,7 @@ $(document).ready(function(){
 		$("#ispisiTabelu").hide();
 		$("#sobe").hide();
 		$("#cijene").hide();
+		$("#divPopust").hide();
 		$("#konfig").hide();
 		$("#promjenaLozinke").hide();
 
@@ -436,7 +442,7 @@ $(document).ready(function(){
 		$("#ispisiTabelu").hide();
 		$("#sobe").hide();
 		$("#promjenaLozinke").hide();
-
+		$("#divPopust").hide();
 		$("#cijene").hide();
 		$("#rezervacije").hide();
 		$("#adminStrana").hide();
@@ -448,6 +454,7 @@ $(document).ready(function(){
 		$("#informacije").hide();
 		$("#ispisiTabelu").hide();
 		$("#cijene").hide();
+		$("#divPopust").hide();
 		$("#konfig").hide();
 		$("#sobe").hide();
 		$("#rezervacije").hide();
@@ -462,12 +469,28 @@ $(document).ready(function(){
 		$("#ispisiTabelu").hide();
 		$("#sobe").hide(); 
 		$("#cijene").show();
+		$("#divPopust").hide();
 		$("#konfig").hide();
 		$("#rezervacije").hide();
 		$("#adminStrana").hide();
 		$("#promjenaLozinke").hide();
 
     });
+    $("#sistemPopust").click(function(){
+    	console.log('dosao u popust');
+    	showRoomsForDiscounts();
+    	$("#informacije").hide();
+    	$("#divPopust").show();
+		$("#ispisiTabelu").hide();
+		$("#sobe").hide(); 
+		$("#cijene").hide();
+		$("#konfig").hide();
+		$("#rezervacije").hide();
+		$("#adminStrana").hide();
+		$("#promjenaLozinke").hide();
+
+    });
+
 });
 function ispisiKonfiguracije(){
 	var adresa = window.location.search.substring(1);
@@ -725,6 +748,7 @@ function formaPopusti(lista){
 		$("#informacije").hide();
 		$("#cijene").hide();
 		$("#konfig").hide();
+		$("#divPopust").hide();
 		
 		
 		$("#ispisiTabelu").show();
@@ -773,6 +797,8 @@ function addUsluga(){
 	$("#informacije").hide();
 	$("#cijene").hide();
 	$("#konfig").hide();
+	$("#divPopust").hide();
+	
 	$("#promjenaLozinke").hide();
 
 	
@@ -1166,6 +1192,7 @@ function changePass(){
 	 $("#sobe").hide();
 	 $("#konfig").hide();
 	 $("#cijene").hide();
+	 $("#divPopust").hide();		
      $("#rezervacije").hide();
      $("#adminStrana").hide();
      $("#informacije").hide();
@@ -1221,5 +1248,69 @@ function changeData(){
 	var id = adresa.split('=')[1];
 	
 	window.location = "changePersonalData.html?id="+id;
+	
+}
+//ispusje sobe za admina sistema da definise popuste za bodove korisnika
+function showRoomsForDiscounts(){
+	var adresa = window.location.search.substring(1);
+	console.log('adesa je '+adresa);
+	var id = adresa.split('=')[1];
+
+	$.ajax({
+		method:'GET',
+		url: "/api/hoteli/getRoomsForDiscount/"+id,
+		success: function(lista){
+			if(lista == null){
+				console.log('Nema soba')
+			}else{
+				writeRoomsForDiscounts(lista);
+				
+			}
+		}
+	});
+	
+	
+}
+function writeRoomsForDiscounts(lista){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	 $("#sobePopusti").empty();
+	 $("#sobePopusti").show();
+	//public RoomDTO(Long id, String tip, int kapacitet, int sprat,boolean imapopust) 
+			
+	 $("#sobePopusti").append("<table class=\"table table-hover\" id=\"tabelaSoba1\" ><tr><th>Room type </th><th>Capacity</th><th>Price per night</th><th></th><th></th><th></th></tr>");
+		
+		$.each(pom, function(index, data) {
+			if(data.imapopust){
+				$("#tabelaSoba1").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td><button type=\"button\" onclick=\"addDiscountForRooms("+data.id+")\" class=\"btn btn-light\">Add discount</button></td><td><button type=\"button\" onclick=\"listOfDiscount("+data.id+")\" class=\"btn btn-light\">Discounts</button></td></tr>");
+			}else{
+				$("#tabelaSoba1").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td><button type=\"button\" onclick=\"addDiscountForRooms("+data.id+")\" class=\"btn btn-light\">Add discount</button></td><td></td></tr>");
+				
+			}
+			
+		});
+		
+	 $("#sobePopusti").append("</table>");
+
+	
+}
+function addDiscountForRooms(idRoom){
+	
+	$("#dodajPopust").append("<form><div class = \"row\"><div class=\"col-md-6\"><div class=\"form-group\"><div class=\"input-group\">");				   		
+   		 
+	$("#dodajPopust").append("<span class=\"input-group-addon\"><i class=\"glyphicon glyphicon-calendar\"></i></span>");
+	$("#dodajPopust").append("<input id = \"checkin\"  class=\"form-control\" type=\"date\" required=\"required\" data-placeholder=\"Since when\"></div></div></div>");
+	$("#dodajPopust").append("<div class=\"col-md-6\"><div class=\"form-group\"><div class=\"input-group\"><span class=\"input-group-addon\"><i class=\"glyphicon glyphicon-calendar\"></i></span>");
+	$("#dodajPopust").append("<input id =\"checkout\"  class=\"form-control\" type=\"date\" required=\"required\"  data-placeholder=\"Until when\"></div></div></div></div>");			
+	$("#dodajPopust").append("<div class=\"row\"><div class=\"col-md-6\"><div class=\"form-group\"><input class=\"form-control\" min=\"1\" id = \"brojBodova\"  type=\"number\" required=\"required\" placeholder=\"Number of user points\">");
+	$("#dodajPopust").append("</div></div><div class=\"col-md-6\"><div class=\"form-group\">");	 
+	$("#dodajPopust").append("<input class=\"form-control\" min=\"1\" id = \"procenat\"  type=\"number\" required=\"required\" placeholder=\"Discount percentage\">");		 
+	$("#dodajPopust").append("</div></div><div class=\"row\"><div class=\"col-md-6\"><div class=\"form-btn\"><button type=\"button\"  class=\"btn btn-lg\" onclick = \"dodajPopustSistem("+idRoom+")\">Add</button>");				
+	$("#dodajPopust").append("</div></div></div></form>");				    
+				    
+
+	$("#dodajPopust").show();
+}
+function dodajPopustSistem(idRoom){
+	console.log(idRoom);
 	
 }

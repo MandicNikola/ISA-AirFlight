@@ -56,6 +56,9 @@ public class Room {
 	
 	@Column(name = "rezervisana")	
 	private boolean rezervisana; 
+    //bice true ukoliko ima definisan ijedan popust
+	@Column(name = "imapopusta")	
+	private boolean imapopusta; 
     
 	@Column(name = "broj_rezervacija")	
 	private int brojRezervacija; 
@@ -252,6 +255,14 @@ public class Room {
 
 	public void setOcenjeneRezervacije(Set<RezervacijaHotel> ocenjeneRezervacije) {
 		this.ocenjeneRezervacije = ocenjeneRezervacije;
+	}
+
+	public boolean isImapopusta() {
+		return imapopusta;
+	}
+
+	public void setImapopusta(boolean imapopusta) {
+		this.imapopusta = imapopusta;
 	}
 
 

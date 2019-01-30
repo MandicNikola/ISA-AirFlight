@@ -112,6 +112,21 @@ public class HotelController {
 			
 		
 		}
+		//sobe za def popusta za admina ssitema
+		@RequestMapping(value="/getRoomsForDiscount/{id}", method = RequestMethod.GET)
+		public ArrayList<RoomDTO> getAllRoomsForDiscount(@PathVariable Long id){	
+			Hotel pronadjeni = servis.findHotelById(id);
+			System.out.println("id hoteal " +id);
+			ArrayList<RoomDTO> sobeDTO = new ArrayList<RoomDTO>();
+			//public RoomDTO(Long id, String tip, int kapacitet, int sprat,boolean imapopust) 
+			
+			for(Room ss:pronadjeni.getSobe()) {
+				RoomDTO room = new RoomDTO(ss.getId(),ss.getTip(),ss.getKapacitet(),ss.getSprat(),ss.isImapopusta());
+				sobeDTO.add(room);
+			}
+				return sobeDTO;
+		
+		}
 		//metoda koja vraca tipove soba u odredjenom hotelu - jednokrevetna,dvokrevetna itd
 		@RequestMapping(value="/vratiTipoveSoba/{id}", method = RequestMethod.GET)
 		public ArrayList<Integer> getTipovaSoba(@PathVariable Long id){	

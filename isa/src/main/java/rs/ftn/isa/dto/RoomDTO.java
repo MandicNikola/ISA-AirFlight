@@ -11,7 +11,7 @@ public class RoomDTO {
 	private int kapacitet;
 	private double cijena;
 	private String balkon;
-
+	private boolean imapopust;
 	
 	public RoomDTO() {}
 	
@@ -23,7 +23,14 @@ public class RoomDTO {
 		this.hotel = hotel;
 		this.idRez = idRez;
 	}
-	
+	public RoomDTO(Long id, String tip, int kapacitet, int sprat,boolean imapopust) {
+		super();
+		this.id = id;
+		this.tip = tip;
+		this.kapacitet = kapacitet;
+		this.sprat = sprat;
+		this.imapopust = imapopust;
+	}
 	public RoomDTO(Long id, String tip, double ocena, int sprat, int kapacitet, double cijena, String balkon) {
 		super();
 		this.id = id;
