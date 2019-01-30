@@ -50,14 +50,6 @@ public class VoziloController {
 		public @ResponseBody Vehicle registrujVozilo( @RequestBody Vehicle novo){		
 		
 		
-		//validacija na serverskoj strani
-		String naziv=novo.getNaziv();
-		
-		if(naziv.equals("")||naziv.equals("undefined")||naziv==null) {
-			Vehicle povratni = new Vehicle();
-			povratni.setGodiste(0);
-			return povratni;
-		}
 		String marka=novo.getMarka();
 		
 		if(marka.equals("")||marka.equals("undefined")||marka==null) {
@@ -81,14 +73,6 @@ public class VoziloController {
 			povratni.setGodiste(3);
 			return povratni;
 		}
-		System.out.println("Usao u registrovanje vozila, naziv je "+ novo.getNaziv());
-
-		Vehicle provera = servis.findVehicleByNaziv(novo.getNaziv());
-			
-		if(provera!=null) {
-			//naziv mora biti jedinstven
-			return null;
-		}
 		
 		//servis.saveVehicle(novo);
 		novo.setBroj(0);
@@ -108,7 +92,6 @@ public class VoziloController {
 				produces = MediaType.APPLICATION_JSON_VALUE)
 		public @ResponseBody Vehicle getVoziloById(@PathVariable Long id){	
 			Vehicle povratna = servis.findVehicleById(id);
-			System.out.println(" Nasao vozilo sa nazivom "+ povratna.getNaziv());
 			return povratna;
 		}
 
@@ -131,21 +114,6 @@ public class VoziloController {
 				return vozilo;
 			}
 			
-			Vehicle proveraImena = servis.findVehicleByNaziv(nova.getNaziv());
-			if(proveraImena != null) {
-				 String kljuc1= proveraImena.getId().toString();
-				 String kljuc2= nova.getId().toString();
-				 if(kljuc1.equals(kljuc2)) {
-					 System.out.println("Ne postoji isti naziv auta");
-				 }else {
-
-						System.out.println("Postoji vozilo sa tim ienom");
-						return null; 
-				 }
-			}
-			
-			System.out.println("Provere su prosle");
-			vozilo.setNaziv(nova.getNaziv());
 			vozilo.setGodiste(nova.getGodiste());
 			vozilo.setMarka(nova.getMarka());
 			vozilo.setModel(nova.getModel());

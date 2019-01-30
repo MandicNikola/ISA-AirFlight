@@ -49,7 +49,6 @@ $(document).on('submit','.registracija',function(e){
 			e.preventDefault();	
 	
 				var newcar={
-								naziv : $('#ime').val(),
 								marka : $('#marka').val(),
 								model : $('#model').val(),
 								godiste : $('#godiste').val(),

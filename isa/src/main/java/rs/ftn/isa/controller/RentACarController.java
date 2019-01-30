@@ -246,12 +246,6 @@ public class RentACarController {
 						break;
 				}
 		}
-		//PROVERA DA LI U TOJ FILIJALI VEC POSTOJI ISTO VOZILO
-		for(Vehicle V : stara.getVozila()) {
-			if(V.getNaziv().equals(vozilo.getNaziv())) {
-				return null;
-			}
-		}
 		
 		//brissemo staru filijalu da bismo joj dodali novo vozilo
 		
@@ -383,7 +377,6 @@ public class RentACarController {
 
 			
 			for(Vehicle V : F.getVozila()) {
-					System.out.println("Vozilo je "+ V.getNaziv());
 					rezultat.add(V);
 				
 			}
@@ -657,7 +650,6 @@ public class RentACarController {
 		}
 		for(Vehicle V : lociranaFilijala.getVozila()) {
 				if(V.getKategorija().toString().equals(kat)){
-					System.out.println("Dodato vozilo sa nazivom "+V.getNaziv() + " kategorija je "+V.getKategorija());
 						ispunjenaKategorija.add(V);//vozila koja se nalaze u trazenom gradu i kategoriji
 				}
 		}
@@ -741,13 +733,8 @@ public class RentACarController {
 				if(dozvolaPickUp && dozvolaPutnici) {
 					vozilo.setCena(ukupnaCena);
 					ispunjeniUslovi.add(vozilo);
-					System.out.println("Vozilo sa nazivom "+vozilo.getNaziv()+ " ispunjava uslov");
 				}
-				
-				
-				
 		}
-		
 		
 		return ispunjeniUslovi;
 	}	
