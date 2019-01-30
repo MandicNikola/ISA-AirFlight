@@ -30,7 +30,10 @@
  	 	text-color:#bfbfbf !important;
  	 	margin-top:2px;
  	 }
- 	 
+ 	 #dugmePopust{
+ 	 	padding: 0px !important;
+ 	 	margin: 0px !important;
+ 	 }
  	 .okvir:hover{
  	 	background-color: #C3C3C3;
  	 }
@@ -83,6 +86,9 @@
   		 margin-right:10px;
  	 
  	 }
+ 	 #dodajPopust{
+ 	 	padding-top: 10px;
+ 	 }
  	 #typeRoom{
   		padding: 0px 0px;
   		 margin: 0px 0px;
@@ -97,9 +103,10 @@
   		padding: 12px 20px;
  		 margin: 8px 0px;
  	 }
- 	 #sobePopust, #dodajPopust{
- 		 padding-right:50px;
- 		 margin-right:50px;
+ 	 #sobePopusti{
+ 		 padding:0px;
+ 		 margin-right: 5px;
+ 		 
  	 }
  	 
  	#dugmeAdminSelekt{
@@ -180,7 +187,48 @@ input[type="date"]:valid::before { display: none }
 			 <div id = "divPopust" class="container"> 
 			 	<section>
 			 	<div class="container" id="sobePopusti"></div>
-			 	<div class="container" id="dodajPopust"></div>			
+			 	<div class="container" id="dodajPopust">
+			 		<div class = "row">
+				   		 	<div class="col-md-6">
+									<div class="form-group">
+										 <div class="input-group">
+										<span class="input-group-addon"> <i class="glyphicon glyphicon-calendar"></i></span>
+										<input id = "checkin"  class="form-control" type="date" required="required" data-placeholder="Since when">
+										<span id="errorPocetak"></span>
+									
+										</div>
+									</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+											 <div class="input-group">
+												<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+												<input id = "checkout"  class="form-control" type="date" required="required"  data-placeholder="Until when">
+											</div>
+								</div>
+							</div>
+				     </div>
+				      <div class="row">
+				   		  <div class="col-md-6">
+								<div class="form-group">
+									 <div class="input-group">	
+								   		<span class="input-group-addon"> <i class="glyphicon glyphicon-bed"></i></span>
+										<input class="form-control" id = "brojBodova"  type="number" min="1" required="required" placeholder="Number of user points">		
+									</div>
+								</div>					
+						 </div>
+						  <div class="col-md-6">
+								<div class="form-group">
+									 <div class="input-group">	
+								   		<span class="input-group-addon"> <i class="glyphicon glyphicon-bed"></i></span>
+										<input class="form-control" id = "procenat"  type="number" min="1" required="required" placeholder="Discount percentage">		
+									</div>
+								</div>					
+						 </div> 	  	  
+				    </div>
+					<div id="dugmePopust">
+					</div>
+			 	</div>			
 			 	</section>
 			 </div>
 			 <div id="adminStrana" class="container-fluid">
