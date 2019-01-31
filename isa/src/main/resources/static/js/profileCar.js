@@ -1,3 +1,71 @@
+$(document).ready(function($) {
+	if(user!=null && user!="null" && user!="undefined") {
+			if(user.uloga == 'ADMIN_RENT'){
+				
+				var pom=window.location.search.substring(1);
+				var id= pom.split('=')[1];
+				console.log('Usao u dodajgrafik');
+
+				$.ajax({
+					method:'GET',
+					url: "/api/rezervacijerent/dailychart/"+id,
+					success: function(lista){
+						if(lista == null){
+							console.log('Nema podataka');
+						}else if(lista.length==0){
+							console.log('Nema podataka');
+						}else{
+							console.log("ima podataka");
+							 	
+							iscrtajGrafik(lista);
+							
+						}
+					}
+				});
+
+			}
+	
+	}	
+	var ctx = $("#myChart");
+	
+	var myChart = new Chart(ctx, {
+	    type: 'bar',
+	    data: {
+	        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+	        datasets: [{
+	            label: '# of Votes',
+	            data: [12, 19, 3, 5, 2, 3],
+	            backgroundColor: [
+	                'rgba(255, 99, 132, 0.2)',
+	                'rgba(54, 162, 235, 0.2)',
+	                'rgba(255, 206, 86, 0.2)',
+	                'rgba(75, 192, 192, 0.2)',
+	                'rgba(153, 102, 255, 0.2)',
+	                'rgba(255, 159, 64, 0.2)'
+	            ],
+	            borderColor: [
+	                'rgba(255,99,132,1)',
+	                'rgba(54, 162, 235, 1)',
+	                'rgba(255, 206, 86, 1)',
+	                'rgba(75, 192, 192, 1)',
+	                'rgba(153, 102, 255, 1)',
+	                'rgba(255, 159, 64, 1)'
+	            ],
+	            borderWidth: 1
+	        }]
+	    },
+	    options: {
+	        scales: {
+	            yAxes: [{
+	                ticks: {
+	                    beginAtZero:true
+	                }
+	            }]
+	        }
+	    }
+	});
+
+});
 function loadPodatke(){
 	$("#adminStrana").hide();
 	

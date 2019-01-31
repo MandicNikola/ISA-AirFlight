@@ -127,9 +127,9 @@ public class RezervacijaHotelController {
 	@RequestMapping(value="/dnevnigrafik/{id}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ArrayList<ChartDTO> getDailyChart(@PathVariable String id){		
+	public @ResponseBody ChartDTO getDailyChart(@PathVariable String id){		
 			System.out.println("Usao u getDaily chart");
-			ArrayList<ChartDTO> podaci = new ArrayList<ChartDTO>();
+			ChartDTO podaci = new ChartDTO();
 			List<RezervacijaHotel> sveRez=servis.findAll();
 	
 			//treba da nadjemo sve rezervacije od hotela sa idRez
@@ -140,7 +140,7 @@ public class RezervacijaHotelController {
 					break;
 				}
 				
-				if(idHotela.toString().equals(id)) {
+			/*	if(idHotela.toString().equals(id)) {
 					//dodajemo u listu
 					Date date  = rezervacija.getDatumDolaska();
 					String datum  =date.toString();
@@ -166,7 +166,7 @@ public class RezervacijaHotelController {
 						//noviPodatak = new ChartDTO(datum, 1);
 						podaci.add(noviPodatak);
 					}
-				}
+				}*/
 			}
 			return podaci;
 	}
