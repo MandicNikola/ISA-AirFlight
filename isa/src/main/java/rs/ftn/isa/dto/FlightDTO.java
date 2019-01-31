@@ -18,9 +18,15 @@ public class FlightDTO {
 	private String datumSletanja;
 	private String vremePoletanja;
 	private String vremeSletanja;
+	
+	private String datumPovratka;
+	
 	private double vreme;	
 	private double duzina;
 	private double cena;
+	
+	
+	private String tip;
 
 	//**sva presedanja koja mi se desavaju u letu
 	private ArrayList<Long> presedanja = new ArrayList<Long>();
@@ -36,6 +42,38 @@ public class FlightDTO {
 	
 	
 	
+	public String getDatumPovratka() {
+		return datumPovratka;
+	}
+
+
+
+
+
+	public void setDatumPovratka(String datumPovratka) {
+		this.datumPovratka = datumPovratka;
+	}
+
+
+
+
+
+	public String getTip() {
+		return tip;
+	}
+
+
+
+
+
+	public void setTip(String tip) {
+		this.tip = tip;
+	}
+
+
+
+
+
 	public Long getIdLeta() {
 		return idLeta;
 	}

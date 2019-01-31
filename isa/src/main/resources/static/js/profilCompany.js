@@ -122,6 +122,47 @@ function showPlanes()
 
 function showFlights()
 {
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	
+	$("#adminStrana").hide();
+	$("#informacije").hide();
+	$("#planesStrana").hide();
+	$("#fastTicketsStrana").hide();
+	$("#priceListStrana").hide();
+	
+	$.ajax
+	({
+		type : 'GET',
+		url : 'api/kompanije/flights/'+id,
+		dataType : 'json',
+		success : function(data)
+		{
+			if(data == null || data.length == 0)
+			{
+				$("#flightsStrana").append('<h1>Trenutno ne postoje avioni!<h1>');
+			}
+			else
+			{
+				$("#flightsStrana").empty();
+				var text = "";
+				
+				text = "<table class=\"table table-striped\" id=\"tabelaAvion\" ><tr><th> Name </th><th colspan='2'> Operations </th></tr>";
+
+				$.each(data,function(index,value)
+				{
+					text += "<tr><td class=\"hoverName\" >"+value.naziv+"</td><td><button  class=\"btn btn-info\" onclick=\"changeConfiguration('"+value.id+"')\">Change configuration</button></td><td><button  class=\"btn btn-info\" onclick=\"deletePlane('"+value.id+"')\">Delete</button></td></tr>";
+
+				});
+				text += "</table>"
+				$("#planesStrana").append(text);
+				$("#flightsStrana").show();
+			}
+			
+		}
+		
+		
+	});
 	
 
 }
@@ -135,6 +176,12 @@ function showAdministrators()
 {
 	
 
+
+}
+
+function searchFlights()
+{
+	
 
 }
 
