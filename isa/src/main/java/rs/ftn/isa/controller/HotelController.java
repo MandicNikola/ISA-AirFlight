@@ -122,7 +122,7 @@ public class HotelController {
 			//public RoomDTO(Long id, String tip, int kapacitet, int sprat,boolean imapopust) 
 			
 			for(Room ss:pronadjeni.getSobe()) {
-				RoomDTO room = new RoomDTO(ss.getId(),ss.getTip(),ss.getKapacitet(),ss.getSprat(),ss.isImapopusta());
+				RoomDTO room = new RoomDTO(ss.getId(),ss.getTip(),ss.getKapacitet(),ss.getSprat(),ss.isImapopusta(),ss.getOcjena());
 				sobeDTO.add(room);
 			}
 				return sobeDTO;
@@ -1357,5 +1357,34 @@ public Hotel otkaziHotel(@PathVariable String idRez){
 				popusti.add(dis);
 			}
 			return popusti;
-		}					
+		}
+		
+		@RequestMapping(value="/ukloniPopust/{id}/slanje/{slanje}", 
+				method = RequestMethod.POST,
+				produces = MediaType.APPLICATION_JSON_VALUE
+				)
+		public @ResponseBody Room ukloniPopust(@PathVariable("id") Long id,@PathVariable("slanje") String slanje){
+			Hotel pronadjeni = servis.findHotelById(id);
+			String[] pom = slanje.split("\\.");
+			
+			Room room  = null;
+			for(Room soba:pronadjeni.getSobe()) {
+				if(soba.getId().toString().equals(pom[1])) {
+					room = soba;
+					break;
+				}
+			}
+			pronadjeni.getSobe().remove(room);
+			Discount zaBrisanje = null;
+			for(Discount dis:room.getPopusti()) {
+				if(dis.getId().toString().equals(pom[0])) {
+					zaBrisanje = dis;
+					break;
+				}
+			}
+			room.getPopusti().remove(zaBrisanje);
+			pronadjeni.getSobe().add(room);
+			servis.saveHotel(pronadjeni);
+			return room;
+		}
 }
