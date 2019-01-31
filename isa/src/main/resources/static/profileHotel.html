@@ -200,6 +200,17 @@ input[type="date"]:valid::before { display: none }
 					<p>List of rooms </p>
 						<div id="izvestajSoba">
 						</div>
+						<div id = "prihodi">
+							<div class="form-group">
+								<input id = "odPrihodi"  class="form-control" type="date" required="required" data-placeholder="Since when">
+										
+								<div class="form-btn">
+								<button type="button" id="HotelDugme" class="btn btn-light"" onclick = "pronadjiPrihode()">Search</button>
+								</div>
+								
+							</div>
+						
+						</div>
 						<div  class= "container" id="dnevniGrafik">
 							<canvas id="grafik1">
 							</canvas>

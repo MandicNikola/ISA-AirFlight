@@ -1469,7 +1469,10 @@ function writeDiscountsOfRoom(lista){
 		
 		$.each(pom, function(index, data) {
 				var slanje = data.id +"."+idRoom;
-				$("#popustiTab").append("<tr><td class=\"hoverName\">"+data.datumod+"</td><td> "+data.datumdo+"</td><td>"+data.bodovi+"</td><td>"+data.vrijednost+"</td><td><button type=\"button\" onclick=\"removeDisc("+slanje+")\" class=\"btn btn-light\">Remove</button></td></tr>");
+				var dat1 = data.datumod.split('T')[0];
+				var dat2 = data.datumdo.split('T')[0];
+				
+				$("#popustiTab").append("<tr><td class=\"hoverName\">"+dat1+"</td><td> "+dat2+"</td><td>"+data.bodovi+"</td><td>"+data.vrijednost+"</td><td><button type=\"button\" onclick=\"removeDisc("+slanje+")\" class=\"btn btn-light\">Remove</button></td></tr>");
 			
 			
 		});
@@ -1494,5 +1497,13 @@ function removeDisc(slanje){
 		});
 
 }
-
+function pronadjiPrihode(){
+	var adresa = window.location.search.substring(1);
+	console.log('adesa je '+adresa);
+	var id = adresa.split('=')[1];
+	var pocetak=$('#odPrihodi').val();
+	$('#odPrihodi').val('');
+	
+	
+}
 
