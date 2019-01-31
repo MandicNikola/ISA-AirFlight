@@ -22,9 +22,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.UserDTO;
+import rs.ftn.isa.model.Discount;
 import rs.ftn.isa.model.Filijala;
+import rs.ftn.isa.model.Hotel;
 import rs.ftn.isa.model.RentACar;
 import rs.ftn.isa.model.RezervacijaRentCar;
+import rs.ftn.isa.model.Room;
 import rs.ftn.isa.model.StatusRezervacije;
 import rs.ftn.isa.model.User;
 import rs.ftn.isa.model.Vehicle;
@@ -325,5 +328,117 @@ public class VoziloController {
 				return vozilo;
 			}
 		
-		}		
+		}	
+		
+		
+		
+		
+		
+		
+		
+		
+		@RequestMapping(value="/definisiPopust/{id}/pocetak/{pocetak}/kraj/{kraj}/bodovi/{bodovi}/procenat/{procenat}", 
+				method = RequestMethod.POST,
+				produces = MediaType.APPLICATION_JSON_VALUE
+				)
+		public @ResponseBody Vehicle popustZaVozilo(@PathVariable("id") Long id,
+	            @PathVariable("pocetak") String pocetak,@PathVariable("kraj") String kraj,@PathVariable("bodovi") String bodovi,@PathVariable("procenat") String procenat){
+			System.out.println("dosao u fu dobio"+id+" pocetak "+pocetak+" kraj "+kraj+" bodovi "+bodovi+" procenti "+procenat);
+			int bod = Integer.parseInt(bodovi);
+			int proc = Integer.parseInt(procenat);
+			Vehicle vozilo = servis.findVehicleById(id);
+			Discount popust = new Discount();
+			String[] datIN=pocetak.split("-");
+			int godina=Integer.parseInt(datIN[0]);
+			//mjesec krece od 0
+			int mjesec=Integer.parseInt(datIN[1])-1;
+			int dan=Integer.parseInt(datIN[2]);
+		
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(godina, mjesec, dan);
+			Date datumOd = calendar.getTime();
+				
+			
+			System.out.println("Daatum je "+datumOd);
+			String[] datOUT=kraj.split("-");
+			
+			 godina=Integer.parseInt(datOUT[0]);
+			//mjesec krece od 0
+			 mjesec=Integer.parseInt(datOUT[1])-1;
+			 dan=Integer.parseInt(datOUT[2]);
+			 calendar.set(godina, mjesec, dan);
+			 Date datumDo = calendar.getTime();
+			 popust.setDatumdo(datumDo);
+			 popust.setDatumod(datumOd);
+			 popust.setBodovi(bod);
+			 popust.setVrijednost(proc);
+			 //slucaj kada mjenja postojeci popust
+			 Discount postojeciPopust = null;
+			 boolean flag = false;
+			 for(Discount disc:vozilo.getPopusti()) {
+				 if(disc.getBodovi() == bod){
+					 flag = true;
+					 postojeciPopust = disc;
+					 break;
+				 }
+			 }
+			 if(flag) {
+				 vozilo.getPopusti().remove(postojeciPopust);
+				 postojeciPopust.setBodovi(popust.getBodovi());
+				 postojeciPopust.setDatumod(popust.getDatumod());
+				 postojeciPopust.setDatumdo(popust.getDatumdo());
+				 postojeciPopust.setVrijednost(popust.getVrijednost());
+			 }
+			 popust.setVozilopopust(vozilo);
+			 if(flag) {
+				 vozilo.getPopusti().add(postojeciPopust);
+			 }else {
+				 vozilo.getPopusti().add(popust);
+			 }
+			 if(!vozilo.isImapopusta()) {
+				 vozilo.setImapopusta(true);
+			 }
+			 
+			 servis.saveVehicle(vozilo);
+			return vozilo;
+		}
+
+		@RequestMapping(value="/getVoziloDiscount/{id}", 
+				method = RequestMethod.GET,
+				produces = MediaType.APPLICATION_JSON_VALUE
+				)
+		public @ResponseBody ArrayList<Discount> popustiSobe(@PathVariable("id") Long id){
+			Vehicle vozilo = servis.findVehicleById(id);
+			ArrayList<Discount> popusti = new ArrayList<Discount>();
+			for(Discount dis:vozilo.getPopusti()) {
+				popusti.add(dis);
+			}
+			return popusti;
+		}
+		
+		@RequestMapping(value="/ukloniPopust/{slanje}", 
+				method = RequestMethod.POST,
+				produces = MediaType.APPLICATION_JSON_VALUE
+				)
+	
+		public @ResponseBody Vehicle ukloniPopust(@PathVariable("slanje") String slanje){
+			System.out.println("Dosao da ukloni popust");
+			String[] pom = slanje.split("\\.");
+			String voziloId = pom[1];
+			Long id = Long.parseLong(voziloId);
+			Vehicle vozilo = servis.findVehicleById(id);
+			if(vozilo.getPopusti() == null) {
+				vozilo.setImapopusta(false);
+				
+			}else {
+
+				if(vozilo.getPopusti().size()== 0) {
+					vozilo.setImapopusta(false);
+				}
+			}
+			
+			servis.saveVehicle(vozilo);
+			return vozilo;
+		}
+		
 }

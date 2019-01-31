@@ -60,7 +60,15 @@ public class Vehicle {
 	@Column(name = "broj", nullable = false)
 	private int broj;
 
+	//bice true ukoliko ima definisan ijedan popust
+	@Column(name = "imapopusta")	
+    private boolean imapopusta; 
 	
+	//jedna vozilo moze da ima vise popusta 
+	@OneToMany(mappedBy = "vozilopopust", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	private Set<Discount> popusti = new HashSet<Discount>();
+		
 	//svako vozilo pripada odredjenoj filijali
 	@ManyToOne( fetch = FetchType.EAGER)
     @JoinColumn(name = "filijala_id")
@@ -262,6 +270,26 @@ public class Vehicle {
 
 	public void setBrojac(int brojac) {
 		this.brojac = brojac;
+	}
+
+
+	public boolean isImapopusta() {
+		return imapopusta;
+	}
+
+
+	public void setImapopusta(boolean imapopusta) {
+		this.imapopusta = imapopusta;
+	}
+
+
+	public Set<Discount> getPopusti() {
+		return popusti;
+	}
+
+
+	public void setPopusti(Set<Discount> popusti) {
+		this.popusti = popusti;
 	}
 	
 	

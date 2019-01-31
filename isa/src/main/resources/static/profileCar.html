@@ -144,7 +144,15 @@
  		margin-top: 5px;
  		margin-bottom: 10px;
  	}
-
+	#autaPopusti{
+			width: 70%;
+  			margin-left:10px;
+	}
+	#dodajPopust,#postojeciPopusti{
+		width:70%;
+			margin-left:10px;
+		
+	}
  	#ispisiSelect{
  	 	width: 40%;
   		padding: 12px 20px;
@@ -177,8 +185,64 @@
 				    <li><a id="price" >Pricelist</a></li>
 					<li><a id="business">Business report</a></li>
 				    <li><a id="admini" >Administrators</a></li>			  
+				  	<li><a id="sistemPopust">Discounts</a></li>			  
+				  
 				  </ul>
 			   </div>
+		
+		
+		<div id = "divPopust" class="container"> 
+			 	<section>
+			 	<div class="container" id="autaPopusti"></div>
+			 	<div class="container" id="postojeciPopusti"></div>
+			 	
+			 	<div class="container" id="dodajPopust">
+			 		<div class = "row">
+				   		 	<div class="col-md-6">
+									<div class="form-group">
+										 <div class="input-group">
+										<span class="input-group-addon"> <i class="glyphicon glyphicon-calendar"></i></span>
+										<input id = "sincewhen"  class="form-control" type="date" required="required" data-placeholder="Since when">
+										<span id="errorPocetak"></span>
+						            	</div>
+									</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+											 <div class="input-group">
+												<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+												<input id = "untilwhen"  class="form-control" type="date" required="required"  data-placeholder="Until when">
+											 </div>
+								   </div>
+							</div>
+				     </div>
+				      <div class="row">
+				   		  <div class="col-md-6">
+								<div class="form-group">
+									 <div class="input-group">	
+								   		<span class="input-group-addon"> <i class="glyphicon glyphicon-pencil"></i></span>
+										<input class="form-control" id = "brojBodova"  type="number" min="1" required="required" placeholder="Number of user points">		
+									</div>
+								</div>					
+						 </div>
+						  <div class="col-md-6">
+								<div class="form-group">
+									 <div class="input-group">	
+								   		<span class="input-group-addon"> <i class="glyphicon glyphicon-pencil"></i></span>
+										<input class="form-control" id = "procenat"  type="number" min="1" required="required" placeholder="Discount percentage">		
+									</div>
+								</div>					
+						 </div> 	  	  
+				    </div>
+					<div id="dugmePopust">
+					</div>
+			 	</div>			
+			 	</section>
+			 </div>
+			
+		
+		
+		
 			   
 			    <div id="adminStrana" class="container-fluid">
 			  		<section >

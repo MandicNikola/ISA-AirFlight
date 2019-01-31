@@ -14,8 +14,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import rs.ftn.isa.dto.RoomDTO;
+import rs.ftn.isa.dto.VehicleDTO;
+import rs.ftn.isa.model.CategoryCar;
 import rs.ftn.isa.model.Filijala;
+import rs.ftn.isa.model.Hotel;
 import rs.ftn.isa.model.RentACar;
+import rs.ftn.isa.model.Room;
 import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.service.FilijalaServiceImpl;
 
@@ -123,5 +128,33 @@ public @ResponseBody Filijala registrujFilijalu( @RequestBody Filijala nova){
 		return stara;
 
 	}	
+	//sobe za def popusta za admina ssitema
+			@RequestMapping(value="/getCarsForDiscount/{id}", method = RequestMethod.GET)
+			public ArrayList<VehicleDTO> getAllCarsForDiscount(@PathVariable Long id){	
+				System.out.println("dosao po vozila"+id.toString());
+				
+				ArrayList<Filijala> filijale = new ArrayList<Filijala>();
+				List<Filijala> svefilijale = servis.findAll();
+				
+				for(Filijala fil:svefilijale) {
+					if(fil.getServis().getId().toString().equals(id.toString())) {
+						System.out.println("dodao filijalu");
+						filijale.add(fil);
+					}
+				}
+				
+				ArrayList<VehicleDTO> vozila = new ArrayList<VehicleDTO>();
+			//	Long id, String marka, String model, int godiste, int sedista, CategoryCar kategorija,
+				//boolean imapopusta
+				for(Filijala ff:filijale) {
+					for(Vehicle vv:ff.getVozila()) {
+						System.out.println("Dodaje vozilo");
+						VehicleDTO voz = new VehicleDTO(vv.getId(),vv.getMarka(),vv.getModel(),vv.getGodiste(),vv.getSedista(),vv.getKategorija(),vv.isImapopusta());
+						vozila.add(voz);
+					}
+				}
+				System.out.println("broj vozila je "+vozila.size());
+				return vozila;
+			}
 		
 }

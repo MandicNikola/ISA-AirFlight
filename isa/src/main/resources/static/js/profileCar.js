@@ -73,6 +73,7 @@ $(document).ready(function($) {
 });
 function loadPodatke(){
 	$("#adminStrana").hide();
+	$("#divPopust").hide();
 	
 	var podatak = window.location.search.substring(1);
 	console.log("Usao u loadPodatke, dobio je "+ podatak);
@@ -404,6 +405,8 @@ $(document).ready(function(){
 	$("#bg").hide();
 	$("#izvestaj").hide();
 	$("#adminStrana").hide();
+	$("#divPopust").hide();
+	
     $("p#vozilo").click(function(){
 		window.location="addCar.html?id="+id;
 
@@ -473,6 +476,24 @@ $(document).ready(function(){
 		$("#cenovnik").show();
 		$("#cenovnikKategorije").empty();
     });
+    
+  $("a#sistemPopust").click(function(){
+    	
+		console.log('popusti');
+		$("#informacije").hide();
+		$("#automobili").hide();
+	 	$("#addUsluge").hide();		
+	 	$("#bg").hide();
+	 	$("#izvestaj").hide();
+	 	$("#adminStrana").hide();
+		$("#cenovnik").hide();
+		$("#divPopust").show();
+		$("#dodajPopust").hide();
+		showCarsForDiscounts();
+    	
+
+  });
+    
     
     $("a#info").click(function(){
     	console.log('pritisnuo');
@@ -825,4 +846,163 @@ function ispisiUspesno(){
 function pozoviProfil(data){
 	
 	window.location="profileCar.html?id="+data;
+}
+function showCarsForDiscounts(){
+	var adresa = window.location.search.substring(1);
+	console.log('adesa je '+adresa);
+	var id = adresa.split('=')[1];
+
+	$.ajax({
+		method:'GET',
+		url: "/api/filijale/getCarsForDiscount/"+id,
+		success: function(lista){
+			if(lista == null){
+				console.log('Nema soba')
+			}else{
+				writeCarsForDiscounts(lista);
+				
+			}
+		}
+	});
+	
+	
+}
+function writeCarsForDiscounts(lista){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	 $("#autaPopusti").empty();
+	 $("#autaPopusti").show();
+		//VehicleDTO voz = new VehicleDTO(vv.getId(),vv.getMarka(),vv.getModel(),vv.getGodiste(),vv.getSedista(),vv.getKategorija(),vv.isImapopusta());
+//Long id, String marka, String model, int godiste, int sedista, CategoryCar kategorija,
+	 $("#autaPopusti").append("<table class=\"table table-hover\" id=\"tabelaAuta1\" ><tr><th> Mark </th><th>Model</th><th>Year</th><th>Seats</th><th>Category</th><th></th><th></th></tr>");
+		console.log('dosao ovdje');
+		$.each(pom, function(index, data) {
+			if(data.imapopusta){
+				console.log('ima popust');
+				
+				$("#tabelaAuta1").append("<tr><td class=\"hoverName\">"+data.marka+"</td><td> "+data.model+"</td><td>"+data.godiste+"</td><td>"+data.sedista+"</td><td>"+data.kategorija+"</td><td><button type=\"button\" onclick=\"addDiscountForCars("+data.id+")\" class=\"btn btn-light\">Add discount</button></td><td><button type=\"button\" onclick=\"listOfDiscount("+data.id+")\" class=\"btn btn-light\">Discounts</button></td></tr>");
+			}else{
+				$("#tabelaAuta1").append("<tr><td class=\"hoverName\">"+data.marka+"</td><td> "+data.model+"</td><td>"+data.godiste+"</td><td>"+data.sedista+"</td><td>"+data.kategorija+"</td><td><button type=\"button\" onclick=\"addDiscountForCars("+data.id+")\" class=\"btn btn-light\">Add discount</button></td><td></td></tr>");
+				
+			}
+			
+		});
+		
+	 $("#autaPopusti").append("</table>");
+	 
+
+	
+}
+function addDiscountForCars(idRoom){
+	$("#autaPopusti").hide();
+
+	$("#dugmePopust").empty();
+	$("#dugmePopust").append("<button type=\"button\"  class=\"btn btn-lg\" onclick = \"dodajPopustSistem("+idRoom+")\">Add</button></div>");				
+	$("#dodajPopust").show();
+}
+
+function dodajPopustSistem(idVozilo){
+	$("#dodajPopust").hide();
+	var pocetak=$('#sincewhen').val();
+	var kraj=$('#untilwhen').val();
+	var bodovi=$('#brojBodova').val();
+	var procenat=$('#procenat').val();
+	
+	$('#sincewhen').val('');
+	$('#untilwhen').val('');
+	$('#brojBodova').val("");
+	$('#procenat').val("");
+	
+	$.ajax({
+		type : 'POST',
+		url : "/api/vozila/definisiPopust/"+idVozilo+"/pocetak/"+pocetak+"/kraj/"+kraj+"/bodovi/"+bodovi+"/procenat/"+procenat,
+		success : function(povratna) {
+						console.log('uspjesno');
+						pomocnaFA();
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+		});
+
+	
+}
+function pomocnaFA(){
+	showCarsForDiscounts();
+	 $("#postojeciPopusti").hide();
+	
+}
+function listOfDiscount(idVozilo){
+	$("#autaPopusti").hide();
+	
+	$.ajax({
+		method:'GET',
+		url: "/api/vozila/getVoziloDiscount/"+idVozilo,
+		success: function(lista){
+				writeDiscountsOfVozilo(lista,idVozilo);
+			
+		}
+	});
+
+	
+	
+}
+function writeDiscountsOfVozilo(lista,idVozilo){
+	 var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	 $("#postojeciPopusti").empty();
+	 $("#postojeciPopusti").show();
+	//public RoomDTO(Long id, String tip, int kapacitet, int sprat,boolean imapopust) 
+			
+	 $("#postojeciPopusti").append("<table class=\"table table-hover\" id=\"popustiTab\" ><tr><th>Since when </th><th>Until when</th><th>Number of user points</th><th>Discount percentage</th><th></th></tr>");
+		
+		$.each(pom, function(index, data) {
+				var slanje = data.id +"."+idVozilo;
+				var dat1 = data.datumod.split('T')[0];
+				var dat2 = data.datumdo.split('T')[0];
+				
+				$("#popustiTab").append("<tr><td class=\"hoverName\">"+dat1+"</td><td> "+dat2+"</td><td>"+data.bodovi+"</td><td>"+data.vrijednost+"</td><td><button type=\"button\" onclick=\"removeDisc("+slanje+")\" class=\"btn btn-light\">Remove</button></td></tr>");
+			
+			
+		});
+		
+	 $("#postojeciPopusti").append("</table>");
+
+}
+function removeDisc(slanje){
+	$.ajax({
+		type : 'POST',
+		url : "/api/popusti/ukloniPopust/"+slanje,
+		success : function(povratna) {
+						console.log('uspjesno');
+						promjeniBrojPopusta(slanje);
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+		});
+
+	
+}
+function promjeniBrojPopusta(slanje){
+	console.log(slanje);
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+
+	$.ajax({
+		type : 'POST',
+		url : "/api/vozila/ukloniPopust/"+slanje,
+		success : function(povratna) {
+						console.log('uspjesno');
+						ispisiOpetVoz();
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+		});
+
+}
+function ispisiOpetVoz(){
+	$("#postojeciPopusti").hide();
+	showCarsForDiscounts();
+
+	
 }

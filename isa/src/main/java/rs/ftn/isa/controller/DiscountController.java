@@ -29,4 +29,5 @@ public class DiscountController {
 		Long idLong = Long.parseLong(pom[0]);
 		servis.removeDiscount(idLong);
 	}
+	
 }

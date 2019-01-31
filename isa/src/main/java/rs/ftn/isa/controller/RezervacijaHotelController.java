@@ -134,20 +134,24 @@ public class RezervacijaHotelController {
 			List<RezervacijaHotel> sveRez=servis.findAll();
 	
 			//treba da nadjemo sve rezervacije od hotela sa idRez
-			for(RezervacijaHotel rezervacija:sveRez) {
+			/*for(RezervacijaHotel rezervacija:sveRez) {
 				Long idHotela = 0L;
 				for(Room sobe:rezervacija.getSobe()) {
 					idHotela = sobe.getHotel().getId();
 					break;
 				}
 				
-			/*	if(idHotela.toString().equals(id)) {
+				if(idHotela.toString().equals(id)) {
 					//dodajemo u listu
 					Date date  = rezervacija.getDatumDolaska();
 					String datum  =date.toString();
 					System.out.println("datuum je "+datum);
 					datum  = datum.split(" ")[0];
-					
+					System.out.println("datum dolaska "+date);
+					Date date2= rezervacija.getDatumOdlaska();
+					System.out.println("datum odlaska "+date2);
+					Calendar cal = Calendar.getInstance();
+					cal.setTime();
 					ChartDTO noviPodatak = null;
 					for(ChartDTO chart: podaci) {
 						String datumPoredjenje =chart.getDatum().toString();
@@ -167,9 +171,9 @@ public class RezervacijaHotelController {
 						//noviPodatak = new ChartDTO(datum, 1);
 						podaci.add(noviPodatak);
 					}
-				}*/
-			}
-			return podaci;
+				}
+			}*/
+			return null;
 	}
 
 

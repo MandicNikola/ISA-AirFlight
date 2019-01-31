@@ -32,6 +32,10 @@ public class Discount {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Room sobapopust;
 
+	//jedna popusti je def za jednu sobu
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Vehicle vozilopopust;
+
 	public Discount() {
 		super();
 	}
@@ -88,6 +92,12 @@ public class Discount {
 	}
 	public void setSobapopust(Room sobapopust) {
 		this.sobapopust = sobapopust;
+	}
+	public Vehicle getVozilopopust() {
+		return vozilopopust;
+	}
+	public void setVozilopopust(Vehicle vozilopopust) {
+		this.vozilopopust = vozilopopust;
 	}
 
 	
