@@ -1323,10 +1323,17 @@ public Hotel otkaziHotel(@PathVariable String idRez){
 			 }
 			 if(flag) {
 				 room.getPopusti().remove(postojeciPopust);
+				 postojeciPopust.setBodovi(popust.getBodovi());
+				 postojeciPopust.setDatumod(popust.getDatumod());
+				 postojeciPopust.setDatumdo(popust.getDatumdo());
+				 postojeciPopust.setVrijednost(popust.getVrijednost());
 			 }
 			 popust.setSobapopust(room);
-			 room.getPopusti().add(popust);
-			 
+			 if(flag) {
+				 room.getPopusti().add(postojeciPopust);
+			 }else {
+				 room.getPopusti().add(popust);
+			 }
 			 if(!room.isImapopusta()) {
 				 room.setImapopusta(true);
 			 }
@@ -1356,6 +1363,7 @@ public Hotel otkaziHotel(@PathVariable String idRez){
 			for(Discount dis:room.getPopusti()) {
 				popusti.add(dis);
 			}
+			System.out.println(" da li je obrisao popuste "+popusti.size());
 			return popusti;
 		}
 		
@@ -1365,24 +1373,28 @@ public Hotel otkaziHotel(@PathVariable String idRez){
 				)
 		public @ResponseBody Room ukloniPopust(@PathVariable("id") Long id,@PathVariable("slanje") String slanje){
 			Hotel pronadjeni = servis.findHotelById(id);
+			System.out.println("Dosao da ukloni popust");
 			String[] pom = slanje.split("\\.");
-			
+			String sobaId = pom[1];
 			Room room  = null;
 			for(Room soba:pronadjeni.getSobe()) {
-				if(soba.getId().toString().equals(pom[1])) {
+				if(soba.getId().toString().equals(sobaId)) {
 					room = soba;
 					break;
 				}
 			}
+			System.out.println("Soba je "+room.getId());
 			pronadjeni.getSobe().remove(room);
-			Discount zaBrisanje = null;
-			for(Discount dis:room.getPopusti()) {
-				if(dis.getId().toString().equals(pom[0])) {
-					zaBrisanje = dis;
-					break;
+			if(room.getPopusti() == null) {
+				room.setImapopusta(false);
+				
+			}else {
+
+				if(room.getPopusti().size()== 0) {
+					room.setImapopusta(false);
 				}
 			}
-			room.getPopusti().remove(zaBrisanje);
+			
 			pronadjeni.getSobe().add(room);
 			servis.saveHotel(pronadjeni);
 			return room;

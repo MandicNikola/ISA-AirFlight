@@ -1513,22 +1513,42 @@ function writeDiscountsOfRoom(lista,idRoom){
 	 $("#postojeciPopusti").append("</table>");
 
 }
-
 function removeDisc(slanje){
-	console.log(slanje);
-	
 	$.ajax({
 		type : 'POST',
-		url : "/api/hoteli/ukloniPopust/"+id+"/slanje/"+slanje,
+		url : "/api/popusti/ukloniPopust/"+slanje,
 		success : function(povratna) {
 						console.log('uspjesno');
-						pomocnaFA();
+						promjeniBrojPopusta(slanje);
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
 			alert('greska');
 		}
 		});
 
+	
+}
+function promjeniBrojPopusta(slanje){
+	console.log(slanje);
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+
+	$.ajax({
+		type : 'POST',
+		url : "/api/hoteli/ukloniPopust/"+id+"/slanje/"+slanje,
+		success : function(povratna) {
+						console.log('uspjesno');
+						ispisiOpetSobu();
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+		});
+
+}
+function ispisiOpetSobu(){
+	$("#postojeciPopusti").hide();
+	showRoomsForDiscounts();
 }
 //ovu funckiju treba uraditi
 function pronadjiPrihode(){
