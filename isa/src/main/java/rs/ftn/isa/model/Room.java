@@ -67,6 +67,11 @@ public class Room {
 	@ManyToOne( fetch = FetchType.EAGER)
 	 private Hotel hotel;
 	
+	//jedna soba moze da ima vise popusta 
+	@OneToMany(mappedBy = "sobapopust", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	private Set<Discount> popusti = new HashSet<Discount>();
+		
 	 //jedna soba moze prirpadati vise rezervacija
 	@ManyToMany(cascade = {CascadeType.ALL})
 	@JoinTable(
@@ -263,6 +268,14 @@ public class Room {
 
 	public void setImapopusta(boolean imapopusta) {
 		this.imapopusta = imapopusta;
+	}
+
+	public Set<Discount> getPopusti() {
+		return popusti;
+	}
+
+	public void setPopusti(Set<Discount> popusti) {
+		this.popusti = popusti;
 	}
 
 
