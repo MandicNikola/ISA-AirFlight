@@ -12,6 +12,7 @@ function onLoad(){
 	$("#promjenaLozinke").hide();
 	$("#dodajPopust").hide();
 	$("#izvestaj").hide();
+	$("#dnevniGrafik").show();
 	
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);
@@ -381,7 +382,39 @@ function resetujGreske(){
 	$("#brojSoba").val("");	
 	$("#brojLjudi").val("");	
 }
+
+function vratiDnevni(){
+	
+}
 $(document).ready(function(){
+	
+	var chart;
+	 //za grafik
+    function createChart(labelsArray,dataArray){
+        var ctx = document.getElementById("chart").getContext('2d');
+        if(chart != null) chart.destroy();
+        chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labelsArray,
+                datasets: [{
+                    label: '# sold tickets',
+                    data: dataArray,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+    }
+	
 	$("#sobe").hide();
 	$("#cijene").hide();
 	$("#divPopust").hide();
@@ -1497,13 +1530,25 @@ function removeDisc(slanje){
 		});
 
 }
+//ovu funckiju treba uraditi
 function pronadjiPrihode(){
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);
 	var id = adresa.split('=')[1];
 	var pocetak=$('#odPrihodi').val();
 	$('#odPrihodi').val('');
-	
+	$.ajax({
+		method:'GET',
+		url: "/api/rezervacijehotel/vratiPrihode/"+id+"/pocetak/"+pocetak,
+		success: function(lista){
+			if(lista == null){
+				console.log('Nema prihoda')
+			}else{
+				console.log('ima' +lista)
+				
+			}
+		}
+	});
 	
 }
 
