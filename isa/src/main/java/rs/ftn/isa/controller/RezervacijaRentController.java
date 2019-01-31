@@ -1,6 +1,8 @@
 package rs.ftn.isa.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 
+import org.assertj.core.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -67,6 +70,7 @@ public class RezervacijaRentController {
 		return rezervacije;
 	}
 
+	@SuppressWarnings("deprecation")
 	@RequestMapping(value="/dailychart/{idRent}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
@@ -84,32 +88,52 @@ public class RezervacijaRentController {
 						System.out.println("Pripada rent-a-car");
 						//dodajemo u listu
 						Date date1= rezervacija.getDatumPreuzimanja();
-						String datum1  =date1.toString();
-	
+					
 						Date date2= rezervacija.getDatumVracanja();
+						System.out.println("Pocetak rez "+date1.toString());
+						System.out.println("Kraj rez "+date2.toString());
+						Calendar c = Calendar.getInstance(); 
 						String datum2  =date2.toString();
-						
-						datum1  = datum1.split(" ")[0];
 						datum2  = datum2.split(" ")[0];
+
+						SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
 						
-						ChartDTO noviPodatak = null;
-						for(ChartDTO chart: podaci) {
-							String datumPoredjenje =chart.getDatum().toString();
-					    	datumPoredjenje = datumPoredjenje.split(" ")[0];
-									if(datumPoredjenje.equals(datum1)) {
-										noviPodatak=chart;
-										System.out.println("Vec postoji taj datum");
-										break;
-									}
-						
-						}
-						if(noviPodatak!=null) {
-							int broj = noviPodatak.getBroj()+1;
-							podaci.remove(noviPodatak);
-							noviPodatak.setBroj(broj);
-							podaci.add(noviPodatak);
-						}else {
-							podaci.add(new ChartDTO(date1, 1));
+						while(poredi(date1,date2)) {
+							String datum1  =date1.toString();
+							datum1  = datum1.split(" ")[0];
+						       		
+							System.out.println("************");
+							System.out.println("Datumi su : 1--> "+datum1+" a 2->>> "+datum2);
+							ChartDTO noviPodatak = null;
+							for(ChartDTO chart: podaci) {
+								String datumPoredjenje =chart.getDatum().toString();
+						    	datumPoredjenje = datumPoredjenje.split(" ")[0];
+										if(datumPoredjenje.equals(datum1)) {
+											noviPodatak=chart;
+											System.out.println("Vec postoji taj datum");
+											break;
+										}
+							
+							}
+							if(noviPodatak!=null) {
+								int broj = noviPodatak.getBroj()+1;
+								podaci.remove(noviPodatak);
+								noviPodatak.setBroj(broj);
+								podaci.add(noviPodatak);
+								System.out.println("Postoji datum u listi");
+							}else {
+								podaci.add(new ChartDTO(date1, 1));
+								System.out.println("Novi datum je");
+							}
+
+							c.setTime(date1); 
+							c.add(Calendar.DATE, 1);
+							System.out.println("Godima "+c.getTime().getYear());
+							System.out.println("mesec "+c.getTime().getMonth());
+							System.out.println("dan "+c.getTime().getDate());
+
+							date1 =new Date( c.getTime().getYear(),c.getTime().getMonth(),c.getTime().getDate());
+							System.out.println("Povecan datum 1 => " +date1.toString() );
 						}
 					}
 					
@@ -119,5 +143,14 @@ public class RezervacijaRentController {
 			return podaci;
 	}
 
-
+	public boolean poredi(Date date1, Date date2) {
+		if(date1.getYear()==date2.getYear() && date1.getMonth()==date2.getMonth() && date1.getDate()==date2.getDate()) {
+			System.out.println("Nisu isti");
+			return false;
+		}else {
+			System.out.println("Isti");
+			return true;
+		}
+		}
+			
 }
