@@ -22,7 +22,7 @@ $(document).ready(function($) {
 						}else{
 							console.log("ima podataka");
 							 	
-							iscrtajGrafik(lista.datum, lista.broj);
+							iscrtajGrafik(lista);
 							
 						}
 					}
@@ -31,7 +31,15 @@ $(document).ready(function($) {
 			}
 	
 	}	
-	function iscrtajGrafik(labele, vrednosti){
+	function iscrtajGrafik(lista){
+		var labele=new Array();
+		var vrednosti=new Array();
+		 for (var i = 0; i < lista.length; i++) {
+			 var datum = lista[i].datum.split('T')[0];
+		 		labele.push(datum);
+		 		vrednosti.push(lista[i].broj);
+		  	}
+		
 		var ctx = $("#myChart");
 		console.log('usao u iscrtaj grafik');
 		var myChart = new Chart(ctx, {
@@ -46,7 +54,7 @@ $(document).ready(function($) {
 		    },
 		    options: {
 		        scales: {
-		            yAxes: [{
+		        	yAxes: [{
 		                ticks: {
 		                    beginAtZero:true
 		                }

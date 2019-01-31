@@ -1,6 +1,7 @@
 package rs.ftn.isa.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -69,55 +70,52 @@ public class RezervacijaRentController {
 	@RequestMapping(value="/dailychart/{idRent}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ChartDTO getDailyChart(@PathVariable String idRent){		
+	public @ResponseBody ArrayList<ChartDTO> getDailyChart(@PathVariable String idRent){		
 			System.out.println("Usao u getDaily chart");
-			ChartDTO podaci = new ChartDTO();
+			ArrayList<ChartDTO> podaci = new ArrayList<ChartDTO>();
 			List<RezervacijaRentCar> sveRez=servis.findAll();
-	
+	        
 			//treba da nadjemo sve rezervacije od hotela sa idRez
 			for(RezervacijaRentCar rezervacija:sveRez) {
-				Vehicle vozilo = rezervacija.getVozilo();
-				String idServis = vozilo.getFilijala().getServis().getId().toString();
-				
-				if(idServis.equals(idRent)) {
-					System.out.println("Pripada rent-a-car");
-					//dodajemo u listu
-					Date date1= rezervacija.getDatumPreuzimanja();
-					String datum1  =date1.toString();
-
-					Date date2= rezervacija.getDatumVracanja();
-					String datum2  =date2.toString();
+					Vehicle vozilo = rezervacija.getVozilo();
+					String idServis = vozilo.getFilijala().getServis().getId().toString();
 					
-					datum1  = datum1.split(" ")[0];
-					datum2  = datum2.split(" ")[0];
-					
-					int index=-1;
-					int noviBroj = 0;
-					//Date noviDatum=null;
-					for(int i=0;i<podaci.getDatum().size();i++) {
-						Date datum = podaci.getDatum().get(i);
-						String datumPoredjenje =datum.toString();
-				    	datumPoredjenje = datumPoredjenje.split(" ")[0];
-						if(datumPoredjenje.equals(datum1)) {
-							index=i;
-							noviBroj = podaci.getBroj().get(i)+1;
-							System.out.println("Vec postoji taj datum");
-							break;
+					if(idServis.equals(idRent)) {
+						System.out.println("Pripada rent-a-car");
+						//dodajemo u listu
+						Date date1= rezervacija.getDatumPreuzimanja();
+						String datum1  =date1.toString();
+	
+						Date date2= rezervacija.getDatumVracanja();
+						String datum2  =date2.toString();
+						
+						datum1  = datum1.split(" ")[0];
+						datum2  = datum2.split(" ")[0];
+						
+						ChartDTO noviPodatak = null;
+						for(ChartDTO chart: podaci) {
+							String datumPoredjenje =chart.getDatum().toString();
+					    	datumPoredjenje = datumPoredjenje.split(" ")[0];
+									if(datumPoredjenje.equals(datum1)) {
+										noviPodatak=chart;
+										System.out.println("Vec postoji taj datum");
+										break;
+									}
+						
+						}
+						if(noviPodatak!=null) {
+							int broj = noviPodatak.getBroj()+1;
+							podaci.remove(noviPodatak);
+							noviPodatak.setBroj(broj);
+							podaci.add(noviPodatak);
+						}else {
+							podaci.add(new ChartDTO(date1, 1));
 						}
 					}
-					if(index != -1) {
-						podaci.getBroj().remove(index);
-						podaci.getDatum().remove(index);
-						podaci.getDatum().add(date1);
-						podaci.getBroj().add(noviBroj);
-					}else {
-						podaci.getBroj().add(1);
-						podaci.getDatum().add(date1);
-					}
-				}
+					
 			}
-			
-			System.out.println("Broj podataka u listi je "+podaci.getDatum().size());
+			Collections.sort(podaci);
+			System.out.println("Broj podataka u listi je "+podaci.size());
 			return podaci;
 	}
 

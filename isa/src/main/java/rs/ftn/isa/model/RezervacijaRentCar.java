@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
-public class RezervacijaRentCar {
+public class RezervacijaRentCar implements Comparable<RezervacijaRentCar>{
 
 	
 	@Id
@@ -192,6 +192,13 @@ public class RezervacijaRentCar {
 
 	public void setOcenjenVozilo(boolean ocenjenVozilo) {
 		this.ocenjenVozilo = ocenjenVozilo;
+	}
+
+
+	@Override
+	public int compareTo(RezervacijaRentCar o) {
+		// TODO Auto-generated method stub
+	    return getDatumPreuzimanja().compareTo(o.getDatumPreuzimanja());
 	}
 
 
