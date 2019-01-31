@@ -431,72 +431,11 @@ $(document).ready(function(){
     	$("#automobili").hide();
     	$("#izvestaj").show();
     	console.log('izvestaj');
-    	dodajGrafik();
+    	//dodajGrafik();
    });
 
     
-});
-function dodajGrafik(){
-	var pom=window.location.search.substring(1);
-	var id= pom.split('=')[1];
-	console.log('Usao u dodajgrafik');
-
-	$("#dnevniGrafik").show();
-	 	
-	$.ajax({
-		method:'GET',
-		url: "/api/rezervacijerent/dailychart/"+id,
-		success: function(lista){
-			if(lista == null){
-				console.log('Nema podataka')
-			}else if(lista.length==0){
-				console.log('Nema podataka')
-			}else{
-				iscrtajGrafik(lista);
-				
-			}
-		}
-	});
-
-}
-
-
-function iscrtajGrafik(data){
-	var podaci=[];
- console.log("usao u iscrtaj grafik")
-	for (var i = 0; i < data.length; i++) {
-			podaci.push({
-				x: new Date(data[i].datum),
-				y: data[i].broj
-			});
-			console.log(data[i].datum)
-			console.log(data[i].broj)
-	}
-	
-	var grafik = new CanvasJS.Chart("grafik1", {
-		theme: "light1",
-		animationEnabled: false, // change to true		
-		title: {
-			text: "Daily reservations chart "
-		},
-		axisX: {
-			valueFormatString: "DD MMM YYYY",
-		},
-		axisY: {
-			title: "Number of reservations",
-			titleFontSize: 24,
-			includeZero: true
-		},
-		data: [{
-			type: "spline", 
-			yValueFormatString: "#.##",
-			dataPoints: podaci
-		}]
-	});	
-	
-	grafik.render();
-}
-function ispisiAdmine(){
+});function ispisiAdmine(){
 	 $.ajax({
 			method:'GET',
 			url: "/api/korisnici/getUsersForSistem",

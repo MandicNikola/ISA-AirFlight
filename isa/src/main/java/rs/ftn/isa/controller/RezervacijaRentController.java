@@ -80,12 +80,19 @@ public class RezervacijaRentController {
 				String idServis = vozilo.getFilijala().getServis().getId().toString();
 				
 				if(idServis.equals(idRent)) {
+					System.out.println("Pripada rent-a-car");
 					//dodajemo u listu
-					Date datum  = rezervacija.getDatumPreuzimanja();
+					Date date= rezervacija.getDatumPreuzimanja();
+					String datum  =date.toString();
+					System.out.println("datuum je "+datum);
+					datum  = datum.split(" ")[0];
 					ChartDTO noviPodatak = null;
 					for(ChartDTO chart: podaci) {
-						if(chart.getDatum().equals(datum)) {
+						String datumPoredjenje =chart.getDatum().toString();
+				    	datumPoredjenje = datumPoredjenje.split(" ")[0];
+						if(datumPoredjenje.equals(datum)) {
 							noviPodatak=chart;
+							System.out.println("Vec postoji taj datum");
 							break;
 						}
 					}
@@ -95,11 +102,13 @@ public class RezervacijaRentController {
 						noviPodatak.setBroj(dosadasnjiBroj+1);
 						podaci.add(noviPodatak);
 					}else {
-						noviPodatak = new ChartDTO(datum, 1);
+						noviPodatak = new ChartDTO(date, 1);
 						podaci.add(noviPodatak);
 					}
 				}
 			}
+			
+			System.out.println("Broj podataka u listi je "+podaci.size());
 			return podaci;
 	}
 
