@@ -1,5 +1,6 @@
 package rs.ftn.isa.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -26,16 +27,16 @@ public class Destination {
 	private String naziv;
 
 	@ManyToMany(mappedBy="destinacije")
-	Set<AirplaneCompany> kompanije;
+	Set<AirplaneCompany> kompanije = new HashSet<AirplaneCompany>();
 	
 	@ManyToMany(mappedBy="presedanja")
 	Set<Flight> letovi;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "poletanje")
-    private Set<Flight> poletanja;
+    private Set<Flight> poletanja = new HashSet<Flight>();
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "sletanje")
-    private Set<Flight> sletanja;
+    private Set<Flight> sletanja = new HashSet<Flight>();
 
 	//trebam ubaciti odnose koji mi fale jos 
 	

@@ -10,7 +10,7 @@ function formToJSON() {
 	});
 }
 
-$(document).on('submit','.flight',function(e){
+$(document).on('submit','.destinacija',function(e){
 	e.preventDefault();
 	var adresa = window.location.search.substring(1);
 	var idKompanija = adresa.split('=')[1];
@@ -25,7 +25,7 @@ $(document).on('submit','.flight',function(e){
 		data:formToJSON(),
 		success : function(data) {
 				if(data == null){
-					alert('neuspesno dodavanje')
+					alert('neuspesno dodavanje');
 				}else{
 					alert('Dodavanje uspesno!');
 					window.location = "AirCompProfile.html?id="+data;

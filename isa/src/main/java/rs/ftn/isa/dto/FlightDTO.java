@@ -10,7 +10,7 @@ import javax.persistence.TemporalType;
 public class FlightDTO {
 
 	
-	
+	private Long idLeta;
 	private Long idAviona;
 	private Long idKompanije;
 	
@@ -36,6 +36,22 @@ public class FlightDTO {
 	
 	
 	
+	public Long getIdLeta() {
+		return idLeta;
+	}
+
+
+
+
+
+	public void setIdLeta(Long idLeta) {
+		this.idLeta = idLeta;
+	}
+
+
+
+
+
 	public String getDatumPoletanja() {
 		return datumPoletanja;
 	}

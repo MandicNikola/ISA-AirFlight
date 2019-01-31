@@ -52,7 +52,7 @@ public class AirplaneCompany {
 	private  Set<Flight> letovi = new HashSet<Flight>();
 	
 	
-	 @ManyToMany(cascade = { CascadeType.ALL })
+	 @ManyToMany(cascade =  CascadeType.ALL ,fetch = FetchType.EAGER)
 	    @JoinTable(
 	        name = "kompanija_destinacija", 
 	        joinColumns = { @JoinColumn(name="company_id",referencedColumnName="id")}, 

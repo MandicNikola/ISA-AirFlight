@@ -26,6 +26,16 @@ function onLoad(){
 	});
 }
 
+function info()
+{
+	$("#informacije").show();
+	$("#adminStrana").hide();
+	$("#flightsStrana").hide();
+	$("#planesStrana").hide();
+	$("#fastTicketsStrana").hide();
+	$("#priceListStrana").hide();
+}
+
 function ispisiProfilKompanije(kompanija){
 	console.log("id "+kompanija.id);
 	var adr = kompanija.adresa;
@@ -66,8 +76,47 @@ function addDestination()
 
 function showPlanes()
 {
+	$("#adminStrana").hide();
+	$("#informacije").hide();
+	$("#flightsStrana").hide();
+	$("#fastTicketsStrana").hide();
+	$("#priceListStrana").hide();
 	
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	
+	$.ajax
+	({
+		type : 'GET',
+		url : 'api/kompanije/airplanes/'+id,
+		dataType : 'json',
+		success : function(data)
+		{
+			if(data == null || data.length == 0)
+			{
+				$("#planesStrana").append('<h1>Trenutno ne postoje avioni!<h1>');
+			}
+			else
+			{
+				$("#planesStrana").empty();
+				var text = "";
+				
+				text = "<table class=\"table table-striped\" id=\"tabelaAvion\" ><tr><th> Name </th><th colspan='2'> Operations </th></tr>";
 
+				$.each(data,function(index,value)
+				{
+					text += "<tr><td class=\"hoverName\" >"+value.naziv+"</td><td><button  class=\"btn btn-info\" onclick=\"changeConfiguration('"+value.id+"')\">Change configuration</button></td><td><button  class=\"btn btn-info\" onclick=\"deletePlane('"+value.id+"')\">Delete</button></td></tr>";
+
+				});
+				text += "</table>"
+				$("#planesStrana").append(text);
+				$("#planesStrana").show();
+			}
+			
+		}
+		
+		
+	});
 
 }
 

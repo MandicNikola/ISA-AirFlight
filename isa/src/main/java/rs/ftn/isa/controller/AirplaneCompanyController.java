@@ -164,17 +164,6 @@ public class AirplaneCompanyController {
 		
 	}
 	
-	@RequestMapping(value = "/flights/{id}",
-			method = RequestMethod.GET)
-	public Set<Flight> getFlights(@PathVariable Long id)
-	{
-		System.out.println("find"  + id);
-		
-		AirplaneCompany pronadjeni = service.findAirplaneCompanyById(id);
-		
-		return pronadjeni.getLetovi();
-		
-	}
 	
 	
 	@RequestMapping(value="/addPlane/{id}", 
@@ -206,10 +195,13 @@ public class AirplaneCompanyController {
 		AirplaneCompany company = service.findAirplaneCompanyById(id);
 		Destination destinationNew = new Destination();
 		
+		if(company == null)
+			return new ResponseEntity<Long>(HttpStatus.BAD_REQUEST);
+		
 		destinationNew.setNaziv(destination.getNaziv());
 		company.getDestinacije().add(destinationNew);
+		destinationNew.getKompanije().add(company);
 		
-		destinationService.saveDestination(destinationNew);
 		service.saveAirplaneCompany(company);
 		
 		return new ResponseEntity<Long>(id, HttpStatus.OK);
@@ -218,13 +210,13 @@ public class AirplaneCompanyController {
 	
 	@RequestMapping(value="/getDestinations/{id}", 
 			method = RequestMethod.GET)
-	public Set<Destination> getDestinations(@PathVariable Long id){		
+	public ResponseEntity<Set<Destination>> getDestinations(@PathVariable Long id){		
 		
 		AirplaneCompany company = service.findAirplaneCompanyById(id);
 		if(company == null)
-			return null;
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
-		return company.getDestinacije();
+		return new ResponseEntity<Set<Destination>>(company.getDestinacije(), HttpStatus.OK);
 		
 			 
 	}
@@ -310,7 +302,36 @@ public class AirplaneCompanyController {
 	
 	
 	
-	
+	@SuppressWarnings("deprecation")
+	@RequestMapping(value="/flights/{id}", 
+			method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Set<FlightDTO>> getFlights(@PathVariable Long id){		
+		
+		//System.out.println("usao u metodu koja mi treba");
+		AirplaneCompany company = service.findAirplaneCompanyById(id);
+		
+		if(company == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		Set<FlightDTO> retSet = new HashSet<FlightDTO>();
+		
+		for(Flight flight : company.getLetovi())
+		{
+			FlightDTO flightDto = new FlightDTO();
+			
+			flightDto.setIdLeta(flight.getId());
+			flightDto.setCena(flight.getCena());
+			
+			Date datePoletanje = flight.getVremePoletanja();
+			Date dateSletanje = flight.getVremeSletanja();
+			
+			//zavrsiit jos
+			
+		}
+		
+		return new ResponseEntity<Set<FlightDTO>>(retSet, HttpStatus.OK);
+			 
+	}
 	
 
 	
