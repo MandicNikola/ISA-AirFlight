@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -26,11 +27,11 @@ public class Destination {
 	@Column(name = "naziv", nullable = false)
 	private String naziv;
 
-	@ManyToMany(mappedBy="destinacije")
-	Set<AirplaneCompany> kompanije = new HashSet<AirplaneCompany>();
+	@ManyToOne(fetch = FetchType.EAGER)
+	AirplaneCompany avioKomp;
 	
-	@ManyToMany(mappedBy="presedanja")
-	Set<Flight> letovi;
+	@ManyToMany(mappedBy="presedanja", fetch = FetchType.LAZY)
+	Set<Flight> letovi = new HashSet<Flight>();
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "poletanje")
     private Set<Flight> poletanja = new HashSet<Flight>();
@@ -50,6 +51,17 @@ public class Destination {
 		this.id = id;
 		this.naziv = naziv;
 	}
+	
+	
+	
+
+	public AirplaneCompany getAvioKomp() {
+		return avioKomp;
+	}
+
+	public void setAvioKomp(AirplaneCompany avioKomp) {
+		this.avioKomp = avioKomp;
+	}
 
 	public Long getId() {
 		return id;
@@ -67,13 +79,6 @@ public class Destination {
 		this.naziv = naziv;
 	}
 
-	public Set<AirplaneCompany> getKompanije() {
-		return kompanije;
-	}
-
-	public void setKompanije(Set<AirplaneCompany> kompanije) {
-		this.kompanije = kompanije;
-	}
 
 	public Set<Flight> getLetovi() {
 		return letovi;

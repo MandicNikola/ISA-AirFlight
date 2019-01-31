@@ -62,8 +62,8 @@ public class Flight {
 	
 	 @ManyToMany(cascade = { CascadeType.ALL })
 	    @JoinTable(
-	        name = "kompanija_destinacija", 
-	        joinColumns = { @JoinColumn(name="company_id",referencedColumnName="id")}, 
+	        name = "let_destinacija", 
+	        joinColumns = { @JoinColumn(name="flight_id",referencedColumnName="id")}, 
 	        inverseJoinColumns = { @JoinColumn(name="destination_id",referencedColumnName="id")}
 	    )
 	 Set<Destination> presedanja = new HashSet<Destination>();

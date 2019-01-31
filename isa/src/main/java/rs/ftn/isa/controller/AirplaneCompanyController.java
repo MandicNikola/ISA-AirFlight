@@ -200,7 +200,7 @@ public class AirplaneCompanyController {
 		
 		destinationNew.setNaziv(destination.getNaziv());
 		company.getDestinacije().add(destinationNew);
-		destinationNew.getKompanije().add(company);
+		destinationNew.setAvioKomp(company);
 		
 		service.saveAirplaneCompany(company);
 		
@@ -209,14 +209,22 @@ public class AirplaneCompanyController {
 	}
 	
 	@RequestMapping(value="/getDestinations/{id}", 
-			method = RequestMethod.GET)
-	public ResponseEntity<Set<Destination>> getDestinations(@PathVariable Long id){		
+			method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Set<DestinationDTO>> getDestinations(@PathVariable Long id){		
 		
 		AirplaneCompany company = service.findAirplaneCompanyById(id);
 		if(company == null)
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		Set<DestinationDTO> destDtos = new HashSet<DestinationDTO>();
+		for(Destination destination : company.getDestinacije())
+		{
+			DestinationDTO dto = new DestinationDTO();
+			dto.setNaziv(destination.getNaziv());
+			dto.setId(destination.getId());
+			destDtos.add(dto);
+		}
 		
-		return new ResponseEntity<Set<Destination>>(company.getDestinacije(), HttpStatus.OK);
+		return new ResponseEntity<Set<DestinationDTO>>(destDtos, HttpStatus.OK);
 		
 			 
 	}
@@ -226,7 +234,7 @@ public class AirplaneCompanyController {
 	@RequestMapping(value="/addFlight", 
 			method = {RequestMethod.POST,RequestMethod.GET},
 			consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Long> addFlight(@RequestBody FlightDTO flight,@PathVariable Long id){		
+	public ResponseEntity<Long> addFlight(@RequestBody FlightDTO flight){		
 		
 		 AirPlane plane = planeService.findAirPlaneById(flight.getIdAviona());
 		 AirplaneCompany company = plane.getAirComp();
@@ -263,6 +271,8 @@ public class AirplaneCompanyController {
 		 
 		 flightNew.setVremePoletanja(formirajDate(flight.getDatumPoletanja(), flight.getVremePoletanja()));
 		 flightNew.setVremeSletanja(formirajDate(flight.getDatumSletanja(), flight.getVremeSletanja()));
+		 
+		 service.saveAirplaneCompany(company);
 		
 		 return new ResponseEntity<Long>(company.getId(), HttpStatus.OK);
 			 
@@ -325,7 +335,7 @@ public class AirplaneCompanyController {
 			Date datePoletanje = flight.getVremePoletanja();
 			Date dateSletanje = flight.getVremeSletanja();
 			
-			//zavrsiit jos
+			
 			
 		}
 		

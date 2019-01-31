@@ -38,7 +38,7 @@
   </style>	
 <title>New flight</title>
 </head>
-<body onload="load()">
+<body onload="load();">
   <div class="container">
     <h2>New flight</h2>
     	<form class="flight" id="unos" method="post" >	
@@ -47,6 +47,16 @@
 		     <div class="form-group">
 		      <i class="glyphicon glyphicon-bed"></i> <label for="selectAirplane">Avion :</label>
 		      <select class="form-control" id="selectAirplane"></select>
+		      <div id="greskaDatumP"></div>	
+		    </div>
+		    
+		    <div class="form-group">
+		      <i class="glyphicon glyphicon-bed"></i> <label for="selectTip">Tip:</label>
+		      <select class="form-control" id="selectTip">
+		      	<option value = "one-way">One-way</option>
+		      	<option value = "round-trip">Round-trip</option>
+		      	<option value = "multi-city">Multi-city</option>    
+		      </select>
 		      <div id="greskaDatumP"></div>	
 		    </div>
 		    
@@ -69,6 +79,8 @@
 		      <div id="greskaDatumP"></div>	
 		    </div>
 		    
+
+		    
 		    <div class="form-group">
 		    <i class="glyphicon glyphicon-map-marker"></i> <label for="vremePoletanja">Vreme poletanja:</label>
 		      <input type="time" class="form-control" id="vremePoletanja" placeholder="Vreme poletanja" >
@@ -87,20 +99,32 @@
 		   	 <div id="greskaAdresaS"></div>
 		    </div>
 		    
+		    <div class="form-group" id="povratak">
+		      <i class="glyphicon glyphicon-bed"></i> <label for="datumPovratka">Datum povratka:</label>
+		      <input  type = "date" class="form-control" id="datumPovratka" placeholder="Datum povratka" >
+		      <div id="greskaDatumP"></div>	
+		    </div>
+		    
 		    <div class="form-group">
 		   	<i class=" glyphicon glyphicon-comment"></i> <label for="duzinaPutovanja">Duzina puta:</label>
 		    	
-		      <input type="number" class="form-control" id="duzinaPutovanja" placeholder="Duzina putovanja" >
+		      <input type="number" class="form-control" id="duzinaPutovanja" placeholder="Duzina putovanja"  min="0">
+		    </div>
+		    
+		    <div class="form-group">
+		   	<i class=" glyphicon glyphicon-comment"></i> <label for="brojPresedanja">Broj presedanja:</label>
+		    	
+		      <input type="number" class="form-control" id="brojPresedanja" placeholder="Broj presedanja" value ="0" min="0">
 		    </div>
 		    
 		    
-		    <div id="brojPresedanja">
+		    <div id="presedanjaIzbor">
 		    </div>
 		    
 		    
 		    <div class="form-group">
 		   	<i class=" glyphicon glyphicon-comment"></i> <label for="cenaPutovanja">Cena karte:</label>	    	
-		      <input type="number" class="form-control" id="cenaPutovanja" placeholder="Cena karte" >
+		      <input type="number" class="form-control" id="cenaPutovanja" placeholder="Cena karte"  min="1">
 		    </div>
 		    
 		    
