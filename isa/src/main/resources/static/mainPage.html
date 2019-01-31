@@ -51,7 +51,7 @@
 	color: white;
 	font-weight: bold;
 }
-  #HotelDugme{
+  #HotelDugme,#flightDugme{
   background-color: #404040 !important;
 	padding:6px;	
 	color: white;
@@ -152,7 +152,85 @@ input[type="date"]:valid::before { display: none }
   <p>Travel is the only thing you buy that makes you rich.</p>
   
   <p>So let's fly together!</p> 
+  </div>
+  <div id = "reserveFlight">
+	<div class="container" >
+   	<div class="row">
+   	<div class="booking-form">
+   		<div class="form-header">
+   			<h1>Make your reservation</h1>
+   		</div>
+   		<form>
+   			<div class="row">
+						<div class="col-md-6">
+									<div class="form-group">
+										<input class="form-control" id = "startDestination" type="text" required placeholder="Enter Start Destination">
+											<span id="errorName"></span>
+									</div>
+						</div>
+						<div class="col-md-6">
+									<div class="form-group">
+										<input class="form-control" id = "endDestination" type="text" required placeholder="Enter Start Destination">
+											<span id="errorName"></span>
+									</div>
+						</div>
+   			</div>
+   			<div class="row">
+						<div class="col-md-6">
+									<div class="form-group">
+										<input class="form-control" id = "brojOsoba" type="text"  placeholder="Enter number of persons" min="0">
+											<span id="errorName"></span>
+									</div>
+						</div>
+						<div class="col-md-6">
+									<div class="form-group">
+										<select class="form-control" id="selectType">
+											<option value = "one-way">One-way</option>
+									      	<option value = "round-trip">Round-trip</option>
+									      	<option value = "multi-city">Multi-city</option>  
+									      	<option value = "all">All</option>
+										</select>
+										<span id="errorName"></span>
+									</div>
+						</div>
+   			</div>
+   		 <div class = "row">
+   		 	<div class="col-md-6">
+					<div class="form-group">
+						 <div class="input-group">
+						<span class="input-group-addon"> <i class="glyphicon glyphicon-calendar"></i></span>
+						<input class="form-control" type="date" id = "datumPoletanja" required="required" data-placeholder="Datum poletanja">
+								<span id="errorDatePoletanja"></span>
+									
+						</div>
+					</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+							 <div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+							<input class="form-control" type="date" id = "datumSletanja" required="required"  data-placeholder="Datum sletanja">
+										<span id="errorDateSletanja"></span>
+							</div>
+				</div>
+			</div>
+		</div>
+			
+   		 <div class = "row">
+			<div class="col-md-12">
+					<div class="form-btn">
+					<button type="button" id="flightDugme"  class="btn  btn-lg">Check flights</button>
+					</div>
+		    </div>
+		 </div>
+   	
+   	 </form>
+   	</div>
+   	</div>
+ </div>
+	
 </div>
+  
 
 <div class="jumbotron text-left" id="pozadinaAuto">
   <h1>Rent-a-car</h1> 

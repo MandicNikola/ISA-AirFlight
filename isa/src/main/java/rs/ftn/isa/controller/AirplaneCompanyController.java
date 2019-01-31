@@ -1,5 +1,6 @@
 package rs.ftn.isa.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -268,6 +269,7 @@ public class AirplaneCompanyController {
 		 flightNew.setDuzina(flight.getDuzina());
 		 flightNew.setCena(flight.getCena());
 		 flightNew.setVreme(flight.getVreme());
+		 flightNew.setTip(flight.getTip());
 		 
 		 flightNew.setVremePoletanja(formirajDate(flight.getDatumPoletanja(), flight.getVremePoletanja()));
 		 flightNew.setVremeSletanja(formirajDate(flight.getDatumSletanja(), flight.getVremeSletanja()));
@@ -336,12 +338,33 @@ public class AirplaneCompanyController {
 			Date dateSletanje = flight.getVremeSletanja();
 			
 			
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat formatVreme = new SimpleDateFormat("HH:mm");
+			String datumPoletanja = format.format(datePoletanje);
+			String datumSletanja = format.format(dateSletanje);
 			
+			String vremePoletanja = formatVreme.format(datePoletanje);
+			String vremeSletanja = formatVreme.format(dateSletanje);
+		
+			flightDto.setDatumPoletanja(datumPoletanja);
+			flightDto.setDatumSletanja(datumSletanja);
+			flightDto.setVremePoletanja(vremePoletanja);
+			flightDto.setVremeSletanja(vremeSletanja);
+			
+			if(!flight.getPresedanja().isEmpty())
+			{
+				for(Destination destination : flight.getPresedanja())
+				{
+					flightDto.getPresedanja().add(destination.getId());
+				}
+			}
 		}
 		
 		return new ResponseEntity<Set<FlightDTO>>(retSet, HttpStatus.OK);
 			 
 	}
+	
+	
 	
 
 	

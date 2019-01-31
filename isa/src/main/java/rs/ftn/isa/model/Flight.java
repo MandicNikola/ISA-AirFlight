@@ -47,6 +47,8 @@ public class Flight {
 	@Column(name = "cena", nullable = false)
 	private double cena;
 	
+	@Column(name = "tip", nullable = false)
+	private String tip;
 	
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private AirplaneCompany avioKomp;
@@ -106,6 +108,22 @@ public class Flight {
 
 	public Destination getPoletanje() {
 		return poletanje;
+	}
+
+
+
+
+
+	public String getTip() {
+		return tip;
+	}
+
+
+
+
+
+	public void setTip(String tip) {
+		this.tip = tip;
 	}
 
 
