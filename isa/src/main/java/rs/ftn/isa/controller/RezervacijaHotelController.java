@@ -142,9 +142,16 @@ public class RezervacijaHotelController {
 				
 			/*	if(idHotela.toString().equals(id)) {
 					//dodajemo u listu
-					Date datum  = rezervacija.getDatumDolaska();
+					Date date  = rezervacija.getDatumDolaska();
+					String datum  =date.toString();
+					System.out.println("datuum je "+datum);
+					datum  = datum.split(" ")[0];
+					
 					ChartDTO noviPodatak = null;
 					for(ChartDTO chart: podaci) {
+						String datumPoredjenje =chart.getDatum().toString();
+				    	datumPoredjenje = datumPoredjenje.split(" ")[0];
+						
 						if(chart.getDatum().equals(datum)) {
 							noviPodatak=chart;
 							break;
@@ -156,7 +163,7 @@ public class RezervacijaHotelController {
 						noviPodatak.setBroj(dosadasnjiBroj+1);
 						podaci.add(noviPodatak);
 					}else {
-						noviPodatak = new ChartDTO(datum, 1);
+						//noviPodatak = new ChartDTO(datum, 1);
 						podaci.add(noviPodatak);
 					}
 				}*/
