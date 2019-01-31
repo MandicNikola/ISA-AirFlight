@@ -432,7 +432,8 @@ $(document).ready(function(){
     	$("#catC").val("");
     	$("#catD").val("");
     	$("#catE").val("");
-   
+    	$("#divPopust").hide();
+		
     });
         
     $("a#veh").click(function(){
@@ -441,7 +442,8 @@ $(document).ready(function(){
      	$("#addUsluge").hide();		
      	$("#bg").hide();
      	$("#izvestaj").hide();
-    	
+     	$("#divPopust").hide();
+		
      	$("#automobili").show();
      	$("#adminStrana").hide();
     	
@@ -450,7 +452,8 @@ $(document).ready(function(){
    });
 
     $("a#res").click(function(){
-    	
+    	$("#divPopust").hide();
+		
     	$("#informacije").hide();
     	$("#cenovnik").hide();
      	$("#addUsluge").hide();
@@ -459,7 +462,8 @@ $(document).ready(function(){
 	$("#adminStrana").hide();
     	$("#bg").show();
     	$("#rezultat").empty();
-
+    	$("#divPopust").hide();
+		
     	$("#anketa").show();
     	resetFormu();
     	console.log('rezervacije');
@@ -472,7 +476,8 @@ $(document).ready(function(){
 	 	$("#addUsluge").hide();		
 	 	$("#bg").hide();
 	 	$("#izvestaj").hide();
-	 	$("#adminStrana").hide();
+	 	$("#divPopust").hide();
+		$("#adminStrana").hide();
 		$("#cenovnik").show();
 		$("#cenovnikKategorije").empty();
     });
