@@ -1,6 +1,7 @@
 package rs.ftn.isa.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -15,11 +16,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import rs.ftn.isa.dto.ChartDTO;
 import rs.ftn.isa.dto.ReservationHotelDTO;
 import rs.ftn.isa.dto.RoomDTO;
 import rs.ftn.isa.model.RezervacijaHotel;
+import rs.ftn.isa.model.RezervacijaRentCar;
 import rs.ftn.isa.model.Room;
 import rs.ftn.isa.model.User;
+import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.service.RezervacijaHotelServiceImp;
 
 @RestController
@@ -120,8 +124,60 @@ public class RezervacijaHotelController {
 	
 	}
 	
-
+	@RequestMapping(value="/dnevnigrafik/{id}",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ChartDTO getDailyChart(@PathVariable String id){		
+			System.out.println("Usao u getDaily chart");
+			ChartDTO podaci = new ChartDTO();
+			List<RezervacijaHotel> sveRez=servis.findAll();
+	
+			//treba da nadjemo sve rezervacije od hotela sa idRez
+			for(RezervacijaHotel rezervacija:sveRez) {
+				Long idHotela = 0L;
+				for(Room sobe:rezervacija.getSobe()) {
+					idHotela = sobe.getHotel().getId();
+					break;
+				}
+				
+			/*	if(idHotela.toString().equals(id)) {
+					//dodajemo u listu
+					Date date  = rezervacija.getDatumDolaska();
+					String datum  =date.toString();
+					System.out.println("datuum je "+datum);
+					datum  = datum.split(" ")[0];
+					
+					ChartDTO noviPodatak = null;
+					for(ChartDTO chart: podaci) {
+						String datumPoredjenje =chart.getDatum().toString();
+				    	datumPoredjenje = datumPoredjenje.split(" ")[0];
+						
+						if(chart.getDatum().equals(datum)) {
+							noviPodatak=chart;
+							break;
+						}
+					}
+					if(noviPodatak != null) {
+						podaci.remove(noviPodatak);
+						int dosadasnjiBroj = noviPodatak.getBroj();
+						noviPodatak.setBroj(dosadasnjiBroj+1);
+						podaci.add(noviPodatak);
+					}else {
+						//noviPodatak = new ChartDTO(datum, 1);
+						podaci.add(noviPodatak);
+					}
+				}*/
+			}
+			return podaci;
 	}
+
+
+
+
+
+
+
+}
 	
 	
 

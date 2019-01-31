@@ -12,6 +12,7 @@ function onLoad(){
 	$("#promjenaLozinke").hide();
 	$("#dodajPopust").hide();
 	$("#izvestaj").hide();
+	$("#dnevniGrafik").show();
 	
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);
@@ -381,7 +382,39 @@ function resetujGreske(){
 	$("#brojSoba").val("");	
 	$("#brojLjudi").val("");	
 }
+
+function vratiDnevni(){
+	
+}
 $(document).ready(function(){
+	
+	var chart;
+	 //za grafik
+    function createChart(labelsArray,dataArray){
+        var ctx = document.getElementById("chart").getContext('2d');
+        if(chart != null) chart.destroy();
+        chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labelsArray,
+                datasets: [{
+                    label: '# sold tickets',
+                    data: dataArray,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+    }
+	
 	$("#sobe").hide();
 	$("#cijene").hide();
 	$("#divPopust").hide();
@@ -572,8 +605,36 @@ function ispisiSobeZaIzvjestaj(lista){
 		});
 		
 	 $("#izvestajSoba").append("</table>");
+	 dodajGrafik();
+	    
+	
+}
+function dodajGrafik(){
+	var pom=window.location.search.substring(1);
+	var id= pom.split('=')[1];
+	console.log('Usao u dodajgrafik');
+
+	$("#dnevniGrafik").show();
+	 	
+	$.ajax({
+		method:'GET',
+		url: "/api/rezervacijehotel/dnevnigrafik/"+id,
+		success: function(lista){
+			if(lista == null){
+				console.log('Nema podataka')
+			}else if(lista.length==0){
+				console.log('Nema podataka')
+			}else{
+				iscrtajGrafik(lista);
+				
+			}
+		}
+	});
 
 	
+}
+function iscrtajGrafik(lista){
+	console.log('dosao da iscrta grafik');
 }
 function ispisiKonfiguracije(){
 	var adresa = window.location.search.substring(1);
@@ -1441,7 +1502,10 @@ function writeDiscountsOfRoom(lista){
 		
 		$.each(pom, function(index, data) {
 				var slanje = data.id +"."+idRoom;
-				$("#popustiTab").append("<tr><td class=\"hoverName\">"+data.datumod+"</td><td> "+data.datumdo+"</td><td>"+data.bodovi+"</td><td>"+data.vrijednost+"</td><td><button type=\"button\" onclick=\"removeDisc("+slanje+")\" class=\"btn btn-light\">Remove</button></td></tr>");
+				var dat1 = data.datumod.split('T')[0];
+				var dat2 = data.datumdo.split('T')[0];
+				
+				$("#popustiTab").append("<tr><td class=\"hoverName\">"+dat1+"</td><td> "+dat2+"</td><td>"+data.bodovi+"</td><td>"+data.vrijednost+"</td><td><button type=\"button\" onclick=\"removeDisc("+slanje+")\" class=\"btn btn-light\">Remove</button></td></tr>");
 			
 			
 		});
@@ -1466,5 +1530,25 @@ function removeDisc(slanje){
 		});
 
 }
-
+//ovu funckiju treba uraditi
+function pronadjiPrihode(){
+	var adresa = window.location.search.substring(1);
+	console.log('adesa je '+adresa);
+	var id = adresa.split('=')[1];
+	var pocetak=$('#odPrihodi').val();
+	$('#odPrihodi').val('');
+	$.ajax({
+		method:'GET',
+		url: "/api/rezervacijehotel/vratiPrihode/"+id+"/pocetak/"+pocetak,
+		success: function(lista){
+			if(lista == null){
+				console.log('Nema prihoda')
+			}else{
+				console.log('ima' +lista)
+				
+			}
+		}
+	});
+	
+}
 

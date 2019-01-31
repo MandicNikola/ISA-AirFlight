@@ -122,7 +122,7 @@ public class HotelController {
 			//public RoomDTO(Long id, String tip, int kapacitet, int sprat,boolean imapopust) 
 			
 			for(Room ss:pronadjeni.getSobe()) {
-				RoomDTO room = new RoomDTO(ss.getId(),ss.getTip(),ss.getKapacitet(),ss.getSprat(),ss.isImapopusta(),ss.getCijena());
+				RoomDTO room = new RoomDTO(ss.getId(),ss.getTip(),ss.getKapacitet(),ss.getSprat(),ss.isImapopusta(),ss.getOcjena());
 				sobeDTO.add(room);
 			}
 				return sobeDTO;

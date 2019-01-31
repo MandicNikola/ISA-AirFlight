@@ -4,9 +4,10 @@
 <meta charset="ISO-8859-1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script type="text/javascript" src="/js/login.js"></script>
+  <script type="text/javascript" src="/js/changePass.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<title>Prijavljivanje korisnika</title>
+ <title>Change your password first</title>
+
 <style>
 
 	body{
@@ -15,7 +16,7 @@
   		    font-family: 'Lato', sans-serif;    
   		    font-size: 16px;
  	 }
- 	 #polje{
+ 	  #polje{
  	 		padding: 3%;
  	 		margin-top: 3%;
  	 		max-width: 400px;
@@ -40,7 +41,8 @@
  			background-color: rgba(255,255,255,0.8);
  	 	 
  	 }
- 	 #lozinka1{
+ 	
+ 	  #lozinka1{
  			padding: 3%;
  	 		margin-top: 3%;
  	 		max-width: 600px;
@@ -54,7 +56,8 @@
 			background-color: rgba(255,255,255,0.8);
 	 	 	
  	 }
- 	 header{
+ 	 
+ 	  header{
  	 	margin-top:5%;
  	 	text-align: center !important;
  	 	font-size: 50px;
@@ -76,35 +79,35 @@
  	 }
  </style>
 </head>
-<body onload= "onload()">
-<div id = "divLogin">
-<header>
-		<p>AirFinity</p>
-</header>
-	<div class="container" id="polje">
-  				<form method="post" class="logovanje" >  					
-				    <div class="form-group row">
-				       <div class="col-xs-8" > 
-					      <i class="glyphicon glyphicon-envelope"></i>
-					      <label for="email">E-mail:</label>
-					      <input type="email" class="form-control" id="mail" placeholder="Enter e-mail" name="email">
-					   	  <div id= "mailError"></div>
-					   	</div>
+<body>
+		<div class="container" id="pass">
+  				<form method="post" class="changePassword" >  					
+				     <div class="form-group row">
+				        <div class="col-xs-6">	
+				            <i class="glyphicon glyphicon-eye-close"></i>
+				            <label for="pwd">Old password:</label>
+					        <input type="password"  required class="form-control" id="lozinkaOld" placeholder="Enter your password" name="loz1">
+					  	    <div id= "lozinkaError"></div>
+				        </div>
 				    </div>
-				    <div class="form-group row" >
-					   <div class="col-xs-8">
-					     <i class="glyphicon glyphicon-eye-close"></i>
-						  <label for="pwd">Password:</label>
-						  <input type="password" class="form-control" id="lozinka" placeholder="Enter password" name="loz1">
-						  <div id= "lozinkaError"></div>
-				  	  </div>
-				    </div>    				    
-			    <button type="submit" id="potvrdiBtn" class="btn btn-default btn-lg">Log in</button>
+					<div class="form-group row">
+					      <div class="col-xs-6">
+						      <i class="glyphicon glyphicon-eye-close"></i>
+				              <label for="pwd">New password:</label>
+						      <input type="password" class="form-control" required id="lozinka1" placeholder="Enter new password" name="loz2">
+						      <div id='poruka'></div>	
+						  </div>			      
+				    </div>
+				    <div class="form-group row">
+					      <div class="col-xs-6">
+						      <i class="glyphicon glyphicon-eye-close"></i>
+				              <label for="pwd">Repeat new password:</label>
+						      <input type="password" class="form-control" required id="lozinka2" placeholder="Repeat password" name="loz2">
+						      <div id='poruka'></div>	
+						  </div>			      
+				    </div>  				    
+			    <button type="submit" id="potvrdiBtn1" class="btn btn-default btn-lg">Confirm</button>
 			  </form>
-			  <p>If you don't have account <a href="registration.html">register</a></p>
 	</div>
-
-</div>
-
 </body>
 </html>

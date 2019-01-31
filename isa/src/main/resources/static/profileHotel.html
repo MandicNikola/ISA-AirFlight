@@ -7,8 +7,10 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  
   <script type="text/javascript"  src="/js/profileHotel.js"></script>
+  <script src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+ 
   <style>
   	header{
 			background-color: white;
@@ -127,7 +129,10 @@
     border-radius: 3px;
    
 	}
-
+#odPrihodi{
+	    width: 40%;
+	
+}
  #HotelDugme{
   background-color: #404040 !important;
 	padding:6px;	
@@ -199,16 +204,18 @@ input[type="date"]:valid::before { display: none }
 					<p>List of rooms </p>
 						<div id="izvestajSoba">
 						</div>
-						<div class="container" id="grafik">
+						<div id = "prihodi">
 							<div class="form-group">
-								<input class="form-control" min="1" max = "12" id = "mjesec"  type="number" min="1" required="required" placeholder="Choose month">								
+								<input id = "odPrihodi"  class="form-control" type="date" required="required" data-placeholder="Since when">
+										
 								<div class="form-btn">
-								<button type="button" id="HotelDugme" class="btn  btn-lg" onclick = "prikaziDnevni()">Show daily report</button>
+								<button type="button" id="HotelDugme" class="btn btn-light" onclick = "pronadjiPrihode()">Search</button>
 								</div>
-					
+								
 							</div>
-							
-    					 </div>				    
+						
+						</div>
+						    
 			   </div> 
 			 <div id = "divPopust" class="container"> 
 			 	<section>

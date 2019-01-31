@@ -1,34 +1,37 @@
 package rs.ftn.isa.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class ChartDTO {
-	private	Date datum;
-	private int  broj;
+	private	ArrayList<Date> datum= new ArrayList<Date>();
+	private ArrayList<Integer>  broj = new ArrayList<Integer>();
 
 	public ChartDTO() {}
 
-	public ChartDTO(Date datum, int broj) {
+	
+	public ChartDTO(ArrayList<Date> datum, ArrayList<Integer> broj) {
 		super();
 		this.datum = datum;
 		this.broj = broj;
 	}
 
-	public Date getDatum() {
+
+	public ArrayList<Date> getDatum() {
 		return datum;
 	}
 
-	public void setDatum(Date datum) {
+	public void setDatum(ArrayList<Date> datum) {
 		this.datum = datum;
 	}
 
-	public int getBroj() {
+	public ArrayList<Integer> getBroj() {
 		return broj;
 	}
 
-	public void setBroj(int broj) {
+	public void setBroj(ArrayList<Integer> broj) {
 		this.broj = broj;
 	}
-	
+
 	
 }

@@ -69,9 +69,9 @@ public class RezervacijaRentController {
 	@RequestMapping(value="/dailychart/{idRent}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ArrayList<ChartDTO> getDailyChart(@PathVariable String idRent){		
+	public @ResponseBody ChartDTO getDailyChart(@PathVariable String idRent){		
 			System.out.println("Usao u getDaily chart");
-			ArrayList<ChartDTO> podaci = new ArrayList<ChartDTO>();
+			ChartDTO podaci = new ChartDTO();
 			List<RezervacijaRentCar> sveRez=servis.findAll();
 	
 			//treba da nadjemo sve rezervacije od hotela sa idRez
@@ -80,26 +80,44 @@ public class RezervacijaRentController {
 				String idServis = vozilo.getFilijala().getServis().getId().toString();
 				
 				if(idServis.equals(idRent)) {
+					System.out.println("Pripada rent-a-car");
 					//dodajemo u listu
-					Date datum  = rezervacija.getDatumPreuzimanja();
-					ChartDTO noviPodatak = null;
-					for(ChartDTO chart: podaci) {
-						if(chart.getDatum().equals(datum)) {
-							noviPodatak=chart;
+					Date date1= rezervacija.getDatumPreuzimanja();
+					String datum1  =date1.toString();
+
+					Date date2= rezervacija.getDatumVracanja();
+					String datum2  =date2.toString();
+					
+					datum1  = datum1.split(" ")[0];
+					datum2  = datum2.split(" ")[0];
+					
+					int index=-1;
+					int noviBroj = 0;
+					//Date noviDatum=null;
+					for(int i=0;i<podaci.getDatum().size();i++) {
+						Date datum = podaci.getDatum().get(i);
+						String datumPoredjenje =datum.toString();
+				    	datumPoredjenje = datumPoredjenje.split(" ")[0];
+						if(datumPoredjenje.equals(datum1)) {
+							index=i;
+							noviBroj = podaci.getBroj().get(i)+1;
+							System.out.println("Vec postoji taj datum");
 							break;
 						}
 					}
-					if(noviPodatak != null) {
-						podaci.remove(noviPodatak);
-						int dosadasnjiBroj = noviPodatak.getBroj();
-						noviPodatak.setBroj(dosadasnjiBroj+1);
-						podaci.add(noviPodatak);
+					if(index != -1) {
+						podaci.getBroj().remove(index);
+						podaci.getDatum().remove(index);
+						podaci.getDatum().add(date1);
+						podaci.getBroj().add(noviBroj);
 					}else {
-						noviPodatak = new ChartDTO(datum, 1);
-						podaci.add(noviPodatak);
+						podaci.getBroj().add(1);
+						podaci.getDatum().add(date1);
 					}
 				}
 			}
+			
+			System.out.println("Broj podataka u listi je "+podaci.getDatum().size());
 			return podaci;
 	}
 
