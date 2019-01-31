@@ -218,7 +218,7 @@ function ispisiAdminuVozila(skup){
 	console.log('usao u ispisiadminuvozila');
 	var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 		
-	$("#izvestajVozila").append("<table class=\"table table-hover\" id=\"tabVozilo\" ><thead><tr><th>Name</th><th>Brand</th><th>Model</th><th>Model year</th><th>Number of seats </th><th>Category</th><th>Branch office</th><th>Rating</th><th></th><th></th></tr></thead>");
+	$("#izvestajVozila").append("<table class=\"table table-hover\" id=\"tabVozilo\" ><thead><tr><th>Brand</th><th>Model</th><th>Model year</th><th>Rating</th><th></th><th></th></tr></thead>");
 	
 	$.each(lista, function(index, vozilo) {
 		$("#tabVozilo").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+vozilo.marka+"</td><td> "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td> "+vozilo.ocena+"</td></tr>");
@@ -430,12 +430,72 @@ $(document).ready(function(){
      	$("#bg").hide();
     	$("#automobili").hide();
     	$("#izvestaj").show();
-    	  console.log('izvestaj');
+    	console.log('izvestaj');
+    	dodajGrafik();
    });
 
     
 });
+function dodajGrafik(){
+	var pom=window.location.search.substring(1);
+	var id= pom.split('=')[1];
+	console.log('Usao u dodajgrafik');
 
+	$("#dnevniGrafik").show();
+	 	
+	$.ajax({
+		method:'GET',
+		url: "/api/rezervacijerent/dailychart/"+id,
+		success: function(lista){
+			if(lista == null){
+				console.log('Nema podataka')
+			}else if(lista.length==0){
+				console.log('Nema podataka')
+			}else{
+				iscrtajGrafik(lista);
+				
+			}
+		}
+	});
+
+}
+
+
+function iscrtajGrafik(data){
+	var podaci=[];
+ console.log("usao u iscrtaj grafik")
+	for (var i = 0; i < data.length; i++) {
+			podaci.push({
+				x: new Date(data[i].datum),
+				y: data[i].broj
+			});
+			console.log(data[i].datum)
+			console.log(data[i].broj)
+	}
+	
+	var grafik = new CanvasJS.Chart("grafik1", {
+		theme: "light1",
+		animationEnabled: false, // change to true		
+		title: {
+			text: "Daily reservations chart "
+		},
+		axisX: {
+			valueFormatString: "DD MMM YYYY",
+		},
+		axisY: {
+			title: "Number of reservations",
+			titleFontSize: 24,
+			includeZero: true
+		},
+		data: [{
+			type: "spline", 
+			yValueFormatString: "#.##",
+			dataPoints: podaci
+		}]
+	});	
+	
+	grafik.render();
+}
 function ispisiAdmine(){
 	 $.ajax({
 			method:'GET',
