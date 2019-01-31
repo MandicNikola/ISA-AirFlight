@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  
   <script type="text/javascript"  src="/js/profileHotel.js"></script>
   <style>
   	header{
@@ -75,7 +76,7 @@
  	 #buttonID{
  	 	margin-left:15px;
  	 }
- 	 #dodajPopust,#sobePopusti,#postojeciPopusti{
+ 	 #dodajPopust,#sobePopusti,#postojeciPopusti,#izvestajSoba{
  	 width:80%;
  	 }
  	 #dugmePopust{
@@ -186,9 +187,29 @@ input[type="date"]:valid::before { display: none }
 				  	<li><a id="config" >List of configurations</a></li>			  
 				  	<li><a id="admini" >Administrators</a></li>			  
 				  	<li><a id="sistemPopust">Discounts</a></li>			  
-				  
+				    <li><a id="business">Business report</a></li>
+				    
 				  </ul>
 			  </div>
+			  
+			 <div id="izvestaj" class="container-fluid">
+			  		<section >
+						<p id="prosecnaOcijena">Average rating of hotel is  </p>
+						</section>
+					<p>List of rooms </p>
+						<div id="izvestajSoba">
+						</div>
+						<div class="container" id="grafik">
+							<div class="form-group">
+								<input class="form-control" min="1" max = "12" id = "mjesec"  type="number" min="1" required="required" placeholder="Choose month">								
+								<div class="form-btn">
+								<button type="button" id="HotelDugme" class="btn  btn-lg" onclick = "prikaziDnevni()">Show daily report</button>
+								</div>
+					
+							</div>
+							
+    					 </div>				    
+			   </div> 
 			 <div id = "divPopust" class="container"> 
 			 	<section>
 			 	<div class="container" id="sobePopusti"></div>

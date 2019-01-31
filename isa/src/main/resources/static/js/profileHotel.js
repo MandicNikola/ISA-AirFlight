@@ -11,7 +11,7 @@ function onLoad(){
 	$("#adminStrana").hide();
 	$("#promjenaLozinke").hide();
 	$("#dodajPopust").hide();
- 	
+	$("#izvestaj").hide();
 	
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);
@@ -35,6 +35,7 @@ function ispisiProfilHotela(hotel){
 	$("#naziv").text('Welcome to '+hotel.naziv);
 	$("#opis").text(hotel.opis);
 	$("#adresa").append(hotel.adresa);
+	
 	var adresa=	adr.replace(" ", "%20");
     
 	$("#adresa").append("<div class=\"mapouter\"><div class=\"gmap_canvas\"><iframe width=\"600\" height=\"500\" id=\"gmap_canvas\" src=\"https://maps.google.com/maps?q="+adresa+"&t=&z=13&ie=UTF8&iwloc=&output=embed\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\"></iframe><a href=\"https://www.embedgooglemap.net\">embedgooglemap.net</a></div><style>.mapouter{text-align:right;height:500px;width:600px;}.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:600px;}</style></div>")
@@ -389,7 +390,7 @@ $(document).ready(function(){
 	$("#adminStrana").hide();
 	$("#promjenaLozinke").hide();
 	$("#dodajPopust").hide();
- 	
+	$("#izvestaj").hide();
 
 
     $("#rooms").click(function(){
@@ -404,7 +405,7 @@ $(document).ready(function(){
 		$("#adminStrana").hide();
 		$("#promjenaLozinke").hide();
 		$("#dodajPopust").hide();
-	 	
+		$("#izvestaj").hide();
 			
     });
     $("#info").click(function(){
@@ -418,7 +419,7 @@ $(document).ready(function(){
 		$("#adminStrana").hide();
 		$("#promjenaLozinke").hide();
 		$("#dodajPopust").hide();
-	 	
+		$("#izvestaj").hide();
 		
     });
     
@@ -439,7 +440,7 @@ $(document).ready(function(){
 		$("#korakDodatne").empty();
 		$("#reserveHotel").show();
 		$("#adminStrana").hide();
-		
+		$("#izvestaj").hide();
     });
     $("#config").click(function(){
     	ispisiKonfiguracije();
@@ -452,7 +453,7 @@ $(document).ready(function(){
 		$("#rezervacije").hide();
 		$("#adminStrana").hide();
 		$("#dodajPopust").hide();
-	 	
+		$("#izvestaj").hide();
     });
     
     $("#admini").click(function(){
@@ -467,7 +468,7 @@ $(document).ready(function(){
 		$("#adminStrana").show();
 		$("#promjenaLozinke").hide();
 		$("#dodajPopust").hide();
-	 	
+		$("#izvestaj").hide();
     });  	
     $("#price").click(function(){
     	console.log('dosao u price');
@@ -482,7 +483,7 @@ $(document).ready(function(){
 		$("#adminStrana").hide();
 		$("#promjenaLozinke").hide();
 		$("#dodajPopust").hide();
-	 	
+		$("#izvestaj").hide();
     });
     $("#sistemPopust").click(function(){
     	console.log('dosao u popust');
@@ -497,10 +498,83 @@ $(document).ready(function(){
 		$("#adminStrana").hide();
 		$("#promjenaLozinke").hide();
 		$("#dodajPopust").hide();
-	 	
+		$("#izvestaj").hide();
+    });
+    $("#business").click(function(){
+    	console.log('dosao u izvjestaj');
+    	$("#informacije").hide();
+    	$("#divPopust").hide();
+    	$("#ispisiTabelu").hide();
+		$("#sobe").hide(); 
+		$("#cijene").hide();
+		$("#konfig").hide();
+		$("#rezervacije").hide();
+		$("#adminStrana").hide();
+		$("#promjenaLozinke").hide();
+		$("#dodajPopust").hide();
+		$("#izvestaj").show();
+		dodajIzvjestaj();
+		
     });
 
 });
+function dodajIzvjestaj(){
+	var adresa = window.location.search.substring(1);
+	console.log('adesa je '+adresa);
+	var id = adresa.split('=')[1];
+	$.ajax({
+		method:'GET',
+		url: "/api/hoteli/findById/"+id,
+		success: function(hotel){
+			if(hotel == null){
+				console.log('Nema servise');
+			}else{
+				ispisiIzvjestajHotel(hotel);
+				
+			}
+		}
+	});
+	
+}
+
+function ispisiIzvjestajHotel(hotel){
+	$("#prosecnaOcijena").append(hotel.ocena);
+	var adresa = window.location.search.substring(1);
+	console.log('adesa je '+adresa);
+	var id = adresa.split('=')[1];
+
+	$.ajax({
+		method:'GET',
+		url: "/api/hoteli/getRoomsForDiscount/"+id,
+		success: function(lista){
+			if(lista == null){
+				console.log('Nema soba')
+			}else{
+				ispisiSobeZaIzvjestaj(lista);
+				
+			}
+		}
+	});
+
+}
+function ispisiSobeZaIzvjestaj(lista){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	 $("#izvestajSoba").empty();
+	 $("#izvestajSoba").show();
+	//public RoomDTO(Long id, String tip, int kapacitet, int sprat,boolean imapopust) 
+			
+	 $("#izvestajSoba").append("<table class=\"table table-hover\" id=\"tabelaSobaIzv\" ><tr><th>Room type </th><th>Capacity</th><th>Floor</th><th>Average Rating</th></tr>");
+		
+		$.each(pom, function(index, data) {
+		
+				$("#tabelaSobaIzv").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td>"+data.ocena+"</td></tr>");
+			
+		});
+		
+	 $("#izvestajSoba").append("</table>");
+
+	
+}
 function ispisiKonfiguracije(){
 	var adresa = window.location.search.substring(1);
 	var id = adresa.split('=')[1];
@@ -1280,7 +1354,8 @@ function showRoomsForDiscounts(){
 }
 function pomocnaFA(){
 	showRoomsForDiscounts();
-	
+	 $("#postojeciPopusti").hide();
+		
 }
 function writeRoomsForDiscounts(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
@@ -1351,7 +1426,7 @@ function listOfDiscount(idRoom){
 		method:'GET',
 		url: "/api/hoteli/getRoomDiscount/"+id+"/idRoom/"+idRoom,
 		success: function(lista){
-				writeDiscountsOfRoom(lista);
+				writeDiscountsOfRoom(lista,idRoom);
 			
 		}
 	});
@@ -1365,7 +1440,8 @@ function writeDiscountsOfRoom(lista){
 	 $("#postojeciPopusti").append("<table class=\"table table-hover\" id=\"popustiTab\" ><tr><th>Since when </th><th>Until when</th><th>Number of user pointst</th><th>Discount percentage</th><th></th></tr>");
 		
 		$.each(pom, function(index, data) {
-				$("#popustiTab").append("<tr><td class=\"hoverName\">"+data.datumod+"</td><td> "+data.datumdo+"</td><td>"+data.bodovi+"</td><td>"+data.vrijednost+"</td><td><button type=\"button\" onclick=\"removeDisc("+data.id+")\" class=\"btn btn-light\">Remove</button></td></tr>");
+				var slanje = data.id +"."+idRoom;
+				$("#popustiTab").append("<tr><td class=\"hoverName\">"+data.datumod+"</td><td> "+data.datumdo+"</td><td>"+data.bodovi+"</td><td>"+data.vrijednost+"</td><td><button type=\"button\" onclick=\"removeDisc("+slanje+")\" class=\"btn btn-light\">Remove</button></td></tr>");
 			
 			
 		});
@@ -1374,7 +1450,21 @@ function writeDiscountsOfRoom(lista){
 
 }
 
-function removeDisc(idPopust){
-	console.log(idPopust);
+function removeDisc(slanje){
+	console.log(slanje);
+	
+	$.ajax({
+		type : 'POST',
+		url : "/api/hoteli/ukloniPopust/"+id+"/slanje/"+slanje,
+		success : function(povratna) {
+						console.log('uspjesno');
+						pomocnaFA();
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+		});
+
 }
+
 
