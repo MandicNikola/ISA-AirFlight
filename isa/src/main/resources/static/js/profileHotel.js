@@ -1492,7 +1492,7 @@ function listOfDiscount(idRoom){
 		}
 	});
 }
-function writeDiscountsOfRoom(lista){
+function writeDiscountsOfRoom(lista,idRoom){
 	 var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#postojeciPopusti").empty();
 	 $("#postojeciPopusti").show();
@@ -1541,14 +1541,17 @@ function pronadjiPrihode(){
 		method:'GET',
 		url: "/api/rezervacijehotel/vratiPrihode/"+id+"/pocetak/"+pocetak,
 		success: function(lista){
-			if(lista == null){
-				console.log('Nema prihoda')
-			}else{
-				console.log('ima' +lista)
-				
-			}
+				promjeniPrihod(lista);
+			
 		}
 	});
 	
 }
 
+function promjeniPrihod(iznos){
+	
+	//$("#iznosPrihoda").empty();
+//	 $("#iznosPrihoda").show();
+	
+	//$('#iznos').val()=iznos;
+}

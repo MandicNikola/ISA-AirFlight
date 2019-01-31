@@ -1,6 +1,7 @@
 package rs.ftn.isa.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -172,7 +173,43 @@ public class RezervacijaHotelController {
 	}
 
 
-
+	@RequestMapping(value="/vratiPrihode/{id}/pocetak/{pocetak}",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody double getPrihode(@PathVariable String id,@PathVariable String pocetak){		
+			System.out.println("Usao u vrati prihode");
+			List<RezervacijaHotel> sveRez=servis.findAll();
+			
+			double prihod = 0;
+			
+			String[] datIN=pocetak.split("-");
+			int godina=Integer.parseInt(datIN[0]);
+			//mjesec krece od 0
+			int mjesec=Integer.parseInt(datIN[1])-1;
+			int dan=Integer.parseInt(datIN[2]);
+		
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(godina, mjesec, dan);
+			Date datumOd = calendar.getTime();
+		
+			//treba da nadjemo sve rezervacije od hotela sa idRez
+			for(RezervacijaHotel rezervacija:sveRez) {
+				Long idHotela = 0L;
+				for(Room sobe:rezervacija.getSobe()) {
+					idHotela = sobe.getHotel().getId();
+					break;
+				}
+				
+				if(idHotela.toString().equals(id)) {
+					//dodajemo u listu
+					Date datumRez  = rezervacija.getDatumDolaska();
+					if(datumRez.compareTo(datumOd)>=0) {
+						prihod += rezervacija.getCijena();
+					}
+				}
+			}
+			return prihod;
+	}
 
 
 
