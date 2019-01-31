@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class ChartDTO {
-	private	ArrayList<Date> datum;
-	private ArrayList<Integer>  broj;
+	private	ArrayList<Date> datum= new ArrayList<Date>();
+	private ArrayList<Integer>  broj = new ArrayList<Integer>();
 
 	public ChartDTO() {}
 
