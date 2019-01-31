@@ -572,8 +572,36 @@ function ispisiSobeZaIzvjestaj(lista){
 		});
 		
 	 $("#izvestajSoba").append("</table>");
+	 dodajGrafik();
+	    
+	
+}
+function dodajGrafik(){
+	var pom=window.location.search.substring(1);
+	var id= pom.split('=')[1];
+	console.log('Usao u dodajgrafik');
+
+	$("#dnevniGrafik").show();
+	 	
+	$.ajax({
+		method:'GET',
+		url: "/api/rezervacijehotel/dnevnigrafik/"+id,
+		success: function(lista){
+			if(lista == null){
+				console.log('Nema podataka')
+			}else if(lista.length==0){
+				console.log('Nema podataka')
+			}else{
+				iscrtajGrafik(lista);
+				
+			}
+		}
+	});
 
 	
+}
+function iscrtajGrafik(lista){
+	console.log('dosao da iscrta grafik');
 }
 function ispisiKonfiguracije(){
 	var adresa = window.location.search.substring(1);
