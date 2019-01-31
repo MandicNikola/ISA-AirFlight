@@ -29,7 +29,7 @@ public class Discount {
 	private Date datumdo;
 	
 	//jedna popusti je def za jednu sobu
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Room sobapopust;
 
 	public Discount() {
