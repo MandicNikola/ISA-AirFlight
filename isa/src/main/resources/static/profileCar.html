@@ -6,8 +6,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script type="text/javascript" src="/js/profileCar.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
-  <title>Profile</title>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script  src="https://canvasjs.com/assets/script/canvasjs.min.js"></script> <title>Profile</title>
 <style>
 	
 	header{
@@ -115,6 +115,9 @@
   	#informacije , #automobili, #cenovnik,#izvestaj{
   		padding-left: 0px;
   		padding-right: 0px;
+  	}
+  	#izvestaj{
+  		background-color : white;
   	}
   	#add{
   		margin-left:20%;
@@ -401,10 +404,9 @@
 					<p>List of our cars </p>
 						<div id="izvestajVozila">
 						</div>
-						<div  class= "container" id="dnevniGrafik">
-							<canvas id="grafik1">
-							</canvas>
-						</div>
+						<canvas id="myChart">
+						</canvas>
+						
 				    
 			   </div>
 			</article>
