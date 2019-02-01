@@ -12,7 +12,7 @@ public class RoomDTO {
 	private double cijena;
 	private String balkon;
 	private boolean imapopust;
-	
+	private boolean imarez;
 	public RoomDTO() {}
 	
 	public RoomDTO(Long id, String tip, double ocena, String hotel, Long idRez) {
@@ -64,6 +64,14 @@ public class RoomDTO {
 
 	public void setKapacitet(int kapacitet) {
 		this.kapacitet = kapacitet;
+	}
+
+	public boolean isImarez() {
+		return imarez;
+	}
+
+	public void setImarez(boolean imarez) {
+		this.imarez = imarez;
 	}
 
 	public double getCijena() {

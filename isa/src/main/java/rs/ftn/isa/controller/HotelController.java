@@ -102,14 +102,23 @@ public class HotelController {
 			return sortiranaLista;
 		}
 		@RequestMapping(value="/getRooms/{id}", method = RequestMethod.GET)
-		public Set<Room> getAllRooms(@PathVariable Long id){	
+		public ArrayList<RoomDTO> getAllRooms(@PathVariable Long id){	
+			//Room type Capacity Price per night");
+			
 			Hotel pronadjeni = servis.findHotelById(id);
 			System.out.println("id hoteal " +id);
+		// id, String tip, double ocena, int sprat, int kapacitet, double cijena, String balkon,boolean imarez) {
+				ArrayList<RoomDTO> sobe = new ArrayList<RoomDTO>();
 			for(Room ss:pronadjeni.getSobe()) {
-				System.out.println("id so "+ss.getId());
-				
+				RoomDTO dto = new RoomDTO(ss.getId(),ss.getTip(),ss.getOcjena(),ss.getSprat(),ss.getKapacitet(),ss.getCijena(),ss.getBalkon());
+				if(ss.getBrojRezervacija() == 0) {
+					dto.setImarez(false);
+				}else {
+					dto.setImarez(true);
+				}
+				sobe.add(dto);
 			}
-				return pronadjeni.getSobe();
+				return sobe;
 			
 		
 		}
