@@ -165,13 +165,13 @@ input[type="date"]:valid::before { display: none }
 						<div class="col-md-6">
 									<div class="form-group">
 										<input class="form-control" id = "startDestination" type="text" required placeholder="Enter Start Destination">
-											<span id="errorName"></span>
+											<span id="errorDestination"></span>
 									</div>
 						</div>
 						<div class="col-md-6">
 									<div class="form-group">
-										<input class="form-control" id = "endDestination" type="text" required placeholder="Enter Start Destination">
-											<span id="errorName"></span>
+										<input class="form-control" id = "endDestination" type="text" required placeholder="Enter End Destination">
+											<span id="errorEndDestination"></span>
 									</div>
 						</div>
    			</div>
@@ -179,7 +179,7 @@ input[type="date"]:valid::before { display: none }
 						<div class="col-md-6">
 									<div class="form-group">
 										<input class="form-control" id = "brojOsoba" type="text"  placeholder="Enter number of persons" min="0">
-											<span id="errorName"></span>
+											<span id="errorBrojOsoba"></span>
 									</div>
 						</div>
 						<div class="col-md-6">
@@ -230,6 +230,33 @@ input[type="date"]:valid::before { display: none }
  </div>
 	
 </div>
+
+<div id="pretragaDiv">
+	<div class="container" >
+		<div class="row">
+			<div class = "col-md-3">	
+				<div class="row"><span class="label label-info">Kompanija:</span></div>
+				<div class="row"><select class="form-control" id="selectKompanijaFilter"></select></div>
+				<div class="row"><span class="label label-info">Cena:</span></div>
+				<div class="row"><input type="range" class="custom-range" id="rangePrice"></div>
+				<div class="row"><span class="label label-info">Cena:</span></div>
+				<div class="row"><input type="range" class="custom-range" id="rangeDuration"></div>
+				
+			
+				<div class="row"><span class="label label-info">Klasa:</span></div>
+				<div class="row">
+					<select class="form-control" id="selectKompanijaFilter">
+						<option value="ekonomska">Economic</option>
+					</select>
+				</div>
+			</div>
+			<div class = "col-md-8">
+			
+			</div>
+		</div>
+	</div>
+</div>
+
   
 
 <div class="jumbotron text-left" id="pozadinaAuto">
