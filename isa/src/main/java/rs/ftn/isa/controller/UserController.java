@@ -208,7 +208,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/changeInfo", method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
-	public String changeProfileInfo(@RequestBody User novi,@Context HttpServletRequest request){		
+	public 	User changeProfileInfo(@RequestBody User novi,@Context HttpServletRequest request){		
 		
 		
 		
@@ -219,7 +219,7 @@ public class UserController {
 			if(provera != null) {
 				System.out.println("Mejl nije jedinstven");
 				provera.setVerifikovan("null");
-				return "Mejl nije jedinstven";
+				return null;
 		
 			}
 			user.setMail(novi.getMail());
@@ -240,10 +240,10 @@ public class UserController {
 				
 			}
 			
-		    servis.saveUser(user);
+		   User korisnik =  servis.saveUser(user);
 		    
 		    
-		    return "uspesno";
+		    return korisnik;
 		    
 	}
 	

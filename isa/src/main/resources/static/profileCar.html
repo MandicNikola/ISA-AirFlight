@@ -250,7 +250,38 @@
 			 </div>
 			
 		
-		
+		 <div id = "divLozinka">
+			 <div class="container" id="pass">
+			  				<form method="post" class="changePassword" >  					
+							     <div class="form-group row">
+							        <div class="col-xs-6">	
+							            <i class="glyphicon glyphicon-eye-close"></i>
+							            <label for="pwd">Old password:</label>
+								        <input type="password"  required class="form-control" id="lozinkaOld" placeholder="Enter your password" name="loz1">
+								  	    <div id= "lozinkaError"></div>
+							        </div>
+							    </div>
+								<div class="form-group row">
+								      <div class="col-xs-6">
+									      <i class="glyphicon glyphicon-eye-close"></i>
+							              <label for="pwd">New password:</label>
+									      <input type="password" class="form-control" required id="lozinka1" placeholder="Enter new password" name="loz2">
+									      <div id='poruka'></div>	
+									  </div>			      
+							    </div>
+							    <div class="form-group row">
+								      <div class="col-xs-6">
+									      <i class="glyphicon glyphicon-eye-close"></i>
+							              <label for="pwd">Repeat new password:</label>
+									      <input type="password" class="form-control" required id="lozinka2" placeholder="Repeat password" name="loz2">
+									      <div id='poruka'></div>	
+									  </div>			      
+							    </div>  				    
+						    <button type="submit" id="potvrdiBtn1" class="btn btn-default btn-lg">Confirm</button>
+						  </form>
+				</div>
+			 </div>
+			
 		
 			   
 			    <div id="adminStrana" class="container-fluid">
@@ -466,7 +497,7 @@
 					  	  
 				        </div>
 				    </div>    				    
-			    <button type="submit" id="potvrdiBtn" class="btn btn-default btn-lg">Add</button>
+			    <button type="button" id="potvrdiBtn" class="btn btn-default btn-lg">Add</button>
 			  </form>
 			 	</div>
 			  </div>
@@ -574,6 +605,12 @@
 				</div>
 				<div class="side">
 					<p id="usluga" class="h">Add a service</p>		
+				</div>
+				<div class="side">
+					<p id="dataAdmin" class="h">Change personal data</p>		
+				</div>
+					<div class="side">
+					<p id="passAdmin" class="h">Change password</p>		
 				</div>
 			</aside>
 			</div>

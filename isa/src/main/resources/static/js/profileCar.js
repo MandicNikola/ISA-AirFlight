@@ -162,6 +162,38 @@ $(document).ready(function($) {
 		}
 	});
 
+	$(document).on('click','#potvrdiBtn1',function(e){
+		e.preventDefault();	
+		
+		var oldLoz =  $('#lozinkaOld').val();
+		console.log(oldLoz);
+		var loz1 = $('#lozinka1').val();
+		console.log(loz1);
+		var loz2 = $('#lozinka2').val();
+		console.log(loz2);
+					$.ajax({
+						type : 'GET',
+						url : "/api/korisnici/changePass?oldPass="+oldLoz+ "&lozinka1="+loz1+"&lozinka2="+loz2,
+						success : function(pov) {
+							if( pov.verifikovan == "stara"){	
+								 alert("Old password is not valid");
+									
+							}else if(pov.verifikovan == "ponavljanje"){
+								 alert("Passwords do not match.");										
+							}else {
+								alert("You have successfully changed your password.");
+								$("#divLozinka").hide();						        
+								$("#pozTabovi").show();
+						        $("#informacije").show();
+						    	
+							}
+						},
+						error: function(XMLHttpRequest, textStatus, errorThrown){
+							alert('greska');
+						}
+					});
+			
+		});
 
 	$("#seeIncome").click(function() {
 		$("#errorIncome").text("");
@@ -514,6 +546,9 @@ function obrisiVozilo(idVozila){
 $(document).ready(function(){
 	var pom=window.location.search.substring(1);
 	var id= pom.split('=')[1];
+	
+	$("#divLozinka").hide();
+	
 	$("#automobili").hide();
 	$("#addUsluge").hide();
 	$("#cenovnik").hide();
@@ -532,8 +567,12 @@ $(document).ready(function(){
 		window.location="addOffice.html?id="+id;
 
    });
+    $("p#dataAdmin").click(function(){
+    	window.location = "changePersonalData.html?id="+id+"=rent";
+   });
     $("p#usluga").click(function(){
     	$("#pozTabovi").hide();
+    	$("#divLozinka").hide();
     	$("#cenovnik").hide();
     	$("#informacije").hide();
     	$("#automobili").hide();
@@ -550,9 +589,27 @@ $(document).ready(function(){
     	$("#divPopust").hide();
 		
     });
+    $("p#passAdmin").click(function(){
+    	$("#cenovnik").hide();
+     	$("#pozTabovi").hide();
+        $("#informacije").hide();
+    	$("#automobili").hide();
+    	$("#adminStrana").hide();
+    	$("#bg").hide();
+    	$("#izvestaj").hide();
+    	$("#addUsluge").hide();	
+    	 $('#lozinkaOld').html('');
+    	 $('#lozinka1').html('');
+    	 $('#lozinka2').html('');	
+    	$("#divPopust").hide();
+    	$("#divLozinka").show();
+		
+    });
         
     $("a#veh").click(function(){
     	$("#informacije").hide();
+    	$("#divLozinka").hide();
+
     	$("#cenovnik").hide();
      	$("#addUsluge").hide();		
      	$("#bg").hide();
@@ -572,9 +629,11 @@ $(document).ready(function(){
     	$("#informacije").hide();
     	$("#cenovnik").hide();
      	$("#addUsluge").hide();
+    	$("#divLozinka").hide();
+
     	$("#automobili").hide();
     	$("#izvestaj").hide();
-	$("#adminStrana").hide();
+    	$("#adminStrana").hide();
     	$("#bg").show();
     	$("#rezultat").empty();
     	$("#divPopust").hide();
@@ -590,6 +649,8 @@ $(document).ready(function(){
 		$("#automobili").hide();
 	 	$("#addUsluge").hide();		
 	 	$("#bg").hide();
+		$("#divLozinka").hide();
+
 	 	$("#izvestaj").hide();
 	 	$("#divPopust").hide();
 		$("#adminStrana").hide();
@@ -609,6 +670,8 @@ $(document).ready(function(){
 		$("#cenovnik").hide();
 		$("#divPopust").show();
 		$("#dodajPopust").hide();
+		$("#divLozinka").hide();
+
 		showCarsForDiscounts();
     	
 
@@ -621,6 +684,8 @@ $(document).ready(function(){
     	$("#automobili").hide();
      	$("#addUsluge").hide();		
      	$("#bg").hide();
+    	$("#divLozinka").hide();
+
     	$("#izvestaj").hide();
      	$("#adminStrana").hide();
     	$("#informacije").show();
@@ -633,6 +698,8 @@ $(document).ready(function(){
 	 	$("#cenovnik").hide();
 	 	$("#bg").hide();
 	 	$("#adminStrana").show();
+		$("#divLozinka").hide();
+
 		
 		
     });
@@ -644,12 +711,16 @@ $(document).ready(function(){
      	$("#bg").hide();
     	$("#automobili").hide();
     	$("#izvestaj").show();
+    	$("#divLozinka").hide();
+
+    	$("#adminStrana").hide();
     	console.log('izvestaj');
     	//dodajGrafik();
    });
 
     
-});function ispisiAdmine(){
+});
+function ispisiAdmine(){
 	 $.ajax({
 			method:'GET',
 			url: "/api/korisnici/getUsersForSistem",

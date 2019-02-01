@@ -1553,7 +1553,7 @@ function changeData(){
 	var adresa = window.location.search.substring(1);
 	var id = adresa.split('=')[1];
 	
-	window.location = "changePersonalData.html?id="+id;
+	window.location = "changePersonalData.html?id="+id+"=hotel";
 	
 }
 //ispusje sobe za admina sistema da definise popuste za bodove korisnika

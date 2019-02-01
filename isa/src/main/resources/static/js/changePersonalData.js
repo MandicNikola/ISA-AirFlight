@@ -74,9 +74,10 @@ $(document).on('submit','.user',function(e){
 					data: senduser,
 					dataType : 'json',
 					success : function(pov) {
-						if( pov.verifikovan == "null"){	
+						if( pov == null){	
 							 alert("Mail is already in use.");
 						}else{
+							sessionStorage.setItem('ulogovan',JSON.stringify(pov));
 							goBack();
 						}
 					},
@@ -90,8 +91,11 @@ function goBack(){
 	alert('dosao je');
 	var adresa = window.location.search.substring(1);
 	var id = adresa.split('=')[1];
-
-	window.location = "profileHotel.html?id="+id;
-	
+	var podatak = adresa.split('=')[2]
+	if(podatak == "hotel"){
+		window.location = "profileHotel.html?id="+id;
+	}else if(podatak == "rent"){
+		window.location = "profileCar.html?id="+id;
+	}
 	
 }
