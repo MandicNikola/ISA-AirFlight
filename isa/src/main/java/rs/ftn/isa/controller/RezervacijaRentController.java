@@ -370,6 +370,10 @@ public class RezervacijaRentController {
 		int month=Integer.parseInt(niz[1])-1;
 		int date=Integer.parseInt(niz[2]);
 		Date datum = new Date(year, month, date);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(datum);
+		cal.add(Calendar.DATE,-1);
+		datum = cal.getTime();
 		System.out.println("Datum jee"+datum.toString());
 		double suma = 0;
 		//treba da nadjemo sve rezervacije od rent-a-car sa idRez
@@ -379,7 +383,12 @@ public class RezervacijaRentController {
 				
 				if(idServis.equals(id)) {
 					System.out.println("Datum za poredjenje"+rezervacija.getDatumPreuzimanja());
-					if(rezervacija.getDatumPreuzimanja().after(datum)) {
+					Date datumRez= rezervacija.getDatumPreuzimanja();
+					datumRez.setHours(0);
+					datumRez.setMinutes(0);
+					datumRez.setSeconds(0);
+
+					if(datum.before(rezervacija.getDatumPreuzimanja())) {
 						System.out.println("Dodajemo vrednost");
 						suma+=rezervacija.getCena();
 					}
