@@ -52,8 +52,11 @@ public class AirplaneCompany {
 	private  Set<Flight> letovi = new HashSet<Flight>();
 	
 	
-	@OneToMany(mappedBy = "avioKomp",cascade =  CascadeType.ALL ,fetch = FetchType.LAZY)
-	Set<Destination> destinacije;
+	@ManyToMany(cascade =  CascadeType.ALL)
+	@JoinTable(name="kompanija_destinacija",
+			joinColumns = { @JoinColumn(name = "employee_id",referencedColumnName="id") }, 
+	        inverseJoinColumns = { @JoinColumn(name = "project_id",referencedColumnName="id")})
+	Set<Destination> destinacije = new HashSet<Destination>();
 	
 	
 	

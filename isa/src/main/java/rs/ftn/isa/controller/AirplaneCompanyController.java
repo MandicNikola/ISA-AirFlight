@@ -194,14 +194,20 @@ public class AirplaneCompanyController {
 		
 		//System.out.println("usao u metodu koja mi treba");
 		AirplaneCompany company = service.findAirplaneCompanyById(id);
-		Destination destinationNew = new Destination();
 		
+		
+		Destination destinationNew = destinationService.findDestinationByName(destination.getNaziv());
+		
+		if(destinationNew == null)
+		{
+			destinationNew = new Destination();
+			destinationNew.setNaziv(destination.getNaziv());
+		}
 		if(company == null)
 			return new ResponseEntity<Long>(HttpStatus.BAD_REQUEST);
 		
-		destinationNew.setNaziv(destination.getNaziv());
 		company.getDestinacije().add(destinationNew);
-		destinationNew.setAvioKomp(company);
+		destinationNew.getAvioKomp().add(company);
 		
 		service.saveAirplaneCompany(company);
 		
