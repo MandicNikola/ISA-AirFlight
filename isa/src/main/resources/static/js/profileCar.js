@@ -34,9 +34,13 @@ $(document).ready(function($) {
 	function iscrtajGrafik(lista){
 		var labele=new Array();
 		var vrednosti=new Array();
+		console.log('dnevni grafik');
+		console.log(lista);
 		 for (var i = 0; i < lista.length; i++) {
+			 
 			 var datum = lista[i].datum.split('T')[0];
-		 		labele.push(datum);
+			 console.log(datum)
+			 labele.push(datum);
 		 		vrednosti.push(lista[i].broj);
 		  	}
 		
@@ -69,10 +73,60 @@ $(document).ready(function($) {
 		        }
 		    }
 		});		
+
+	
 	}
 
 
 });
+
+function iscrtajGrafik2(lista){
+	var labele=new Array();
+	var vrednosti=new Array();
+	console.log(lista);
+	 for (var i = 0; i < lista.length; i++) {
+		 
+		 var datum = lista[i].datum;
+
+		 datum=datum.split('T')[0];
+		 
+	 	 console.log(datum);
+		 labele.push(datum);
+	 		vrednosti.push(lista[i].broj);
+	  	}
+	
+	var ctx = $("#weekChart");
+	console.log('usao u iscrtaj grafik');
+	var myChart = new Chart(ctx, {
+	    type: 'bar',
+	    data: {
+	        labels: labele,
+	        datasets: [{
+	            label: 'Number of reservations',
+	            data: vrednosti,
+	            borderWidth: 1,
+	            borderColor: 'rgba(214, 111, 239,1)',
+	            backgroundColor: 'rgba(220, 146, 239,1)'
+	        }]
+	    },
+	    options: {
+	        scales: {
+	        	yAxes: [{
+	                ticks: {
+	                    beginAtZero:true
+	                }
+	            }]
+	        },
+	        title: {
+	            display: true,
+	            text: "Number of reservations per week",
+	            fontSize: 24
+	        }
+	    }
+	});		
+
+
+}
 function loadPodatke(){
 	$("#adminStrana").hide();
 	$("#divPopust").hide();
@@ -124,8 +178,7 @@ function prikaziGraf(){
 				console.log('Nema podataka');
 			}else{
 				console.log("ima podataka");
-				 	
-				//iscrtajGrafik(lista);
+				iscrtajGrafik2(lista);
 				
 			}
 		}

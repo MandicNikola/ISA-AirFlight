@@ -161,11 +161,41 @@ public class RezervacijaRentController {
 			String idRent = niz[0];
 			int godina =Integer.parseInt(niz[1]);
 			int mesec = Integer.parseInt(niz[2]);
-			
+			Calendar kalendar = Calendar.getInstance();
 			System.out.println("godina je "+godina+" mesec je "+mesec);
 			ArrayList<ChartDTO> podaci = new ArrayList<ChartDTO>();
+			Date newDate  = new Date(godina-1900, mesec-1, 1);
+			System.out.println("Datum prvi je "+ newDate.toString());
+			kalendar.setTime(newDate);
+			int danNedelja = kalendar.get(Calendar.DAY_OF_WEEK);
+			if(danNedelja==1) {
+				danNedelja=7;
+			}else {
+				danNedelja-=1;
+			}
+			System.out.println("Dan u nedelji je" + danNedelja);
 			
-		List<RezervacijaRentCar> sveRez=servis.findAll();
+			//dodajemo pocetke nedelja u listu
+			podaci.add(new ChartDTO(newDate, 0));
+			int dodajDan = 8-danNedelja; //3
+			kalendar.add(Calendar.DATE, dodajDan);
+			newDate= kalendar.getTime();
+			System.out.println("Drugi dan je "+newDate.toString());
+			podaci.add(new ChartDTO(newDate, 0));
+			int brojDana = kalendar.getActualMaximum(Calendar.DATE);
+			while(newDate.getDate()+7 < brojDana) {
+						
+				kalendar.add(Calendar.DATE, 7);
+				newDate= kalendar.getTime();
+				podaci.add(new ChartDTO(newDate, 0));
+			}
+			for(int p=0;p<podaci.size();p++) {
+					System.out.println(podaci.get(p));
+			}
+			
+			
+			
+			List<RezervacijaRentCar> sveRez=servis.findAll();
 	        
 			//treba da nadjemo sve rezervacije od rent-a-car sa idRez
 			for(RezervacijaRentCar rezervacija:sveRez) {
@@ -184,9 +214,9 @@ public class RezervacijaRentController {
 						datum2  = datum2.split(" ")[0];
 
 						SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
-						ArrayList<Integer> brojNedelja = new ArrayList<Integer>();
+				
+						
 						while(poredi(date1,date2)) {
-							c.setTime(date1); 
 							
 							String datum1 = "";
 							datum1 = formater.format(date1);
@@ -198,45 +228,30 @@ public class RezervacijaRentController {
 
 							System.out.println("parsirana godina "+Integer.parseInt(nizS[0])+" parsiran mesec "+godRez);
 							if((godina==Integer.parseInt(nizS[0])) && (mesec==godRez)) {
-										ChartDTO noviPodatak = null;
-										System.out.println("Nedelja u mesecu je"+c.get(Calendar.WEEK_OF_MONTH));
-										if(brojNedelja.size() == 0) {
-											brojNedelja.add(c.get(Calendar.WEEK_OF_MONTH));
-										}
-										for(ChartDTO chart: podaci) {
-		
-											String datumPoredjenje =chart.getDatum().toString();
-											System.out.println("Datum poredjenja je "+datumPoredjenje);
-									    	datumPoredjenje = formater.format(chart.getDatum());
-											System.out.println("Datum formatiran je "+datumPoredjenje);
-		
-									    	datumPoredjenje = datumPoredjenje.split(" ")[0];
-		
-											System.out.println("Datum poredjenja posle splitovanja je "+datumPoredjenje);
-													
-													if(datumPoredjenje.equals(datum1)) {
-														noviPodatak=chart;
-														System.out.println("Vec postoji taj datum");
-														break;
-													}
-										
-										}
-										if(noviPodatak!=null) {
-											int broj = noviPodatak.getBroj()+1;
-											podaci.remove(noviPodatak);
-											noviPodatak.setBroj(broj);
-											podaci.add(noviPodatak);
-											for(int k=0;k<podaci.size();k++) {
-													System.out.println(podaci.get(k));
+										int index=-1;
+										//prolazimo kroz listu u kojoj se nalaze poceci nedelja
+										for(int i=1;i<podaci.size();i++) {
+											
+											Date datumPoredjenje =podaci.get(i).getDatum();
+											if(date1.before(datumPoredjenje)) {
+												index=i-1;	
+												break;
 											}
-											System.out.println("Postoji datum u listi");
-										}else {
-											podaci.add(new ChartDTO(date1, 1));
-											System.out.println("Novi datum je");
+		
 										}
+										if(index != -1) {
+											int broj = podaci.get(index).getBroj()+1;
+											podaci.get(index).setBroj(broj);
+										}else {
+											
+											int broj=podaci.get(podaci.size()-1).getBroj()+1;
+											podaci.get(podaci.size()-1).setBroj(broj);
+										}
+										
+									
 								
 							}
-						
+							c.setTime(date1); 
 							c.add(Calendar.DATE, 1);
 							date1 =c.getTime();
 							
@@ -245,6 +260,15 @@ public class RezervacijaRentController {
 					
 			}
 			Collections.sort(podaci);
+			for(int p=0;p<podaci.size();p++) {
+				kalendar.setTime(podaci.get(p).getDatum()); 
+				kalendar.add(Calendar.DATE, 1);
+				Date datePom =kalendar.getTime();
+				
+				podaci.get(p).setDatum(datePom);
+				System.out.println(podaci.get(p));
+		    }
+		
 			System.out.println("Broj podataka u listi je "+podaci.size());
 			
 			return podaci;
