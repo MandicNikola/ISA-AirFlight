@@ -99,7 +99,7 @@ $(document).ready(function($) {
 			
 			$.ajax({
 				method:'GET',
-				url: "/api/rezervacijehotel/godisnjigrafik/"+id+"/godina/"+godina,
+				url: "/api/rezervacijehotel/mjesecnigrafik/"+id+"/godina/"+godina,
 				success: function(lista){
 					if(lista == null){
 						console.log('Nema podataka');
@@ -107,7 +107,7 @@ $(document).ready(function($) {
 						console.log('Nema podataka');
 					}else{
 						console.log("ima podataka");
-						iscrtajGrafik(lista,sedmicnichart,"mjesecniChart","Number of reservations per week");
+						iscrtajGrafik(lista,mjesecnichart,"mjesecniChart","Number of reservations per month");
 						
 					}
 				}
@@ -163,63 +163,6 @@ $(document).ready(function($) {
 		});		
 	}
 
-
-	
-	function iscrtajSedmicniGrafik(lista){
-		
-		var labele=new Array();
-		var vrednosti=new Array();
-		console.log(lista);
-		 for (var i = 0; i < lista.length; i++) {
-			 
-			 var datum = lista[i].datum;
-
-			 datum=datum.split('T')[0];
-			 
-		 	 console.log(datum);
-			 labele.push(datum);
-		 		vrednosti.push(lista[i].broj);
-		  	}
-		
-		 var chart;
-		 //za grafik
-	    
-		var ctx = $("#weekChart");
-		console.log('usao u iscrtaj grafik');
-		if(sedmicnichart != null) {
-			sedmicnichart.destroy();
-		}
-
-		 sedmicnichart = new Chart(ctx, {
-		    type: 'bar',
-		    data: {
-		        labels: labele,
-		        datasets: [{
-		            label: 'Number of reservations',
-		            data: vrednosti,
-		            borderWidth: 1,
-		            borderColor: 'rgba(214, 111, 239,1)',
-		            backgroundColor: 'rgba(220, 146, 239,1)'
-		        }]
-		    },
-		    options: {
-		        scales: {
-		        	yAxes: [{
-		                ticks: {
-		                    beginAtZero:true
-		                }
-		            }]
-		        },
-		        title: {
-		            display: true,
-		            text: "Number of reservations per week",
-		            fontSize: 24
-		        }
-		    }
-		});		
-
-
-}
 });
 
 function onLoad(){
@@ -1731,11 +1674,11 @@ function pronadjiPrihode(){
 }
 
 function promjeniPrihod(iznos){
+	console.log()
+	$("#divVrijednost").empty();
+	$("#divVrijednost").append("<input id = \"vrijednostPrihoda\"  class=\"form-control\" type=\"number\" disabled>");
 	
-	//$("#iznosPrihoda").empty();
-//	 $("#iznosPrihoda").show();
-	
-	//$('#iznos').val()=iznos;
+	$('#vrijednostPrihoda').val(iznos);
 }
 
 

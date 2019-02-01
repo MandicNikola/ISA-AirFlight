@@ -330,8 +330,6 @@ public class RezervacijaHotelController {
 				System.out.println("Broj podataka u listi je "+podaci.size());
 				return podaci;
 
-			
-
 	}
 
 	
@@ -366,8 +364,9 @@ public class RezervacijaHotelController {
 		
 			Calendar calendar = Calendar.getInstance();
 			calendar.set(godina, mjesec, dan);
+			calendar.add(Calendar.DATE,-1);
 			Date datumOd = calendar.getTime();
-		
+			
 			//treba da nadjemo sve rezervacije od hotela sa idRez
 			for(RezervacijaHotel rezervacija:sveRez) {
 				Long idHotela = 0L;
@@ -378,8 +377,13 @@ public class RezervacijaHotelController {
 				
 				if(idHotela.toString().equals(id)) {
 					//dodajemo u listu
+					
 					Date datumRez  = rezervacija.getDatumDolaska();
-					if(datumRez.compareTo(datumOd)>=0) {
+					datumRez.setHours(0);
+					datumRez.setMinutes(0);
+					datumRez.setSeconds(0);
+					
+					if(datumOd.before(datumRez)) {
 						prihod += rezervacija.getCijena();
 					}
 				}
@@ -388,6 +392,66 @@ public class RezervacijaHotelController {
 	}
 
 
+	@RequestMapping(value="/mjesecnigrafik/{id}/godina/{godina}",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ArrayList<ChartDTO> mjesecnigrafik(@PathVariable String id,@PathVariable String godina){		
+			int god =Integer.parseInt(godina);
+				
+			List<RezervacijaHotel> sveRez=servis.findAll();
+			ArrayList<ChartDTO> podaci = new ArrayList<ChartDTO>();
+			
+			Calendar calendar = Calendar.getInstance();
+			SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+			
+			for(int i=0;i<12;i++) {
+				Date newDate  = new Date(god-1900, i, 1);
+				podaci.add(new ChartDTO(newDate, 0));
+			}
+
+			for(RezervacijaHotel rezervacija:sveRez) {
+				Long idHotela = 0L;
+				for(Room sobe:rezervacija.getSobe()) {
+					idHotela = sobe.getHotel().getId();
+					break;
+				}
+				//rezervacija od odbaranog hotela
+				if(idHotela.toString().equals(id)) {
+					Date date1= rezervacija.getDatumDolaska();
+					Date date2= rezervacija.getDatumOdlaska();
+					Calendar c = Calendar.getInstance(); 
+				 while(poredi(date1,date2)) {
+						
+						String datum1 = "";
+						datum1 = formater.format(date1);
+						String[] pom = datum1.split("-");
+						
+						if(Integer.parseInt(pom[0]) == god) {
+							System.out.println("Poklapa se godina");
+						    int mjesec=Integer.parseInt(pom[1])-1;    
+						    podaci.get(mjesec).setBroj(podaci.get(mjesec).getBroj()+1);
+						}
+						c.setTime(date1); 
+						c.add(Calendar.DATE, 1);
+						date1 =c.getTime();
+						}
+				}
+			}
+				Collections.sort(podaci);
+				
+				for(int p=0;p<podaci.size();p++) {
+					calendar.setTime(podaci.get(p).getDatum()); 
+					calendar.add(Calendar.DATE, 1);
+					Date datePom =calendar.getTime();
+					
+					podaci.get(p).setDatum(datePom);
+					System.out.println(podaci.get(p));
+			    }
+			
+				System.out.println("Broj podataka u listi je "+podaci.size());
+				return podaci;
+
+	}
 
 
 }
