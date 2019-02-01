@@ -72,10 +72,43 @@ $(document).ready(function($) {
 				}
 			}
 		});
-		
 		}
-
 	});
+
+		$(document).on('click','#potvrdiBtn1',function(e){
+			e.preventDefault();	
+			
+			var oldLoz =  $('#lozinkaOld').val();
+			console.log(oldLoz);
+			
+			var loz1 = $('#lozinka1').val();
+			console.log(loz1);
+			var loz2 = $('#lozinka2').val();
+			console.log(loz2);
+			
+						$.ajax({
+							type : 'GET',
+							url : "/api/korisnici/changePass?oldPass="+oldLoz+ "&lozinka1="+loz1+"&lozinka2="+loz2,
+							success : function(pov) {
+								if( pov.verifikovan == "stara"){	
+									 alert("Old password is not valid");
+										
+								}else if(pov.verifikovan == "ponavljanje"){
+									 alert("Passwords do not match.");										
+								}else {
+									alert("Izmjenio .");
+									ispisiHotel();		
+								}
+							},
+							error: function(XMLHttpRequest, textStatus, errorThrown){
+								alert('greska');
+							}
+						});
+				
+			});
+
+		
+
 
 		
 		$( "#godisnjiDugme" ).click(function() {
@@ -1456,34 +1489,6 @@ function prikaziPromjenu(){
     $("#promjenaLozinke").show();
 
 }
-
-$(document).on('submit','.changePassword',function(e){
-	e.preventDefault();	
-	
-	var oldLoz =  $('#lozinkaOld').val();
-	var loz1 = $('#lozinka1').val();
-	var loz2 = $('#lozinka2').val();
-			 
-				$.ajax({
-					type : 'GET',
-					url : "/api/korisnici/changePass?oldPass="+oldLoz+ "&lozinka1="+loz1+"&lozinka2="+loz2,
-					success : function(pov) {
-						if( pov.verifikovan == "stara"){	
-							 alert("Old password is not valid");
-								
-						}else if(pov.verifikovan == "ponavljanje"){
-							 alert("Passwords do not match.");										
-						}else {
-							alert("Izmjenio .");
-							ispisiHotel();		
-						}
-					},
-					error: function(XMLHttpRequest, textStatus, errorThrown){
-						alert('greska');
-					}
-				});
-		
-	});
 //prikaze profil hotela posle promjene lozinke admina
 function ispisiHotel(){
 	$("#informacije").show();
