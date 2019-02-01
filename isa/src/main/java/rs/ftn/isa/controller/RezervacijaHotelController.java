@@ -211,38 +211,54 @@ public class RezervacijaHotelController {
 	         return null;
 	     }
 	  }
-	@RequestMapping(value="/mjesecnigrafik/{id}/brojMjeseci/{brojMj}",
+	@RequestMapping(value="/sedmicnigrafik/{id}/brojMjeseci/{brojMj}/godina/{godina}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ArrayList<ChartDTO> mjesecnigrafik(@PathVariable String id,@PathVariable String brojMj){		
-			System.out.println("Usao u getDaily chart");
+	public @ResponseBody ArrayList<ChartDTO> sedmicnigrafik(@PathVariable String id,@PathVariable String brojMj,@PathVariable String godina){		
+			int god =Integer.parseInt(godina);
+			int mjesec = Integer.parseInt(brojMj);
+		
+			
 			List<RezervacijaHotel> sveRez=servis.findAll();
 			ArrayList<ChartDTO> podaci = new ArrayList<ChartDTO>();
 			
-			Calendar c = Calendar.getInstance();
-			if(brojMj.length() == 1) {
-				brojMj = "0"+brojMj;
+			Calendar calendar = Calendar.getInstance();
+			
+			Date newDate  = new Date(god-1900, mjesec-1, 1);
+			System.out.println("Datum prvi je "+ newDate.toString());
+			
+			calendar.setTime(newDate);
+			int danNedelja = calendar.get(Calendar.DAY_OF_WEEK);
+			if(danNedelja!=1) {
+				danNedelja=danNedelja-1;
+			}else {
+				danNedelja=7;
 			}
-			String datum = "2019-"+brojMj+"-01";
-			Date myDate = parseDate(datum);
+			System.out.println("Dan u nedelji je" + danNedelja);
 			
-			c.setTime(myDate);
+			//dodajemo pocetke nedelja u listu
+			podaci.add(new ChartDTO(newDate, 0));
+			//int noviDan = 8-danNedelja; 
+			calendar.add(Calendar.DATE, 8-danNedelja);
+			newDate= calendar.getTime();
+			System.out.println("Drugi dan je "+newDate.toString());
 			
-			int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-			int godina = 2019;
-			int mjesec = Integer.parseInt(brojMj);
+			podaci.add(new ChartDTO(newDate, 0));
 			
-			c.set(Calendar.YEAR, godina);
-			c.set(Calendar.MONTH, mjesec-1);
-			int numDays = c.getActualMaximum(Calendar.DATE);
-			podaci.add(new ChartDTO(myDate,0));
-			int dan = 8-dayOfWeek;
-			System.out.println("drugi dan"+dan);
-			 myDate.setDate(dan);
+			int brojDanaMj = calendar.getActualMaximum(Calendar.DATE);
+			while(newDate.getDate()+7 < brojDanaMj) {
+						
+				calendar.add(Calendar.DATE, 7);
+				newDate= calendar.getTime();
+				podaci.add(new ChartDTO(newDate, 0));
 			
-			//popunimo moguce vrijednosti u podacima
-			System.out.println(" broj dana "+numDays);
-		/*	for(RezervacijaHotel rezervacija:sveRez) {
+			}
+			for(int p=0;p<podaci.size();p++) {
+					System.out.println(podaci.get(p));
+			}
+			
+
+			for(RezervacijaHotel rezervacija:sveRez) {
 				Long idHotela = 0L;
 				for(Room sobe:rezervacija.getSobe()) {
 					idHotela = sobe.getHotel().getId();
@@ -253,8 +269,8 @@ public class RezervacijaHotelController {
 					
 					Date date1= rezervacija.getDatumDolaska();
 					Date date2= rezervacija.getDatumOdlaska();
-					System.out.println("Pocetak rez "+date1.toString());
-					System.out.println("Kraj rez "+date2.toString());
+					
+					
 					Calendar c = Calendar.getInstance(); 
 				
 					String datum2  =date2.toString();
@@ -265,34 +281,30 @@ public class RezervacijaHotelController {
 						
 						String datum1 = "";
 						datum1 = formater.format(date1);
+						String[] nizS = datum1.split("-");
 						
-						System.out.println("************");
 						System.out.println("Datumi su : 1--> "+datum1+" a 2->>> "+datum2);
-						ChartDTO noviPodatak = null;
-						for(ChartDTO chart: podaci) {
-							
-							String datumPoredjenje =chart.getDatum().toString();
-						    System.out.println("Datum poredjenja je "+datumPoredjenje);
-							datumPoredjenje = formater.format(chart.getDatum());
-							System.out.println("Datum formatiran je "+datumPoredjenje);
-							datumPoredjenje = datumPoredjenje.split(" ")[0];
-							System.out.println("Datum poredjenja posle splitovanja je "+datumPoredjenje);
-											
-							if(datumPoredjenje.equals(datum1)) {
-									noviPodatak=chart;
-									System.out.println("Vec postoji taj datum");
+						
+						if((god==Integer.parseInt(nizS[0])) && (mjesec==Integer.parseInt(nizS[1]))) {
+							int index=-1;
+							//prolazimo kroz listu u kojoj se nalaze poceci nedelja
+							for(int i=1;i<podaci.size();i++) {	
+								Date datumPoredjenje =podaci.get(i).getDatum();
+								if(date1.before(datumPoredjenje)) {
+									index=i-1;	
 									break;
+								}
 							}
-													
-						}
-						if(noviPodatak != null) {
-							podaci.remove(noviPodatak);
-							noviPodatak.setBroj(noviPodatak.getBroj()+1);
-							podaci.add(noviPodatak);
-							System.out.println("Postoji datum u listi");
-						}else {
-							podaci.add(new ChartDTO(date1, 1));
-							System.out.println("Novi datum je");
+							
+							if(index != -1) {
+								int broj = podaci.get(index).getBroj()+1;
+								podaci.get(index).setBroj(broj);
+							}else {
+								
+								int broj=podaci.get(podaci.size()-1).getBroj()+1;
+								podaci.get(podaci.size()-1).setBroj(broj);
+							}
+					
 						}
 
 						
@@ -303,8 +315,18 @@ public class RezervacijaHotelController {
 						
 					}
 				}
-			}*/
+			}
 				Collections.sort(podaci);
+				
+				for(int p=0;p<podaci.size();p++) {
+					calendar.setTime(podaci.get(p).getDatum()); 
+					calendar.add(Calendar.DATE, 1);
+					Date datePom =calendar.getTime();
+					
+					podaci.get(p).setDatum(datePom);
+					System.out.println(podaci.get(p));
+			    }
+			
 				System.out.println("Broj podataka u listi je "+podaci.size());
 				return podaci;
 

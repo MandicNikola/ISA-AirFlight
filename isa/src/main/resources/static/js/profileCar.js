@@ -1,14 +1,20 @@
 $(document).ready(function($) {
 	var user = sessionStorage.getItem("ulogovan");
+	var chartDay;
+	var chartWeek;
+	var chartMonth;
+	var podatak = window.location.search.substring(1);
+	console.log("Usao u showGraf");
+	var niz= podatak.split("=");
+	var id= niz[1];
 
+	
 	if(user!=null && user!="null" && user!="undefined") {
 			console.log('ima korisnika');
 			var korisnik=JSON.parse(user);
 			console.log(korisnik.tip);
 			if(korisnik.tip == 'ADMIN_SISTEM'){
 				
-				var pom=window.location.search.substring(1);
-				var id= pom.split('=')[1];
 				console.log('Usao u dodajgrafik');
 
 				$.ajax({
@@ -20,9 +26,10 @@ $(document).ready(function($) {
 						}else if(lista.length==0){
 							console.log('Nema podataka');
 						}else{
+							var kont="dayChart";
+							var naslov="Number of reservations per day";
 							console.log("ima podataka");
-							 	
-							iscrtajGrafik(lista);
+							iscrtajGrafik(lista,kont,naslov);
 							
 						}
 					}
@@ -31,7 +38,7 @@ $(document).ready(function($) {
 			}
 	
 	}	
-	function iscrtajGrafik(lista){
+	function iscrtajGrafik(lista, kontekst, naslov){
 		var labele=new Array();
 		var vrednosti=new Array();
 		console.log('dnevni grafik');
@@ -44,89 +51,219 @@ $(document).ready(function($) {
 		 		vrednosti.push(lista[i].broj);
 		  	}
 		
-		var ctx = $("#myChart");
-		console.log('usao u iscrtaj grafik');
-		var myChart = new Chart(ctx, {
-		    type: 'bar',
-		    data: {
-		        labels: labele,
-		        datasets: [{
-		            label: 'Number of reservations',
-		            data: vrednosti,
-		            borderWidth: 1,
-		            borderColor: 'rgba(214, 111, 239,1)',
-		            backgroundColor: 'rgba(220, 146, 239,1)'
-		        }]
-		    },
-		    options: {
-		        scales: {
-		        	yAxes: [{
-		                ticks: {
-		                    beginAtZero:true
-		                }
-		            }]
-		        },
-		        title: {
-		            display: true,
-		            text: "Daily reservations chart ",
-		            fontSize: 24
-		        }
-		    }
-		});		
+		var ctx = $("#"+kontekst);
+		if(kontekst == "dayChart"){
+			if(chartDay != null){
+				 chartDay.destroy();
+			 }	
+			console.log('usao u iscrtaj grafik');
+			chartDay = new Chart(ctx, {
+			    type: 'bar',
+			    data: {
+			        labels: labele,
+			        datasets: [{
+			            label: 'Number of reservations',
+			            data: vrednosti,
+			            borderWidth: 1,
+			            borderColor: 'rgba(214, 111, 239,1)',
+			            backgroundColor: 'rgba(220, 146, 239,1)'
+			        }]
+			    },
+			    options: {
+			        scales: {
+			        	yAxes: [{
+			                ticks: {
+			                    beginAtZero:true
+			                }
+			            }]
+			        },
+			        title: {
+			            display: true,
+			            text: naslov,
+			            fontSize: 24
+			        }
+			    }
+			});		
+
+		}else if(kontekst == "monthGrafik"){
+			if(chartMonth != null){
+				 chartMonth.destroy();
+			 }	
+			console.log('usao u iscrtaj grafik');
+			chartMonth = new Chart(ctx, {
+			    type: 'bar',
+			    data: {
+			        labels: labele,
+			        datasets: [{
+			            label: 'Number of reservations',
+			            data: vrednosti,
+			            borderWidth: 1,
+			            borderColor: 'rgba(214, 111, 239,1)',
+			            backgroundColor: 'rgba(220, 146, 239,1)'
+			        }]
+			    },
+			    options: {
+			        scales: {
+			        	yAxes: [{
+			                ticks: {
+			                    beginAtZero:true
+			                }
+			            }]
+			        },
+			        title: {
+			            display: true,
+			            text: naslov,
+			            fontSize: 24
+			        }
+			    }
+			});		
+
+			
+		}else{
+			
+			if(chartWeek != null){
+				 chartWeek.destroy();
+			 }	
+			console.log('usao u iscrtaj grafik');
+			chartWeek = new Chart(ctx, {
+			    type: 'bar',
+			    data: {
+			        labels: labele,
+			        datasets: [{
+			            label: 'Number of reservations',
+			            data: vrednosti,
+			            borderWidth: 1,
+			            borderColor: 'rgba(214, 111, 239,1)',
+			            backgroundColor: 'rgba(220, 146, 239,1)'
+			        }]
+			    },
+			    options: {
+			        scales: {
+			        	yAxes: [{
+			                ticks: {
+			                    beginAtZero:true
+			                }
+			            }]
+			        },
+			        title: {
+			            display: true,
+			            text: naslov,
+			            fontSize: 24
+			        }
+			    }
+			});		
+
+						
+			
+		}
+		 
+	        
 
 	
 	}
 
+	$("#showGraf").click(function() {
+		var podatak = window.location.search.substring(1);
+		console.log("Usao u showGraf");
+		
+		var godina = $("#yearChart").val();
+		var mesec = $("#monthChart").val();
+		if(isNaN(godina)){
+			console.log('nije broj');
+			alert('Enter correct year');
+		}else if(godina.length!=4){
+			console.log('duzina ne valja');
+			alert('Enter correct year');
+		}else if(godina < 2018){
+			alert('Year must be greater than 2018');
+		}else{
+			console.log('sve okej godina je '+godina);
+		console.log(mesec);
+		
+		var podatak = id+"="+godina+"="+mesec;
+		$.ajax({
+			method:'GET',
+			url: "/api/rezervacijerent/weeklychart/"+podatak,
+			success: function(lista){
+				if(lista == null){
+					console.log('Nema podataka');
+				}else if(lista.length==0){
+					console.log('Nema podataka');
+				}else{
+					console.log("ima podataka");
+					var kont="weekChart";
+					var naslov="Number of reservations per week";
+					iscrtajGrafik(lista,kont,naslov);
+					
+				}
+			}
+		});
+		
+		}
+	});
 
+	$("#showGraf2").click(function() {
+		
+		var godina = $("#yearCh").val();
+		if(isNaN(godina)){
+			console.log('nije broj');
+			alert('Enter correct year');
+		}else if(godina.length!=4){
+			console.log('duzina ne valja');
+			alert('Enter correct year');
+		}else if(godina < 2018){
+			alert('Year must be greater than 2018');
+		}else{
+			console.log('sve okej godina je '+godina);
+		
+		var podatak = id+"="+godina;
+		$.ajax({
+			method:'GET',
+			url: "/api/rezervacijerent/monthlychart/"+podatak,
+			success: function(lista){
+				if(lista == null){
+					console.log('Nema podataka');
+				}else if(lista.length==0){
+					console.log('Nema podataka');
+				}else{
+					console.log("ima podataka");
+					var kont="monthGrafik";
+					var naslov="Number of reservations per moth";
+					iscrtajGrafik(lista,kont,naslov);
+					
+				}
+			}
+		});
+		
+		}
+	});
+
+
+	$("#seeIncome").click(function() {
+		$("#errorIncome").text("");
+		var ispravno=true;
+		var start=$("#incomeDate").val();
+		if(start == ""){
+			ispravno = false;
+			$("#errorIncome").text(" Fill out this field").css('color', 'red');
+		}
+		if(ispravno){
+			console.log(start);
+			$.ajax({
+					method:'GET',
+					url: "/api/rezervacijerent/getIncome/"+id+"/start/"+start,
+					success: function(iznos){
+						console.log(iznos);
+						$("#incomeResult").empty();
+						$("#incomeResult").append("<p> Total income is "+iznos+"</p>");
+					}
+			});
+			
+		}
+		
+	});
 });
 
-function iscrtajGrafik2(lista){
-	var labele=new Array();
-	var vrednosti=new Array();
-	console.log(lista);
-	 for (var i = 0; i < lista.length; i++) {
-		 
-		 var datum = lista[i].datum;
-
-		 datum=datum.split('T')[0];
-		 
-	 	 console.log(datum);
-		 labele.push(datum);
-	 		vrednosti.push(lista[i].broj);
-	  	}
-	
-	var ctx = $("#weekChart");
-	console.log('usao u iscrtaj grafik');
-	var myChart = new Chart(ctx, {
-	    type: 'bar',
-	    data: {
-	        labels: labele,
-	        datasets: [{
-	            label: 'Number of reservations',
-	            data: vrednosti,
-	            borderWidth: 1,
-	            borderColor: 'rgba(214, 111, 239,1)',
-	            backgroundColor: 'rgba(220, 146, 239,1)'
-	        }]
-	    },
-	    options: {
-	        scales: {
-	        	yAxes: [{
-	                ticks: {
-	                    beginAtZero:true
-	                }
-	            }]
-	        },
-	        title: {
-	            display: true,
-	            text: "Number of reservations per week",
-	            fontSize: 24
-	        }
-	    }
-	});		
-
-
-}
 function loadPodatke(){
 	$("#adminStrana").hide();
 	$("#divPopust").hide();
@@ -146,48 +283,7 @@ function loadPodatke(){
 			});
 	
 	
-}
-function prikaziGraf(){
-	var podatak = window.location.search.substring(1);
-	console.log("Usao u showGraf");
-	var niz= podatak.split("=");
-	var id= niz[1];
-	
-	var godina = $("#yearChart").val();
-	var mesec = $("#monthChart").val();
-	if(isNaN(godina)){
-		console.log('nije broj');
-		alert('Enter correct year');
-	}else if(godina.length!=4){
-		console.log('duzina ne valja');
-		alert('Enter correct year');
-	}else if(godina < 2018){
-		alert('Year must be greater than 2018');
-	}else{
-		console.log('sve okej godina je '+godina);
-	console.log(mesec);
-	
-	var podatak = id+"="+godina+"="+mesec;
-	$.ajax({
-		method:'GET',
-		url: "/api/rezervacijerent/weeklychart/"+podatak,
-		success: function(lista){
-			if(lista == null){
-				console.log('Nema podataka');
-			}else if(lista.length==0){
-				console.log('Nema podataka');
-			}else{
-				console.log("ima podataka");
-				iscrtajGrafik2(lista);
-				
-			}
-		}
-	});
-	
-	}
-	
-}
-function iscrtajStranicu(servis){
+}function iscrtajStranicu(servis){
 	console.log('usao u iscrtaj stranicu dobio je '+ servis);
 	
     $("#naslov").text(servis.naziv);
