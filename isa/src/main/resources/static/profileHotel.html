@@ -228,13 +228,13 @@ input[type="date"]:valid::before { display: none }
 								
 								<div class="form-group row ">				      	
 							        <div class="col-xs-1">
-									      <label >Year:</label>
+									      <label >Choose year:</label>
 									</div>
 							   		<div class="col-xs-2">
 										<input type="text" maxlength ="4" class="form-control" id="yearChart" placeholder="Enter year" >
 									</div>	   	  
 							   		<div class="col-xs-1">
-									      <label >Month:</label>
+									      <label >Choose month:</label>
 									 </div>
 									 <div class="col-xs-3">
 									      <select class="form-control" id="monthChart"  >
@@ -253,12 +253,34 @@ input[type="date"]:valid::before { display: none }
 									   	  </select>
 							   		</div>
 							   		<div class="col-xs-2">
-							   			<button id="showGraf"  class="btn btn-info" onclick="prikaziSedmicni()">Show</button>
+							   			<button id="mjesecniDugme"  class="btn btn-info" >Show</button>
 									</div>
 							    </div>
 						    			 
 						</div>
 						<canvas id="weekChart">
+						</canvas>
+					
+						<div class="row" id="godinaIzbor">
+								<h3 id="look">
+									<span> <i class="glyphicon glyphicon-calendar"></i></span>Look at weekly reservations
+							    </h3>
+								
+								<div class="form-group row ">				      	
+							        <div class="col-xs-1">
+									      <label >Choose year:</label>
+									</div>
+							   		<div class="col-xs-2">
+										<input type="text" maxlength ="4" class="form-control" id="yearGodisnji" placeholder="Choose year" >
+									</div>	   	  
+							   		
+							   		<div class="col-xs-2">
+							   			<button id="godisnjiDugme"  class="btn btn-info" >Show</button>
+									</div>
+							    </div>
+						    			 
+						</div>
+						<canvas id="mjesecniChart">
 						</canvas>
 					    
 			   </div> 
