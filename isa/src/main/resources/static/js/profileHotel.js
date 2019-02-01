@@ -1,7 +1,105 @@
 /**
  * 
  */
+$(document).ready(function($) {
+	var user = sessionStorage.getItem("ulogovan");
+	console.log('dosao u gornji ready');
+	if(user!=null && user!="null" && user!="undefined") {
+			console.log('ima korisnika');
+			var korisnik=JSON.parse(user);
+			console.log(korisnik.tip);
+			if(korisnik.tip == 'ADMIN_SISTEM'){
+				
+				var pom=window.location.search.substring(1);
+				var id= pom.split('=')[1];
+				console.log('Usao u dodajgrafik');
 
+				$.ajax({
+					method:'GET',
+					url: "/api/rezervacijehotel/dnevnigrafik/"+id,
+					success: function(lista){
+						if(lista == null){
+							console.log('Nema podataka');
+						}else if(lista.length==0){
+							console.log('Nema podataka');
+						}else{
+							console.log("ima podataka");
+							 	
+							iscrtajGrafik(lista);
+							
+						}
+					}
+				});
+
+			}
+	
+	}	
+	function iscrtajGrafik(lista){
+		var labele=new Array();
+		var vrednosti=new Array();
+		 for (var i = 0; i < lista.length; i++) {
+			 var datum = lista[i].datum.split('T')[0];
+		 		labele.push(datum);
+		 		vrednosti.push(lista[i].broj);
+		  	}
+		
+		var ctx = $("#myChart");
+		console.log('usao u iscrtaj grafik');
+		var myChart = new Chart(ctx, {
+		    type: 'bar',
+		    data: {
+		        labels: labele,
+		        datasets: [{
+		            label: 'Number of reservations',
+		            data: vrednosti,
+		            borderWidth: 1,
+		            borderColor: 'rgba(214, 111, 239,1)',
+		            backgroundColor: 'rgba(220, 146, 239,1)'
+		        }]
+		    },
+		    options: {
+		        scales: {
+		        	yAxes: [{
+		                ticks: {
+		                    beginAtZero:true
+		                }
+		            }]
+		        },
+		        title: {
+		            display: true,
+		            text: "Daily reservations chart ",
+		            fontSize: 24
+		        }
+		    }
+		});		
+	}
+
+
+});
+function sedmGrafik(){
+	var adresa = window.location.search.substring(1);
+	console.log('adesa je '+adresa);
+	var id = adresa.split('=')[1];
+	
+	var brojMj=$('#brojMj').val();
+	console.log(brojMj);
+	$.ajax({
+		method:'GET',
+		url: "/api/rezervacijehotel/mjesecnigrafik/"+id+"/brojMjeseci/"+brojMj,
+		success: function(lista){
+			if(lista == null){
+				console.log('Nema podataka');
+			}else if(lista.length==0){
+				console.log('Nema podataka');
+			}else{
+				console.log("ima podataka");
+				 	
+				
+			}
+		}
+	});
+
+}
 function onLoad(){
 	$("#konfig").hide();
 	$("#sobe").hide();
@@ -576,37 +674,10 @@ function ispisiSobeZaIzvjestaj(lista){
 		});
 		
 	 $("#izvestajSoba").append("</table>");
-	 dodajGrafik();
 	    
 	
 }
-function dodajGrafik(){
-	var pom=window.location.search.substring(1);
-	var id= pom.split('=')[1];
-	console.log('Usao u dodajgrafik');
 
-	$("#dnevniGrafik").show();
-	 	
-	$.ajax({
-		method:'GET',
-		url: "/api/rezervacijehotel/dnevnigrafik/"+id,
-		success: function(lista){
-			if(lista == null){
-				console.log('Nema podataka')
-			}else if(lista.length==0){
-				console.log('Nema podataka')
-			}else{
-				iscrtajGrafik(lista);
-				
-			}
-		}
-	});
-
-	
-}
-function iscrtajGrafik(lista){
-	console.log('dosao da iscrta grafik');
-}
 function ispisiKonfiguracije(){
 	var adresa = window.location.search.substring(1);
 	var id = adresa.split('=')[1];

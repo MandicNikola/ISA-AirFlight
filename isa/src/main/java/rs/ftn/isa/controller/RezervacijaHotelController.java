@@ -1,7 +1,9 @@
 package rs.ftn.isa.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -128,54 +130,202 @@ public class RezervacijaHotelController {
 	@RequestMapping(value="/dnevnigrafik/{id}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ChartDTO getDailyChart(@PathVariable String id){		
+	public @ResponseBody ArrayList<ChartDTO> getDailyChart(@PathVariable String id){		
 			System.out.println("Usao u getDaily chart");
-			ChartDTO podaci = new ChartDTO();
 			List<RezervacijaHotel> sveRez=servis.findAll();
-	
-			//treba da nadjemo sve rezervacije od hotela sa idRez
-			/*for(RezervacijaHotel rezervacija:sveRez) {
+			ArrayList<ChartDTO> podaci = new ArrayList<ChartDTO>();
+			
+			for(RezervacijaHotel rezervacija:sveRez) {
 				Long idHotela = 0L;
 				for(Room sobe:rezervacija.getSobe()) {
 					idHotela = sobe.getHotel().getId();
 					break;
 				}
-				
+				//rezervacija od odbaranog hotela
 				if(idHotela.toString().equals(id)) {
-					//dodajemo u listu
-					Date date  = rezervacija.getDatumDolaska();
-					String datum  =date.toString();
-					System.out.println("datuum je "+datum);
-					datum  = datum.split(" ")[0];
-					System.out.println("datum dolaska "+date);
+					
+					Date date1= rezervacija.getDatumDolaska();
 					Date date2= rezervacija.getDatumOdlaska();
-					System.out.println("datum odlaska "+date2);
-					Calendar cal = Calendar.getInstance();
-					cal.setTime();
-					ChartDTO noviPodatak = null;
-					for(ChartDTO chart: podaci) {
-						String datumPoredjenje =chart.getDatum().toString();
-				    	datumPoredjenje = datumPoredjenje.split(" ")[0];
+					System.out.println("Pocetak rez "+date1.toString());
+					System.out.println("Kraj rez "+date2.toString());
+					Calendar c = Calendar.getInstance(); 
+				
+					String datum2  =date2.toString();
+					datum2  = datum2.split(" ")[0];
+
+					SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+					while(poredi(date1,date2)) {
 						
-						if(chart.getDatum().equals(datum)) {
-							noviPodatak=chart;
-							break;
+						String datum1 = "";
+						datum1 = formater.format(date1);
+						
+						System.out.println("************");
+						System.out.println("Datumi su : 1--> "+datum1+" a 2->>> "+datum2);
+						ChartDTO noviPodatak = null;
+						for(ChartDTO chart: podaci) {
+							
+							String datumPoredjenje =chart.getDatum().toString();
+						    System.out.println("Datum poredjenja je "+datumPoredjenje);
+							datumPoredjenje = formater.format(chart.getDatum());
+							System.out.println("Datum formatiran je "+datumPoredjenje);
+							datumPoredjenje = datumPoredjenje.split(" ")[0];
+							System.out.println("Datum poredjenja posle splitovanja je "+datumPoredjenje);
+											
+							if(datumPoredjenje.equals(datum1)) {
+									noviPodatak=chart;
+									System.out.println("Vec postoji taj datum");
+									break;
+							}
+													
 						}
+						if(noviPodatak != null) {
+							podaci.remove(noviPodatak);
+							noviPodatak.setBroj(noviPodatak.getBroj()+1);
+							podaci.add(noviPodatak);
+							System.out.println("Postoji datum u listi");
+						}else {
+							podaci.add(new ChartDTO(date1, 1));
+							System.out.println("Novi datum je");
+						}
+
+						
+						c.setTime(date1); 
+						c.add(Calendar.DATE, 1);
+						date1 =c.getTime();
+
+						
 					}
-					if(noviPodatak != null) {
-						podaci.remove(noviPodatak);
-						int dosadasnjiBroj = noviPodatak.getBroj();
-						noviPodatak.setBroj(dosadasnjiBroj+1);
-						podaci.add(noviPodatak);
-					}else {
-						//noviPodatak = new ChartDTO(datum, 1);
-						podaci.add(noviPodatak);
+				}
+			}
+				Collections.sort(podaci);
+				System.out.println("Broj podataka u listi je "+podaci.size());
+				return podaci;
+
+			
+
+	}
+	 public static Date parseDate(String date) {
+	     try {
+	         return new SimpleDateFormat("yyyy-MM-dd").parse(date);
+	     } catch (Exception e) {
+	         return null;
+	     }
+	  }
+	@RequestMapping(value="/mjesecnigrafik/{id}/brojMjeseci/{brojMj}",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ArrayList<ChartDTO> mjesecnigrafik(@PathVariable String id,@PathVariable String brojMj){		
+			System.out.println("Usao u getDaily chart");
+			List<RezervacijaHotel> sveRez=servis.findAll();
+			ArrayList<ChartDTO> podaci = new ArrayList<ChartDTO>();
+			
+			Calendar c = Calendar.getInstance();
+			if(brojMj.length() == 1) {
+				brojMj = "0"+brojMj;
+			}
+			String datum = "2019-"+brojMj+"-01";
+			Date myDate = parseDate(datum);
+			
+			c.setTime(myDate);
+			
+			int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+			int godina = 2019;
+			int mjesec = Integer.parseInt(brojMj);
+			
+			c.set(Calendar.YEAR, godina);
+			c.set(Calendar.MONTH, mjesec-1);
+			int numDays = c.getActualMaximum(Calendar.DATE);
+			podaci.add(new ChartDTO(myDate,0));
+			int dan = 8-dayOfWeek;
+			System.out.println("drugi dan"+dan);
+			 myDate.setDate(dan);
+			
+			//popunimo moguce vrijednosti u podacima
+			System.out.println(" broj dana "+numDays);
+		/*	for(RezervacijaHotel rezervacija:sveRez) {
+				Long idHotela = 0L;
+				for(Room sobe:rezervacija.getSobe()) {
+					idHotela = sobe.getHotel().getId();
+					break;
+				}
+				//rezervacija od odbaranog hotela
+				if(idHotela.toString().equals(id)) {
+					
+					Date date1= rezervacija.getDatumDolaska();
+					Date date2= rezervacija.getDatumOdlaska();
+					System.out.println("Pocetak rez "+date1.toString());
+					System.out.println("Kraj rez "+date2.toString());
+					Calendar c = Calendar.getInstance(); 
+				
+					String datum2  =date2.toString();
+					datum2  = datum2.split(" ")[0];
+
+					SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+					while(poredi(date1,date2)) {
+						
+						String datum1 = "";
+						datum1 = formater.format(date1);
+						
+						System.out.println("************");
+						System.out.println("Datumi su : 1--> "+datum1+" a 2->>> "+datum2);
+						ChartDTO noviPodatak = null;
+						for(ChartDTO chart: podaci) {
+							
+							String datumPoredjenje =chart.getDatum().toString();
+						    System.out.println("Datum poredjenja je "+datumPoredjenje);
+							datumPoredjenje = formater.format(chart.getDatum());
+							System.out.println("Datum formatiran je "+datumPoredjenje);
+							datumPoredjenje = datumPoredjenje.split(" ")[0];
+							System.out.println("Datum poredjenja posle splitovanja je "+datumPoredjenje);
+											
+							if(datumPoredjenje.equals(datum1)) {
+									noviPodatak=chart;
+									System.out.println("Vec postoji taj datum");
+									break;
+							}
+													
+						}
+						if(noviPodatak != null) {
+							podaci.remove(noviPodatak);
+							noviPodatak.setBroj(noviPodatak.getBroj()+1);
+							podaci.add(noviPodatak);
+							System.out.println("Postoji datum u listi");
+						}else {
+							podaci.add(new ChartDTO(date1, 1));
+							System.out.println("Novi datum je");
+						}
+
+						
+						c.setTime(date1); 
+						c.add(Calendar.DATE, 1);
+						date1 =c.getTime();
+
+						
 					}
 				}
 			}*/
-			return null;
+				Collections.sort(podaci);
+				System.out.println("Broj podataka u listi je "+podaci.size());
+				return podaci;
+
+			
+
 	}
 
+	
+	public boolean poredi(Date date1, Date date2) {
+		if(date1.getYear()==date2.getYear() && date1.getMonth()==date2.getMonth() && date1.getDate()==date2.getDate()) {
+			System.out.println("Isti su");
+			return false;
+		}else {
+			System.out.println("Nisu isti");
+			System.out.println("Godine suu "+date1.getYear() + " a drugi "+date2.getYear());
+			System.out.println("Meseci suu "+date1.getMonth() + " a drugi "+date2.getMonth());
+			System.out.println("Dani  suu "+date1.getDate() + " a drugi "+date2.getDate());
+			
+			return true;
+		}
+		}
 
 	@RequestMapping(value="/vratiPrihode/{id}/pocetak/{pocetak}",
 			method = RequestMethod.GET,
