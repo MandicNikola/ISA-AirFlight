@@ -1,6 +1,9 @@
 $(document).ready(function($) {
 	var user = sessionStorage.getItem("ulogovan");
-
+	var chartDay;
+	var chartWeek;
+	var chartMonth;
+	
 	if(user!=null && user!="null" && user!="undefined") {
 			console.log('ima korisnika');
 			var korisnik=JSON.parse(user);
@@ -45,8 +48,12 @@ $(document).ready(function($) {
 		  	}
 		
 		var ctx = $("#myChart");
+		 if(chartDay != null){
+			 chartDay.destroy();
+		 }
+	        
 		console.log('usao u iscrtaj grafik');
-		var myChart = new Chart(ctx, {
+		chartDay = new Chart(ctx, {
 		    type: 'bar',
 		    data: {
 		        labels: labele,
@@ -77,56 +84,100 @@ $(document).ready(function($) {
 	
 	}
 
+	function iscrtajGrafik2(lista){
+		var labele=new Array();
+		var vrednosti=new Array();
+		console.log(lista);
+		 for (var i = 0; i < lista.length; i++) {
+			 
+			 var datum = lista[i].datum;
+
+			 datum=datum.split('T')[0];
+			 
+		 	 console.log(datum);
+			 labele.push(datum);
+		 		vrednosti.push(lista[i].broj);
+		  	}
+		
+		var ctx = $("#weekChart");
+		if(chartWeek != null){
+			 chartWeek.destroy();
+		 }
+		console.log('usao u iscrtaj grafik');
+		chartWeek = new Chart(ctx, {
+		    type: 'bar',
+		    data: {
+		        labels: labele,
+		        datasets: [{
+		            label: 'Number of reservations',
+		            data: vrednosti,
+		            borderWidth: 1,
+		            borderColor: 'rgba(214, 111, 239,1)',
+		            backgroundColor: 'rgba(220, 146, 239,1)'
+		        }]
+		    },
+		    options: {
+		        scales: {
+		        	yAxes: [{
+		                ticks: {
+		                    beginAtZero:true
+		                }
+		            }]
+		        },
+		        title: {
+		            display: true,
+		            text: "Number of reservations per week",
+		            fontSize: 24
+		        }
+		    }
+		});		
+
+
+	}
+
+	$("#showGraf").click(function() {
+		var podatak = window.location.search.substring(1);
+		console.log("Usao u showGraf");
+		var niz= podatak.split("=");
+		var id= niz[1];
+		
+		var godina = $("#yearChart").val();
+		var mesec = $("#monthChart").val();
+		if(isNaN(godina)){
+			console.log('nije broj');
+			alert('Enter correct year');
+		}else if(godina.length!=4){
+			console.log('duzina ne valja');
+			alert('Enter correct year');
+		}else if(godina < 2018){
+			alert('Year must be greater than 2018');
+		}else{
+			console.log('sve okej godina je '+godina);
+		console.log(mesec);
+		
+		var podatak = id+"="+godina+"="+mesec;
+		$.ajax({
+			method:'GET',
+			url: "/api/rezervacijerent/weeklychart/"+podatak,
+			success: function(lista){
+				if(lista == null){
+					console.log('Nema podataka');
+				}else if(lista.length==0){
+					console.log('Nema podataka');
+				}else{
+					console.log("ima podataka");
+					iscrtajGrafik2(lista);
+					
+				}
+			}
+		});
+		
+		}
+	});
+
 
 });
 
-function iscrtajGrafik2(lista){
-	var labele=new Array();
-	var vrednosti=new Array();
-	console.log(lista);
-	 for (var i = 0; i < lista.length; i++) {
-		 
-		 var datum = lista[i].datum;
-
-		 datum=datum.split('T')[0];
-		 
-	 	 console.log(datum);
-		 labele.push(datum);
-	 		vrednosti.push(lista[i].broj);
-	  	}
-	
-	var ctx = $("#weekChart");
-	console.log('usao u iscrtaj grafik');
-	var myChart = new Chart(ctx, {
-	    type: 'bar',
-	    data: {
-	        labels: labele,
-	        datasets: [{
-	            label: 'Number of reservations',
-	            data: vrednosti,
-	            borderWidth: 1,
-	            borderColor: 'rgba(214, 111, 239,1)',
-	            backgroundColor: 'rgba(220, 146, 239,1)'
-	        }]
-	    },
-	    options: {
-	        scales: {
-	        	yAxes: [{
-	                ticks: {
-	                    beginAtZero:true
-	                }
-	            }]
-	        },
-	        title: {
-	            display: true,
-	            text: "Number of reservations per week",
-	            fontSize: 24
-	        }
-	    }
-	});		
-
-
-}
 function loadPodatke(){
 	$("#adminStrana").hide();
 	$("#divPopust").hide();
@@ -146,48 +197,7 @@ function loadPodatke(){
 			});
 	
 	
-}
-function prikaziGraf(){
-	var podatak = window.location.search.substring(1);
-	console.log("Usao u showGraf");
-	var niz= podatak.split("=");
-	var id= niz[1];
-	
-	var godina = $("#yearChart").val();
-	var mesec = $("#monthChart").val();
-	if(isNaN(godina)){
-		console.log('nije broj');
-		alert('Enter correct year');
-	}else if(godina.length!=4){
-		console.log('duzina ne valja');
-		alert('Enter correct year');
-	}else if(godina < 2018){
-		alert('Year must be greater than 2018');
-	}else{
-		console.log('sve okej godina je '+godina);
-	console.log(mesec);
-	
-	var podatak = id+"="+godina+"="+mesec;
-	$.ajax({
-		method:'GET',
-		url: "/api/rezervacijerent/weeklychart/"+podatak,
-		success: function(lista){
-			if(lista == null){
-				console.log('Nema podataka');
-			}else if(lista.length==0){
-				console.log('Nema podataka');
-			}else{
-				console.log("ima podataka");
-				iscrtajGrafik2(lista);
-				
-			}
-		}
-	});
-	
-	}
-	
-}
-function iscrtajStranicu(servis){
+}function iscrtajStranicu(servis){
 	console.log('usao u iscrtaj stranicu dobio je '+ servis);
 	
     $("#naslov").text(servis.naziv);
