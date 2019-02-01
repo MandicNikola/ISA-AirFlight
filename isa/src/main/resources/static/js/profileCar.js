@@ -49,7 +49,9 @@ $(document).ready(function($) {
 		        datasets: [{
 		            label: 'Number of reservations',
 		            data: vrednosti,
-		            borderWidth: 1
+		            borderWidth: 1,
+		            borderColor: 'rgba(214, 111, 239,1)',
+		            backgroundColor: 'rgba(220, 146, 239,1)'
 		        }]
 		    },
 		    options: {

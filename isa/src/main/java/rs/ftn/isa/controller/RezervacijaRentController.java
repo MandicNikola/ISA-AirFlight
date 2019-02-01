@@ -80,7 +80,7 @@ public class RezervacijaRentController {
 			ArrayList<ChartDTO> podaci = new ArrayList<ChartDTO>();
 			List<RezervacijaRentCar> sveRez=servis.findAll();
 	        
-			//treba da nadjemo sve rezervacije od hotela sa idRez
+			//treba da nadjemo sve rezervacije od rent-a-car sa idRez
 			for(RezervacijaRentCar rezervacija:sveRez) {
 					Vehicle vozilo = rezervacija.getVozilo();
 					String idServis = vozilo.getFilijala().getServis().getId().toString();
