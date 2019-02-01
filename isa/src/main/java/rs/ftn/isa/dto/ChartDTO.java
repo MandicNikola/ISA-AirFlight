@@ -35,6 +35,11 @@ public class ChartDTO implements Comparable<ChartDTO> {
 		// TODO Auto-generated method stub
 	    return getDatum().compareTo(o.getDatum());
 	}
+
+	@Override
+	public String toString() {
+		return "ChartDTO [datum=" + datum + ", broj=" + broj + "]";
+	}
 	
 	
 }

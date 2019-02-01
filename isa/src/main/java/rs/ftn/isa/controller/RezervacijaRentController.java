@@ -12,6 +12,7 @@ import javax.ws.rs.core.Context;
 
 import org.assertj.core.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.ParseException;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -99,15 +100,24 @@ public class RezervacijaRentController {
 						SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
 						
 						while(poredi(date1,date2)) {
-							String datum1  =date1.toString();
-							datum1  = datum1.split(" ")[0];
-						       		
+
+							String datum1 = "";
+							datum1 = formater.format(date1);
+							
 							System.out.println("************");
 							System.out.println("Datumi su : 1--> "+datum1+" a 2->>> "+datum2);
 							ChartDTO noviPodatak = null;
 							for(ChartDTO chart: podaci) {
+
 								String datumPoredjenje =chart.getDatum().toString();
+								System.out.println("Datum poredjenja je "+datumPoredjenje);
+						    	datumPoredjenje = formater.format(chart.getDatum());
+								System.out.println("Datum formatiran je "+datumPoredjenje);
+
 						    	datumPoredjenje = datumPoredjenje.split(" ")[0];
+
+								System.out.println("Datum poredjenja posle splitovanja je "+datumPoredjenje);
+										
 										if(datumPoredjenje.equals(datum1)) {
 											noviPodatak=chart;
 											System.out.println("Vec postoji taj datum");
@@ -120,6 +130,9 @@ public class RezervacijaRentController {
 								podaci.remove(noviPodatak);
 								noviPodatak.setBroj(broj);
 								podaci.add(noviPodatak);
+								for(int k=0;k<podaci.size();k++) {
+										System.out.println(podaci.get(k));
+								}
 								System.out.println("Postoji datum u listi");
 							}else {
 								podaci.add(new ChartDTO(date1, 1));
@@ -128,12 +141,8 @@ public class RezervacijaRentController {
 
 							c.setTime(date1); 
 							c.add(Calendar.DATE, 1);
-							System.out.println("Godima "+c.getTime().getYear());
-							System.out.println("mesec "+c.getTime().getMonth());
-							System.out.println("dan "+c.getTime().getDate());
-
-							date1 =new Date( c.getTime().getYear(),c.getTime().getMonth(),c.getTime().getDate());
-							System.out.println("Povecan datum 1 => " +date1.toString() );
+							date1 =c.getTime();
+							
 						}
 					}
 					
@@ -145,10 +154,12 @@ public class RezervacijaRentController {
 
 	public boolean poredi(Date date1, Date date2) {
 		if(date1.getYear()==date2.getYear() && date1.getMonth()==date2.getMonth() && date1.getDate()==date2.getDate()) {
-			System.out.println("Nisu isti");
+			System.out.println("Godine suu "+date1.getYear() + " a drugi "+date2.getYear());
+			System.out.println("Meseci suu "+date1.getMonth() + " a drugi "+date2.getMonth());
+			System.out.println("Isti su");
 			return false;
 		}else {
-			System.out.println("Isti");
+			System.out.println("Nisu isti");
 			return true;
 		}
 		}
