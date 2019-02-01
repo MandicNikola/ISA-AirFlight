@@ -1,7 +1,6 @@
 package rs.ftn.isa.controller;
 
 import java.text.SimpleDateFormat;
-import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -11,11 +10,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 
-import org.assertj.core.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.expression.ParseException;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.ChartDTO;
+import rs.ftn.isa.model.RentACar;
 import rs.ftn.isa.model.RezervacijaRentCar;
 import rs.ftn.isa.model.User;
 import rs.ftn.isa.model.Vehicle;
@@ -357,5 +354,42 @@ public class RezervacijaRentController {
 			return true;
 		}
 		}
-			
+	@RequestMapping(value="/getIncome/{id}/start/{start}",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody double getPrihode(@PathVariable String id,@PathVariable String start){		
+	
+		List<RezervacijaRentCar> sveRez=servis.findAll();
+		System.out.println("Parametar je "+start);
+		String[] niz=start.split("-");
+		int year=Integer.parseInt(niz[0])-1900;
+		int month=Integer.parseInt(niz[1])-1;
+		int date=Integer.parseInt(niz[2]);
+		Date datum = new Date(year, month, date);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(datum);
+		cal.add(Calendar.DATE,-1);
+		datum = cal.getTime();
+		System.out.println("Datum jee"+datum.toString());
+		double suma = 0;
+		//treba da nadjemo sve rezervacije od rent-a-car sa idRez
+		for(RezervacijaRentCar rezervacija:sveRez) {
+				Vehicle vozilo = rezervacija.getVozilo();
+				String idServis = vozilo.getFilijala().getServis().getId().toString();
+				
+				if(idServis.equals(id)) {
+					System.out.println("Datum za poredjenje"+rezervacija.getDatumPreuzimanja());
+					Date datumRez= rezervacija.getDatumPreuzimanja();
+					datumRez.setHours(0);
+					datumRez.setMinutes(0);
+					datumRez.setSeconds(0);
+
+					if(datum.before(rezervacija.getDatumPreuzimanja())) {
+						System.out.println("Dodajemo vrednost");
+						suma+=rezervacija.getCena();
+					}
+				}
+		}
+		return suma;
+	}
 }

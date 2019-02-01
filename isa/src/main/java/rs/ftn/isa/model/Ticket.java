@@ -42,6 +42,82 @@ public class Ticket {
 	private Pozivnica pozivnica;
 	
 	
+	public Ticket()
+	{
+		
+	}
+
+
+	public Long getId() {
+		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+	public int getRed() {
+		return red;
+	}
+
+
+	public void setRed(int red) {
+		this.red = red;
+	}
+
+
+	public int getMesto() {
+		return mesto;
+	}
+
+
+	public void setMesto(int mesto) {
+		this.mesto = mesto;
+	}
+
+
+	public int getPopust() {
+		return popust;
+	}
+
+
+	public void setPopust(int popust) {
+		this.popust = popust;
+	}
+
+
+	public boolean isRezervisano() {
+		return rezervisano;
+	}
+
+
+	public void setRezervisano(boolean rezervisano) {
+		this.rezervisano = rezervisano;
+	}
+
+
+	public Flight getLet() {
+		return let;
+	}
+
+
+	public void setLet(Flight let) {
+		this.let = let;
+	}
+
+
+	public Pozivnica getPozivnica() {
+		return pozivnica;
+	}
+
+
+	public void setPozivnica(Pozivnica pozivnica) {
+		this.pozivnica = pozivnica;
+	}
+	
+	
 	
 	
 	

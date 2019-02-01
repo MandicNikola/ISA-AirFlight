@@ -29,7 +29,7 @@ $(document).ready(function($) {
 							var kont="dayChart";
 							var naslov="Number of reservations per day";
 							console.log("ima podataka");
-							iscrtajGrafik(lista,kont,naslov);
+							iscrtajGrafik(lista,kont,naslov, chartDay);
 							
 						}
 					}
@@ -38,7 +38,7 @@ $(document).ready(function($) {
 			}
 	
 	}	
-	function iscrtajGrafik(lista, kontekst, naslov){
+	function iscrtajGrafik(lista, kontekst, naslov,chart){
 		var labele=new Array();
 		var vrednosti=new Array();
 		console.log('dnevni grafik');
@@ -52,17 +52,16 @@ $(document).ready(function($) {
 		  	}
 		
 		var ctx = $("#"+kontekst);
-		if(kontekst == "dayChart"){
-			if(chartDay != null){
-				 chartDay.destroy();
+			if(chart != null){
+				 chart.destroy();
 			 }	
 			console.log('usao u iscrtaj grafik');
-			chartDay = new Chart(ctx, {
+			chart = new Chart(ctx, {
 			    type: 'bar',
 			    data: {
 			        labels: labele,
 			        datasets: [{
-			            label: 'Number of reservations',
+			            label: 'Number of reserved cars',
 			            data: vrednosti,
 			            borderWidth: 1,
 			            borderColor: 'rgba(214, 111, 239,1)',
@@ -84,81 +83,6 @@ $(document).ready(function($) {
 			        }
 			    }
 			});		
-
-		}else if(kontekst == "monthGrafik"){
-			if(chartMonth != null){
-				 chartMonth.destroy();
-			 }	
-			console.log('usao u iscrtaj grafik');
-			chartMonth = new Chart(ctx, {
-			    type: 'bar',
-			    data: {
-			        labels: labele,
-			        datasets: [{
-			            label: 'Number of reservations',
-			            data: vrednosti,
-			            borderWidth: 1,
-			            borderColor: 'rgba(214, 111, 239,1)',
-			            backgroundColor: 'rgba(220, 146, 239,1)'
-			        }]
-			    },
-			    options: {
-			        scales: {
-			        	yAxes: [{
-			                ticks: {
-			                    beginAtZero:true
-			                }
-			            }]
-			        },
-			        title: {
-			            display: true,
-			            text: naslov,
-			            fontSize: 24
-			        }
-			    }
-			});		
-
-			
-		}else{
-			
-			if(chartWeek != null){
-				 chartWeek.destroy();
-			 }	
-			console.log('usao u iscrtaj grafik');
-			chartWeek = new Chart(ctx, {
-			    type: 'bar',
-			    data: {
-			        labels: labele,
-			        datasets: [{
-			            label: 'Number of reservations',
-			            data: vrednosti,
-			            borderWidth: 1,
-			            borderColor: 'rgba(214, 111, 239,1)',
-			            backgroundColor: 'rgba(220, 146, 239,1)'
-			        }]
-			    },
-			    options: {
-			        scales: {
-			        	yAxes: [{
-			                ticks: {
-			                    beginAtZero:true
-			                }
-			            }]
-			        },
-			        title: {
-			            display: true,
-			            text: naslov,
-			            fontSize: 24
-			        }
-			    }
-			});		
-
-						
-			
-		}
-		 
-	        
-
 	
 	}
 
@@ -193,7 +117,7 @@ $(document).ready(function($) {
 					console.log("ima podataka");
 					var kont="weekChart";
 					var naslov="Number of reservations per week";
-					iscrtajGrafik(lista,kont,naslov);
+					iscrtajGrafik(lista,kont,naslov, chartWeek);
 					
 				}
 			}
@@ -229,7 +153,7 @@ $(document).ready(function($) {
 					console.log("ima podataka");
 					var kont="monthGrafik";
 					var naslov="Number of reservations per moth";
-					iscrtajGrafik(lista,kont,naslov);
+					iscrtajGrafik(lista,kont,naslov, chartMonth);
 					
 				}
 			}
@@ -238,6 +162,30 @@ $(document).ready(function($) {
 		}
 	});
 
+
+	$("#seeIncome").click(function() {
+		$("#errorIncome").text("");
+		var ispravno=true;
+		var start=$("#incomeDate").val();
+		if(start == ""){
+			ispravno = false;
+			$("#errorIncome").text(" Fill out this field").css('color', 'red');
+		}
+		if(ispravno){
+			console.log(start);
+			$.ajax({
+					method:'GET',
+					url: "/api/rezervacijerent/getIncome/"+id+"/start/"+start,
+					success: function(iznos){
+						console.log(iznos);
+						$("#incomeResult").empty();
+						$("#incomeResult").append("<p> Total income is "+iznos+"<i class=\"glyphicon glyphicon-euro\"></i> </span></p>");
+					}
+			});
+			
+		}
+		
+	});
 });
 
 function loadPodatke(){

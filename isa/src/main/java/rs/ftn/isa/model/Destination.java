@@ -27,8 +27,8 @@ public class Destination {
 	@Column(name = "naziv", nullable = false)
 	private String naziv;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	AirplaneCompany avioKomp;
+	@ManyToMany(fetch = FetchType.LAZY,mappedBy="destinacije")
+	Set<AirplaneCompany> avioKomp = new HashSet<AirplaneCompany>();
 	
 	@ManyToMany(mappedBy="presedanja", fetch = FetchType.LAZY)
 	Set<Flight> letovi = new HashSet<Flight>();
@@ -55,11 +55,11 @@ public class Destination {
 	
 	
 
-	public AirplaneCompany getAvioKomp() {
+	public Set<AirplaneCompany> getAvioKomp() {
 		return avioKomp;
 	}
 
-	public void setAvioKomp(AirplaneCompany avioKomp) {
+	public void setAvioKomp(Set<AirplaneCompany> avioKomp) {
 		this.avioKomp = avioKomp;
 	}
 
