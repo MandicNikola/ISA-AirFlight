@@ -28,7 +28,7 @@ $(document).ready(function($) {
 						}else{
 							console.log("ima podataka");
 							 	
-							iscrtajGrafik(lista);
+							iscrtajGrafik(lista,dnevnichart,"myChart","Number of reservations per day");
 							
 						}
 					}
@@ -37,7 +37,8 @@ $(document).ready(function($) {
 			}
 	
 	}	
-	$( "#showGraf" ).click(function() {
+	
+	$( "#mjesecniDugme" ).click(function() {
 		var podatak = window.location.search.substring(1);
 		console.log("Usao u showGraf");
 		var niz= podatak.split("=");
@@ -66,7 +67,7 @@ $(document).ready(function($) {
 					console.log('Nema podataka');
 				}else{
 					console.log("ima podataka");
-					iscrtajSedmicniGrafik(lista);
+					iscrtajGrafik(lista,sedmicnichart,"weekChart","Number of reservations per week");
 					
 				}
 			}
@@ -74,12 +75,51 @@ $(document).ready(function($) {
 		
 		}
 
-	
+	});
+
+		
+		$( "#godisnjiDugme" ).click(function() {
+			var podatak = window.location.search.substring(1);
+			console.log("Usao u showGraf");
+			var niz= podatak.split("=");
+			var id= niz[1];
+			
+			var godina = $("#yearGodisnji").val();
+			
+			if(isNaN(godina)){
+				console.log('nije broj');
+				alert('Enter correct year');
+			}else if(godina.length!=4){
+				console.log('duzina ne valja');
+				alert('Enter correct year');
+			}else if(godina < 2016){
+				alert('Year must be greater than 2016');
+			}else{
+				console.log('sve okej godina je '+godina);
+			
+			$.ajax({
+				method:'GET',
+				url: "/api/rezervacijehotel/godisnjigrafik/"+id+"/godina/"+godina,
+				success: function(lista){
+					if(lista == null){
+						console.log('Nema podataka');
+					}else if(lista.length==0){
+						console.log('Nema podataka');
+					}else{
+						console.log("ima podataka");
+						iscrtajGrafik(lista,sedmicnichart,"mjesecniChart","Number of reservations per week");
+						
+					}
+				}
+			});
+			
+			}
+
 	
 	
 	});
 
-	function iscrtajGrafik(lista){
+	function iscrtajGrafik(lista,chart,id,title){
 		var labele=new Array();
 		var vrednosti=new Array();
 		 for (var i = 0; i < lista.length; i++) {
@@ -88,18 +128,18 @@ $(document).ready(function($) {
 		 		vrednosti.push(lista[i].broj);
 		  	}
 		
-		var ctx = $("#myChart");
+		var ctx = $("#"+id);
 		console.log('usao u iscrtaj grafik');
-		if(dnevnichart != null){ 
-			dnevnichart.destroy();
+		if(chart != null){ 
+			chart.destroy();
 			}
 
-		dnevnichart = new Chart(ctx, {
+		chart = new Chart(ctx, {
 		    type: 'bar',
 		    data: {
 		        labels: labele,
 		        datasets: [{
-		            label: 'Number of reservations',
+		            label: "Number of reservations",
 		            data: vrednosti,
 		            borderWidth: 1,
 		            borderColor: 'rgba(214, 111, 239,1)',
@@ -116,7 +156,7 @@ $(document).ready(function($) {
 		        },
 		        title: {
 		            display: true,
-		            text: "Daily reservations chart ",
+		            text: title,
 		            fontSize: 24
 		        }
 		    }
@@ -1698,7 +1738,5 @@ function promjeniPrihod(iznos){
 	//$('#iznos').val()=iznos;
 }
 
-function prikaziSedmicni(){
-	
-}
+
 
