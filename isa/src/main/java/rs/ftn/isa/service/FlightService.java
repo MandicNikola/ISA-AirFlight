@@ -24,14 +24,19 @@ public class FlightService {
 	/*
 	 metoda koja pronalazi aktivne letove kompanije ukoliko su mi potrebni
 	 */
-	public List<Flight> findActiveFlights(Date date, Long id)
+	public List<Flight> findActiveFlights(Date date)
 	{
-		return repozitorujum.findFlights(date, id);
+		return repozitorujum.findFlights(date);
 	}
 	
 	public Flight findOneFlightById(Long id)
 	{
 		return repozitorujum.findOneById(id);
+	}
+	
+	public List<Flight> findFlightsBetweenDates(Date dateDepart, Date dateReturn)
+	{
+		return repozitorujum.findFlightsBetweenDates(dateDepart, dateReturn);
 	}
 	
 	

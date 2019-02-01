@@ -15,8 +15,15 @@ public interface FlightRepository extends JpaRepository<Flight, Long>{
 
 	@Query("select u " + 
 			"from Flight u  " + 
-			"where u.vremePoletanja > :date AND u.plane = :id")
-	List<Flight> findFlights(@Param("date") Date date, @Param("id") Long id);
+			"where u.vremePoletanja > :date")
+	List<Flight> findFlights(@Param("date") Date date);
+	
+	
+	@Query("select u " + 
+			"from Flight u  " + 
+			"where u.vremePoletanja > :date AND u.vremeSletanja < :date1")
+	List<Flight> findFlightsBetweenDates(@Param("date") Date date, @Param("date") Date date1);
+	
 	
 	Flight findOneById(Long id);
 	
