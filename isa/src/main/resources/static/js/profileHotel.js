@@ -383,37 +383,8 @@ function resetujGreske(){
 	$("#brojLjudi").val("");	
 }
 
-function vratiDnevni(){
-	
-}
 $(document).ready(function(){
 	
-	var chart;
-	 //za grafik
-    function createChart(labelsArray,dataArray){
-        var ctx = document.getElementById("chart").getContext('2d');
-        if(chart != null) chart.destroy();
-        chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labelsArray,
-                datasets: [{
-                    label: '# sold tickets',
-                    data: dataArray,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                }
-            }
-        });
-    }
 	
 	$("#sobe").hide();
 	$("#cijene").hide();
