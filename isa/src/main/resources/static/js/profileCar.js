@@ -93,7 +93,47 @@ function loadPodatke(){
 	
 	
 }
-
+function prikaziGraf(){
+	var podatak = window.location.search.substring(1);
+	console.log("Usao u showGraf");
+	var niz= podatak.split("=");
+	var id= niz[1];
+	
+	var godina = $("#yearChart").val();
+	var mesec = $("#monthChart").val();
+	if(isNaN(godina)){
+		console.log('nije broj');
+		alert('Enter correct year');
+	}else if(godina.length!=4){
+		console.log('duzina ne valja');
+		alert('Enter correct year');
+	}else if(godina < 2018){
+		alert('Year must be greater than 2018');
+	}else{
+		console.log('sve okej godina je '+godina);
+	console.log(mesec);
+	
+	var podatak = id+"="+godina+"="+mesec;
+	$.ajax({
+		method:'GET',
+		url: "/api/rezervacijerent/weeklychart/"+podatak,
+		success: function(lista){
+			if(lista == null){
+				console.log('Nema podataka');
+			}else if(lista.length==0){
+				console.log('Nema podataka');
+			}else{
+				console.log("ima podataka");
+				 	
+				//iscrtajGrafik(lista);
+				
+			}
+		}
+	});
+	
+	}
+	
+}
 function iscrtajStranicu(servis){
 	console.log('usao u iscrtaj stranicu dobio je '+ servis);
 	
