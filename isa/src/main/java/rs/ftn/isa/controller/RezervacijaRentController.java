@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.ChartDTO;
+import rs.ftn.isa.model.RentACar;
 import rs.ftn.isa.model.RezervacijaRentCar;
 import rs.ftn.isa.model.User;
 import rs.ftn.isa.model.Vehicle;
@@ -357,5 +358,33 @@ public class RezervacijaRentController {
 			return true;
 		}
 		}
-			
+	@RequestMapping(value="/getIncome/{id}/start/{start}",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody double getPrihode(@PathVariable String id,@PathVariable String start){		
+	
+		List<RezervacijaRentCar> sveRez=servis.findAll();
+		System.out.println("Parametar je "+start);
+		String[] niz=start.split("-");
+		int year=Integer.parseInt(niz[0])-1900;
+		int month=Integer.parseInt(niz[1])-1;
+		int date=Integer.parseInt(niz[2]);
+		Date datum = new Date(year, month, date);
+		System.out.println("Datum jee"+datum.toString());
+		double suma = 0;
+		//treba da nadjemo sve rezervacije od rent-a-car sa idRez
+		for(RezervacijaRentCar rezervacija:sveRez) {
+				Vehicle vozilo = rezervacija.getVozilo();
+				String idServis = vozilo.getFilijala().getServis().getId().toString();
+				
+				if(idServis.equals(id)) {
+					System.out.println("Datum za poredjenje"+rezervacija.getDatumPreuzimanja());
+					if(rezervacija.getDatumPreuzimanja().after(datum)) {
+						System.out.println("Dodajemo vrednost");
+						suma+=rezervacija.getCena();
+					}
+				}
+		}
+		return suma;
+	}
 }

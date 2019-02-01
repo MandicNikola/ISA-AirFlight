@@ -238,6 +238,30 @@ $(document).ready(function($) {
 		}
 	});
 
+
+	$("#seeIncome").click(function() {
+		$("#errorIncome").text("");
+		var ispravno=true;
+		var start=$("#incomeDate").val();
+		if(start == ""){
+			ispravno = false;
+			$("#errorIncome").text(" Fill out this field").css('color', 'red');
+		}
+		if(ispravno){
+			console.log(start);
+			$.ajax({
+					method:'GET',
+					url: "/api/rezervacijerent/getIncome/"+id+"/start/"+start,
+					success: function(iznos){
+						console.log(iznos);
+						$("#incomeResult").empty();
+						$("#incomeResult").append("<p> Total income is "+iznos+"</p>");
+					}
+			});
+			
+		}
+		
+	});
 });
 
 function loadPodatke(){

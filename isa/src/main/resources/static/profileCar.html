@@ -18,11 +18,14 @@
 		    border-bottom: 2px solid #C3C3C3;
 		    padding: 4px;
  	}
- 	.look{
+ 	.look, #incomeResult{
  		padding:5px;
  		font-weight: bold;
  		font-family: "Comic Sans MS", serif;
 		    
+ 	}
+ 	#incomeResult{
+ 		font-size: 16px;
  	}
 	body{
 			background-color: #EFEFEF;
@@ -473,6 +476,29 @@
 						</section>
 					<p>List of our cars </p>
 						<div id="izvestajVozila">
+						</div>
+							<div class="row" >
+								<h3 class="look">
+									<span> <i class="glyphicon glyphicon-calendar"></i></span>See income of the service 
+								</h3>
+								<div class="form-group row ">				      	
+							        <div class="col-xs-1">
+									      <label class="form-label">Since:</label>
+									</div>
+							   		<div class="col-xs-4" id="income">
+									   		<div class="input-group">
+												<span class="input-group-addon"> <i class="glyphicon glyphicon-calendar"></i></span>
+												<input class="form-control" id="incomeDate" type="date" data-placeholder="Choose the begining of period" data-toggle="tooltip" data-placement="top" title="Date since when you want to calculate income" >
+												<span id="errorIncome"></span>
+											</div>
+									</div>
+									<div class="col-xs-2">
+							   			<button id="seeIncome"  class="btn btn-info" >Calculate</button>
+									</div>
+							   		<div class="col-xs-4" id="incomeResult">
+									</div>
+							    </div>
+						    			 
 						</div>
 						<canvas id="dayChart">
 						</canvas>
