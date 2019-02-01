@@ -352,7 +352,7 @@ $(document).on('submit','.konfiguracija',function(e){
 					alert('Postoji izabrana kategorija');
 					
 				}else{
-					alert('dodavanje super');
+					//alert('dodavanje super');
 					dodajHoteluKategoriju(data);
 				}	
 		},
@@ -1501,12 +1501,10 @@ function removeDisc(slanje){
 }
 function promjeniBrojPopusta(slanje){
 	console.log(slanje);
-	var adresa = window.location.search.substring(1);
-	var id = adresa.split('=')[1];
-
+	
 	$.ajax({
 		type : 'POST',
-		url : "/api/hoteli/ukloniPopust/"+id+"/slanje/"+slanje,
+		url : "/api/rooms/ukloniPopust/"+slanje,
 		success : function(povratna) {
 						console.log('uspjesno');
 						ispisiOpetSobu();

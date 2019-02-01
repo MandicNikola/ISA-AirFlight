@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.model.Filijala;
+import rs.ftn.isa.model.Hotel;
 import rs.ftn.isa.model.RezervacijaHotel;
 import rs.ftn.isa.model.Room;
 import rs.ftn.isa.service.RoomServiceImp;
@@ -93,5 +94,30 @@ public class RoomController {
 		return stara;
 	}
 
+
+	@RequestMapping(value="/ukloniPopust/{slanje}", 
+			method = RequestMethod.POST,
+			produces = MediaType.APPLICATION_JSON_VALUE
+			)
+	public @ResponseBody Room ukloniPopust(@PathVariable("slanje") String slanje){
+		System.out.println("Dosao da ukloni popust");
+		String[] pom = slanje.split("\\.");
+		String sobaId = pom[1];
+		Long id =Long.parseLong(sobaId);
+		Room room  = servis.findRoomById(id);
+		System.out.println("Soba je "+room.getId());
+		if(room.getPopusti() == null) {
+			room.setImapopusta(false);
+			
+		}else {
+
+			if(room.getPopusti().size()== 0) {
+				room.setImapopusta(false);
+			}
+		}
+		
+		servis.saveRoom(room);
+		return room;
+	}
 
 }

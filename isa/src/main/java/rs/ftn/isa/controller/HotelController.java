@@ -1367,36 +1367,4 @@ public Hotel otkaziHotel(@PathVariable String idRez){
 			return popusti;
 		}
 		
-		@RequestMapping(value="/ukloniPopust/{id}/slanje/{slanje}", 
-				method = RequestMethod.POST,
-				produces = MediaType.APPLICATION_JSON_VALUE
-				)
-		public @ResponseBody Room ukloniPopust(@PathVariable("id") Long id,@PathVariable("slanje") String slanje){
-			Hotel pronadjeni = servis.findHotelById(id);
-			System.out.println("Dosao da ukloni popust");
-			String[] pom = slanje.split("\\.");
-			String sobaId = pom[1];
-			Room room  = null;
-			for(Room soba:pronadjeni.getSobe()) {
-				if(soba.getId().toString().equals(sobaId)) {
-					room = soba;
-					break;
-				}
-			}
-			System.out.println("Soba je "+room.getId());
-			pronadjeni.getSobe().remove(room);
-			if(room.getPopusti() == null) {
-				room.setImapopusta(false);
-				
-			}else {
-
-				if(room.getPopusti().size()== 0) {
-					room.setImapopusta(false);
-				}
-			}
-			
-			pronadjeni.getSobe().add(room);
-			servis.saveHotel(pronadjeni);
-			return room;
-		}
 }

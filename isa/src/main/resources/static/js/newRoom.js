@@ -67,7 +67,6 @@ $(document).on('submit','.soba',function(e){
 				}else if(data == null){
 					alert('dodavanje nije super');	
 				}else{
-					alert('dodavanje je super');
 					dodajHotelu(data);
 				}	
 		},
