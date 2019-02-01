@@ -135,10 +135,7 @@
     border-radius: 3px;
    
 	}
-#odPrihodi{
-	    width: 40%;
-	
-}
+
  #HotelDugme{
   background-color: #404040 !important;
 	padding:6px;	
@@ -153,8 +150,13 @@
     border-radius: 3px;
      font-family: 'Josefin Sans', sans-serif;
 }
-  
-  
+  #monthChoose,#godinaIzbor,#prosecnaOcijena{
+  	margin-left:20px;
+  }
+  #prosecnaOcijena,#listaSoba{
+	     font-family: 'Josefin Sans', sans-serif;
+	  
+  }
 .form-header,#korak4css,#obavj{
 	text-align: center;
     margin-bottom: 20px;
@@ -205,15 +207,16 @@ input[type="date"]:valid::before { display: none }
 			  
 			 <div id="izvestaj" class="container-fluid">
 			  		<section >
-						<p id="prosecnaOcijena">Average rating of hotel is  </p>
+						<p id="prosecnaOcijena">Average rating of hotel is: </p>
 						</section>
-					<p>List of rooms </p>
+					<p id = "listaSoba"> List of rooms: </p>
 						<div id="izvestajSoba">
 						</div>
 						<div id = "prihodi">
-							<div class="form-group">
-								<input id = "odPrihodi"  class="form-control" type="date" required="required" data-placeholder="Since when">
-								<div class="form-btn"><button type="button" id="PrihodDugme" class="btn btn-light" onclick = "pronadjiPrihode()">Search</button>																					</div>	
+							<div class="form-group row">
+							<div class="col-xs-3"><input id = "odPrihodi"  class="form-control" type="date" required="required" data-placeholder="Since when"></div>
+							<div class="col-xs-1"><button type="button" id="PrihodDugme" class="btn btn-light" onclick = "pronadjiPrihode()">Show income</button></div>	
+							<div class="col-xs-2" id = "divVrijednost"></div>
 							</div>
 						</div>
 					
