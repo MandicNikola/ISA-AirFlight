@@ -162,7 +162,6 @@ public class RezervacijaRentController {
 			int godina =Integer.parseInt(niz[1]);
 			int mesec = Integer.parseInt(niz[2]);
 			Calendar kalendar = Calendar.getInstance();
-			System.out.println("godina je "+godina+" mesec je "+mesec);
 			ArrayList<ChartDTO> podaci = new ArrayList<ChartDTO>();
 			Date newDate  = new Date(godina-1900, mesec-1, 1);
 			System.out.println("Datum prvi je "+ newDate.toString());
@@ -173,14 +172,12 @@ public class RezervacijaRentController {
 			}else {
 				danNedelja-=1;
 			}
-			System.out.println("Dan u nedelji je" + danNedelja);
 			
 			//dodajemo pocetke nedelja u listu
 			podaci.add(new ChartDTO(newDate, 0));
-			int dodajDan = 8-danNedelja; //3
+			int dodajDan = 8-danNedelja; 
 			kalendar.add(Calendar.DATE, dodajDan);
 			newDate= kalendar.getTime();
-			System.out.println("Drugi dan je "+newDate.toString());
 			podaci.add(new ChartDTO(newDate, 0));
 			int brojDana = kalendar.getActualMaximum(Calendar.DATE);
 			while(newDate.getDate()+7 < brojDana) {
@@ -192,8 +189,6 @@ public class RezervacijaRentController {
 			for(int p=0;p<podaci.size();p++) {
 					System.out.println(podaci.get(p));
 			}
-			
-			
 			
 			List<RezervacijaRentCar> sveRez=servis.findAll();
 	        
@@ -207,8 +202,6 @@ public class RezervacijaRentController {
 						Date date1= rezervacija.getDatumPreuzimanja();
 						Date date2= rezervacija.getDatumVracanja();
 						
-						System.out.println("Pocetak rezervacije "+date1.toString());
-						System.out.println("Kraj rezervacije "+date2.toString());
 						Calendar c = Calendar.getInstance(); 
 						String datum2  =date2.toString();
 						datum2  = datum2.split(" ")[0];
@@ -222,8 +215,6 @@ public class RezervacijaRentController {
 							datum1 = formater.format(date1);
 							//prvo proveravamo da li nam odgovara godina i mesec
 							String[] nizS = datum1.split("-");
-							System.out.println("************");
-							System.out.println("Datumi su : 1--> "+datum1+" a 2->>> "+datum2);
 							int godRez=Integer.parseInt(nizS[1]);
 
 							System.out.println("parsirana godina "+Integer.parseInt(nizS[0])+" parsiran mesec "+godRez);
@@ -273,6 +264,88 @@ public class RezervacijaRentController {
 			
 			return podaci;
 	}
+	@RequestMapping(value="/monthlychart/{podatak}",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ArrayList<ChartDTO> getMonthlyChart(@PathVariable String podatak){	
+		System.out.println("Usao u getMonthly");
+			String[] niz = podatak.split("=");
+			String idRent = niz[0];
+			int godina =Integer.parseInt(niz[1]);
+			SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar kalendar = Calendar.getInstance();
+			ArrayList<ChartDTO> podaci = new ArrayList<ChartDTO>();
+			
+			for(int i=0;i<12;i++) {
+				Date newDate  = new Date(godina-1900, i, 1);
+				podaci.add(new ChartDTO(newDate, 0));
+			}
+			
+			for(int p=0;p<podaci.size();p++) {
+					System.out.println(podaci.get(p));
+			}
+			
+			List<RezervacijaRentCar> sveRez=servis.findAll();
+	        
+			//treba da nadjemo sve rezervacije od rent-a-car sa idRez
+			for(RezervacijaRentCar rezervacija:sveRez) {
+					Vehicle vozilo = rezervacija.getVozilo();
+					String idServis = vozilo.getFilijala().getServis().getId().toString();
+					
+					if(idServis.equals(idRent)) {
+						//dodajemo u listu
+						Date date1= rezervacija.getDatumPreuzimanja();
+						Date date2= rezervacija.getDatumVracanja();
+						
+						Calendar c = Calendar.getInstance(); 
+						String datum2  =date2.toString();
+						datum2  = datum2.split(" ")[0];
+						
+						while(poredi(date1,date2)) {
+							System.out.println("Porede se "+date1.toString()+" i "+date2.toString());
+							String datum1 = "";
+							datum1 = formater.format(date1);
+							//prvo proveravamo da li nam odgovara godina i mesec
+							String[] nizS = datum1.split("-");
+							int godRez=Integer.parseInt(nizS[1]);
+
+							System.out.println("parsirana godina "+Integer.parseInt(nizS[0])+" parsiran mesec "+godRez);
+							if(godina==Integer.parseInt(nizS[0])) {
+								System.out.println("Poklapa se godina");
+							          int index=Integer.parseInt(nizS[1])-1;
+							          int broj = podaci.get(index).getBroj()+1;
+									   podaci.get(index).setBroj(broj);
+									   
+									for(int p=0;p<podaci.size();p++) {
+											System.out.println(podaci.get(p));
+									}
+									 
+							}
+							
+							
+							c.setTime(date1); 
+							c.add(Calendar.DATE, 1);
+							date1 =c.getTime();
+							
+						}
+					}
+					
+			}
+			Collections.sort(podaci);
+			for(int p=0;p<podaci.size();p++) {
+				kalendar.setTime(podaci.get(p).getDatum()); 
+				kalendar.add(Calendar.DATE, 1);
+				Date datePom =kalendar.getTime();
+				
+				podaci.get(p).setDatum(datePom);
+			System.out.println(podaci.get(p));
+		    }
+		
+			System.out.println("Broj podataka u listi je "+podaci.size());
+			
+			return podaci;
+	}
+
 	public boolean poredi(Date date1, Date date2) {
 		if(date1.getYear()==date2.getYear() && date1.getMonth()==date2.getMonth() && date1.getDate()==date2.getDate()) {
 			System.out.println("Godine suu "+date1.getYear() + " a drugi "+date2.getYear());
