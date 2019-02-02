@@ -1392,7 +1392,6 @@ function zavrsiRezBezUsluga(nizSoba){
 	var listaUsl="nema";
 	var adresa = window.location.search.substring(1);
     var id = adresa.split('=')[1];
-		//ovo treba da obradim da vrati podatke
 	  
 	  $.ajax({
 			type : 'POST',
@@ -1429,8 +1428,7 @@ function zavrsiRez(nizSoba){
 		  if(this.checked){
 			  listaUsl += (listaUsl=="" ? $(this).val() : "." + $(this).val());
 				  
-		    }
-		   
+		    } 
 		});
 	  if(listaUsl == ""){
 		  listaUsl = "nema";

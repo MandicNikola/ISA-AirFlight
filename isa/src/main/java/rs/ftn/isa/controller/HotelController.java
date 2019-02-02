@@ -937,7 +937,7 @@ public class HotelController {
 				}
 				
 			}
-			
+			//uzima samo jedan popust
 			if(popusti.size() != 0) {
 				popusti.sort(Comparator.comparingDouble(Usluga :: getPopust));	
 			}
@@ -951,11 +951,13 @@ public class HotelController {
 			for(int i = 0;i<sobe.size();i++) {
 				cijena += (dani*sobe.get(i).getCijena());
 			}
+	
 			if(imaUsluga) {
 				for(int i = 0;i<usluge.size();i++) {
 					cijena += (dani*brLjudi*usluge.get(i).getCena());
 				}
 			}
+			
 			if(popusti.size() == 0) {
 				rez.setCijena(cijena);
 				povratna.setCijena(cijena);
@@ -965,9 +967,11 @@ public class HotelController {
 				rez.setCijena(cijena*((100-popustMax)/100));
 				povratna.setCijena(cijena*((100-popustMax)/100));
 			}
+			
 			if(korisnik != null) {
-			rez.setUserHotel(korisnik);
-			korisnik.getRezHotela().add(rez);
+				rez.setUserHotel(korisnik);
+				povratna.setUserHotel(korisnik);
+				korisnik.getRezHotela().add(rez);
 				System.out.println("dodao korisnika u rez "+korisnik.getIme());
 			}
 			for(Room room:sobe) {
