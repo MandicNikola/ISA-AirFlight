@@ -17,6 +17,7 @@ function loadInformacije(){
 function iscrtajStranicu(rent){
 	
 	$("#naziv").val(rent.naziv);
+	$("#grad").val(rent.grad);
 	$("#adr").val(rent.adresa);
 	$("#opis").val(rent.opis);
 }
@@ -33,6 +34,7 @@ $(document).on('submit','.izmeni',function(e){
 	var newRent={
 			id: idRent,
 			naziv: $("#naziv").val(),
+			grad: $("#grad").val(),
 			adresa : $("#adr").val(),
 			opis : $("#opis").val()			
 }

@@ -72,7 +72,7 @@ public class RentACarControllerTest {
 	@Transactional
 	@Rollback(true)
 	public void testSaveRent() throws Exception {
-		RentACar newRent = new RentACar(RentACarConstants.DB_NEW_NAZIV, RentACarConstants.DB_NEW_ADRESA, RentACarConstants.DB_NEW_OPIS);
+		RentACar newRent = new RentACar(RentACarConstants.DB_NEW_NAZIV, RentACarConstants.DB_NEW_GRAD,RentACarConstants.DB_NEW_ADRESA, RentACarConstants.DB_NEW_OPIS);
 				
 		String json = TestUtil.json(newRent);
 		this.mockMvc.perform(post(URL_PREFIX+ "/newrentacar").contentType(contentType).content(json)).andExpect(status().isCreated());
