@@ -739,7 +739,7 @@ public class HotelController {
 		public ArrayList<RoomDTO> vratiPonude(@RequestBody ReservationHotelDTO rez,@PathVariable Long id,@Context HttpServletRequest request){		
 			Hotel hotel = servis.findHotelById(id);
 			User korisnik = (User)request.getSession().getAttribute("ulogovan");		
-			//double brojBodova  = korisnik.
+			int brojBodova  = korisnik.getBodovi();
 			System.out.println("dosao da vrati ponude " + rez.getBrojKreveta());
 			ArrayList<Room> sobe = new ArrayList<Room>();
 			
@@ -783,8 +783,23 @@ public class HotelController {
 			ArrayList<RoomDTO> pronadjeneSobe = new ArrayList<RoomDTO>();
 			for(Room soba:sobe) {
 				if(soba.getKapacitet() == rez.getBrojKreveta()) {
-					System.out.println("ubacio sobu");
-					pronadjeneSobe.add(new RoomDTO(soba.getId(), soba.getTip(), soba.getOcjena(), soba.getSprat(), soba.getKapacitet(), soba.getCijena(), soba.getBalkon()));
+					boolean flag = false;
+					for(Discount dis:soba.getPopusti()) {
+						if(dis.getBodovi()>= brojBodova){
+							Date pocetakPopusta = dis.getDatumod();
+							Date krajPopusta = dis.getDatumdo();
+							if(!(rez.getCheckIn().after(krajPopusta)||(rez.getCheckOut().before(pocetakPopusta)))) {
+								flag = true;
+							}
+							System.out.println("Soba je na popustu za taj broj bodova");
+							break;
+						}
+					}
+					if(!flag) {
+
+						System.out.println("ubacio sobu");
+						pronadjeneSobe.add(new RoomDTO(soba.getId(), soba.getTip(), soba.getOcjena(), soba.getSprat(), soba.getKapacitet(), soba.getCijena(), soba.getBalkon()));
+					}
 				}
 				
 			}
