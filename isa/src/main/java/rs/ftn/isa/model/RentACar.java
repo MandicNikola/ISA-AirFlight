@@ -38,6 +38,8 @@ public class RentACar {
 
 	@Column(name="brojac")
 	private Integer brojac;
+
+	
 	
 	@OneToMany(mappedBy = "servis", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore

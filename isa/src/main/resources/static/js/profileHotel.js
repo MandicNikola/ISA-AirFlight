@@ -601,7 +601,8 @@ $(document).ready(function(){
 	$("#promjenaLozinke").hide();
 	$("#dodajPopust").hide();
 	$("#izvestaj").hide();
-
+	$("#ispisiTabelu").hide();
+	
 
     $("#rooms").click(function(){
     	listaSoba();

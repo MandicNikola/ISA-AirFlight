@@ -210,6 +210,7 @@ public class HotelController {
 			 if(pom == null) {
 		//inicijalno ocjena je 0
 				 Hotel newHotel = new Hotel(hotel.getNaziv(),hotel.getAdresa(),hotel.getOpis(),0);
+				 newHotel.setGrad(hotel.getGrad());
 				 servis.saveHotel(newHotel);
 				 return new ResponseEntity<>(new HotelDTO(newHotel), HttpStatus.CREATED); 
 			 }else {
@@ -672,6 +673,7 @@ public class HotelController {
 			}
 			old.setNaziv(hotel.getNaziv());
 			old.setAdresa(hotel.getAdresa());
+			old.setGrad(hotel.getGrad());
 			old.setOpis(hotel.getOpis());
 			servis.saveHotel(old);
 			System.out.println("sacuvao hotel");

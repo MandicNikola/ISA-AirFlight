@@ -20,6 +20,8 @@ function popuniPolja(hotel){
 	$("#naziv").val(hotel.naziv);
 	$("#adr").val(hotel.adresa);
 	$("#opis").val(hotel.opis);	
+	$("#grad").val(hotel.grad);	
+	
 }
 
 
@@ -58,7 +60,8 @@ function formToJSON() {
 	return JSON.stringify({
 		"naziv" : $('#naziv').val(),
 		"adresa" : $('#adr').val(),
-		"opis" : $('#opis').val(),			
+		"opis" : $('#opis').val(),	
+		"grad": $('#grad').val()
 	});
 }
 function ucitajPocetnu(){

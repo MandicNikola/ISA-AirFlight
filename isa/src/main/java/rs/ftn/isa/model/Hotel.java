@@ -34,6 +34,10 @@ public class Hotel {
 	@Column(name = "adresa", nullable = false)	
 	private String adresa;
 	
+
+	@Column(name="grad", nullable = false)
+	private String grad;
+	
 	@Column(name = "opis", nullable = false)	
 	private String opis;
 	
@@ -42,6 +46,8 @@ public class Hotel {
 	
 	@Column(name="brojac")
 	private Integer brojac;
+	
+
 	
 	@OneToMany(mappedBy = "hotelski",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore
@@ -175,6 +181,13 @@ public class Hotel {
 			   return city1.compareTo(city2);
 
 	}};
+
+	public String getGrad() {
+		return grad;
+	}
+	public void setGrad(String grad) {
+		this.grad = grad;
+	}
 
 
 }

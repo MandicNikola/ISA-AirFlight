@@ -6,20 +6,20 @@ public class HotelDTO {
 	private String naziv;
 	private String adresa;
 	private String opis;
-	
+	private String grad;
 	public HotelDTO() {
 		super();
 		
 	}
-	public HotelDTO(String naziv, String adresa, String opis) {
+	public HotelDTO(String naziv, String adresa, String opis,String grad) {
 		super();
 		this.naziv = naziv;
 		this.adresa = adresa;
 		this.opis = opis;
+		this.grad = grad;
 	}
 	public HotelDTO(Hotel hotel) {
-		this(hotel.getNaziv(), hotel.getAdresa(),
-				hotel.getOpis());
+		this(hotel.getNaziv(), hotel.getAdresa(),hotel.getOpis(),hotel.getGrad());
 	}
 	@Override
 	public String toString() {
@@ -42,6 +42,12 @@ public class HotelDTO {
 	}
 	public void setOpis(String opis) {
 		this.opis = opis;
+	}
+	public String getGrad() {
+		return grad;
+	}
+	public void setGrad(String grad) {
+		this.grad = grad;
 	}
 	
 	
