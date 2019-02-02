@@ -11,6 +11,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.RentACarDTO;
 import rs.ftn.isa.dto.ReservationRentDTO;
+import rs.ftn.isa.dto.RoomDTO;
+import rs.ftn.isa.dto.VehicleDTO;
+import rs.ftn.isa.model.Discount;
 import rs.ftn.isa.model.Filijala;
 import rs.ftn.isa.model.PricelistRentCar;
 import rs.ftn.isa.model.RentACar;
@@ -603,28 +609,29 @@ public class RentACarController {
 			method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody ArrayList<Vehicle> checkReservation(@RequestBody ReservationRentDTO rezervacija) {
+	@ResponseBody ArrayList<VehicleDTO> checkReservation(@RequestBody ReservationRentDTO rezervacija,@Context HttpServletRequest request) {
+		User korisnik = (User)request.getSession().getAttribute("ulogovan");		
+		int brojBodova  = korisnik.getBodovi();
 		
 		Long id=rezervacija.getRentId();
 		ArrayList<Vehicle> ispunjeniUslovi=new  ArrayList<Vehicle>();
+		ArrayList<VehicleDTO> povratnaLista=new  ArrayList<VehicleDTO>();
 		
 		//prvo gledamo u kom se servisu nalazimo
 		RentACar rent = servis.findOneById(id);
 		System.out.println("Usau u checkReservation");
 			
-	
-
 		Filijala lociranaFilijala=null;
 		//ako nema filijala nije korisnik mogao nista da izabere
 		if(rent.getFilijale() == null) {
 
 			System.out.println("nema filjala1");
-			return new ArrayList<Vehicle>();
+			return new ArrayList<VehicleDTO>();
 		}
 		if(rent.getFilijale().size()==0) {
 
 			System.out.println("nema filjala2");
-			return new ArrayList<Vehicle>();
+			return new ArrayList<VehicleDTO>();
 		}
 	
 		String startLokacija = rezervacija.getStartLocation();
@@ -641,12 +648,12 @@ public class RentACarController {
 		String kat=rezervacija.getTip();
 		if(lociranaFilijala.getVozila()==null) {
 			System.out.println("nema vozila1");
-			return new ArrayList<Vehicle>();
+			return new ArrayList<VehicleDTO>();
 		}
 		if(lociranaFilijala.getVozila().size()==0) {
 
 			System.out.println("nema vozila2");
-			return new ArrayList<Vehicle>();
+			return new ArrayList<VehicleDTO>();
 		}
 		for(Vehicle V : lociranaFilijala.getVozila()) {
 				if(V.getKategorija().toString().equals(kat)){
@@ -691,16 +698,16 @@ public class RentACarController {
 				PricelistRentCar cenovnik = servis.findAktivanCenovnik(rent.getId());
 				if(cenovnik==null) {
 					System.out.println("Cenovnik je null");
-					return new ArrayList<Vehicle>();
+					return new ArrayList<VehicleDTO>();
 				}
 				if(cenovnik.getUsluge()==null) {
 					System.out.println("nema usluga 1");
-					return new ArrayList<Vehicle>();
+					return new ArrayList<VehicleDTO>();
 				}
 				if(cenovnik.getUsluge().size()==0) {
 
 					System.out.println("nema usluga 2");
-					return new ArrayList<Vehicle>();
+					return new ArrayList<VehicleDTO>();
 				}
 				Set<Usluga> usluge= cenovnik.getUsluge();
 				double cena=0;
@@ -735,8 +742,31 @@ public class RentACarController {
 					ispunjeniUslovi.add(vozilo);
 				}
 		}
+		for(Vehicle V: ispunjeniUslovi) {
+			boolean dozvola = true;
+			for(Discount dis: V.getPopusti()) {
+				if(dis.getBodovi()>= brojBodova){
+					Date pocetakPopusta = dis.getDatumod();
+					Date krajPopusta = dis.getDatumdo();
+					if(!(rezervacija.getPickUp().after(krajPopusta)||(rezervacija.getDropOff().before(pocetakPopusta)))) {
+						dozvola = false;
+					}
+					System.out.println("Vozilo je na popustu za taj broj bodova");
+					break;
+				}
+			}
+			if(dozvola) {
+
+				System.out.println("Dodato vozilo");
+				VehicleDTO novoVozilo =new VehicleDTO(V.getId(), V.getMarka(), V.getModel(), V.getGodiste(), V.getGodiste(), V.getKategorija(), V.isImapopusta());
+				novoVozilo.setCena(V.getCena());
+				povratnaLista.add(novoVozilo);
+			}
+			
+			
+		}
 		
-		return ispunjeniUslovi;
+		return povratnaLista;
 	}	
 	
 	 public int daysBetween(Date d1, Date d2){

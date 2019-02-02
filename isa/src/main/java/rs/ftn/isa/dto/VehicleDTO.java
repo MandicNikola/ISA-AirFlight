@@ -10,7 +10,9 @@ public class VehicleDTO {
 	private int sedista;
 	private CategoryCar kategorija;
     private boolean imapopusta;
-    public VehicleDTO() {
+	private double cena;
+
+	public VehicleDTO() {
     	super();
     }
 	public VehicleDTO(Long id, String marka, String model, int godiste, int sedista, CategoryCar kategorija,
@@ -65,6 +67,12 @@ public class VehicleDTO {
 	}
 	public void setImapopusta(boolean imapopusta) {
 		this.imapopusta = imapopusta;
+	}
+	public double getCena() {
+		return cena;
+	}
+	public void setCena(double cena) {
+		this.cena = cena;
 	} 
 
     

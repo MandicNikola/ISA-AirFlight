@@ -988,14 +988,13 @@ function izlistajPonude(data){
 	var niz = data == null ? [] : (data instanceof Array ? data : [ data ]);
 	
 	$("#rezultat").show();
-	 $("#rezultat").append("<table class=\"table table-hover\" id=\"tabelaPonuda\" ><thead><tr><th>Brand</th><th>Model</th><th>Model year</th><th>Number of seats </th><th>Category</th><th>Branch office</th><th>Total price</th><th></th></thead>");
+	 $("#rezultat").append("<table class=\"table table-hover\" id=\"tabelaPonuda\" ><thead><tr><th>Brand</th><th>Model</th><th>Model year</th><th>Number of seats </th><th>Category</th><th>Total price</th><th></th></thead>");
 		
 		$.each(niz, function(index, pom) {
 			
-			var filpom=pom.filijala.grad;
 			var cena=pom.cena;
 			var param=cena+"="+pom.id;
-			$("#tabelaPonuda").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+pom.marka+"</td><td > "+pom.model+"</td><td > "+pom.godiste+"</td><td > "+pom.sedista+"</td><td> "+pom.kategorija+"</td><td > "+filpom+"</td><td> "+pom.cena+"</td><td><button class=\"btn btn-info\" onclick=\"rezervisiVozilo('"+param+"')\">Reserve</button></td><td></tr>");
+			$("#tabelaPonuda").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+pom.marka+"</td><td > "+pom.model+"</td><td > "+pom.godiste+"</td><td > "+pom.sedista+"</td><td> "+pom.kategorija+"</td><td> "+pom.cena+"</td><td><button class=\"btn btn-info\" onclick=\"rezervisiVozilo('"+param+"')\">Reserve</button></td><td></tr>");
 				
 		});
 		

@@ -103,6 +103,7 @@ public class User {
 		this.mail = mail;
 		this.telefon = telefon;
 		this.grad = grad;
+		this.bodovi=0;
 	}
 
 
@@ -120,6 +121,7 @@ public class User {
 		this.lozinka = lozinka;
 		this.tip = Role.valueOf(tip);
 		this.adminPotvrdio = adminPotvrdio;
+		this.bodovi=0;
 	}
 
 
@@ -133,6 +135,7 @@ public class User {
 		this.grad = grad;
 		this.lozinka = lozinka;
 		this.tip = tip;
+		this.bodovi=0;
 	}
 
 
@@ -146,6 +149,7 @@ public class User {
 		this.grad = grad;
 		this.lozinka = lozinka;
 		this.tip = Role.NEREGISTROVAN;
+		this.bodovi=0;
 	}
 
 
