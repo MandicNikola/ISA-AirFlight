@@ -736,9 +736,10 @@ public class HotelController {
 		@RequestMapping(value="/vratiPonude/{id}", 
 				method = RequestMethod.POST,
 				consumes = MediaType.APPLICATION_JSON_VALUE)
-		public ArrayList<RoomDTO> vratiPonude(@RequestBody ReservationHotelDTO rez,@PathVariable Long id){		
+		public ArrayList<RoomDTO> vratiPonude(@RequestBody ReservationHotelDTO rez,@PathVariable Long id,@Context HttpServletRequest request){		
 			Hotel hotel = servis.findHotelById(id);
-			
+			User korisnik = (User)request.getSession().getAttribute("ulogovan");		
+			//double brojBodova  = korisnik.
 			System.out.println("dosao da vrati ponude " + rez.getBrojKreveta());
 			ArrayList<Room> sobe = new ArrayList<Room>();
 			
