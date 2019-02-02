@@ -205,7 +205,7 @@ public class RentACarController {
 	public ResponseEntity<RentACar> newRentACar(@RequestBody RentACarDTO newRent) {
 		RentACar rent = servis.findOneByNaziv(newRent.getNaziv());
 		if(rent == null) {
-			RentACar novi = new RentACar(newRent.getNaziv(),newRent.getAdresa(),newRent.getOpis());
+			RentACar novi = new RentACar(newRent.getNaziv(),newRent.getGrad(),newRent.getAdresa(),newRent.getOpis());
 			servis.saveRentACar(novi);
 			return new ResponseEntity<>(novi, HttpStatus.CREATED);	
 
@@ -567,7 +567,7 @@ public class RentACarController {
 		
 		RentACar rent = servis.findOneById(newRent.getId());
 		
-		if(rent.getNaziv().equals(newRent.getNaziv()) && (rent.getAdresa().equals(newRent.getAdresa())) && (rent.getOpis().equals(newRent.getOpis())) ) {
+		if(rent.getNaziv().equals(newRent.getNaziv())&&(rent.getGrad().equals(newRent.getGrad())) && (rent.getAdresa().equals(newRent.getAdresa())) && (rent.getOpis().equals(newRent.getOpis())) ) {
 			//nista se nije izmenilo
 			System.out.println("Nista se nije izmenilo");
 			return rent;
@@ -587,7 +587,7 @@ public class RentACarController {
 					return null;
 			}
 		}
-		
+		rent.setGrad(newRent.getGrad());
 		rent.setAdresa(newRent.getAdresa());
 		rent.setNaziv(newRent.getNaziv());
 		rent.setOpis(newRent.getOpis());

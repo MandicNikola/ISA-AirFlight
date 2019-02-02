@@ -27,6 +27,9 @@ public class RentACar {
 	@Column(name="naziv", nullable = false)
 	private String naziv;
 	
+	@Column(name="grad",nullable = false)
+	private String grad;
+	
 	@Column(name="adresa",nullable = false)
 	private String adresa;
 	
@@ -55,14 +58,7 @@ public class RentACar {
 		ocena=0;
 		brojac=0;
 	}
-	public RentACar(String naziv, String adresa, String opis) {
-		super();
-		this.naziv = naziv;
-		this.adresa = adresa;
-		this.opis = opis;
-		ocena=0;
-		brojac=0;
-	}
+	
 	
 	public RentACar(Long id, String naziv, String adresa, String opis) {
 		super();
@@ -75,6 +71,29 @@ public class RentACar {
 	}
 	
 	
+	
+	public RentACar(Long id, String naziv, String grad, String adresa, String opis) {
+		super();
+		this.id = id;
+		this.naziv = naziv;
+		this.grad = grad;
+		this.adresa = adresa;
+		this.opis = opis;
+		this.ocena = 0;
+		this.brojac = 0;
+	}
+	
+	public RentACar(String naziv, String grad, String adresa, String opis) {
+		super();
+		this.naziv = naziv;
+		this.grad = grad;
+		this.adresa = adresa;
+		this.opis = opis;
+		this.brojac=0;
+		this.ocena=0;
+	}
+
+
 	public Long getId() {
 		return id;
 	}
@@ -127,6 +146,14 @@ public class RentACar {
 	}
 	public void setOcena(double ocena) {
 		this.ocena = ocena;
+	}
+
+
+	public String getGrad() {
+		return grad;
+	}
+	public void setGrad(String grad) {
+		this.grad = grad;
 	}
 
 

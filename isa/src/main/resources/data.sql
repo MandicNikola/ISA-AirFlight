@@ -12,8 +12,8 @@ insert into hotel ( id, naziv, adresa,grad, opis, ocena, brojac) values (1245,'M
 insert into hotel ( id, naziv, adresa,grad, opis, ocena, brojac) values (1115,'Anjica', 'Fruskogorska 18','Novi Sad','divno',0, 0);
 insert into cenovnik( id, datum_primene,aktivan) values (125,'2018-11-11',false);
 insert into cenovnik( id, datum_primene,aktivan) values (128,'2017-11-11',false);
-insert into rentacar ( id, naziv, adresa, opis, ocena, brojac) values (1245,'Fast car', 'Kisacka 10','Dobrodosli',0, 0);
-insert into rentacar ( id, naziv, adresa, opis, ocena, brojac) values (1255,'Rent a car', 'Kosovska 18','sigurno i lako',0, 0);
-insert into rentacar ( id, naziv, adresa, opis, ocena, brojac) values (1265,'NS the best', 'Dunavska 22','samo brzo',0, 0);
+insert into rentacar ( id, naziv, adresa, grad, opis, ocena, brojac) values (1245,'Fast car','Kisacka 10', 'Novi Sad','Dobrodosli',0, 0);
+insert into rentacar ( id, naziv, adresa, grad, opis, ocena, brojac) values (1255,'Rent a car', 'Kosovska 18','Novi Sad','sigurno i lako',0, 0);
+insert into rentacar ( id, naziv, adresa, grad, opis, ocena, brojac) values (1265,'NS the best', 'Knez Mihajlova 13', 'Beograd','samo brzo',0, 0);
 
 
