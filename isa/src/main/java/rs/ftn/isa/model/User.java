@@ -51,6 +51,10 @@ public class User {
 	@Column(name="adminPotvrdio")
 	private boolean adminPotvrdio;
 	
+	@Column(name="bodovi")
+	private int bodovi;
+	
+	
 	@Enumerated(EnumType.STRING)
 	@Column(name="tip")
 	private Role tip;
@@ -373,6 +377,16 @@ public class User {
 		{
 			related.setRelated(this,false);
 		}
+	}
+
+
+	public int getBodovi() {
+		return bodovi;
+	}
+
+
+	public void setBodovi(int bodovi) {
+		this.bodovi = bodovi;
 	}
 	
 		
