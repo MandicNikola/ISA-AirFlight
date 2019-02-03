@@ -772,7 +772,7 @@ function izlistajFast(){
 	console.log(kraj);
 	$.ajax({
 		method:'GET',
-		url: "/api/rooms/getFast/"+id+"/checkout/"+kraj+"/checkin/2019-01-02",
+		url: "/api/rooms/getFast/"+id+"/checkout/"+kraj+"/checkin/2019-02-02",
 		success: function(data){
 			if(data == null){
 				console.log('Nema soba');
@@ -785,7 +785,7 @@ function izlistajFast(){
 	
 }
 function ispisiFast(data){
-	
+	console.log('stigao u ispisiFast');
 }
 function dodajIzvjestaj(){
 	var adresa = window.location.search.substring(1);
