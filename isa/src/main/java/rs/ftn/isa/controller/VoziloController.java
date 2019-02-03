@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -22,10 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.VehicleDTO;
 import rs.ftn.isa.model.Discount;
+import rs.ftn.isa.model.PricelistRentCar;
 import rs.ftn.isa.model.RezervacijaRentCar;
 
 import rs.ftn.isa.model.StatusRezervacije;
 import rs.ftn.isa.model.User;
+import rs.ftn.isa.model.Usluga;
 import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.service.VoziloService;
 
@@ -514,7 +517,53 @@ public @ResponseBody ArrayList<VehicleDTO> nadjiVozilaPopust(@PathVariable Strin
 					}
 					
 					if(dozvolaPickUp) {
+						int brojDana= daysBetween(pocetak, kraj);
+						PricelistRentCar cenovnik = null;
+						
+						for(PricelistRentCar C : V.getFilijala().getServis().getCenovnici()) {
+								if(C.isAktivan()){
+									cenovnik=C;
+									break;
+								}
+						}
+						if(cenovnik==null) {
+							System.out.println("Cenovnik je null");
+							return new ArrayList<VehicleDTO>();
+						}
+						if(cenovnik.getUsluge()==null) {
+							System.out.println("nema usluga 1");
+							return new ArrayList<VehicleDTO>();
+						}
+						if(cenovnik.getUsluge().size()==0) {
+
+							System.out.println("nema usluga 2");
+							return new ArrayList<VehicleDTO>();
+						}
+						Set<Usluga> usluge= cenovnik.getUsluge();
+						double cena=0;
+						
+						ArrayList<Usluga> sortirane = new ArrayList<Usluga>();
+						for(Usluga u : usluge) {
+							if(u.getKategorija().toString().equals(V.getKategorija().toString())) {
+								sortirane.add(u);
+							}
+						}
+						sortirane.sort(Comparator.comparingInt(Usluga :: getPrekoTrajanja));
+						System.out.println("Broj dana je "+brojDana);
+						
+						
+						cena= sortirane.get(0).getCena(); //uzima se najmanja cena
+						for(int j = 0;j < sortirane.size();j++) {
+								Usluga pom=sortirane.get(j);
+								if(brojDana >= pom.getPrekoTrajanja()) {
+									cena=pom.getCena();	
+									System.out.println("Promenjena cena na "+cena);
+								}
+						}
+
+						
 						VehicleDTO novaPonuda = new VehicleDTO(V.getId(), V.getMarka(), V.getModel(), V.getGodiste(), V.getSedista(), V.getKategorija(), V.isImapopusta());
+						novaPonuda.setCena(cena);
 						novaPonuda.setPopust(popust.getVrijednost());
 						ponuda.add(novaPonuda);
 				
@@ -529,5 +578,7 @@ public @ResponseBody ArrayList<VehicleDTO> nadjiVozilaPopust(@PathVariable Strin
 			}
 			return ponuda;
 }
-		
+		 public int daysBetween(Date d1, Date d2){
+	         return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+	 }
 }

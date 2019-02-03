@@ -165,6 +165,7 @@ $(document).ready(function($) {
 				}else{
 					console.log("ima podataka");
 					console.log(lista.length);
+					ispisiBrzeRez(lista,start,end);
 				}
 			}
 		});
@@ -284,7 +285,8 @@ function loadPodatke(){
 			});
 	
 	
-}function iscrtajStranicu(servis){
+}
+function iscrtajStranicu(servis){
 	console.log('usao u iscrtaj stranicu dobio je '+ servis);
 	
     $("#naslov").text(servis.naziv);
@@ -327,7 +329,19 @@ function popuniFilijale(){
 	
 }
 
+function ispisiBrzeRez(skup,odDat,doDat){
+	
+	console.log('Usao u ispisi brze rez');
+	$("#resultFast").empty();
+	var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
+	
+	$("#resultFast").append("<table class=\"table table-hover\" id=\"tabelaFast\" ><tr><th>Model</th><th>Brand</th><th>Since</th><th>Until</th><th>Original price</th><th>Discount</th><th></th></tr>");
+	$.each(lista, function(index, clan) {
+		
+		$("#tabelaFast").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+clan.model+"</td><td> "+clan.marka+"</td><td>"+odDat+"</td><td>"+doDat+"</td><td>"+clan.cena+"</td><td>"+clan.popust+"</td></tr>");
 
+	});
+}
 
 //ovde treba da se preuzmu usluge od odredjene kategorije
 function kategorija(naziv){
@@ -687,7 +701,8 @@ $(document).ready(function(){
 		
      	$("#automobili").hide();
      	$("#adminStrana").hide();
-     	$("#divFast").show();
+     	$("#resultFast").empty();
+    	$("#divFast").show();
      });        
     $("a#veh").click(function(){
     	$("#informacije").hide();
