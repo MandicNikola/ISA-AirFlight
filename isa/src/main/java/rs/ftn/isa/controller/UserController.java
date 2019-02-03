@@ -594,13 +594,14 @@ public class UserController {
 	@RequestMapping(value="/dodajRez", 
 			method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody User dodajRezervaciju(@RequestBody User korisnik ){		
+	public @ResponseBody RezervacijaRentCar dodajRezervaciju(@RequestBody RezervacijaRentCar rez ){		
 	System.out.println("Usao u sacuvaj korisnika");
-	System.out.println("Id je "+korisnik.getId());
+	System.out.println("Id je "+rez.getKorisnik().getId());
+	User korisnik  = rez.getKorisnik();
 	System.out.println("Ispis korisnika je "+korisnik);
 	User kor=	servis.saveUser(korisnik);
-		System.out.println("vratio je sacuvanog");
-		return kor;
+	//	System.out.println("vratio je sacuvanog");
+		return rez;
 	}
 	
 	@RequestMapping(value="/addRezSobe", 
