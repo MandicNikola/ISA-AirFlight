@@ -12,5 +12,5 @@ public interface RoomService {
 	
 	Room saveRoom(Room soba);
 	void removeRoom(Long id);
-	
+	List<Room> findRoomsByHotel(Long hotel);
 }

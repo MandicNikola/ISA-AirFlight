@@ -208,7 +208,9 @@ function onLoad(){
 	$("#promjenaLozinke").hide();
 	$("#dodajPopust").hide();
 	$("#izvestaj").hide();
+	//?
 	$("#dnevniGrafik").show();
+	$("#fastDiv").hide();
 	
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);
@@ -604,6 +606,7 @@ $(document).ready(function(){
 	$("#dodajPopust").hide();
 	$("#izvestaj").hide();
 	$("#ispisiTabelu").hide();
+	$("#fastDiv").hide();
 	
 
     $("#rooms").click(function(){
@@ -618,6 +621,7 @@ $(document).ready(function(){
 		$("#adminStrana").hide();
 		$("#promjenaLozinke").hide();
 		$("#dodajPopust").hide();
+		$("#fastDiv").hide();
 		$("#izvestaj").hide();
 			
     });
@@ -633,6 +637,7 @@ $(document).ready(function(){
 		$("#promjenaLozinke").hide();
 		$("#dodajPopust").hide();
 		$("#izvestaj").hide();
+		$("#fastDiv").hide();
 		
     });
     
@@ -647,7 +652,8 @@ $(document).ready(function(){
 		$("#konfig").hide();
 		$("#promjenaLozinke").hide();
 		$("#dodajPopust").hide();
-	 	
+		$("#fastDiv").hide();
+		
 		$("#rezervacije").show();
 		$("#korak").empty();
 		$("#korakDodatne").empty();
@@ -667,6 +673,8 @@ $(document).ready(function(){
 		$("#adminStrana").hide();
 		$("#dodajPopust").hide();
 		$("#izvestaj").hide();
+		$("#fastDiv").hide();
+		
     });
     
     $("#admini").click(function(){
@@ -682,6 +690,8 @@ $(document).ready(function(){
 		$("#promjenaLozinke").hide();
 		$("#dodajPopust").hide();
 		$("#izvestaj").hide();
+		$("#fastDiv").hide();
+		
     });  	
     $("#price").click(function(){
     	console.log('dosao u price');
@@ -697,6 +707,8 @@ $(document).ready(function(){
 		$("#promjenaLozinke").hide();
 		$("#dodajPopust").hide();
 		$("#izvestaj").hide();
+		$("#fastDiv").hide();
+		
     });
     $("#sistemPopust").click(function(){
     	console.log('dosao u popust');
@@ -712,6 +724,8 @@ $(document).ready(function(){
 		$("#promjenaLozinke").hide();
 		$("#dodajPopust").hide();
 		$("#izvestaj").hide();
+		$("#fastDiv").hide();
+		
     });
     $("#business").click(function(){
     	console.log('dosao u izvjestaj');
@@ -727,10 +741,52 @@ $(document).ready(function(){
 		$("#dodajPopust").hide();
 		$("#izvestaj").show();
 		dodajIzvjestaj();
+		$("#fastDiv").hide();
+		
+    });
+    
+    $("#fast").click(function(){
+    	console.log('dosao u fast rez');
+    	$("#informacije").hide();
+    	$("#divPopust").hide();
+    	$("#ispisiTabelu").hide();
+		$("#sobe").hide(); 
+		$("#cijene").hide();
+		$("#konfig").hide();
+		$("#rezervacije").hide();
+		$("#adminStrana").hide();
+		$("#promjenaLozinke").hide();
+		$("#dodajPopust").hide();
+		$("#izvestaj").hide();
+		$("#fastPonuda").empty();
+		$("#fastDiv").show();
 		
     });
 
 });
+function izlistajFast(){
+	$("#fastPonuda").empty();
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	var kraj=$('#checkoutFast').val();
+	console.log(kraj);
+	$.ajax({
+		method:'GET',
+		url: "/api/rooms/getFast/"+id+"/checkout/"+kraj+"/checkin/2019-01-02",
+		success: function(data){
+			if(data == null){
+				console.log('Nema soba');
+			}else{
+				ispisiFast(data);
+				
+			}
+		}
+	});
+	
+}
+function ispisiFast(data){
+	
+}
 function dodajIzvjestaj(){
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);
