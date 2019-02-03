@@ -13,8 +13,5 @@ public interface VoziloRepository extends JpaRepository<Vehicle,Long> {
 
 	Vehicle findOneById(Long id);
 	
-<<<<<<< HEAD
-=======
-	
->>>>>>> 93bbe449cd2c85345e984ec259b842f19445c05f
+
 }
