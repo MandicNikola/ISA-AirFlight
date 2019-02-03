@@ -35,4 +35,10 @@ public class RoomServiceImp implements RoomService{
 		repozitorijum.deleteById(id);
 	}
 
+	@Override
+	public List<Room> findRoomsByHotel(Long hotel) {
+		// TODO Auto-generated method stub
+		return repozitorijum.findRoomsByHotel(hotel);
+	}
+
 }

@@ -14,6 +14,7 @@ $(document).ready(function($) {
 			console.log(korisnik.tip);
 			if(korisnik.tip == 'ADMIN_SISTEM'){
 				  $("#res").hide();
+				  $("#fastRes").hide();
 				console.log('Usao u dodajgrafik');
 
 				$.ajax({
@@ -41,7 +42,16 @@ $(document).ready(function($) {
 				$(".side").hide();
 			}
 	
+	}else{
+
+		 $("#business").hide();
+		 $("#admini").hide();
+		 $("#sistemPopust").hide();
+		$(".side").hide();
 	}	
+	
+	
+	
 	function iscrtajGrafik(lista, kontekst, naslov,chart){
 		var labele=new Array();
 		var vrednosti=new Array();
@@ -128,6 +138,38 @@ $(document).ready(function($) {
 		});
 		
 		}
+	});
+
+	$("#findFast").click(function() {
+		
+		
+		var end = $("#datumFast").val();
+		var start="2019-02-02";
+		//kasnije dodati
+		//var date1 = Date.parse(pocetak);
+	//	var date2 = Date.parse(datum);
+		//if (date1 > date2) {
+			//$("#errorFast").text("Drop-off date must be greater than pick-up date").css('color', 'red');
+		//}else{
+		
+		//}
+		
+		$.ajax({
+			method:'GET',
+			url: "/api/vozila/getFast/"+id+"/start/"+start+"/end/"+end+"/grad/Novi Sad",
+			success: function(lista){
+				if(lista == null){
+					console.log('Nema podataka');
+				}else if(lista.length==0){
+					console.log('Nema podataka');
+				}else{
+					console.log("ima podataka");
+					console.log(lista.length);
+					ispisiBrzeRez(lista,start,end);
+				}
+			}
+		});
+		
 	});
 
 	$("#showGraf2").click(function() {
@@ -243,7 +285,8 @@ function loadPodatke(){
 			});
 	
 	
-}function iscrtajStranicu(servis){
+}
+function iscrtajStranicu(servis){
 	console.log('usao u iscrtaj stranicu dobio je '+ servis);
 	
     $("#naslov").text(servis.naziv);
@@ -286,7 +329,19 @@ function popuniFilijale(){
 	
 }
 
+function ispisiBrzeRez(skup,odDat,doDat){
+	
+	console.log('Usao u ispisi brze rez');
+	$("#resultFast").empty();
+	var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
+	
+	$("#resultFast").append("<table class=\"table table-hover\" id=\"tabelaFast\" ><tr><th>Model</th><th>Brand</th><th>Since</th><th>Until</th><th>Original price</th><th>Discount</th><th></th></tr>");
+	$.each(lista, function(index, clan) {
+		
+		$("#tabelaFast").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+clan.model+"</td><td> "+clan.marka+"</td><td>"+odDat+"</td><td>"+doDat+"</td><td>"+clan.cena+"</td><td>"+clan.popust+"</td></tr>");
 
+	});
+}
 
 //ovde treba da se preuzmu usluge od odredjene kategorije
 function kategorija(naziv){
@@ -575,7 +630,7 @@ $(document).ready(function(){
 	var id= pom.split('=')[1];
 	
 	$("#divLozinka").hide();
-	
+	$("#divFast").hide();
 	$("#automobili").hide();
 	$("#addUsluge").hide();
 	$("#cenovnik").hide();
@@ -603,6 +658,7 @@ $(document).ready(function(){
     	$("#cenovnik").hide();
     	$("#informacije").hide();
     	$("#automobili").hide();
+    	$("#divFast").hide();
     	$("#adminStrana").hide();
     	$("#bg").hide();
     	$("#izvestaj").hide();
@@ -622,6 +678,7 @@ $(document).ready(function(){
         $("#informacije").hide();
     	$("#automobili").hide();
     	$("#adminStrana").hide();
+    	$("#divFast").hide();
     	$("#bg").hide();
     	$("#izvestaj").hide();
     	$("#addUsluge").hide();	
@@ -632,11 +689,25 @@ $(document).ready(function(){
     	$("#divLozinka").show();
 		
     });
-        
-    $("a#veh").click(function(){
+    $("a#fastRes").click(function(){
     	$("#informacije").hide();
     	$("#divLozinka").hide();
 
+    	$("#cenovnik").hide();
+     	$("#addUsluge").hide();		
+     	$("#bg").hide();
+     	$("#izvestaj").hide();
+     	$("#divPopust").hide();
+		
+     	$("#automobili").hide();
+     	$("#adminStrana").hide();
+     	$("#resultFast").empty();
+    	$("#divFast").show();
+     });        
+    $("a#veh").click(function(){
+    	$("#informacije").hide();
+    	$("#divLozinka").hide();
+    	$("#divFast").hide();
     	$("#cenovnik").hide();
      	$("#addUsluge").hide();		
      	$("#bg").hide();
@@ -657,7 +728,7 @@ $(document).ready(function(){
     	$("#cenovnik").hide();
      	$("#addUsluge").hide();
     	$("#divLozinka").hide();
-
+    	$("#divFast").hide();
     	$("#automobili").hide();
     	$("#izvestaj").hide();
     	$("#adminStrana").hide();
@@ -677,7 +748,7 @@ $(document).ready(function(){
 	 	$("#addUsluge").hide();		
 	 	$("#bg").hide();
 		$("#divLozinka").hide();
-
+		$("#divFast").hide();
 	 	$("#izvestaj").hide();
 	 	$("#divPopust").hide();
 		$("#adminStrana").hide();
@@ -698,7 +769,7 @@ $(document).ready(function(){
 		$("#divPopust").show();
 		$("#dodajPopust").hide();
 		$("#divLozinka").hide();
-
+		$("#divFast").hide();
 		showCarsForDiscounts();
     	
 
@@ -712,7 +783,7 @@ $(document).ready(function(){
      	$("#addUsluge").hide();		
      	$("#bg").hide();
     	$("#divLozinka").hide();
-
+    	$("#divFast").hide();
     	$("#izvestaj").hide();
      	$("#adminStrana").hide();
     	$("#informacije").show();
@@ -726,7 +797,7 @@ $(document).ready(function(){
 	 	$("#bg").hide();
 	 	$("#adminStrana").show();
 		$("#divLozinka").hide();
-
+		$("#divFast").hide();
 		
 		
     });
@@ -739,7 +810,7 @@ $(document).ready(function(){
     	$("#automobili").hide();
     	$("#izvestaj").show();
     	$("#divLozinka").hide();
-
+    	$("#divFast").hide();
     	$("#adminStrana").hide();
     	console.log('izvestaj');
     	//dodajGrafik();

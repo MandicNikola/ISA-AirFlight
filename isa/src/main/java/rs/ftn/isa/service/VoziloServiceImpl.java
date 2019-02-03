@@ -42,4 +42,6 @@ public class VoziloServiceImpl implements VoziloService{
 		repozitorijum.deleteById(id);
 	}
 
+
+
 }

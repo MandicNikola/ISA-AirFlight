@@ -98,6 +98,15 @@
   		 margin-right:10px;
  	 	
  	 }
+ 	 #DugmeFast{
+ 	 	padding-left:8px;
+ 	 	padding-rigth:8px;
+ 	 	padding-top:3px;
+ 	 	padding-bottom:3px;
+ 	 	
+ 	 	margin-left:15px;
+ 		
+ 	 }
  	 #dodajPopust{
  	 	padding-top: 10px;
  	 
@@ -157,6 +166,10 @@
 	     font-family: 'Josefin Sans', sans-serif;
 	  
   }
+  #fastDiv{
+ 		margin-top: 25px;
+  		margin-left:15px;
+  }
 .form-header,#korak4css,#obavj{
 	text-align: center;
     margin-bottom: 20px;
@@ -201,9 +214,30 @@ input[type="date"]:valid::before { display: none }
 				  	<li><a id="admini" >Administrators</a></li>			  
 				  	<li><a id="sistemPopust">Discounts</a></li>			  
 				    <li><a id="business">Business report</a></li>
+				    <li><a id="fast">Fast reservations</a></li>
 				    
 				  </ul>
 			  </div>
+			 <div id="fastDiv" class="container-fluid">
+			 		 <div class="row">
+				   		
+			  		<div class="col-md-4">
+								<div class="form-group">
+											 <div class="input-group">
+												<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+												<input id = "checkoutFast"  class="form-control" type="date" required="required"  data-placeholder="Check out">
+											</div>
+								</div>
+					</div>
+					<div class="col-md-3">
+									<div class="form-btn">
+									<button type="button" id="DugmeFast" class="btn  btn-lg" onclick = "izlistajFast()">Check availability</button>
+									</div>
+					</div>
+					</div>
+					<div id = "fastPonuda"></div>
+			 </div> 
+			  
 			  
 			 <div id="izvestaj" class="container-fluid">
 			  		<section >

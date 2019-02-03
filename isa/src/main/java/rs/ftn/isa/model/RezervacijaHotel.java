@@ -45,6 +45,9 @@ public class RezervacijaHotel {
 	@Column(nullable = false)
 	private double cijena;
 	
+	@Column(name ="rezavion")
+	private Long rezavion;
+	
 	@Enumerated(EnumType.STRING)
 	@Column(name="status")
 	private StatusRezervacije status;
@@ -177,6 +180,14 @@ public class RezervacijaHotel {
 
 	public void setOcenjeneSobe(Set<Room> ocenjeneSobe) {
 		this.ocenjeneSobe = ocenjeneSobe;
+	}
+
+	public Long getRezavion() {
+		return rezavion;
+	}
+
+	public void setRezavion(Long rezavion) {
+		this.rezavion = rezavion;
 	}
 
 
