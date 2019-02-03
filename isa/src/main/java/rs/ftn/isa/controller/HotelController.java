@@ -981,9 +981,9 @@ public class HotelController {
 				povratna.setCijena(cijena);
 			}else {
 				System.out.println("usao ovdje "+cijena);
-				double popustMax = popusti.get(0).getPopust();
-				rez.setCijena(cijena*((100-popustMax)/100));
-				povratna.setCijena(cijena*((100-popustMax)/100));
+				double popustMax = popusti.get(popusti.size()-1).getPopust();
+				rez.setCijena((double)cijena*((double)(100-popustMax)/100));
+				povratna.setCijena((double)cijena*((double)(100-popustMax)/100));
 			}
 			
 			if(korisnik != null) {

@@ -28,6 +28,7 @@ import rs.ftn.isa.model.Filijala;
 import rs.ftn.isa.model.Hotel;
 import rs.ftn.isa.model.RezervacijaHotel;
 import rs.ftn.isa.model.Room;
+import rs.ftn.isa.model.StatusRezervacije;
 import rs.ftn.isa.model.User;
 import rs.ftn.isa.service.RoomServiceImp;
 
@@ -207,7 +208,8 @@ public class RoomController {
 			Set<RezervacijaHotel> rezervacije = room.getRezervacije(); 
 			if(rezervacije.size() == 0) {
 				RoomDTO sobaDTO = new RoomDTO(room.getId(),room.getTip(),room.getOcjena(),room.getSprat(),room.getKapacitet(),room.getCijena(),room.getBalkon());
-				sobaDTO.setPopust(odgovarajuciPopust.getVrijednost());
+				sobaDTO.setPopust(odgovarajuciPopust.getId());
+				sobaDTO.setVrijednostPopusta(odgovarajuciPopust.getVrijednost());
 				pronadjeneSobe.add(sobaDTO);
 				break;
 			}
@@ -238,7 +240,9 @@ public class RoomController {
 			if(odobrenCheckIN == true || odobrenCheckOUT == true) {
 				System.out.println("odobrena soba");
 				RoomDTO sobaDTO = new RoomDTO(room.getId(),room.getTip(),room.getOcjena(),room.getSprat(),room.getKapacitet(),room.getCijena(),room.getBalkon());
-				sobaDTO.setPopust(odgovarajuciPopust.getVrijednost());
+				sobaDTO.setPopust(odgovarajuciPopust.getId());
+				sobaDTO.setVrijednostPopusta(odgovarajuciPopust.getVrijednost());
+				
 				pronadjeneSobe.add(sobaDTO);
 			}
 			
@@ -254,5 +258,86 @@ public class RoomController {
 		return pronadjeneSobe;
 	}	
 
+	//metoda koja formira rezervaciju
+	//url : "/api/rooms/rezervisiFast/"+info+"/sobapopust/"+param,
 	
+			@RequestMapping(value="/rezervisiFast/{info}/sobapopust/{sobapopust}/idhotel/{idhotel}", 
+					method = RequestMethod.POST,
+					produces = MediaType.APPLICATION_JSON_VALUE
+					)
+			public @ResponseBody RezervacijaHotel brzaRez(@PathVariable("info") String info,
+		            @PathVariable("sobapopust") String sobapopust,@PathVariable("idhotel") Long idhotel,@Context HttpServletRequest request){
+				RezervacijaHotel povratna = new RezervacijaHotel();
+				User korisnik = (User)request.getSession().getAttribute("ulogovan");		
+				List<Room> sobe = servis.findRoomsByHotel(idhotel);
+				
+				String[] infoPom = info.split("\\*");
+				String checkIN = infoPom[0];
+				String checkOUT = infoPom[1];
+				
+				String[] pom = sobapopust.split("\\.");
+				String sobaID = pom[0];
+				String popustID = pom[1];
+				Room izabranaSoba = null;
+				for(Room soba:sobe) {
+					if(soba.getId().toString().equals(sobaID)) {
+						izabranaSoba = soba;
+						break;
+					}
+				}
+				Discount izabraniPopust = null;
+				System.out.println("velicina "+izabranaSoba.getPopusti().size());
+				for(Discount dis:izabranaSoba.getPopusti()) {
+					if(dis.getId().toString().equals(popustID)) {
+						izabraniPopust = dis;
+						break;
+					}
+					
+				}
+				
+				
+				String[] datIN=checkIN.split("-");
+				
+				int godina=Integer.parseInt(datIN[0]);
+				int mjesec=Integer.parseInt(datIN[1])-1;
+				int dan=Integer.parseInt(datIN[2]);	
+				Calendar calendar = Calendar.getInstance();
+				calendar.set(godina, mjesec, dan);
+				Date datumCheckIn = calendar.getTime();
+				datumCheckIn.setHours(0);
+				datumCheckIn.setMinutes(0);
+				datumCheckIn.setSeconds(0);
+				
+				String[] datOUT=checkOUT.split("-");
+				
+				 godina=Integer.parseInt(datOUT[0]);
+				//mjesec krece od 0
+				 mjesec=Integer.parseInt(datOUT[1])-1;
+				 dan=Integer.parseInt(datOUT[2]);
+				 calendar.set(godina, mjesec, dan);
+				 Date datumCheckOut = calendar.getTime();
+				
+				povratna.setDatumDolaska(datumCheckIn);
+				povratna.setDatumOdlaska(datumCheckOut);
+				
+				int dani = daysBetween(datumCheckIn, datumCheckOut);
+				double cijena = dani*izabranaSoba.getCijena();
+				//uracunajpopust
+				povratna.setCijena((double)cijena*((double)(100-izabraniPopust.getVrijednost())/100));
+				
+				povratna.setUserHotel(korisnik);
+				korisnik.getRezHotela().add(povratna);
+				povratna.setStatus(StatusRezervacije.AKTIVNA);
+				
+				Set<RezervacijaHotel> rezSobe = izabranaSoba.getRezervacije();
+				rezSobe.add(povratna);				
+				izabranaSoba.setRezervacije(rezSobe);	
+				servis.saveRoom(izabranaSoba);
+				return povratna;
+			
+			}
+			
+			 public int daysBetween(Date d1, Date d2){
+		         return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+			 }
 }
