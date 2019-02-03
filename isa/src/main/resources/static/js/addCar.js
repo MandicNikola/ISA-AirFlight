@@ -42,7 +42,7 @@ function ispisiFilijale(skup){
 
 	$("#office").empty();
 	$.each(lista, function(index, fil) {
-		 $("#office").append("<option  value=\""+fil.id+"\">"+fil.grad+"</option>");
+		 $("#office").append("<option  value=\""+fil.id+"\">"+fil.grad+","+fil.adresa+"</option>");
 	});
 }
 $(document).on('submit','.registracija',function(e){

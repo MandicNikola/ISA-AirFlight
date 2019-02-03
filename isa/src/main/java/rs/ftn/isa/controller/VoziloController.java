@@ -330,12 +330,6 @@ public class VoziloController {
 		}	
 		
 		
-		
-		
-		
-		
-		
-		
 		@RequestMapping(value="/definisiPopust/{id}/pocetak/{pocetak}/kraj/{kraj}/bodovi/{bodovi}/procenat/{procenat}", 
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE
@@ -468,7 +462,12 @@ public @ResponseBody ArrayList<VehicleDTO> nadjiVozilaPopust(@PathVariable Strin
 						//da vidimo da li je na popustu
 							if(V.getPopusti().size() != 0) {
 								System.out.println("Postoje popusti");
-									for(Discount D : V.getPopusti()) {
+								ArrayList<Discount> popusti =new ArrayList<Discount>();
+								for(Discount DD : V.getPopusti()) {
+										popusti.add(DD);
+								}
+								popusti.sort(Comparator.comparingInt(Discount :: getBodovi));
+									for(Discount D : popusti) {
 										System.out.println("Provera bodova "+D.getBodovi()+" i "+bodovi);
 											//mora da ima dovoljnno bodova
 											if(bodovi >= D.getBodovi()) {
