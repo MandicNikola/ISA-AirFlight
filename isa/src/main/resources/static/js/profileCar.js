@@ -333,12 +333,17 @@ function ispisiBrzeRez(skup,odDat,doDat){
 	
 	console.log('Usao u ispisi brze rez');
 	$("#resultFast").empty();
+	
+	$("#resultFast").append("<p><h2> Offers: </h2></p>");
+	$("#resultFast").append("<p>FROM <span id=\"startDate\">"+odDat+"</span> TO <span id=\"endDate\">"+doDat+"</span></p>");
+	
 	var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 	
-	$("#resultFast").append("<table class=\"table table-hover\" id=\"tabelaFast\" ><tr><th>Model</th><th>Brand</th><th>Since</th><th>Until</th><th>Original price</th><th>Discount</th><th></th></tr>");
+	$("#resultFast").append("<table class=\"table table-hover\" id=\"tabelaFast\" ><tr><th>Model</th><th>Brand</th><th>Original price</th><th>Discount</th><th></th></tr>");
 	$.each(lista, function(index, clan) {
-		
-		$("#tabelaFast").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+clan.model+"</td><td> "+clan.marka+"</td><td>"+odDat+"</td><td>"+doDat+"</td><td>"+clan.cena+"</td><td>"+clan.popust+"</td></tr>");
+		var param=clan.id+","+clan.cena+","+clan.popust;
+		console.log(param);
+     	$("#tabelaFast").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+clan.model+"</td><td> "+clan.marka+"</td><td>"+clan.cena+"</td><td>"+clan.popust+"</td><td><button class=\"btn btn-info\" onclick=\"rezervisiVozilo('"+param+"')\">Reserve</button></td></tr>");
 
 	});
 }
@@ -542,7 +547,7 @@ function popuniSelect(skup){
 	
 	var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 	 $.each(lista, function(index, data) {
-		 	var adresa=data.grad + ", "+data.ulica;
+		 	var adresa=data.grad +", "+data.ulica;
 		 $("#pickLocation").append("<option  value=\""+data.id+"\">"+adresa+"</option>");
 
 		 $("#dropLocation").append("<option  value=\""+data.id+"\">"+adresa+"</option>");
@@ -1066,7 +1071,7 @@ function izlistajPonude(data){
 		$.each(niz, function(index, pom) {
 			
 			var cena=pom.cena;
-			var param=cena+"="+pom.id;
+			var param=pom.id+","+cena+",0";
 			$("#tabelaPonuda").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+pom.marka+"</td><td > "+pom.model+"</td><td > "+pom.godiste+"</td><td > "+pom.sedista+"</td><td> "+pom.kategorija+"</td><td> "+pom.cena+"</td><td><button class=\"btn btn-info\" onclick=\"rezervisiVozilo('"+param+"')\">Reserve</button></td><td></tr>");
 				
 		});
@@ -1075,20 +1080,26 @@ function izlistajPonude(data){
 	
 }
 function rezervisiVozilo(param){
-	
-	var cena=param.split('=')[0];
-	var id= param.split('=')[1];
-	
-	console.log('Usao u rezervisi vozilo '+ id + " cena je "+cena);
-	var pocetak =  $("#pocetak").text();
-	var kraj =  $("#kraj").text();
+    
+	var id=param.split(',')[0];
+	var cena= param.split(',')[1];
+	var flag = param.split(',')[2];
+	console.log('Usao u rezervisi vozilo '+ id + " cena je "+cena+"a flag je "+flag);
+	if(flag == 0){
+		var pocetak =  $("#pocetak").text();
+		var kraj =  $("#kraj").text();
+			
+	}else{
+		var pocetak =  $("#startDate").text();
+		var kraj =  $("#endDate").text();
+		
+	}
 	
 	console.log("pocetak je"+ pocetak+" kraj je "+ kraj);
-	var posalji = id+"="+pocetak+"="+kraj+"="+cena;
-	
+	var podatak = id+"="+pocetak+"="+kraj+"="+cena+"="+flag;
 	$.ajax({
 		type : 'POST',
-		url : "/api/vozila/dodajRezervaciju/"+posalji,
+		url : "/api/vozila/dodajRezervaciju/"+podatak,
 		success : function(povratna) {
 			console.log('zavrsena rezervacija');
 			poveziKorisnika(povratna);
@@ -1125,8 +1136,9 @@ function poveziKorisnika(pom){
 		});
 }
 function ispisiUspesno(){
+	$("#divFast").hide();
 	$("#anketa").hide();
-	 
+	 $("#bg").show();
 	$("#rezultat").empty();
     $("#rezultat").append("<p><h2>You have successfully made a reservation</h2></p>");
     

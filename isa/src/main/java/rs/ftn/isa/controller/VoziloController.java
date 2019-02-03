@@ -134,7 +134,6 @@ public class VoziloController {
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE)
 		public @ResponseBody User dodajRezervaciju(@PathVariable String podatak, @Context HttpServletRequest request){		
-			//u podatku se nalazi idVozilo=datumPreuzimanja=datumVracanja=cena
 			System.out.println("usao u dodajRezervaciju "+podatak);
 			
 			User korisnik = (User)request.getSession().getAttribute("ulogovan");		
@@ -157,7 +156,6 @@ public class VoziloController {
 				
 			
 			System.out.println("Daatum je "+datPreuzimanja);
-			
 			String krajDatum=niz[2];
 			String[] krajP=krajDatum.split("-");
 			
@@ -169,16 +167,30 @@ public class VoziloController {
 			 calendar.set(year, month, day);
 			 Date datVracanje = calendar.getTime();
 			 System.out.println("Daatum je "+datVracanje);
-					
-			 
-			int cena=Integer.parseInt(niz[3]);
-	        			System.out.println("Usao u dodajRezervaciju u vozilo");
+			 double cenaVozila=0;
+			 String flag = niz[4];
+			 if(flag.equals("0")) {
+				 cenaVozila=Double.parseDouble(niz[3]);
+		        	
+			 }else {
+				 Integer popust= Integer.parseInt(flag);
+				int brojDana= daysBetween(datPreuzimanja,datVracanje);
+				cenaVozila= Double.parseDouble(niz[3]);
+				System.out.println("Pocetna cena je "+cenaVozila);
+				cenaVozila = (double)cenaVozila*((double)(100-popust)/100);
+
+				System.out.println("Pocetna cena 2 je "+cenaVozila);
+				cenaVozila=(double)cenaVozila*brojDana;
+
+				System.out.println("Pocetna cena3 je "+cenaVozila);
+			 }
+			 System.out.println("Usao u dodajRezervaciju u vozilo");
 			
 	        	
 			//prvo pronadjemo vozilo koje treba da se izmeni
 			RezervacijaRentCar rezervacija = new RezervacijaRentCar();
 			rezervacija.setStatus(StatusRezervacije.AKTIVNA);
-			rezervacija.setCena(cena);
+			rezervacija.setCena(cenaVozila);
 			rezervacija.setKorisnik(korisnik);
 			korisnik.getRezRent().add(rezervacija);
 			System.out.println("Datum preuzimanja je "+datPreuzimanja);
@@ -194,8 +206,6 @@ public class VoziloController {
 			vozilo.setBroj(vozilo.getBroj()+1);
 			System.out.println("Id od vozila je "+vozilo.getId());
 			servis.saveVehicle(vozilo);
-			Long idRent = vozilo.getFilijala().getServis().getId();
-			//vozilo.setModel(idRent.toString());	
 			return korisnik;
 
 		}
