@@ -784,8 +784,28 @@ function izlistajFast(){
 	});
 	
 }
-function ispisiFast(data){
+function ispisiFast(lista){
 	console.log('stigao u ispisiFast');
+	
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	 $("#izvestajSoba").empty();
+	 $("#izvestajSoba").show();
+	// RoomDTO(room.getId(),room.getTip(),room.getOcjena(),room.getSprat(),room.getKapacitet(),room.getCijena(),room.getBalkon()		
+	 $("#fastPonuda").append("<table class=\"table table-hover\" id=\"tabelaSobeFast\" ><tr><th>Room type </th><th>Capacity</th><th>Floor</th><th>Average Rating</th><th>Balcony</th><th></th></tr>");
+		
+		$.each(pom, function(index, data) {
+			if(data.balkon == 'da'){
+				$("#tabelaSobeFast").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td>"+data.ocena+"</td><td><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\" ></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"rezervisiFast("+data.id+")\">Reserve</button></tr>");
+			}else{
+				$("#tabelaSobeFast").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td>"+data.ocena+"</td><td><input type=\"checkbox\" disabled=\"disabled\" ></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"rezervisiFast("+data.id+")\">Reserve</button></tr>");
+				
+				
+			}
+		});
+		
+	 $("#fastPonuda").append("</table>");
+
+	
 }
 function dodajIzvjestaj(){
 	var adresa = window.location.search.substring(1);
@@ -1622,11 +1642,52 @@ function writeRoomsForDiscounts(lista){
 	
 }
 function addDiscountForRooms(idRoom){
+	var adresa = window.location.search.substring(1);
+	var id = adresa.split('=')[1];
+	
 	$("#sobePopusti").hide();
 
 	$("#dugmePopust").empty();
-	$("#dugmePopust").append("<button type=\"button\"  class=\"btn btn-lg\" onclick = \"dodajPopustSistem("+idRoom+")\">Add</button></div>");				
+	$("#dugmePopust").append("<button type=\"button\"  class=\"btn btn-lg\" onclick = \"dodajPopustSistem("+idRoom+")\">Add</button></div>");
+	$.ajax({
+		method:'GET',
+		url: "/api/hoteli/getUsluge/"+id,
+		success: function(lista){
+			if(lista==null){
+				console.log('Nema usluga');
+				nemaUslugaPopusti();
+			}else if(lista.length == 0){
+				console.log('Prazne usluga');
+				nemaUslugaPopusti();
+			}else{
+				console.log('Ima usluga ');
+				
+				imaUslugaPopusti(lista);
+				
+			}
+		}
+	});
+	
+	//$("#dodajPopust").show();
+}
+function nemaUslugaPopusti(){
 	$("#dodajPopust").show();
+	$("#uslugePopust").empty();
+	
+}
+function imaUslugaPopusti(data){
+	var lista = data == null ? [] : (data instanceof Array ? data : [ data ]);
+	$("#dodajPopust").show();
+	
+	$("#uslugePopust").empty();
+	
+	$("#uslugePopust").append("<table class=\"table table-hover\" id=\"tblDodatne\" ><tr><th>Service name </th><th>Rate</th><th></th></tr>");
+	$.each(lista, function(index, usluga) {
+			$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td>"+usluga.cena+"</td><td><input type=\"checkbox\" name= \"cekiraneUsluge\" id=\""+usluga.id+"\" value=\""+usluga.id+"\"></td></tr>");
+	});
+    $("#uslugePopust").append("</table>");                                                                                                     
+    $("#uslugePopust").show();
+		
 }
 function dodajPopustSistem(idRoom){
 	console.log(idRoom);
@@ -1642,9 +1703,24 @@ function dodajPopustSistem(idRoom){
 	$('#brojBodova').val("");
 	$('#procenat').val("");
 	
+	var listaUsl="";
+	  
+	
+	  $('input[name = "cekiraneUsluge"]').each(function () {
+		  console.log('usao ovdje');
+		  if(this.checked){
+			  listaUsl += (listaUsl=="" ? $(this).val() : "." + $(this).val());
+				  
+		    } 
+		});
+	  if(listaUsl == ""){
+		  listaUsl = "nema";
+	  }
+
+	console.log(listaUsl);
 	$.ajax({
 		type : 'POST',
-		url : "/api/hoteli/definisiPopust/"+id+"/soba/"+idRoom+"/pocetak/"+pocetak+"/kraj/"+kraj+"/bodovi/"+bodovi+"/procenat/"+procenat,
+		url : "/api/hoteli/definisiPopust/"+id+"/soba/"+idRoom+"/pocetak/"+pocetak+"/kraj/"+kraj+"/bodovi/"+bodovi+"/procenat/"+procenat+"/listaUsl/"+listaUsl,
 		success : function(povratna) {
 						console.log('uspjesno');
 						pomocnaFA();

@@ -1295,15 +1295,37 @@ public Hotel otkaziHotel(@PathVariable String idRez){
 	}
 	 
 }
-		//url : "/api/hoteli/definisiPopust/"+id+"/soba/"+idRoom+"/pocetak/"+pocetak+"/kraj/"+kraj+"/bodovi/"+bodovi+"/procenat/"+procenat,
+		//url : "/api/hoteli/definisiPopust/"+id+"/soba/"+idRoom+"/pocetak/"+pocetak+"/kraj/"+kraj+"/bodovi/"+bodovi+"/procenat/"+procenat+"/listausluga/"+listaUsl,
 		
-		@RequestMapping(value="/definisiPopust/{id}/soba/{idRoom}/pocetak/{pocetak}/kraj/{kraj}/bodovi/{bodovi}/procenat/{procenat}", 
+		@RequestMapping(value="/definisiPopust/{id}/soba/{idRoom}/pocetak/{pocetak}/kraj/{kraj}/bodovi/{bodovi}/procenat/{procenat}/listaUsl/{listaUsl}", 
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE
 				)
 		public @ResponseBody Room popustZaSobu(@PathVariable("id") Long id,
-	            @PathVariable("idRoom") Long idRoom,@PathVariable("pocetak") String pocetak,@PathVariable("kraj") String kraj,@PathVariable("bodovi") String bodovi,@PathVariable("procenat") String procenat){
+	            @PathVariable("idRoom") Long idRoom,@PathVariable("pocetak") String pocetak,@PathVariable("kraj") String kraj,@PathVariable("bodovi") String bodovi,@PathVariable("procenat") String procenat,@PathVariable("listaUsl") String listaUsl){
 			System.out.println("dosao u fu dobio"+id+" id sobe "+idRoom+" pocetak "+pocetak+" kraj "+kraj+" bodovi "+bodovi+" procenti "+procenat);
+
+				//pokupila sam usluge dodatne koje je selektovao treba da se dodaju u popust Many-Many veza
+			boolean imaUsluga = true;
+			if(listaUsl.equals("nema")) {
+				imaUsluga = false;
+			}
+			System.out.println("dosao ovdjee !");
+			ArrayList<String> indexUsluga = new ArrayList<String>() {};
+			
+			if(imaUsluga == true) {
+				if(listaUsl.contains(".")) {
+					String[] pomocna = listaUsl.split("\\.");
+					for(int i = 0;i<pomocna.length;i++) {
+						indexUsluga.add(pomocna[i]);
+					}
+				}else {
+						indexUsluga.add(listaUsl);
+				}
+			}
+
+			
+			
 			int bod = Integer.parseInt(bodovi);
 			int proc = Integer.parseInt(procenat);
 			Hotel pronadjeni = servis.findHotelById(id);
