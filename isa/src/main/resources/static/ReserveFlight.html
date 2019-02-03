@@ -1,10 +1,58 @@
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
-</head>
-<body>
+	  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	  <script type="text/javascript" src="/js/reserveFlight.js"></script>
+	  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<title>Reservation</title>
+<style>
+.container {
+  display: flex;
+  justify-content: center;
+}
+.center {
+  width: 800px;
+  background: #5F85DB;
+  color: #fff;
+  font-weight: bold;
+  font-family: Tahoma;
+}
 
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 2px solid #dddddd;
+  text-align: center;
+  padding: 8px;
+}
+</style>
+</head>
+<body onload="load()">
+	<div class="container">
+		<h2>Reserve Seats</h2>
+		  <div class="row" >
+		    <div class="col-md-9" id="seats">
+		
+		    </div>
+		    <div class="col-md-3" id="orijentacija">
+		     
+		    </div>
+		  </div>
+		   <div class="row" id="friendsCall">
+		   
+		  </div>
+		  
+		  <div class="row" id="passengers">
+		   
+		  </div>
+		  
+	</div>
 </body>
 </html>

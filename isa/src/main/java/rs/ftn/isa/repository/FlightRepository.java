@@ -15,7 +15,7 @@ public interface FlightRepository extends JpaRepository<Flight, Long>{
 
 	@Query("select u " + 
 			"from Flight u  " + 
-			"where u.vremePoletanja > :date")
+			"where CAST(u.vremePoletanja as date) = CAST(:date as date)")
 	List<Flight> findFlights(@Param("date") Date date);
 	
 	

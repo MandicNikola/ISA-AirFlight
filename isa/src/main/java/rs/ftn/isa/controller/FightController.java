@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,8 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ch.qos.logback.core.util.DatePatternToRegexUtil;
 import rs.ftn.isa.dto.AirplaneDTO;
 import rs.ftn.isa.dto.FlightDTO;
+import rs.ftn.isa.dto.SeatDTO;
 import rs.ftn.isa.model.Destination;
 import rs.ftn.isa.model.Flight;
+import rs.ftn.isa.model.Seat;
 import rs.ftn.isa.model.Ticket;
 import rs.ftn.isa.service.DestinationServiceImp;
 import rs.ftn.isa.service.FlightService;
@@ -39,7 +42,9 @@ public class FightController {
 	DestinationServiceImp destinationService;
 	
 	
-	
+	/*
+	 * metoda ne vraca podatke koji su mi potrebni sutra to jos istestirati da proverim
+	 */
 	@RequestMapping(value="/findFlights", 
 			method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -217,5 +222,42 @@ public class FightController {
 		
 		return false;
 	}
+	
+	@RequestMapping(value="/seats/{id}/{class}", 
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<SeatDTO>> returnSeats(@PathVariable("id") Long id,@PathVariable("class") String klasa)		
+	{
+		
+		Flight flight = servis.findOneFlightById(id);
+		
+		//pokupim konfiguraciju
+		String configuration = flight.getPlane().getKonfiguracija();
+		
+		ArrayList<SeatDTO> retSeats = new ArrayList<SeatDTO>();
+		
+		for(Ticket ticket : flight.getKarte())
+		{
+			if(ticket.getKlasa().equals(klasa))
+			{
+			Seat sediste = ticket.getSediste();
+			SeatDTO dto = new SeatDTO();
+			dto.setIdSedista(sediste.getId());
+			dto.setIdKarte(ticket.getId());
+			dto.setRezervisano(ticket.isRezervisano());
+			dto.setBrojKolone(sediste.getKolona());
+			dto.setBrojReda(dto.getBrojReda());
+			dto.setKonfiguracija(configuration);
+			retSeats.add(dto);
+		
+			}
+		}
+		
+		return new ResponseEntity<List<SeatDTO>>(retSeats, HttpStatus.OK);
+		
+	}
+	
+	
+	
 	
 }

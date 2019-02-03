@@ -25,9 +25,83 @@ public class ReservationTicket {
 	@Column(name = "prosla", nullable = false)
 	private boolean zavrsena;
 	
+	@Column(name = "finalizirana", nullable = false)
+	private boolean finalizirana;
+	
+	@Column(name = "rezervacijaAvion", nullable = true)
+	private Long rezervacijaAvion;
+	
+	@Column(name = "rezervacijaHotel", nullable = true)
+	private Long rezervacijaHotel;
+	
+	
 	//imaju korisnika na kog se vezuju
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private User korisnik;
+
+	public ReservationTicket()
+	{
+		
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+	public java.util.Date getDatumRezervacije() {
+		return datumRezervacije;
+	}
+
+
+	public void setDatumRezervacije(java.util.Date datumRezervacije) {
+		this.datumRezervacije = datumRezervacije;
+	}
+
+
+	public boolean isZavrsena() {
+		return zavrsena;
+	}
+
+
+	public void setZavrsena(boolean zavrsena) {
+		this.zavrsena = zavrsena;
+	}
+
+
+	public Long getRezervacijaAvion() {
+		return rezervacijaAvion;
+	}
+
+
+	public void setRezervacijaAvion(Long rezervacijaAvion) {
+		this.rezervacijaAvion = rezervacijaAvion;
+	}
+
+
+	public Long getRezervacijaHotel() {
+		return rezervacijaHotel;
+	}
+
+
+	public void setRezervacijaHotel(Long rezervacijaHotel) {
+		this.rezervacijaHotel = rezervacijaHotel;
+	}
+
+
+	public User getKorisnik() {
+		return korisnik;
+	}
+
+
+	public void setKorisnik(User korisnik) {
+		this.korisnik = korisnik;
+	}
 	
 	
 	
