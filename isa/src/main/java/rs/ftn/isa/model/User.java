@@ -51,6 +51,10 @@ public class User {
 	@Column(name="adminPotvrdio")
 	private boolean adminPotvrdio;
 	
+	@Column(name="bodovi")
+	private int bodovi;
+	
+	
 	@Enumerated(EnumType.STRING)
 	@Column(name="tip")
 	private Role tip;
@@ -99,6 +103,7 @@ public class User {
 		this.mail = mail;
 		this.telefon = telefon;
 		this.grad = grad;
+		this.bodovi=0;
 	}
 
 
@@ -116,6 +121,7 @@ public class User {
 		this.lozinka = lozinka;
 		this.tip = Role.valueOf(tip);
 		this.adminPotvrdio = adminPotvrdio;
+		this.bodovi=0;
 	}
 
 
@@ -129,6 +135,7 @@ public class User {
 		this.grad = grad;
 		this.lozinka = lozinka;
 		this.tip = tip;
+		this.bodovi=0;
 	}
 
 
@@ -142,6 +149,7 @@ public class User {
 		this.grad = grad;
 		this.lozinka = lozinka;
 		this.tip = Role.NEREGISTROVAN;
+		this.bodovi=0;
 	}
 
 
@@ -373,6 +381,16 @@ public class User {
 		{
 			related.setRelated(this,false);
 		}
+	}
+
+
+	public int getBodovi() {
+		return bodovi;
+	}
+
+
+	public void setBodovi(int bodovi) {
+		this.bodovi = bodovi;
 	}
 	
 		

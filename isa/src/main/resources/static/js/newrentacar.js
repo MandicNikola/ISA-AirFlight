@@ -5,16 +5,25 @@ $(document).on('submit','.rentacar',function(e){
 	e.preventDefault();	
 	
 	let naziv = $('#naziv').val();
+	let grad = $('#grad').val();
+
 	let adresa = $('#adr').val();
 	let ispravno = true;
 	
 	 $("#greskaNaziv").html('');
-	  $("#greskaAdresa").html('');
+	 $("#greskaGrad").html('');
+	 $("#greskaAdresa").html('');
 	 
 	if(!naziv){
 		console.log('usao u neispravan naziv'+naziv);
 		
 		$("#greskaNaziv").html('Naziv rent a car servisa je obavezan.').css('color','red');
+		ispravno = false;
+	}
+	if(!grad){
+		console.log('usao u neispravan naziv'+grad);
+		
+		$("#greskaGrad").html('Grad rent a car servisa je obavezan.').css('color','red');
 		ispravno = false;
 	}
 	if(!adresa){
@@ -52,6 +61,7 @@ function ucitajPocetnu(){
 function formToJSON() {
 	return JSON.stringify({
 		"naziv" : $('#naziv').val(),
+		"grad": $("#grad").val(),
 		"adresa" : $('#adr').val(),
 		"opis" : $('#opis').val(),			
 	});

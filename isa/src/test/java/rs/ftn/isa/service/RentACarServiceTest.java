@@ -57,7 +57,7 @@ public class RentACarServiceTest {
 		when(rentRepositoryMock.findAll()).thenReturn(Arrays.asList(new RentACar(RentACarConstants.DB_ID, RentACarConstants.DB_NAZIV, RentACarConstants.DB_ADRESA, RentACarConstants.DB_OPIS)));
 		
 		//rent servis koji treba da se doda
-		RentACar newRent = new RentACar(RentACarConstants.DB_NEW_NAZIV, RentACarConstants.DB_NEW_ADRESA, RentACarConstants.DB_NEW_OPIS);
+		RentACar newRent = new RentACar(RentACarConstants.DB_NEW_NAZIV,RentACarConstants.DB_NEW_GRAD, RentACarConstants.DB_NEW_ADRESA, RentACarConstants.DB_NEW_OPIS);
 		//kad se pozove save sacuvaj novi rent
 		when(rentRepositoryMock.save(newRent)).thenReturn(newRent);
 		
@@ -100,12 +100,12 @@ public class RentACarServiceTest {
 	@Rollback(true)
 	public void testDeleteById() {
 		
-		when(rentRepositoryMock.findAll()).thenReturn(Arrays.asList(new RentACar(RentACarConstants.DB_ID, RentACarConstants.DB_NAZIV, RentACarConstants.DB_ADRESA, RentACarConstants.DB_OPIS),new RentACar(RentACarConstants.DB_NEW_NAZIV, RentACarConstants.DB_NEW_ADRESA, RentACarConstants.DB_NEW_OPIS)));
+		when(rentRepositoryMock.findAll()).thenReturn(Arrays.asList(new RentACar(RentACarConstants.DB_ID, RentACarConstants.DB_NAZIV,RentACarConstants.DB_GRAD, RentACarConstants.DB_ADRESA, RentACarConstants.DB_OPIS),new RentACar(RentACarConstants.DB_NEW_NAZIV,RentACarConstants.DB_NEW_GRAD, RentACarConstants.DB_NEW_ADRESA, RentACarConstants.DB_NEW_OPIS)));
 		
 		int dbSizeBeforeRemove = rentService.findAll().size();
 		doNothing().when(rentRepositoryMock).deleteById(3L);;
 		rentService.removeRentACar(3l);
-		when(rentRepositoryMock.findAll()).thenReturn(Arrays.asList(new RentACar(RentACarConstants.DB_ID, RentACarConstants.DB_NAZIV, RentACarConstants.DB_ADRESA, RentACarConstants.DB_OPIS)));
+		when(rentRepositoryMock.findAll()).thenReturn(Arrays.asList(new RentACar(RentACarConstants.DB_ID, RentACarConstants.DB_NAZIV,RentACarConstants.DB_GRAD, RentACarConstants.DB_ADRESA, RentACarConstants.DB_OPIS)));
 		
 		List<RentACar> rents = rentService.findAll();
 		assertThat(rents).hasSize(dbSizeBeforeRemove - 1);

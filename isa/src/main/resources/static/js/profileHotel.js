@@ -229,13 +229,15 @@ function onLoad(){
 function ispisiProfilHotela(hotel){
 	console.log("id "+hotel.id);
 	var adr = hotel.adresa;
+	var grad = hotel.grad;
 	$("#naziv").text('Welcome to '+hotel.naziv);
 	$("#opis").text(hotel.opis);
-	$("#adresa").append(hotel.adresa);
+	$("#adresa").append(hotel.adresa+", "+grad);
 	
-	var adresa=	adr.replace(" ", "%20");
-    
-	$("#adresa").append("<div class=\"mapouter\"><div class=\"gmap_canvas\"><iframe width=\"600\" height=\"500\" id=\"gmap_canvas\" src=\"https://maps.google.com/maps?q="+adresa+"&t=&z=13&ie=UTF8&iwloc=&output=embed\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\"></iframe><a href=\"https://www.embedgooglemap.net\">embedgooglemap.net</a></div><style>.mapouter{text-align:right;height:500px;width:600px;}.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:600px;}</style></div>")
+	var adresa=	adr.replace(" ","%20");
+	var gradic = grad.replace(" ","%20");	
+    var adresagrad = adresa+"%20"+gradic;
+	$("#adresa").append("<div class=\"mapouter\"><div class=\"gmap_canvas\"><iframe width=\"600\" height=\"500\" id=\"gmap_canvas\" src=\"https://maps.google.com/maps?q="+adresagrad+"&t=&z=13&ie=UTF8&iwloc=&output=embed\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\"></iframe><a href=\"https://www.embedgooglemap.net\">embedgooglemap.net</a></div><style>.mapouter{text-align:right;height:500px;width:600px;}.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:600px;}</style></div>")
 	
 	var adresa = window.location.search.substring(1);
 	var id = adresa.split('=')[1];
@@ -601,7 +603,8 @@ $(document).ready(function(){
 	$("#promjenaLozinke").hide();
 	$("#dodajPopust").hide();
 	$("#izvestaj").hide();
-
+	$("#ispisiTabelu").hide();
+	
 
     $("#rooms").click(function(){
     	listaSoba();
@@ -1392,7 +1395,6 @@ function zavrsiRezBezUsluga(nizSoba){
 	var listaUsl="nema";
 	var adresa = window.location.search.substring(1);
     var id = adresa.split('=')[1];
-		//ovo treba da obradim da vrati podatke
 	  
 	  $.ajax({
 			type : 'POST',
@@ -1429,8 +1431,7 @@ function zavrsiRez(nizSoba){
 		  if(this.checked){
 			  listaUsl += (listaUsl=="" ? $(this).val() : "." + $(this).val());
 				  
-		    }
-		   
+		    } 
 		});
 	  if(listaUsl == ""){
 		  listaUsl = "nema";

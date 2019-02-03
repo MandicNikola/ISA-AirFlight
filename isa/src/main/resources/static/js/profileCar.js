@@ -7,14 +7,13 @@ $(document).ready(function($) {
 	console.log("Usao u showGraf");
 	var niz= podatak.split("=");
 	var id= niz[1];
-
 	
 	if(user!=null && user!="null" && user!="undefined") {
 			console.log('ima korisnika');
 			var korisnik=JSON.parse(user);
 			console.log(korisnik.tip);
 			if(korisnik.tip == 'ADMIN_SISTEM'){
-				
+				  $("#res").hide();
 				console.log('Usao u dodajgrafik');
 
 				$.ajax({
@@ -35,6 +34,11 @@ $(document).ready(function($) {
 					}
 				});
 
+			}else{
+				 $("#business").hide();
+				 $("#admini").hide();
+				 $("#sistemPopust").hide();
+				$(".side").hide();
 			}
 	
 	}	
@@ -247,8 +251,11 @@ function loadPodatke(){
     
     $("#adresa").append(servis.adresa);
     var pom= servis.adresa;
+    var grad = servis.grad+" ";
+    grad= grad.replace(" ", "%20");
     var adr= pom.replace(" ", "%20");
-    $("#adresa").append("<div class=\"mapouter\"><div class=\"gmap_canvas\"><iframe width=\"600\" height=\"500\" id=\"gmap_canvas\" src=\"https://maps.google.com/maps?q="+adr+"&t=&z=13&ie=UTF8&iwloc=&output=embed\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\"></iframe><a href=\"https://www.embedgooglemap.net\">embedgooglemap.net</a></div><style>.mapouter{text-align:right;height:500px;width:600px;}.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:600px;}</style></div>")
+    var konacna=grad+adr;
+    $("#adresa").append("<div class=\"mapouter\"><div class=\"gmap_canvas\"><iframe width=\"600\" height=\"500\" id=\"gmap_canvas\" src=\"https://maps.google.com/maps?q="+konacna+"&t=&z=13&ie=UTF8&iwloc=&output=embed\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\"></iframe><a href=\"https://www.embedgooglemap.net\">embedgooglemap.net</a></div><style>.mapouter{text-align:right;height:500px;width:600px;}.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:600px;}</style></div>")
     $("#opis").append(servis.opis);
 	
     var podatak = window.location.search.substring(1);
@@ -450,7 +457,9 @@ function ispisiAdminuVozila(skup){
 
 }
 function ispisiFilijale(skup){
+	var user = sessionStorage.getItem("ulogovan");
 	
+
 var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 	
 		$("#filijale").empty();
@@ -459,7 +468,13 @@ var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 			console.log(fil.grad);
 			$("#" + index).append("<div class=\"panel-heading\">"+fil.grad+"</div>");
 			$("#" + index).append("<div class=\"panel-body\">"+fil.ulica+"</div>");
-			$("#" + index).append("<div class=\"panel-footer\"><button  class=\"btn btn-info\" onclick=\"izmeniFilijalu('"+fil.id+"')\">Izmeni</button> <button  class=\"btn btn-info\" onclick=\"obrisiFilijalu('"+fil.id+"')\">Obrisi</button></div>");
+			if(user!=null && user!="null" && user!="undefined") {
+				var korisnik=JSON.parse(user);
+				if(korisnik.tip == 'ADMIN_SISTEM'){
+					$("#" + index).append("<div class=\"panel-footer\"><button  class=\"btn btn-info\" onclick=\"izmeniFilijalu('"+fil.id+"')\">Izmeni</button> <button  class=\"btn btn-info\" onclick=\"obrisiFilijalu('"+fil.id+"')\">Obrisi</button></div>");
+				}
+			
+			}
 			 $("#filijale").append("</div>");
 		});
 	popuniSelect(skup);
@@ -497,6 +512,7 @@ function obrisiFilijalu(id){
 }
 
 function ispisiVozila(skup){
+	var user = sessionStorage.getItem("ulogovan");
 	
 	$("#pregledVozila").empty();
 	console.log('usao u ispisivozila');
@@ -509,12 +525,23 @@ function ispisiVozila(skup){
 		var filulica=vozilo.filijala.ulica;
 		var adresa=filpom + ", "+filulica;
 		console.log(filpom);
-		if(vozilo.broj == 0){
-			$("#tabelaVozilo").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+vozilo.marka+"</td><td > "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td > "+vozilo.sedista+"</td><td > "+vozilo.kategorija+"</td><td > "+adresa+"</td><td><button  class=\"btn btn-info\" onclick=\"izmeniVozilo('"+vozilo.id+"')\">Change</button></td><td><button class=\"btn btn-info\"  onclick=\"obrisiVozilo('"+vozilo.id+"')\">Delete</button></td></tr>");
+		if(user!=null && user!="null" && user!="undefined") {
+			var korisnik=JSON.parse(user);
+			if(korisnik.tip == 'ADMIN_SISTEM'){
+				if(vozilo.broj == 0){
+					$("#tabelaVozilo").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+vozilo.marka+"</td><td > "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td > "+vozilo.sedista+"</td><td > "+vozilo.kategorija+"</td><td > "+adresa+"</td><td><button  class=\"btn btn-info\" onclick=\"izmeniVozilo('"+vozilo.id+"')\">Change</button></td><td><button class=\"btn btn-info\"  onclick=\"obrisiVozilo('"+vozilo.id+"')\">Delete</button></td></tr>");
+				}else{
+					$("#tabelaVozilo").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+vozilo.marka+"</td><td > "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td > "+vozilo.sedista+"</td><td > "+vozilo.kategorija+"</td><td > "+adresa+"</td><td><button  class=\"btn btn-info\" disabled=\"disabled\" data-toggle=\"tooltip\" data-placement=\"right\" title=\"You can't change a car if it's in use\" onclick=\"izmeniVozilo('"+vozilo.id+"')\">Change</button></td><td><button class=\"btn btn-info\"  disabled=\"disabled\" data-toggle=\"tooltip\" data-placement=\"right\" title=\"You can't delete a car if it's in use\" onclick=\"obrisiVozilo('"+vozilo.id+"')\">Delete</button></td></tr>");
+						
+				}
+			}
+		
 		}else{
-			$("#tabelaVozilo").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+vozilo.marka+"</td><td > "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td > "+vozilo.sedista+"</td><td > "+vozilo.kategorija+"</td><td > "+adresa+"</td><td><button  class=\"btn btn-info\" disabled=\"disabled\" data-toggle=\"tooltip\" data-placement=\"right\" title=\"You can't change a car if it's in use\" onclick=\"izmeniVozilo('"+vozilo.id+"')\">Change</button></td><td><button class=\"btn btn-info\"  disabled=\"disabled\" data-toggle=\"tooltip\" data-placement=\"right\" title=\"You can't delete a car if it's in use\" onclick=\"obrisiVozilo('"+vozilo.id+"')\">Delete</button></td></tr>");
-				
+			$("#tabelaVozilo").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+vozilo.marka+"</td><td > "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td > "+vozilo.sedista+"</td><td > "+vozilo.kategorija+"</td><td > "+adresa+"</td></tr>");
+			
+			
 		}
+		
 		
 	});
     $("#pregledVozila").append("</table>");
@@ -618,9 +645,9 @@ $(document).ready(function(){
 		
      	$("#automobili").show();
      	$("#adminStrana").hide();
-    	
+     	popuniVozila();
     	$("#automobili").show();
-	console.log('vozilo');
+    	console.log('vozilo');
    });
 
     $("a#res").click(function(){
@@ -717,6 +744,37 @@ $(document).ready(function(){
     	console.log('izvestaj');
     	//dodajGrafik();
    });
+
+    $(document).on('click','#potvrdiBtn',function(e){
+    	e.preventDefault();	
+    	console.log('usao u dodajUslugu');
+    	var pom=window.location.search.substring(1);
+    	var id= pom.split('=')[1];
+    	
+    	trajanje = $('#days').val();
+        katA = $('#catA').val();
+    	katB = $('#catB').val();
+    	katC = $('#catC').val();
+    	katD =  $('#catD').val();
+    	katE = $('#catE').val();
+    	pom= id+"="+trajanje+"="+katA+"="+katB+"="+katC+"="+katD+"="+katE;
+    	
+    		$.ajax({
+    			type : 'POST',
+    			url : "/api/rents/dodajUslugu/"+pom,
+    			success : function(pov) {
+    				if( pov == null){	
+    					alert('Naziv usluge vec postoji u sistemu');
+    				}else{
+    					alert('Uspesno ste dodali uslugu');
+    					resetuj();
+    				}
+    			},
+    			error: function(XMLHttpRequest, textStatus, errorThrown){
+    				alert('greska');
+    			}
+    		});
+    });
 
     
 });
@@ -824,37 +882,6 @@ function resetFormu(){
 	$("#tip").val("A");
 	$("#putnici").val("");
 }
-$(document).on('submit','.dodavanje',function(e){
-	e.preventDefault();	
-	
-	var pom=window.location.search.substring(1);
-	var id= pom.split('=')[1];
-	
-	trajanje = $('#days').val();
-    katA = $('#catA').val();
-	katB = $('#catB').val();
-	katC = $('#catC').val();
-	katD =  $('#catD').val();
-	katE = $('#catE').val();
-	pom= id+"="+trajanje+"="+katA+"="+katB+"="+katC+"="+katD+"="+katE;
-	
-		$.ajax({
-			type : 'POST',
-			url : "/api/rents/dodajUslugu/"+pom,
-			success : function(pov) {
-				if( pov == null){	
-					alert('Naziv usluge vec postoji u sistemu');
-				}else{
-					alert('Uspesno ste dodali uslugu');
-					resetuj();
-				}
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown){
-				alert('greska');
-			}
-		});
-});
-
 function resetuj(){
 	$("#pozTabovi").show();
 	$("#cenovnik").hide();
@@ -961,14 +988,13 @@ function izlistajPonude(data){
 	var niz = data == null ? [] : (data instanceof Array ? data : [ data ]);
 	
 	$("#rezultat").show();
-	 $("#rezultat").append("<table class=\"table table-hover\" id=\"tabelaPonuda\" ><thead><tr><th>Brand</th><th>Model</th><th>Model year</th><th>Number of seats </th><th>Category</th><th>Branch office</th><th>Total price</th><th></th></thead>");
+	 $("#rezultat").append("<table class=\"table table-hover\" id=\"tabelaPonuda\" ><thead><tr><th>Brand</th><th>Model</th><th>Model year</th><th>Number of seats </th><th>Category</th><th>Total price</th><th></th></thead>");
 		
 		$.each(niz, function(index, pom) {
 			
-			var filpom=pom.filijala.grad;
 			var cena=pom.cena;
 			var param=cena+"="+pom.id;
-			$("#tabelaPonuda").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+pom.marka+"</td><td > "+pom.model+"</td><td > "+pom.godiste+"</td><td > "+pom.sedista+"</td><td> "+pom.kategorija+"</td><td > "+filpom+"</td><td> "+pom.cena+"</td><td><button class=\"btn btn-info\" onclick=\"rezervisiVozilo('"+param+"')\">Reserve</button></td><td></tr>");
+			$("#tabelaPonuda").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+pom.marka+"</td><td > "+pom.model+"</td><td > "+pom.godiste+"</td><td > "+pom.sedista+"</td><td> "+pom.kategorija+"</td><td> "+pom.cena+"</td><td><button class=\"btn btn-info\" onclick=\"rezervisiVozilo('"+param+"')\">Reserve</button></td><td></tr>");
 				
 		});
 		
