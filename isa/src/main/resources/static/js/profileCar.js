@@ -1124,9 +1124,9 @@ function poveziKorisnika(pom){
 		contentType : "application/json",
 		data: sending,
 		dataType : 'json',		
-		success : function() {
+		success : function(pov) {
 			console.log('usao u uspesno');
-			ispisiUspesno();
+			ispisiUspesno(pov);
 			
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
@@ -1135,13 +1135,14 @@ function poveziKorisnika(pom){
 		}
 		});
 }
-function ispisiUspesno(){
+function ispisiUspesno(pov){
 	$("#divFast").hide();
 	$("#anketa").hide();
 	 $("#bg").show();
 	$("#rezultat").empty();
     $("#rezultat").append("<p><h2>You have successfully made a reservation</h2></p>");
-    
+    $("#rezultat").append("<p>Total price:"+pov.cena+"</p><p>We are looking forward to have you as our clients</p>");
+	
     popuniVozila();
 	
 }

@@ -133,7 +133,7 @@ public class VoziloController {
 		@RequestMapping(value="/dodajRezervaciju/{podatak}", 
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE)
-		public @ResponseBody User dodajRezervaciju(@PathVariable String podatak, @Context HttpServletRequest request){		
+		public @ResponseBody RezervacijaRentCar dodajRezervaciju(@PathVariable String podatak, @Context HttpServletRequest request){		
 			System.out.println("usao u dodajRezervaciju "+podatak);
 			
 			User korisnik = (User)request.getSession().getAttribute("ulogovan");		
@@ -206,7 +206,7 @@ public class VoziloController {
 			vozilo.setBroj(vozilo.getBroj()+1);
 			System.out.println("Id od vozila je "+vozilo.getId());
 			servis.saveVehicle(vozilo);
-			return korisnik;
+			return rezervacija;
 
 		}
 		
