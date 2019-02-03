@@ -718,7 +718,7 @@ public class RentACarController {
 						sortirane.add(u);
 					}
 				}
-				sortirane.sort(Comparator.comparingDouble(Usluga :: getCena));
+				sortirane.sort(Comparator.comparingInt(Usluga :: getPrekoTrajanja));
 				int brojDana = daysBetween(rezervacija.getPickUp(), rezervacija.getDropOff());
 				System.out.println("Broj dana je "+brojDana);
 				
