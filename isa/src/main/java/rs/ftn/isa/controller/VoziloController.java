@@ -447,6 +447,7 @@ public @ResponseBody ArrayList<VehicleDTO> nadjiVozilaPopust(@PathVariable Strin
 			if(korisnik.getBodovi()==0) {
 				return ponuda;
 			}
+			System.out.println("Broj bodova je "+korisnik.getBodovi());
 			SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
 			Date pocetak = formater.parse(start);
 			Date kraj = formater.parse(end);
@@ -455,19 +456,26 @@ public @ResponseBody ArrayList<VehicleDTO> nadjiVozilaPopust(@PathVariable Strin
 			List<Vehicle> svaVozila = servis.findAll();
 			
 			for(Vehicle V: svaVozila) {	
-				String idVRent=V.getFilijala().getServis().toString();
+				System.out.println("Proverava vozilo "+V.getMarka());
+				String idVRent=V.getFilijala().getServis().getId().toString();
 				String gradV=V.getFilijala().getGrad();
 				Discount popust = null;
 					if(gradV.equals(grad) && idVRent.equals(id)) {
+						System.out.println("Pripada filijali i ren");
 						//da vidimo da li je na popustu
 							if(V.getPopusti().size() != 0) {
+								System.out.println("Postoje popusti");
 									for(Discount D : V.getPopusti()) {
+										System.out.println("Provera bodova "+D.getBodovi()+" i "+bodovi);
 											//mora da ima dovoljnno bodova
 											if(bodovi >= D.getBodovi()) {
+												System.out.println("Ima dovoljno bodova");
 												c.setTime(D.getDatumod());
 												c.add(Calendar.DATE,-1);
 												Date pocPopusta= c.getTime();
-												pocPopusta.setTime(0);
+												pocPopusta.setHours(0);
+												pocPopusta.setMinutes(0);
+												pocPopusta.setSeconds(0);
 												System.out.println(pocPopusta.toString());
 												if(pocetak.after(pocPopusta) && kraj.before(D.getDatumdo())) {
 														System.out.println("Ispunjava uslove");

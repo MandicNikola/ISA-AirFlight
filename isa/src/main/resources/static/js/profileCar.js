@@ -143,7 +143,8 @@ $(document).ready(function($) {
 	$("#findFast").click(function() {
 		
 		
-		var start = $("#datumFast").val();
+		var end = $("#datumFast").val();
+		var start="2019-02-02";
 		//kasnije dodati
 		//var date1 = Date.parse(pocetak);
 	//	var date2 = Date.parse(datum);
@@ -155,7 +156,7 @@ $(document).ready(function($) {
 		
 		$.ajax({
 			method:'GET',
-			url: "/api/vozila/getFast/"+id+"/start/"+start+"/grad/Novi Sad",
+			url: "/api/vozila/getFast/"+id+"/start/"+start+"/end/"+end+"/grad/Novi Sad",
 			success: function(lista){
 				if(lista == null){
 					console.log('Nema podataka');
