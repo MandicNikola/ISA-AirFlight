@@ -11,7 +11,10 @@ public class VehicleDTO {
 	private CategoryCar kategorija;
     private boolean imapopusta;
 	private double cena;
+	private double cenaPopust;
+	private int popust;
 
+	
 	public VehicleDTO() {
     	super();
     }
@@ -73,6 +76,24 @@ public class VehicleDTO {
 	}
 	public void setCena(double cena) {
 		this.cena = cena;
+	}
+	public double getCenaPopust() {
+		return cenaPopust;
+	}
+	public void setCenaPopust(double cenaPopust) {
+		this.cenaPopust = cenaPopust;
+	}
+	public int getPopust() {
+		return popust;
+	}
+	public void setPopust(int popust) {
+		this.popust = popust;
+	}
+	@Override
+	public String toString() {
+		return "VehicleDTO [id=" + id + ", marka=" + marka + ", model=" + model + ", godiste=" + godiste + ", sedista="
+				+ sedista + ", kategorija=" + kategorija + ", imapopusta=" + imapopusta + ", cena=" + cena
+				+ ", cenaPopust=" + cenaPopust + ", popust=" + popust + "]";
 	} 
 
     

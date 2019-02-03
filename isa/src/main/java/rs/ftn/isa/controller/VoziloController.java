@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -21,13 +20,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import rs.ftn.isa.dto.UserDTO;
+import rs.ftn.isa.dto.VehicleDTO;
 import rs.ftn.isa.model.Discount;
-import rs.ftn.isa.model.Filijala;
-import rs.ftn.isa.model.Hotel;
-import rs.ftn.isa.model.RentACar;
 import rs.ftn.isa.model.RezervacijaRentCar;
-import rs.ftn.isa.model.Room;
+
 import rs.ftn.isa.model.StatusRezervacije;
 import rs.ftn.isa.model.User;
 import rs.ftn.isa.model.Vehicle;
@@ -420,7 +416,6 @@ public class VoziloController {
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE
 				)
-	
 		public @ResponseBody Vehicle ukloniPopust(@PathVariable("slanje") String slanje){
 			System.out.println("Dosao da ukloni popust");
 			String[] pom = slanje.split("\\.");
@@ -440,5 +435,91 @@ public class VoziloController {
 			servis.saveVehicle(vozilo);
 			return vozilo;
 		}
+		
+		@RequestMapping(value="/getFast/{id}/start/{start}/end/{end}/grad/{grad}", 
+		method = RequestMethod.GET,
+		produces = MediaType.APPLICATION_JSON_VALUE
+		)
+public @ResponseBody ArrayList<VehicleDTO> nadjiVozilaPopust(@PathVariable String id,@PathVariable String start,@PathVariable String end,@PathVariable String grad, @Context HttpServletRequest request) throws ParseException{
+			ArrayList<VehicleDTO> ponuda = new ArrayList<VehicleDTO>();
+			System.out.println("id "+id+" start " + start+" grad"+grad);
+			User korisnik = (User)request.getSession().getAttribute("ulogovan");		
+			if(korisnik.getBodovi()==0) {
+				return ponuda;
+			}
+			SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+			Date pocetak = formater.parse(start);
+			Date kraj = formater.parse(end);
+			Calendar c = Calendar.getInstance();
+			int bodovi = korisnik.getBodovi();
+			List<Vehicle> svaVozila = servis.findAll();
+			
+			for(Vehicle V: svaVozila) {	
+				String idVRent=V.getFilijala().getServis().toString();
+				String gradV=V.getFilijala().getGrad();
+				Discount popust = null;
+					if(gradV.equals(grad) && idVRent.equals(id)) {
+						//da vidimo da li je na popustu
+							if(V.getPopusti().size() != 0) {
+									for(Discount D : V.getPopusti()) {
+											//mora da ima dovoljnno bodova
+											if(bodovi >= D.getBodovi()) {
+												c.setTime(D.getDatumod());
+												c.add(Calendar.DATE,-1);
+												Date pocPopusta= c.getTime();
+												pocPopusta.setTime(0);
+												System.out.println(pocPopusta.toString());
+												if(pocetak.after(pocPopusta) && kraj.before(D.getDatumdo())) {
+														System.out.println("Ispunjava uslove");
+														popust=D;
+												}
+											}
+									}
+							}
+							
+					}
+				if(popust != null) {
+					//treba proveriti da li je soba slobodna u tom periodu
+					System.out.println("Vozilo poseduje popust");
+					
+					Set<RezervacijaRentCar> rezervacije = V.getRezervacije(); 
+					
+					//Provera 1 --> 
+					//ako je nas datum preuzimanja pre datuma vracanja iz rezervacije,
+					//Provera 2 --> 
+					//onda gledamo da li je i datum vracanja naseg vozila nakon datuma preuzimanja iz
+					//rezervacije
+					
+					boolean dozvolaPickUp = true;
+					//prolazimo kroz sve rezervacije koje su napravljene za ovo vozilo
+					for(RezervacijaRentCar R : rezervacije) {	
+						//ako je datum preuzimanja vozila pre datuma vracanja iz rezervacije
+						if(pocetak.before(R.getDatumVracanja())) {
+							System.out.println("provera1-> Datum preuzimanja je pre datuma vracanja iz liste rezervacije");
+							 //datum vracanja auta posle datuma preuzimanja iz rezervacije, preklapaju se termini, vozilo nam ne odgovara
+								if(kraj.after(R.getDatumPreuzimanja())){
+									dozvolaPickUp = false;
+									System.out.println("provera2--> Datum vracanja je posle datuma preuzimanja iz rezervacije");
+								}
+						}
+						
+					}
+					
+					if(dozvolaPickUp) {
+						VehicleDTO novaPonuda = new VehicleDTO(V.getId(), V.getMarka(), V.getModel(), V.getGodiste(), V.getSedista(), V.getKategorija(), V.isImapopusta());
+						novaPonuda.setPopust(popust.getVrijednost());
+						ponuda.add(novaPonuda);
+				
+					}
+					
+				}
+			}
+			for(VehicleDTO VDTO:ponuda) {
+				System.out.println("ispiss");
+				System.out.println(VDTO);
+					
+			}
+			return ponuda;
+}
 		
 }

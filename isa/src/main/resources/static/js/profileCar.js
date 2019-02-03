@@ -14,6 +14,7 @@ $(document).ready(function($) {
 			console.log(korisnik.tip);
 			if(korisnik.tip == 'ADMIN_SISTEM'){
 				  $("#res").hide();
+				  $("#fastRes").hide();
 				console.log('Usao u dodajgrafik');
 
 				$.ajax({
@@ -41,7 +42,16 @@ $(document).ready(function($) {
 				$(".side").hide();
 			}
 	
+	}else{
+
+		 $("#business").hide();
+		 $("#admini").hide();
+		 $("#sistemPopust").hide();
+		$(".side").hide();
 	}	
+	
+	
+	
 	function iscrtajGrafik(lista, kontekst, naslov,chart){
 		var labele=new Array();
 		var vrednosti=new Array();
@@ -128,6 +138,36 @@ $(document).ready(function($) {
 		});
 		
 		}
+	});
+
+	$("#findFast").click(function() {
+		
+		
+		var start = $("#datumFast").val();
+		//kasnije dodati
+		//var date1 = Date.parse(pocetak);
+	//	var date2 = Date.parse(datum);
+		//if (date1 > date2) {
+			//$("#errorFast").text("Drop-off date must be greater than pick-up date").css('color', 'red');
+		//}else{
+		
+		//}
+		
+		$.ajax({
+			method:'GET',
+			url: "/api/vozila/getFast/"+id+"/start/"+start+"/grad/Novi Sad",
+			success: function(lista){
+				if(lista == null){
+					console.log('Nema podataka');
+				}else if(lista.length==0){
+					console.log('Nema podataka');
+				}else{
+					console.log("ima podataka");
+					console.log(lista.length);
+				}
+			}
+		});
+		
 	});
 
 	$("#showGraf2").click(function() {
@@ -575,7 +615,7 @@ $(document).ready(function(){
 	var id= pom.split('=')[1];
 	
 	$("#divLozinka").hide();
-	
+	$("#divFast").hide();
 	$("#automobili").hide();
 	$("#addUsluge").hide();
 	$("#cenovnik").hide();
@@ -603,6 +643,7 @@ $(document).ready(function(){
     	$("#cenovnik").hide();
     	$("#informacije").hide();
     	$("#automobili").hide();
+    	$("#divFast").hide();
     	$("#adminStrana").hide();
     	$("#bg").hide();
     	$("#izvestaj").hide();
@@ -622,6 +663,7 @@ $(document).ready(function(){
         $("#informacije").hide();
     	$("#automobili").hide();
     	$("#adminStrana").hide();
+    	$("#divFast").hide();
     	$("#bg").hide();
     	$("#izvestaj").hide();
     	$("#addUsluge").hide();	
@@ -632,11 +674,24 @@ $(document).ready(function(){
     	$("#divLozinka").show();
 		
     });
-        
-    $("a#veh").click(function(){
+    $("a#fastRes").click(function(){
     	$("#informacije").hide();
     	$("#divLozinka").hide();
 
+    	$("#cenovnik").hide();
+     	$("#addUsluge").hide();		
+     	$("#bg").hide();
+     	$("#izvestaj").hide();
+     	$("#divPopust").hide();
+		
+     	$("#automobili").hide();
+     	$("#adminStrana").hide();
+     	$("#divFast").show();
+     });        
+    $("a#veh").click(function(){
+    	$("#informacije").hide();
+    	$("#divLozinka").hide();
+    	$("#divFast").hide();
     	$("#cenovnik").hide();
      	$("#addUsluge").hide();		
      	$("#bg").hide();
@@ -657,7 +712,7 @@ $(document).ready(function(){
     	$("#cenovnik").hide();
      	$("#addUsluge").hide();
     	$("#divLozinka").hide();
-
+    	$("#divFast").hide();
     	$("#automobili").hide();
     	$("#izvestaj").hide();
     	$("#adminStrana").hide();
@@ -677,7 +732,7 @@ $(document).ready(function(){
 	 	$("#addUsluge").hide();		
 	 	$("#bg").hide();
 		$("#divLozinka").hide();
-
+		$("#divFast").hide();
 	 	$("#izvestaj").hide();
 	 	$("#divPopust").hide();
 		$("#adminStrana").hide();
@@ -698,7 +753,7 @@ $(document).ready(function(){
 		$("#divPopust").show();
 		$("#dodajPopust").hide();
 		$("#divLozinka").hide();
-
+		$("#divFast").hide();
 		showCarsForDiscounts();
     	
 
@@ -712,7 +767,7 @@ $(document).ready(function(){
      	$("#addUsluge").hide();		
      	$("#bg").hide();
     	$("#divLozinka").hide();
-
+    	$("#divFast").hide();
     	$("#izvestaj").hide();
      	$("#adminStrana").hide();
     	$("#informacije").show();
@@ -726,7 +781,7 @@ $(document).ready(function(){
 	 	$("#bg").hide();
 	 	$("#adminStrana").show();
 		$("#divLozinka").hide();
-
+		$("#divFast").hide();
 		
 		
     });
@@ -739,7 +794,7 @@ $(document).ready(function(){
     	$("#automobili").hide();
     	$("#izvestaj").show();
     	$("#divLozinka").hide();
-
+    	$("#divFast").hide();
     	$("#adminStrana").hide();
     	console.log('izvestaj');
     	//dodajGrafik();
