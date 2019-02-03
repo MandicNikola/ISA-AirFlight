@@ -62,6 +62,9 @@ public class RezervacijaRentCar implements Comparable<RezervacijaRentCar>{
 	@Column(nullable = false)
 	private int cena;
 	
+	@Column(name="glavna_Rezervacija",nullable = true)
+	private Long glavnRez;
+	
 	public RezervacijaRentCar() {
 		this.status=StatusRezervacije.AKTIVNA;
 		
@@ -199,6 +202,16 @@ public class RezervacijaRentCar implements Comparable<RezervacijaRentCar>{
 	public int compareTo(RezervacijaRentCar o) {
 		// TODO Auto-generated method stub
 	    return getDatumPreuzimanja().compareTo(o.getDatumPreuzimanja());
+	}
+
+
+	public Long getGlavnRez() {
+		return glavnRez;
+	}
+
+
+	public void setGlavnRez(Long glavnRez) {
+		this.glavnRez = glavnRez;
 	}
 
 
