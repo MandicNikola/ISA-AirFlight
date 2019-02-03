@@ -176,13 +176,13 @@ input[type="date"]:valid::before { display: none }
 						</div>
    			</div>
    			<div class="row">
-						<div class="col-md-6">
+						<div class="col-md-4">
 									<div class="form-group">
 										<input class="form-control" id = "brojOsoba" type="text"  placeholder="Enter number of persons" min="0">
 											<span id="errorBrojOsoba"></span>
 									</div>
 						</div>
-						<div class="col-md-6">
+						<div class="col-md-4">
 									<div class="form-group">
 										<select class="form-control" id="selectType">
 											<option value = "one-way">One-way</option>
@@ -190,7 +190,16 @@ input[type="date"]:valid::before { display: none }
 									      	<option value = "multi-city">Multi-city</option>  
 									      	<option value = "all">All</option>
 										</select>
-										<span id="errorName"></span>
+									</div>
+						</div>
+						<div class="col-md-4">
+									<div class="form-group">
+										<select class="form-control" id="selectClass">
+											<option value = "biznis">Business</option>
+									      	<option value = "ekonomska">Economivc</option>
+									      	<option value = "first">First</option>  
+									      	<option value = "mixed">All</option>
+										</select>
 									</div>
 						</div>
    			</div>
@@ -219,7 +228,7 @@ input[type="date"]:valid::before { display: none }
    		 <div class = "row">
 			<div class="col-md-12">
 					<div class="form-btn">
-					<button type="button" id="flightDugme"  class="btn  btn-lg">Check flights</button>
+					<button type="button" id="flightDugme"  onclick="findFlights()" class="btn  btn-lg">Check flights</button>
 					</div>
 		    </div>
 		 </div>
@@ -246,12 +255,16 @@ input[type="date"]:valid::before { display: none }
 				<div class="row"><span class="label label-info">Class:</span></div>
 				<div class="row">
 					<select class="form-control" id="selectKompanijaFilter">
-						<option value="ekonomska">Economic</option>
+						<option value = "biznis">Business</option>
+				      	<option value = "ekonomska">Economivc</option>
+				      	<option value = "first">First</option>  
+				      	<option value = "mixed">All</option>
 					</select>
 				</div>
 			</div>
 			<div class = "col-md-8">
-			
+				<div id="pretragaLetova">
+				</div>
 			</div>
 		</div>
 	</div>

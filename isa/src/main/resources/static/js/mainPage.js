@@ -858,44 +858,114 @@ function findFlights()
 	$("#errorDestination").text("");
 	$("#errorEndDestination").text("");
 	$("#errorBrojOsoba").text("");
-	$("#errorName").text("");
 	$("#errorDatePoletanja").text("");
-	$("#errorDateSletanja").text("");
+	$("#errorDatePovratka").text("");
 	
-	var hotel=$("#nameHotel").val();
+	var startDestination = $("#startDestination").val();
+	var endDestination = $("#endDestination").val();
+	
 	var today = new Date().toISOString().split('T')[0];
+	var ispravno = true;
 	
-	if(hotel == ""){
-		ispravno = false;
-		$("#errorName").text(" Fill out this field").css('color', 'red');
-	}
 	
-	var pocetak=$("#hotelCheckIn").val();
+	var pocetak=$("#datumPoletanja").val();
 	if(pocetak == ""){
 		ispravno = false;
-		$("#errorPocetak").text(" Fill out this field").css('color', 'red');
+		$("#errorDatePoletanja").text(" Fill out this field").css('color', 'red');
 	}else if(pocetak < today){
-		$("#errorPocetak").text("You can not select the date that passed").css('color', 'red');
+		$("#errorDatePoletanja").text("You can not select the date that passed").css('color', 'red');
 		ispravno=false;
 		
 	}
-	var kraj=$("#hotelCheckOut").val();
-	if(kraj == ""){
-		ispravno=false;
-		$("#errorKraj").text(" Fill out this field").css('color', 'red');
+	var tip = $('#selectType').val();
+	if(tip == "round-trip")
+	{
+		var kraj=$("#datumPovratka").val();
+		if(kraj == ""){
+			ispravno=false;
+			$("#errorDatePovratka").text(" Fill out this field").css('color', 'red');
+		}
+		var date1 = Date.parse(pocetak);
+		var date2 = Date.parse(kraj);
+		if (date1 > date2) {
+			$("#errorDatePovratka").text("Return date must be greater than depart date").css('color', 'red');
+			ispravno=false;
+		}	
+	
 	}
-	var date1 = Date.parse(pocetak);
-	var date2 = Date.parse(kraj);
-	if (date1 > date2) {
-		$("#errorKraj").text("Check out date must be greater than check in date").css('color', 'red');
-		ispravno=false;
-	}	
+	else
+	{
+		kraj = "nema";
+	}
+	
+	
+	var klasa = $('#selectClass').val();
+	var brPutnika = $('#brojOsoba').val();
+	
+	if(isNaN(brPutnika))
+	{
+		brPutnika = 1;
+	}
+	
+	if(startDestination == ""){
+		ispravno = false;
+		$("#errorDestination").text(" Fill out this field").css('color', 'red');
+	}
+	
+	if(endDestination == ""){
+		ispravno = false;
+		$("#errorEndDestination").text(" Fill out this field").css('color', 'red');
+	}
+	alert(ispravno);
+	if(ispravno)
+	{
+		
+		$.ajax({
+					type : 'POST',
+					url : "api/letovi/findFlights",
+					contentType: "application/json",
+					dataType : "json",
+					data : pretragaToJson(pocetak,kraj,tip,klasa,startDestination,endDestination,brPutnika),
+					
+					success : function(data)
+					{
+						alert(data);
+						
+					},
+					error: function(XMLHttpRequest, textStatus, errorThrown){
+							alert('greska');
+					}
+					
+				});
+	
+	}
 
+
+}
+
+function ispisLetova()
+{
+	
 
 
 }
 
 
+
+function pretragaToJson(pocetak,kraj,tip,klasa,startDestination,endDestination,brPutnika)
+{
+	return JSON.stringify(
+			{
+				"datumPoletanja" : pocetak,
+				"datumPovratka" : kraj,
+					"tip" : tip,
+					"klasa" : klasa,
+					"lokPoletanja" : startDestination,
+					"lokSletanja" : endDestination,
+					"brojLjudi" : brPutnika
+			});
+	
+}
 
 
 function preuzmiPodatke() {

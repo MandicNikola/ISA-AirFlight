@@ -1,6 +1,8 @@
 package rs.ftn.isa.model;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,6 +12,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Seat {
@@ -25,13 +30,33 @@ public class Seat {
 	@Column(name = "kolona", nullable = false)
 	private int kolona;
 	
+	@Column(name = "klasa", nullable = false)
+	private String klasa;
+	
 	//segment kome pripadaju sedista
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Segment segment;
 	
 	
+	@OneToMany(mappedBy = "sediste",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	private  Set<Ticket> karte = new HashSet<Ticket>();
 	
 	
+	
+	public Seat()
+	{
+		
+	}
+	
+	
+	public Seat(int red, int kolona, String klasa) {
+		super();
+		this.red = red;
+		this.kolona = kolona;
+		this.klasa = klasa;
+	}
+
 	@Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -51,6 +76,54 @@ public class Seat {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public int getRed() {
+		return red;
+	}
+
+	public void setRed(int red) {
+		this.red = red;
+	}
+
+	public int getKolona() {
+		return kolona;
+	}
+
+	public void setKolona(int kolona) {
+		this.kolona = kolona;
+	}
+
+	public String getKlasa() {
+		return klasa;
+	}
+
+	public void setKlasa(String klasa) {
+		this.klasa = klasa;
+	}
+
+	public Segment getSegment() {
+		return segment;
+	}
+
+	public void setSegment(Segment segment) {
+		this.segment = segment;
+	}
+
+	public Set<Ticket> getKarte() {
+		return karte;
+	}
+
+	public void setKarte(Set<Ticket> karte) {
+		this.karte = karte;
+	}
 	
 	
 }

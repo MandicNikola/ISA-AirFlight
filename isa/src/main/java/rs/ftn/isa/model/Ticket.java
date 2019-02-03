@@ -20,32 +20,43 @@ public class Ticket {
 	private Long id;
 	
 	//sediste cena i popust
-	@Column(name = "red",nullable = false)
-	private int red;
-	
-	@Column(name = "mesto",nullable = false)
-	private int mesto;
 	
 	@Column(name = "popust", nullable = true)
 	private int popust;
 	
+	@Column(name = "klasa", nullable = false)
+	private String klasa;
 	
 	@Column(name = "rezervisano", nullable = false)
 	private boolean rezervisano;
 	
 	//da znamo kom letu pripada kada mi treba
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Flight let;
 	
 	@OneToOne(mappedBy = "ticket", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, optional = false)
+            fetch = FetchType.LAZY)
 	private Pozivnica pozivnica;
 	
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Seat sediste;
 	
 	public Ticket()
 	{
 		
 	}
+
+	
+	
+	
+	public Ticket(boolean rezervisano, String klasa) {
+		super();
+		this.rezervisano = rezervisano;
+		this.klasa = klasa;
+	}
+
+
 
 
 	public Long getId() {
@@ -57,25 +68,7 @@ public class Ticket {
 		this.id = id;
 	}
 
-
-	public int getRed() {
-		return red;
-	}
-
-
-	public void setRed(int red) {
-		this.red = red;
-	}
-
-
-	public int getMesto() {
-		return mesto;
-	}
-
-
-	public void setMesto(int mesto) {
-		this.mesto = mesto;
-	}
+	
 
 
 	public int getPopust() {
@@ -115,6 +108,26 @@ public class Ticket {
 
 	public void setPozivnica(Pozivnica pozivnica) {
 		this.pozivnica = pozivnica;
+	}
+
+
+	public String getKlasa() {
+		return klasa;
+	}
+
+
+	public void setKlasa(String klasa) {
+		this.klasa = klasa;
+	}
+
+
+	public Seat getSediste() {
+		return sediste;
+	}
+
+
+	public void setSediste(Seat sediste) {
+		this.sediste = sediste;
 	}
 	
 	

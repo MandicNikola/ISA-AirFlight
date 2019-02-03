@@ -34,6 +34,16 @@ public class AirPlane {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private AirplaneCompany airComp;
 	
+	@Column(name = "kofiguracija", nullable = false)
+	private String konfiguracija;
+	
+	@Column(name = "ekonomska", nullable = false)
+	private int ekonomska;
+	@Column(name = "biznis", nullable = false)
+	private int biznis;
+	@Column(name = "prvaKlasa", nullable = false)
+	private int prvaKlasa;
+	
 	//segmenti koje sadrzi avion koji su mi bitni
 	@OneToMany(mappedBy = "plane",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore
@@ -42,8 +52,10 @@ public class AirPlane {
 	
 	@OneToMany(mappedBy = "plane",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore
-	private Set<Segment> segments = new HashSet<Segment>();
-
+	private  Set<Segment> segmenti = new HashSet<Segment>();
+	
+	
+	
 
 	public AirPlane() {
 		super();
@@ -90,13 +102,45 @@ public class AirPlane {
 	}
 
 
-	public Set<Segment> getSegments() {
-		return segments;
+
+
+	public String getKonfiguracija() {
+		return konfiguracija;
 	}
 
 
-	public void setSegments(Set<Segment> segments) {
-		this.segments = segments;
+	public void setKonfiguracija(String konfiguracija) {
+		this.konfiguracija = konfiguracija;
+	}
+
+
+	public int getEkonomska() {
+		return ekonomska;
+	}
+
+
+	public void setEkonomska(int ekonomska) {
+		this.ekonomska = ekonomska;
+	}
+
+
+	public int getBiznis() {
+		return biznis;
+	}
+
+
+	public void setBiznis(int biznis) {
+		this.biznis = biznis;
+	}
+
+
+	public int getPrvaKlasa() {
+		return prvaKlasa;
+	}
+
+
+	public void setPrvaKlasa(int prvaKlasa) {
+		this.prvaKlasa = prvaKlasa;
 	}
 
 
@@ -119,6 +163,16 @@ public class AirPlane {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+
+	public Set<Segment> getSegmenti() {
+		return segmenti;
+	}
+
+
+	public void setSegmenti(Set<Segment> segmenti) {
+		this.segmenti = segmenti;
+	}
 
 	
 	

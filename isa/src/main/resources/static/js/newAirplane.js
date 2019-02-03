@@ -4,7 +4,12 @@
 
 function formToJSON() {
 	return JSON.stringify({
-		"naziv" : $('#nazivAvion').val()		
+		"naziv" : $('#nazivAvion').val(),
+		"konfiguracija" : $('#konfiguracijaAvion').val(),
+		"ekonomska" : $('#brEkonomska').val(),
+		"prvaKlasa" : $('#brPrva').val(),
+		"biznis" : $('#brBiznis').val(),
+		
 	});
 }
 

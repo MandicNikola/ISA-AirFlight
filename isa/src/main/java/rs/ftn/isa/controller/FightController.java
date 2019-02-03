@@ -40,14 +40,18 @@ public class FightController {
 	
 	
 	
-	@RequestMapping(value="/findFlights/{startDestination}/{endDestination}/{brOsoba}", 
+	@RequestMapping(value="/findFlights", 
 			method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<FlightDTO>>  findFlight(@RequestBody FlightDTO flight,@PathVariable("startDestination") String startDestination,@PathVariable("endDestination") String endDestination, @PathVariable("endDestination") int brojOsoba) throws ParseException{		
+	public ResponseEntity<List<FlightDTO>>  findFlight(@RequestBody FlightDTO flight) throws ParseException{		
 	//
-		if(flight == null)
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		String startDestination = flight.getLokPoletanja();
+		String endDestination = flight.getLokSletanja();
+		int brojOsoba =flight.getBrojLjudi();
+		
+		
 		
 		if(startDestination.equals("nema") || startDestination.isEmpty() || startDestination == null)
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -83,12 +87,13 @@ public class FightController {
 		List<Flight> retFlights = new ArrayList<Flight>();
 		
 		String type = flight.getTip();
+		System.out.println(type);
 		if(type.equals("round-trip"))
 		{
 			Date datePoletanja = new SimpleDateFormat("yyyy-MM-dd").parse(datumPoletanja);
 			Date datePovratka = new SimpleDateFormat("yyyy-MM-dd").parse(datumPovratka);
 			if(datePoletanja.after(datePovratka))
-				return new ResponseEntity<List<FlightDTO>>(HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<List<FlightDTO>>(new ArrayList<FlightDTO>(), HttpStatus.OK);
 			
 			retFlights = servis.findFlightsBetweenDates(datePoletanja, datePovratka);
 			
@@ -100,6 +105,7 @@ public class FightController {
 		}
 		
 		//ukoliko nije pronasao nijedan let
+		System.out.println("usao ovde");
 		if(retFlights == null || retFlights.size() == 0)
 			return new ResponseEntity<List<FlightDTO>>(new ArrayList<FlightDTO>(), HttpStatus.OK);
 		//obrisemo tipove koji mi ne odgovaraju
@@ -115,18 +121,40 @@ public class FightController {
 		}
 		
 		//ukoliko je broj osoba veci onda vrsim pretragu koja mi treba
-		if(brojOsoba > 0)
+		
+		String klasaPuta = "all";
+		
+		
+		if(klasaPuta.equals("mixed"))
 		{
-			Iterator<Flight> it = retFlights.iterator();
-			while(it.hasNext())
+			if(brojOsoba > 0)
 			{
-				Flight let = it.next();
-				if(!checkTickets(let, brojOsoba))
-					it.remove();
-			}	
+				Iterator<Flight> it = retFlights.iterator();
+				while(it.hasNext())
+				{
+					Flight let = it.next();
+					if(!checkTickets(let, brojOsoba,klasaPuta))
+						it.remove();
+				}	
+			}
+		}
+		else
+		{
+			if(brojOsoba > 0)
+			{
+				Iterator<Flight> it = retFlights.iterator();
+				while(it.hasNext())
+				{
+					Flight let = it.next();
+					if(!checkTickets(let, brojOsoba,klasaPuta))
+						it.remove();
+				}	
+			}
+			
+			
 		}
 		
-		//formiranje DTO
+	//formiranje DTO jos zavrsiti
 		ArrayList<FlightDTO> retFlightDto = new ArrayList<FlightDTO>();
 		for(Flight let : retFlights)
 		{
@@ -134,32 +162,58 @@ public class FightController {
 			dto.setIdLeta(let.getId());
 			dto.setIdKompanije(let.getAvioKomp().getId());
 			dto.setCena(let.getCena());
+			dto.setNazivKompanije(let.getAvioKomp().getNaziv());
 			
 			
+			SimpleDateFormat formatVreme = new SimpleDateFormat("HH:mm");
+			String vremePoletanja = formatVreme.format(let.getVremePoletanja());
+			String vremeSletanja = formatVreme.format(let.getVremeSletanja());
+			
+			int brojPresedanja = let.getPresedanja().size();
+			dto.setVremePoletanja(vremePoletanja);
+			dto.setVremeSletanja(vremeSletanja);
+			dto.setBrojPresedanja(brojPresedanja);
 			
 			
+			retFlightDto.add(dto);
 		}
 		
 		
 		
-		return null;
+		return new ResponseEntity<List<FlightDTO>>(retFlightDto, HttpStatus.OK);
 	}
 	
-	public boolean checkTickets(Flight flight, int brOsoba)
+	public boolean checkTickets(Flight flight, int brOsoba,String type)
 	{
 		Set<Ticket> tickets = flight.getKarte();
 		int brojSlobodnih = 0;
 		
-		for(Ticket ticket : tickets)
+		if(type.equals("mixed"))
 		{
-			if(!ticket.isRezervisano())
+			for(Ticket ticket : tickets)
 			{
-				brojSlobodnih++;
-				if(brojSlobodnih == brOsoba)
-					return true;
+				if(!ticket.isRezervisano())
+				{
+					brojSlobodnih++;
+					if(brojSlobodnih == brOsoba)
+						return true;
+				}
 			}
 		}
-		
+		else
+		{
+			for(Ticket ticket : tickets)
+			{
+				if(!ticket.isRezervisano() && ticket.getKlasa().equals(type))
+				{
+					brojSlobodnih++;
+					if(brojSlobodnih == brOsoba)
+						return true;
+				}
+			}
+			
+			
+		}
 		
 		return false;
 	}

@@ -32,6 +32,9 @@ import rs.ftn.isa.model.Flight;
 import rs.ftn.isa.model.Hotel;
 import rs.ftn.isa.model.RentACar;
 import rs.ftn.isa.model.Room;
+import rs.ftn.isa.model.Seat;
+import rs.ftn.isa.model.Segment;
+import rs.ftn.isa.model.Ticket;
 import rs.ftn.isa.model.Usluga;
 import rs.ftn.isa.service.AirPlaneServiceImpl;
 import rs.ftn.isa.service.AirplaneServiceCompanyImpl;
@@ -277,8 +280,16 @@ public class AirplaneCompanyController {
 		 flightNew.setVreme(flight.getVreme());
 		 flightNew.setTip(flight.getTip());
 		 
+		 
 		 flightNew.setVremePoletanja(formirajDate(flight.getDatumPoletanja(), flight.getVremePoletanja()));
 		 flightNew.setVremeSletanja(formirajDate(flight.getDatumSletanja(), flight.getVremeSletanja()));
+		
+		 if(!(flight.getDatumPovratka().equals("nema") || flight.getDatumPovratka().isEmpty() || flight.getDatumPovratka() == null))
+		 { 
+			 flightNew.setVremePovratka(formirajDate(flight.getDatumPovratka(),"00:00"));
+		 }
+		 
+		 formirajKarte(plane, flightNew);
 		 
 		 service.saveAirplaneCompany(company);
 		
@@ -303,6 +314,24 @@ public class AirplaneCompanyController {
 		 
 		 return new Date(godina-1900, mesec, dan, hours, minutes);
 		 
+	}
+	
+	public void formirajKarte(AirPlane plane, Flight flight)
+	{
+		for(Segment segment : plane.getSegmenti())
+		{
+			for(Seat sediste : segment.getSeats())
+			{
+				Ticket ticket = new Ticket(false,sediste.getKlasa());
+				ticket.setSediste(sediste);
+				sediste.getKarte().add(ticket);
+				flight.getKarte().add(ticket);
+				ticket.setLet(flight);
+				
+			}
+			
+		}
+		
 	}
 	
 	

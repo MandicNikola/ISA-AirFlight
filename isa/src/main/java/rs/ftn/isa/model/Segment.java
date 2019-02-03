@@ -43,10 +43,122 @@ public class Segment {
 	private AirPlane plane;
 	
 	
+	public Segment()
+	{
+		
+	}
 	
 	
 	
 	
+	
+	public Segment(String naziv, int redovi, int faktor) {
+		super();
+		this.naziv = naziv;
+		this.redovi = redovi;
+		this.faktor = faktor;
+	}
+
+
+
+
+
+	public Long getId() {
+		return id;
+	}
+
+
+
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+
+
+
+	public String getNaziv() {
+		return naziv;
+	}
+
+
+
+
+
+	public void setNaziv(String naziv) {
+		this.naziv = naziv;
+	}
+
+
+
+
+
+	public int getRedovi() {
+		return redovi;
+	}
+
+
+
+
+
+	public void setRedovi(int redovi) {
+		this.redovi = redovi;
+	}
+
+
+
+
+
+	public int getFaktor() {
+		return faktor;
+	}
+
+
+
+
+
+	public void setFaktor(int faktor) {
+		this.faktor = faktor;
+	}
+
+
+
+
+
+	public Set<Seat> getSeats() {
+		return seats;
+	}
+
+
+
+
+
+	public void setSeats(Set<Seat> seats) {
+		this.seats = seats;
+	}
+
+
+
+
+
+	public AirPlane getPlane() {
+		return plane;
+	}
+
+
+
+
+
+	public void setPlane(AirPlane plane) {
+		this.plane = plane;
+	}
+
+
+
+
+
 	@Override
     public boolean equals(Object o) {
         if (this == o) {

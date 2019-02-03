@@ -14,6 +14,8 @@ public class FlightDTO {
 	private Long idAviona;
 	private Long idKompanije;
 	
+	private String nazivKompanije;
+	
 	private String datumPoletanja;
 	private String datumSletanja;
 	private String vremePoletanja;
@@ -27,11 +29,21 @@ public class FlightDTO {
 	
 	
 	private String tip;
+	private String klasa;
 
 	//**sva presedanja koja mi se desavaju u letu
 	private ArrayList<Long> presedanja = new ArrayList<Long>();
 	private Long lokacijaPoletanja;
 	private Long lokacijaSletanja;
+	
+	private int brojEkonomska;
+	private int brojBiznis;
+	private int brojPrva;
+	
+	private String lokPoletanja;
+	private String lokSletanja;
+	private int brojLjudi;
+	private int brojPresedanja;
 	
 	
 	public FlightDTO() {
@@ -42,6 +54,70 @@ public class FlightDTO {
 	
 	
 	
+	public String getLokPoletanja() {
+		return lokPoletanja;
+	}
+
+
+
+
+
+	public String getNazivKompanije() {
+		return nazivKompanije;
+	}
+
+
+
+
+
+	public void setNazivKompanije(String nazivKompanije) {
+		this.nazivKompanije = nazivKompanije;
+	}
+
+
+
+
+
+	public void setLokPoletanja(String lokPoletanja) {
+		this.lokPoletanja = lokPoletanja;
+	}
+
+
+
+
+
+	public String getLokSletanja() {
+		return lokSletanja;
+	}
+
+
+
+
+
+	public void setLokSletanja(String lokSletanja) {
+		this.lokSletanja = lokSletanja;
+	}
+
+
+
+
+
+	public int getBrojLjudi() {
+		return brojLjudi;
+	}
+
+
+
+
+
+	public void setBrojLjudi(int brojLjudi) {
+		this.brojLjudi = brojLjudi;
+	}
+
+
+
+
+
 	public String getDatumPovratka() {
 		return datumPovratka;
 	}
@@ -68,6 +144,38 @@ public class FlightDTO {
 
 	public void setTip(String tip) {
 		this.tip = tip;
+	}
+
+
+
+
+
+	public String getKlasa() {
+		return klasa;
+	}
+
+
+
+
+
+	public int getBrojPresedanja() {
+		return brojPresedanja;
+	}
+
+
+
+
+
+	public void setBrojPresedanja(int brojPresedanja) {
+		this.brojPresedanja = brojPresedanja;
+	}
+
+
+
+
+
+	public void setKlasa(String klasa) {
+		this.klasa = klasa;
 	}
 
 
@@ -239,6 +347,54 @@ public class FlightDTO {
 	}
 	public void setCena(double cena) {
 		this.cena = cena;
+	}
+
+
+
+
+
+	public int getBrojEkonomska() {
+		return brojEkonomska;
+	}
+
+
+
+
+
+	public void setBrojEkonomska(int brojEkonomska) {
+		this.brojEkonomska = brojEkonomska;
+	}
+
+
+
+
+
+	public int getBrojBiznis() {
+		return brojBiznis;
+	}
+
+
+
+
+
+	public void setBrojBiznis(int brojBiznis) {
+		this.brojBiznis = brojBiznis;
+	}
+
+
+
+
+
+	public int getBrojPrva() {
+		return brojPrva;
+	}
+
+
+
+
+
+	public void setBrojPrva(int brojPrva) {
+		this.brojPrva = brojPrva;
 	}
 	
 	

@@ -84,7 +84,7 @@ function formToJSON(id,presedanja,datPovratka)
 		"cena" : $('#cenaPutovanja').val(),
 		"lokacijaPoletanja" : $('#selectPoletanje').val(),
 		"lokacijaSletanja" : $('#selectSletanje').val(),
-		"tip" : $('selectTip').val(),
+		"tip" : $('#selectTip').val(),
 		"presedanja" : presedanja,
 		"datumPovratka" : datPovratka
 		

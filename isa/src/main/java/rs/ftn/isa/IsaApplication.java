@@ -26,6 +26,7 @@ import rs.ftn.isa.service.HotelService;
 import rs.ftn.isa.service.HotelServiceImpl;
 import rs.ftn.isa.service.RentACarService;
 import rs.ftn.isa.service.RoomService;
+import rs.ftn.isa.controller.FightController;
 
 import rs.ftn.isa.service.RoomServiceImp;
 import rs.ftn.isa.service.UslugaService;

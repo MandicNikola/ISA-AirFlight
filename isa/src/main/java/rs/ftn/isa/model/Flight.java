@@ -37,6 +37,10 @@ public class Flight {
 	@Column(name = "vremeSletanja", nullable = false)
 	private Date vremeSletanja;
 	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "vremePovratka", nullable = true)
+	private Date vremePovratka;
+	
 	
 	@Column(name = "vreme", nullable = false)
 	private double vreme;
@@ -148,6 +152,22 @@ public class Flight {
 
 	public void setSletanje(Destination sletanje) {
 		this.sletanje = sletanje;
+	}
+
+
+
+
+
+	public Date getVremePovratka() {
+		return vremePovratka;
+	}
+
+
+
+
+
+	public void setVremePovratka(Date vremePovratka) {
+		this.vremePovratka = vremePovratka;
 	}
 
 
