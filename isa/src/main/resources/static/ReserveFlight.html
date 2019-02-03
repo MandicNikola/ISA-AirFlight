@@ -9,6 +9,11 @@
 	  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <title>Reservation</title>
 <style>
+
+.form-header,#nemaPonuda{
+	text-align: center;
+    margin-bottom: 20px;
+}
 .container {
   display: flex;
   justify-content: center;
@@ -24,7 +29,7 @@
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
-  width: 100%;
+  width: 50%;
 }
 
 td, th {
@@ -32,27 +37,122 @@ td, th {
   text-align: center;
   padding: 8px;
 }
+
+ .booking-form {
+    max-width: 768px;
+    width: 100%;
+    margin: auto;
+    padding: 30px;
+    border-radius: 3px;
+}
+
 </style>
 </head>
-<body onload="load()">
+<body>
 	<div class="container">
-		<h2>Reserve Seats</h2>
-		  <div class="row" >
-		    <div class="col-md-9" id="seats">
-		
-		    </div>
-		    <div class="col-md-3" id="orijentacija">
-		     
-		    </div>
-		  </div>
-		   <div class="row" id="friendsCall">
-		   
-		  </div>
-		  
-		  <div class="row" id="passengers">
-		   
-		  </div>
-		  
+		<h1>Reserve Seats</h1>
 	</div>
+
+	<div class="container" id="pregledSedista">
+		<div  class= "col-md-8">
+			<div class="row" id="seats">
+				
+			</div>
+		</div>
+		<div class= "col-md-4">
+			<table>
+				<tr><td>Reserved</td><td style="background-color: grey"></td></tr>
+				<tr><td>Free</td><td style="background-color: rgb(187, 148, 231)"></td></tr>
+				<tr><td>Taken</td><td style="background-color: rgb(255, 255, 255)"></td></tr>
+			</table>
+		</div>	
+	</div>
+	
+	<div class="container" id="pregledPrijatelja">
+		<div class = "row">
+			<h3>Search friends:</h3>
+		</div>
+		<div class = row>
+			<div  class= "col-md-8">
+				<input type="text" id="searchFriends"  placeholder="Search for friends">
+			</div>
+		</div>	
+		
+		<div class = "row" id = "prijatelji">
+		</div>
+	</div>
+	
+	<div class="container" id="passengers">
+		<div class="booking-form">
+	   		<div class="form-header">
+	   			<h1 id=passenger>Passenger</h1>
+	   		</div>
+	   		<form>
+	   			<div class="row">
+							<div class="col-md-6">
+										<div class="form-group">
+											<input class="form-control" id = "name" type="text" required placeholder="First Name">
+												<span id="errorName"></span>
+										</div>
+							</div>
+							<div class="col-md-6">
+										<div class="form-group">
+											<input class="form-control" id = "endDestination" type="text" required placeholder="Last Name">
+												<span id="errorLastName"></span>
+										</div>
+							</div>
+	   			</div>
+	   			<div class="row">
+							<div class="col-md-6">
+										<div class="form-group">
+											<input class="form-control" id = "birthday" type="date" required placeholder="birthday">
+												<span id="errorDestination"></span>
+										</div>
+							</div>
+							<div class="col-md-6">
+										<div class="form-group">
+											<input class="form-control" id = "phone" type="tel" required placeholder="Phone(eg. 021-996-4545)"  pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
+												<span id="errorEndDestination"></span>
+										</div>
+							</div>
+	   			</div>
+	   			<div class="row">
+							<div class="col-md-6">
+										<div class="form-group">
+											<input class="form-control" id = "passport" type="text" required placeholder="Passport">
+												<span id="errorName"></span>
+										</div>
+							</div>
+							<div class="col-md-6">
+										<div class="form-group">
+											<input class="form-control" id = "email" type="email"  placeholder="email">
+												<span id="errorLastName"></span>
+										</div>
+							</div>
+	   			</div>
+	   			<div class="row">
+	   				<button type="button" class="btn btn-primary" id="addPasenger">Add</button>
+	   			</div>
+	   			
+	   	 </form>
+  		</div>
+	</div>
+	
+	<div class="container" id="buttons">
+		<div  class= "col-md-10">
+			
+		</div>
+		<div class= "col-md-1">
+			<button type="button" class="btn btn-default">Back</button>
+		
+		</div>	
+		<div class= "col-md-1">
+			<button type="button" class="btn btn-primary">Next</button>
+		</div>
+	</div>
+
+	
+		  
+	
 </body>
 </html>
