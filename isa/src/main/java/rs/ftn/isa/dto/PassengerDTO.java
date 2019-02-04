@@ -33,7 +33,7 @@ public class PassengerDTO {
 	private String passport;
 	
 	
-	private Date datumRodjenja;
+	private String datumRodjenja;
 	
 	
 	public PassengerDTO()
@@ -44,7 +44,7 @@ public class PassengerDTO {
 	
 
 
-	public PassengerDTO(String ime, String prezime, String mail, String telefon, String passport, Date datumRodjenja) {
+	public PassengerDTO(String ime, String prezime, String mail, String telefon, String passport, String datumRodjenja) {
 		super();
 		this.ime = ime;
 		this.prezime = prezime;
@@ -52,6 +52,20 @@ public class PassengerDTO {
 		this.telefon = telefon;
 		this.passport = passport;
 		this.datumRodjenja = datumRodjenja;
+	}
+
+
+
+
+	public Long getIdKarte() {
+		return idKarte;
+	}
+
+
+
+
+	public void setIdKarte(Long idKarte) {
+		this.idKarte = idKarte;
 	}
 
 
@@ -117,12 +131,12 @@ public class PassengerDTO {
 	}
 
 
-	public Date getDatumRodjenja() {
+	public String getDatumRodjenja() {
 		return datumRodjenja;
 	}
 
 
-	public void setDatumRodjenja(Date datumRodjenja) {
+	public void setDatumRodjenja(String datumRodjenja) {
 		this.datumRodjenja = datumRodjenja;
 	}
 	

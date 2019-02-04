@@ -16,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class ReservationTicket {
@@ -25,6 +27,7 @@ public class ReservationTicket {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+	@Temporal(TemporalType.DATE)
 	@Column(name = "datumRezervacije", nullable = false)
 	private java.util.Date datumRezervacije;
 	
@@ -34,7 +37,7 @@ public class ReservationTicket {
 	
 
 	@Column(name = "ocenjenaKompanija", nullable = true)
-	private boolean ocenanjenaKompanija;
+	private boolean ocenjenaKompanija;
 	
 	
 	//imaju korisnika na kog se vezuju
@@ -42,7 +45,7 @@ public class ReservationTicket {
 	private User korisnik;
 	
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "reservationTicket")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "reservationTicket", cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH})
 	private Set<Ticket> karte = new HashSet<Ticket>();
 	
 	
@@ -71,20 +74,23 @@ public class ReservationTicket {
 		this.datumRezervacije = datumRezervacije;
 	}
 
-
-	
-	
 	
 
-	public boolean isOcenanjenaKompanija() {
-		return ocenanjenaKompanija;
+	public boolean isOcenjenaKompanija() {
+		return ocenjenaKompanija;
 	}
 
-	public void setOcenanjenaKompanija(boolean ocenanjenaKompanija) {
-		this.ocenanjenaKompanija = ocenanjenaKompanija;
+	public void setOcenjenaKompanija(boolean ocenjenaKompanija) {
+		this.ocenjenaKompanija = ocenjenaKompanija;
 	}
 
+	public Set<Ticket> getKarte() {
+		return karte;
+	}
 
+	public void setKarte(Set<Ticket> karte) {
+		this.karte = karte;
+	}
 
 	public StatusRezervacije getStatus() {
 		return status;

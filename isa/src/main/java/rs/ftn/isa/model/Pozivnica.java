@@ -1,6 +1,7 @@
 package rs.ftn.isa.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -40,6 +41,69 @@ public class Pozivnica {
 	 @ManyToOne(fetch = FetchType.EAGER)
 	 private User korisnik;
 	 
-	
+	 public Pozivnica()
+	 {
+		 
+	 }
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public boolean isRezervisano() {
+		return rezervisano;
+	}
+
+	public void setRezervisano(boolean rezervisano) {
+		this.rezervisano = rezervisano;
+	}
+
+	public Date getDatum() {
+		return datum;
+	}
+
+	public void setDatum(Date datum) {
+		this.datum = datum;
+	}
+
+	public Ticket getTicket() {
+		return ticket;
+	}
+
+	public void setTicket(Ticket ticket) {
+		this.ticket = ticket;
+	}
+
+	public User getKorisnik() {
+		return korisnik;
+	}
+
+	public void setKorisnik(User korisnik) {
+		this.korisnik = korisnik;
+	}
+	 
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Pozivnica c = (Pozivnica) o;
+        if(c.id == null || id == null) {
+            return false;
+        }
+        return Objects.equals(id, c.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 	
 }

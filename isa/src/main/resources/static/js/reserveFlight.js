@@ -4,7 +4,7 @@
 
 var selectedSeats = [];
 var status ="";
-var brojPrijatelja = -1;
+var brojPrijatelja = 0;
 var invitedFriends = [];
 var imaPrijatelje = false;
 var passengers = [];
@@ -303,11 +303,13 @@ function back()
 	}
 	else if(status == "finishRezervation-pozivanjePrijatelja")
 	{
+		status = "pozivanjePrijatelja";
 		$('#pregledPrijatelja').show();
 		$('#finishReservation').hide();
 	}
 	else if(status == "finishRezervation-izborSedista")
 	{
+		status = "izborSedista";
 		$('#finishReservation').hide();
 		$('#pregledSedista').show();
 		
@@ -316,13 +318,14 @@ function back()
 	{
 		if(imaPrijatelje)
 		{
+			status = "pozivanjePrijatelja";
 			$('#pregledPrijatelja').show();
 			$('#passengers').hide();
 			passengers = [];
 		}
 		else
 		{	
-			
+			status = "izborSedista";
 			$('#passengers').hide();
 			$('#pregledSedista').show();
 			passengers = [];
@@ -333,7 +336,6 @@ function back()
 		$('#pregledPrijatelja').hide();
 		$('#pregledSedista').show();
 		status = "izborSedista";
-		invitedFriends = [];
 		
 	}
 	
@@ -346,6 +348,65 @@ function back()
  */
 function zavrsiRezervaciju(mode)
 {
+	alert(JSON.stringify(passengers));
+	alert(JSON.stringify(selectedSeats));
+	
+	if(passengers.length >= 0)
+	{
+		var putnici = [];
+		
+		$.each(passengers,function(index,value)
+				{
+					var sediste = selectedSeats.pop();
+					var putnik = value;
+					putnik.idKarte = sediste.split("-")[2];
+					putnici.push(putnik);
+				});
+		
+		var idTicket = selectedSeats.pop().split("-")[2];
+		
+		
+		$.ajax
+		({
+			type : 'POST',
+			url : 'api/letovi/makeReservation/'+idTicket,
+			contentType: "application/json",
+			data : JSON.stringify(putnici),
+			success : function(data)
+			{
+				alert(data);
+				if(invitedFriends.length > 0)
+				{
+					var pozivnice = [];
+					$.each(invitedFriends,function(index,value)
+							{
+								var sediste = selectedSeats.pop();
+								var friendId = value;
+								var idKarte =  sediste.split("-")[2];
+								
+								
+								var promenljiva = {ticketID : idKarte, korisnikID : friendId};
+								pozivnice.push(promenljiva);
+							});
+					
+					$.ajax({
+						type : 'POST',
+						url : 'api/letovi/makeInvitations',
+						contentType: "application/json",
+						data : JSON.stringify(pozivnice),
+						success : function(data1)
+						{
+							alert("uspesno");
+						}
+				
+					});
+				}
+			}
+					
+		});
+		
+		
+	}
 	
 	
 
@@ -353,30 +414,43 @@ function zavrsiRezervaciju(mode)
 
 function addPassenger()
 {
-	var ispravno = true;
-	
-	if($('#name').val() == "")
-		ispravno = false;
-	if($('#lastName').val() == "")
-		ispravno = false;
-	if($('#phone').val() == "")
-		ispravno = false;
-	if($('#passport').val() == "")
-		ispravno = false;
-	if($('#email').val() == "")
-		ispravno = false;
-	if($('#birthday').val() == "")
-		ispravno = false;
-	
-	var passenger = {ime : $('#name').val(), prezime : $('#lastName').val(), 
-		telefon : $('#phone').val(), passport : $('#passport').val(), mail : $('#email').val(),
-		datumRodjenja : $('#birthday').val()
-	};
+	alert('usao u dugme add');
+	if(brojPrijatelja > 0)
+	{
+		var ispravno = true;
+		
+		if($('#name').val() == "")
+			ispravno = false;
+		if($('#lastName').val() == "")
+			ispravno = false;
+		if($('#phone').val() == "")
+			ispravno = false;
+		if($('#passport').val() == "")
+			ispravno = false;
+		if($('#email').val() == "")
+			ispravno = false;
+		if($('#birthday').val() == "")
+			ispravno = false;
+		
+		var passenger = {ime : $('#name').val(), prezime : $('#lastName').val(), 
+			telefon : $('#phone').val(), passport : $('#passport').val(), mail : $('#email').val(),
+			datumRodjenja : $('#birthday').val()
+		};
 
-	if(ispravno)
-		passengers.push(passenger);
-	
-	
+		if(ispravno)
+		{
+			alert("putnik uspesno dodat!");
+			passengers.push(passenger);
+			brojPrijatelja--;
+			$('#name').val("");
+			$('#lastName').val("");
+			$('#passport').val("");
+			$('#email').val("");
+			$('#birthday').val("");
+			$('#phone').val("");
+			
+		}
+	}
 	
 }
 

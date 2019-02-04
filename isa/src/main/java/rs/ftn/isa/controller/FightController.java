@@ -8,6 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,13 +28,23 @@ import ch.qos.logback.core.util.DatePatternToRegexUtil;
 import rs.ftn.isa.dto.AirplaneDTO;
 import rs.ftn.isa.dto.FlightDTO;
 import rs.ftn.isa.dto.PassengerDTO;
+import rs.ftn.isa.dto.PozivnicaDTO;
 import rs.ftn.isa.dto.SeatDTO;
 import rs.ftn.isa.model.Destination;
 import rs.ftn.isa.model.Flight;
+import rs.ftn.isa.model.PassengerInfo;
+import rs.ftn.isa.model.Pozivnica;
+import rs.ftn.isa.model.ReservationTicket;
 import rs.ftn.isa.model.Seat;
+import rs.ftn.isa.model.StatusRezervacije;
 import rs.ftn.isa.model.Ticket;
+import rs.ftn.isa.model.User;
 import rs.ftn.isa.service.DestinationServiceImp;
+import rs.ftn.isa.service.EmailService;
 import rs.ftn.isa.service.FlightService;
+import rs.ftn.isa.service.PozivnicaServiceImp;
+import rs.ftn.isa.service.TicketServiceImp;
+import rs.ftn.isa.service.UserServiceImpl;
 
 @RestController
 @RequestMapping(value="api/letovi")
@@ -42,6 +56,17 @@ public class FightController {
 	@Autowired
 	DestinationServiceImp destinationService;
 	
+	@Autowired
+	TicketServiceImp servisKarata;
+	
+	@Autowired
+	UserServiceImpl servisKorisnik;
+	
+	@Autowired
+	EmailService servisMail;
+	
+	@Autowired
+	PozivnicaServiceImp servisPozivnica;
 	
 	/*
 	 * metoda ne vraca podatke koji su mi potrebni sutra to jos istestirati da proverim
@@ -328,16 +353,149 @@ public class FightController {
 	}
 	
 	
-	@RequestMapping(value="/makeReservation/{id}/{class}", 
+	@RequestMapping(value="/makeReservation/{id}", 
 			method = RequestMethod.POST,
-			consumes = MediaType.APPLICATION_JSON_VALUE,
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Long> makeReservation(@RequestBody ArrayList<PassengerDTO> passengers)		
+			consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Long> makeReservation(@RequestBody ArrayList<PassengerDTO> passengers,@Context HttpServletRequest request,@PathVariable("id") Long id) throws ParseException		
+	{
+		User user = (User) request.getSession().getAttribute("ulogovan");
+		if(user == null)
+			return new ResponseEntity<Long>(HttpStatus.BAD_REQUEST);
+		ReservationTicket rezervation = new ReservationTicket();
+		user = servisKorisnik.findOneById(user.getId());
+		
+		rezervation.setKorisnik(user);
+		rezervation.setStatus(StatusRezervacije.AKTIVNA);
+		user.getResTicket().add(rezervation);
+		
+		SimpleDateFormat formatDatum = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		rezervation.setDatumRezervacije(date);
+		
+		if(passengers.size() > 0)
+		{
+			for(PassengerDTO passDto : passengers)
+			{
+				Ticket ticket = servisKarata.findOneById(passDto.getIdKarte());
+				
+				Date datum = formatDatum.parse(passDto.getDatumRodjenja());
+				
+				
+				PassengerInfo info = new PassengerInfo(passDto.getIme(), passDto.getPrezime(), passDto.getMail(), passDto.getTelefon(), passDto.getPassport(), datum);
+				ticket.setPassengerInfo(info);
+				info.setKarta(ticket);
+				ticket.setRezervisano(true);
+				rezervation.getKarte().add(ticket);
+				ticket.setReservationTicket(rezervation);
+							
+				
+			}		
+		}
+		//ostaje mi jos da podesim pasos sto mi fali kod karte
+		
+		Ticket karta = servisKarata.findOneById(id);
+		PassengerInfo info = new PassengerInfo();
+		info.setIme(user.getIme());
+		info.setMail(user.getMail());
+		info.setPrezime(user.getPrezime());
+		karta.setPassengerInfo(info);
+		info.setKarta(karta);
+		karta.setRezervisano(true);
+		rezervation.getKarte().add(karta);
+		karta.setReservationTicket(rezervation);
+		
+		servisKorisnik.saveUser(user);
+		
+		
+		return new ResponseEntity<Long>(rezervation.getId(), HttpStatus.OK);
+	}
+	
+	
+	
+	@RequestMapping(value="/makeInvitations", 
+			method = RequestMethod.POST,
+			consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> makeInvitations(@RequestBody ArrayList<PozivnicaDTO> pozivnice,@Context HttpServletRequest request) throws ParseException, MessagingException		
 	{
 		
+		if(pozivnice.size() > 0)
+		{
+			for(PozivnicaDTO pozivnicaDTO : pozivnice)
+			{
+				User korisnik = servisKorisnik.findOneById(pozivnicaDTO.getKorisnikID());
+				Ticket ticket = servisKarata.findOneById(pozivnicaDTO.getTicketID());
+				Pozivnica pozivnica = new Pozivnica();
+				
+				pozivnica.setDatum(new Date());
+				pozivnica.setKorisnik(korisnik);
+				pozivnica.setTicket(ticket);
+				ticket.setPozivnica(pozivnica);
+				korisnik.getPozivnice().add(pozivnica);
+				
+				servisMail.sendInvitationAsync(korisnik, pozivnica);
+				
+				servisKorisnik.saveUser(korisnik);
+				
+			}
+		}
+		
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/acceptInvitation/{id}", 
+			method = RequestMethod.POST,
+			consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> acceptInvitation(@PathVariable("id") Long id) throws ParseException		
+	{
+		Pozivnica pozivnica = servisPozivnica.findOneById(id);
+		if(pozivnica == null)
+			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+		
+		Ticket ticket = pozivnica.getTicket();
+		User korisnik = pozivnica.getKorisnik();
+			
+		ReservationTicket rezervacija = new ReservationTicket();
+		rezervacija.setDatumRezervacije(new Date());
+		
+		rezervacija.setKorisnik(korisnik);
+		rezervacija.setStatus(StatusRezervacije.AKTIVNA);
+		korisnik.getResTicket().add(rezervacija);
+		
+		PassengerInfo info = new PassengerInfo();
+		info.setIme(korisnik.getIme());
+		info.setMail(korisnik.getMail());
+		info.setPrezime(korisnik.getPrezime());
+		
+		ticket.setPassengerInfo(info);
+		info.setKarta(ticket);
+		ticket.setRezervisano(true);
+		ticket.setReservationTicket(rezervacija);
+		rezervacija.getKarte().add(ticket);
 		
 		
-		return null;
+		korisnik.getPozivnice().remove(pozivnica);
+		
+		servisKorisnik.saveUser(korisnik);
+	
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/declineInvitation/{id}", 
+			method = RequestMethod.POST,
+			consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> declineInvitation(@PathVariable("id") Long id) throws ParseException		
+	{
+		
+		Pozivnica pozivnica = servisPozivnica.findOneById(id);
+		if(pozivnica == null)
+			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+		
+		User korisnik = pozivnica.getKorisnik();
+		korisnik.getPozivnice().remove(pozivnica);
+		
+		servisKorisnik.saveUser(korisnik);
+		
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
 	

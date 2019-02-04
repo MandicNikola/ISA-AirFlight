@@ -153,8 +153,18 @@ public class User {
 	}
 
 
+	
 
 
+
+	public Set<Pozivnica> getPozivnice() {
+		return pozivnice;
+	}
+
+
+	public void setPozivnice(Set<Pozivnica> pozivnice) {
+		this.pozivnice = pozivnice;
+	}
 
 
 	public Role getTip() {

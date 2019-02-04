@@ -35,15 +35,15 @@ public class PassengerInfo {
 	private String telefon;
 	
 	
-	@Column(name="passport", nullable = false)
+	@Column(name="passport", nullable = true)
 	private String passport;
 	
 	@Temporal(TemporalType.DATE)
-	@Column(name="datumRodjenja", nullable = false)
+	@Column(name="datumRodjenja", nullable = true)
 	private Date datumRodjenja;
 	
-	@OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ticket_id", nullable = false)
+	@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ticket_id")
     private Ticket karta;
 	
 	
@@ -136,6 +136,20 @@ public class PassengerInfo {
 
 	public void setDatumRodjenja(Date datumRodjenja) {
 		this.datumRodjenja = datumRodjenja;
+	}
+
+
+
+
+	public Ticket getKarta() {
+		return karta;
+	}
+
+
+
+
+	public void setKarta(Ticket karta) {
+		this.karta = karta;
 	}
 	
 	

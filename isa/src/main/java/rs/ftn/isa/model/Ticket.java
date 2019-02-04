@@ -1,5 +1,7 @@
 package rs.ftn.isa.model;
 
+import java.util.Objects;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -80,6 +82,34 @@ public class Ticket {
 	
 
 
+	public ReservationTicket getReservationTicket() {
+		return reservationTicket;
+	}
+
+
+
+
+	public void setReservationTicket(ReservationTicket reservationTicket) {
+		this.reservationTicket = reservationTicket;
+	}
+
+
+
+
+	public PassengerInfo getPassengerInfo() {
+		return passengerInfo;
+	}
+
+
+
+
+	public void setPassengerInfo(PassengerInfo passengerInfo) {
+		this.passengerInfo = passengerInfo;
+	}
+
+
+
+
 	public int getPopust() {
 		return popust;
 	}
@@ -139,7 +169,25 @@ public class Ticket {
 		this.sediste = sediste;
 	}
 	
-	
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Ticket c = (Ticket) o;
+        if(c.id == null || id == null) {
+            return false;
+        }
+        return Objects.equals(id, c.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 	
 	
 	

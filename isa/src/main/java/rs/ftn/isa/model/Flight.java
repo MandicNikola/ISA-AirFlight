@@ -72,7 +72,7 @@ public class Flight {
 	private int brOcena;
 	
 	
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private AirplaneCompany avioKomp;
 	
 	//karte vezane za let koje su rezervisane
