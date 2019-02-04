@@ -60,7 +60,7 @@ public class RezervacijaRentCar implements Comparable<RezervacijaRentCar>{
 	
 	
 	@Column(nullable = false)
-	private int cena;
+	private double cena;
 	
 	@Column(name="glavna_Rezervacija",nullable = true)
 	private Long glavnRez;
@@ -102,12 +102,13 @@ public class RezervacijaRentCar implements Comparable<RezervacijaRentCar>{
 	}
 
 
-	public int getCena() {
+
+	public double getCena() {
 		return cena;
 	}
 
 
-	public void setCena(int cena) {
+	public void setCena(double cena) {
 		this.cena = cena;
 	}
 

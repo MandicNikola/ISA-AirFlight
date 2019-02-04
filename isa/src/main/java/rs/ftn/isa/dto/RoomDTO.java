@@ -13,7 +13,8 @@ public class RoomDTO {
 	private String balkon;
 	private boolean imapopust;
 	private boolean imarez;
-	private int popust;
+	private Long popust;
+	private int vrijednostPopusta;
 	public RoomDTO() {}
 	
 	public RoomDTO(Long id, String tip, double ocena, String hotel, Long idRez) {
@@ -130,12 +131,20 @@ public class RoomDTO {
 		this.imapopust = imapopust;
 	}
 
-	public int getPopust() {
+	public Long getPopust() {
 		return popust;
 	}
 
-	public void setPopust(int popust) {
+	public void setPopust(Long popust) {
 		this.popust = popust;
+	}
+
+	public int getVrijednostPopusta() {
+		return vrijednostPopusta;
+	}
+
+	public void setVrijednostPopusta(int vrijednostPopusta) {
+		this.vrijednostPopusta = vrijednostPopusta;
 	}
 	
 	

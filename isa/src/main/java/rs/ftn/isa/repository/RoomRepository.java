@@ -16,4 +16,5 @@ public interface RoomRepository extends JpaRepository<Room, Long >{
 				"where r.hotel.id= ?1")
 		List<Room> findRoomsByHotel(Long hotel);
 		
+		
 }
