@@ -3,6 +3,9 @@ package rs.ftn.isa.repository;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,13 +18,13 @@ public interface FlightRepository extends JpaRepository<Flight, Long>{
 
 	@Query("select u " + 
 			"from Flight u  " + 
-			"where CAST(u.vremePoletanja as date) = CAST(:date as date)")
-	List<Flight> findFlights(@Param("date") Date date);
+			"where u.datumPoletanja = :date")
+	List<Flight> findByVremePoletanja(@Param("date")Date date);
 	
 	
 	@Query("select u " + 
 			"from Flight u  " + 
-			"where u.vremePoletanja > :date AND u.vremeSletanja < :date1")
+			"where DATE(u.vremePoletanja) = DATE(:date) AND DATE(u.vremeSletanja) = DATE(:date1)")
 	List<Flight> findFlightsBetweenDates(@Param("date") Date date, @Param("date1") Date date1);
 	
 	

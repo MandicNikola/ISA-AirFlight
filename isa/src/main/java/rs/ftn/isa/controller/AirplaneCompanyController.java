@@ -1,5 +1,6 @@
 package rs.ftn.isa.controller;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -244,7 +245,7 @@ public class AirplaneCompanyController {
 	@RequestMapping(value="/addFlight", 
 			method = {RequestMethod.POST,RequestMethod.GET},
 			consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Long> addFlight(@RequestBody FlightDTO flight){		
+	public ResponseEntity<Long> addFlight(@RequestBody FlightDTO flight) throws ParseException{		
 		
 		 AirPlane plane = planeService.findAirPlaneById(flight.getIdAviona());
 		 AirplaneCompany company = plane.getAirComp();
@@ -281,12 +282,24 @@ public class AirplaneCompanyController {
 		 flightNew.setTip(flight.getTip());
 		 
 		 
-		 flightNew.setVremePoletanja(formirajDate(flight.getDatumPoletanja(), flight.getVremePoletanja()));
-		 flightNew.setVremeSletanja(formirajDate(flight.getDatumSletanja(), flight.getVremeSletanja()));
-		
+		 SimpleDateFormat formatVreme = new SimpleDateFormat("HH:mm");
+		 SimpleDateFormat formatDatum = new SimpleDateFormat("yyyy-MM-dd");
+		 
+		 Date vremePoletanja = formatVreme.parse(flight.getVremePoletanja());
+		 Date vremeSletanja = formatVreme.parse(flight.getVremeSletanja());
+		 Date datumPoletanja = formatDatum.parse(flight.getDatumPoletanja());
+		 Date datumSletanja = formatDatum.parse(flight.getDatumSletanja());
+		 
+		 flightNew.setVremePoletanja(vremePoletanja);
+		 flightNew.setVremeSletanja(vremeSletanja);
+		 flightNew.setDatumPoletanja(datumPoletanja);
+		 flightNew.setDatumSletanja(datumSletanja);
+		 
+		 
 		 if(!(flight.getDatumPovratka().equals("nema") || flight.getDatumPovratka().isEmpty() || flight.getDatumPovratka() == null))
 		 { 
-			 flightNew.setVremePovratka(formirajDate(flight.getDatumPovratka(),"00:00"));
+			 Date datumPovratka = formatDatum.parse(flight.getDatumPovratka());
+			 flightNew.setVremePovratka(datumPovratka);
 		 }
 		 
 		 formirajKarte(plane, flightNew);

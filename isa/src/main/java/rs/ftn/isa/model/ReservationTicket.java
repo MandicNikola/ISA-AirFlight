@@ -1,6 +1,8 @@
 package rs.ftn.isa.model;
 
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class ReservationTicket {
@@ -29,14 +32,19 @@ public class ReservationTicket {
 	@Column(name="status")
 	private StatusRezervacije status;
 	
+
+	@Column(name = "ocenjenaKompanija", nullable = true)
+	private boolean ocenanjenaKompanija;
+	
 	
 	//imaju korisnika na kog se vezuju
 	@ManyToOne(fetch = FetchType.EAGER)
 	private User korisnik;
 	
-	@ManyToOne( fetch = FetchType.EAGER)
-    @JoinColumn(name = "ticket_id")
-	private Ticket ticket;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "reservationTicket")
+	private Set<Ticket> karte = new HashSet<Ticket>();
+	
 	
 
 	public ReservationTicket()
@@ -65,6 +73,18 @@ public class ReservationTicket {
 
 
 	
+	
+	
+
+	public boolean isOcenanjenaKompanija() {
+		return ocenanjenaKompanija;
+	}
+
+	public void setOcenanjenaKompanija(boolean ocenanjenaKompanija) {
+		this.ocenanjenaKompanija = ocenanjenaKompanija;
+	}
+
+
 
 	public StatusRezervacije getStatus() {
 		return status;

@@ -29,15 +29,26 @@ public class Flight {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.TIME)
 	@Column(name = "vremePoletanja", nullable = false)
 	private Date vremePoletanja;
 	
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.TIME)
 	@Column(name = "vremeSletanja", nullable = false)
 	private Date vremeSletanja;
 	
-	@Temporal(TemporalType.TIMESTAMP)
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "datumPoletanja", nullable = false)
+	private Date datumPoletanja;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "datumSletanja", nullable = false)
+	private Date datumSletanja;
+	
+	
+	
+	@Temporal(TemporalType.DATE)
 	@Column(name = "vremePovratka", nullable = true)
 	private Date vremePovratka;
 	
@@ -53,6 +64,13 @@ public class Flight {
 	
 	@Column(name = "tip", nullable = false)
 	private String tip;
+	
+	@Column(name = "ocena", nullable = true)
+	private double ocena;
+	
+	@Column(name = "brOcena", nullable =true)
+	private int brOcena;
+	
 	
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private AirplaneCompany avioKomp;
@@ -94,6 +112,38 @@ public class Flight {
 	
 	
 	
+	public double getOcena() {
+		return ocena;
+	}
+
+
+
+
+
+	public void setOcena(double ocena) {
+		this.ocena = ocena;
+	}
+
+
+
+
+
+	public int getBrOcena() {
+		return brOcena;
+	}
+
+
+
+
+
+	public void setBrOcena(int brOcena) {
+		this.brOcena = brOcena;
+	}
+
+
+
+
+
 	public Set<Destination> getPresedanja() {
 		return presedanja;
 	}
@@ -245,6 +295,40 @@ public class Flight {
 	public void setPlane(AirPlane plane) {
 		this.plane = plane;
 	}
+	
+	
+
+	public Date getDatumPoletanja() {
+		return datumPoletanja;
+	}
+
+
+
+
+
+	public void setDatumPoletanja(Date datumPoletanja) {
+		this.datumPoletanja = datumPoletanja;
+	}
+
+
+
+
+
+	public Date getDatumSletanja() {
+		return datumSletanja;
+	}
+
+
+
+
+
+	public void setDatumSletanja(Date datumSletanja) {
+		this.datumSletanja = datumSletanja;
+	}
+
+
+
+
 
 	@Override
     public boolean equals(Object o) {

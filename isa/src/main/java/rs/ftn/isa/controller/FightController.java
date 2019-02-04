@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ch.qos.logback.core.util.DatePatternToRegexUtil;
 import rs.ftn.isa.dto.AirplaneDTO;
 import rs.ftn.isa.dto.FlightDTO;
+import rs.ftn.isa.dto.PassengerDTO;
 import rs.ftn.isa.dto.SeatDTO;
 import rs.ftn.isa.model.Destination;
 import rs.ftn.isa.model.Flight;
@@ -84,6 +85,7 @@ public class FightController {
 		Destination stDestination = destinationService.findDestinationByName(startDestination);
 		Destination enDestination = destinationService.findDestinationByName(endDestination);
 		
+		//provera dobijenih letova sa destinacijom
 		if(stDestination == null || enDestination == null)
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
@@ -117,6 +119,21 @@ public class FightController {
 		if(retFlights == null || retFlights.size() == 0)
 			return new ResponseEntity<List<FlightDTO>>(new ArrayList<FlightDTO>(), HttpStatus.OK);
 		//obrisemo tipove koji mi ne odgovaraju
+		
+		//poredjenje sa destinacijama
+		Iterator<Flight> iter = retFlights.iterator();
+		while(iter.hasNext())
+		{
+			Flight let = iter.next();
+			if(!let.getPoletanje().getNaziv().equals(stDestination.getNaziv()) || !let.getSletanje().getNaziv().equals(enDestination.getNaziv()))
+			{
+				iter.remove();
+			}
+			
+		}	
+		
+		
+		
 		if(!type.equals("all"))
 		{
 			Iterator<Flight> it = retFlights.iterator();
@@ -163,29 +180,37 @@ public class FightController {
 		
 	//formiranje DTO jos zavrsiti
 		ArrayList<FlightDTO> retFlightDto = new ArrayList<FlightDTO>();
-		for(Flight let : retFlights)
+		if(!klasaPuta.equals("mixed"))
 		{
-			FlightDTO dto = new FlightDTO();
-			dto.setIdLeta(let.getId());
-			dto.setIdKompanije(let.getAvioKomp().getId());
-			dto.setCena(let.getCena());
-			dto.setNazivKompanije(let.getAvioKomp().getNaziv());
+			for(Flight let : retFlights)
+			{
+				FlightDTO dto = formflightDto(let, klasaPuta);			
+				retFlightDto.add(dto);
+			}
 			
-			
-			SimpleDateFormat formatVreme = new SimpleDateFormat("HH:mm");
-			String vremePoletanja = formatVreme.format(let.getVremePoletanja());
-			String vremeSletanja = formatVreme.format(let.getVremeSletanja());
-			
-			int brojPresedanja = let.getPresedanja().size();
-			dto.setVremePoletanja(vremePoletanja);
-			dto.setVremeSletanja(vremeSletanja);
-			dto.setBrojPresedanja(brojPresedanja);
-			dto.setDuzina(let.getDuzina());
-			
-			retFlightDto.add(dto);
 		}
-		
-		
+		else
+		{
+			for(Flight let : retFlights)
+			{
+				if(freeTickets(let, "ekonomska"))
+				{
+					FlightDTO dtoEconomic = formflightDto(let, "ekonomska");
+					retFlightDto.add(dtoEconomic);
+				}
+				if(freeTickets(let, "biznis"))
+				{
+					FlightDTO dtoBiznis = formflightDto(let, "biznis");
+					retFlightDto.add(dtoBiznis);
+				}
+				if(freeTickets(let, "first"))
+				{
+					FlightDTO dtoFirst = formflightDto(let, "first");
+					retFlightDto.add(dtoFirst);
+				}				
+			}
+			
+		}
 		
 		return new ResponseEntity<List<FlightDTO>>(retFlightDto, HttpStatus.OK);
 	}
@@ -225,6 +250,50 @@ public class FightController {
 		return false;
 	}
 	
+	/*
+	 * metoda koja mi vraca broj slobodnih karata po 
+	 */
+	public boolean freeTickets(Flight flight, String type)
+	{
+		Set<Ticket> tickets = flight.getKarte();
+		for(Ticket ticket : tickets)
+		{
+			if(!ticket.isRezervisano() && ticket.getKlasa().equals(type))
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	
+	public FlightDTO formflightDto(Flight let, String klasaPuta)
+	{
+		FlightDTO dto = new FlightDTO();
+		dto.setIdLeta(let.getId());
+		dto.setIdKompanije(let.getAvioKomp().getId());
+		dto.setCena(let.getCena());
+		dto.setNazivKompanije(let.getAvioKomp().getNaziv());
+		
+		
+		SimpleDateFormat formatVreme = new SimpleDateFormat("HH:mm");
+		String vremePoletanja = formatVreme.format(let.getVremePoletanja());
+		String vremeSletanja = formatVreme.format(let.getVremeSletanja());
+		
+		int brojPresedanja = let.getPresedanja().size();
+		dto.setVremePoletanja(vremePoletanja);
+		dto.setVremeSletanja(vremeSletanja);
+		dto.setBrojPresedanja(brojPresedanja);
+		dto.setDuzina(let.getDuzina());
+		dto.setKlasa(klasaPuta);
+		
+	
+		return dto;
+	}
+	
+	
+	
 	@RequestMapping(value="/seats/{id}/{class}", 
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
@@ -248,16 +317,30 @@ public class FightController {
 				dto.setIdKarte(ticket.getId());
 				dto.setRezervisano(ticket.isRezervisano());
 				dto.setBrojKolone(sediste.getKolona());
-				dto.setBrojReda(dto.getBrojReda());
+				dto.setBrojReda(sediste.getRed());
 				dto.setKonfiguracija(configuration);
 				retSeats.add(dto);
 		
 			}
 		}
 		
-		return new ResponseEntity<List<SeatDTO>>(retSeats, HttpStatus.OK);
-		
+		return new ResponseEntity<List<SeatDTO>>(retSeats, HttpStatus.OK);	
 	}
+	
+	
+	@RequestMapping(value="/makeReservation/{id}/{class}", 
+			method = RequestMethod.POST,
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Long> makeReservation(@RequestBody ArrayList<PassengerDTO> passengers)		
+	{
+		
+		
+		
+		return null;
+	}
+	
+	
 	
 	
 	
