@@ -795,6 +795,7 @@ $(document).ready(function(){
     	$("#divFast").hide();
     	$("#izvestaj").hide();
      	$("#adminStrana").hide();
+    	$("#divPopust").hide();
     	$("#informacije").show();
     });
     $("a#admini").click(function(){
@@ -804,6 +805,7 @@ $(document).ready(function(){
 	 	$("#addUsluge").hide();		
 	 	$("#cenovnik").hide();
 	 	$("#bg").hide();
+		$("#divPopust").hide();
 	 	$("#adminStrana").show();
 		$("#divLozinka").hide();
 		$("#divFast").hide();
@@ -821,6 +823,8 @@ $(document).ready(function(){
     	$("#divLozinka").hide();
     	$("#divFast").hide();
     	$("#adminStrana").hide();
+    	$("#divPopust").hide();
+
     	console.log('izvestaj');
     	//dodajGrafik();
    });
