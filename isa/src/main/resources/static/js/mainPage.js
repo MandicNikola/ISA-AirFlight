@@ -965,7 +965,7 @@ function findFlights()
 function book(button)
 {
 	var id = button.id;
-	window.location = "ReserveFlight.html?"+id;
+	window.location = "ReserveFlight.html?id="+id;
 
 }
 

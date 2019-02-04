@@ -3,9 +3,11 @@
  */
 
 var selectedSeats = [];
-var status;
+var status ="";
 var brojPrijatelja = -1;
 var invitedFriends = [];
+var imaPrijatelje = false;
+var passengers = [];
 
 function onLoad()
 {
@@ -19,10 +21,10 @@ function onLoad()
 	$('#pregledPrijatelja').hide();
 	$('#finishReservation').hide();
 	
-	
+	alert('api/letovi/seats/'+idLet+'/'+tip);
 	$.ajax({
 				type : 'GET',
-				url : 'api/letovi/'+idLet+'/'+tip,
+				url : 'api/letovi/seats/'+idLet+'/'+tip,
 				dataType: 'json',
 				success : function(data)
 				{
@@ -30,6 +32,9 @@ function onLoad()
 					if(seats.length > 0)
 					{
 						var configuration = seats[0].konfiguracija;
+						alert(configuration);
+						alert(seats.length);
+						
 						drawSeats(seats,configuration);
 						$.ajax(
 								{
@@ -38,14 +43,18 @@ function onLoad()
 									dataType: 'json',
 									success : function(data)
 									{
-										popuniPrijatelje(data);
+										if(data == null || data.length == 0)
+										{
+											imaPrijatelje = false;
+										}
+										else
+										{
+											popuniPrijatelje(data);
+										}
 									}
-										
 								});
-						$('#pregledPrijatelja').show();
 					}
-					
-					
+						
 				}
 				
 			});
@@ -62,17 +71,17 @@ function drawSeats(seats,configuration)
 	var i;
 	var text = "";
 	var ukupnoSedistaPoRedu = 0;
-	var brojRedova = Math.floor(seats.length/ukupnoSedistaPoRedu)+1;
+	
 	var tableID = [];
-	var ostatak = seats.length % brojRedova;
+	
 	for(i = 0; i < brojSedistaPoRedu.length; i++)
 	{
-		text += '<div class="col-md-'+Math.floor(12/brojSedistaPoRedu.length)+'"><table id="t"'+i+'></table></div>';
-		ukupnoSedistaPoRedu += brojSedistaPoRedu[i];
-		tableID.push('t'+i);
+		text += '<div class="col-md-'+Math.floor(12/brojSedistaPoRedu.length)+'"><table id="t'+i+'"></table></div>';
+		ukupnoSedistaPoRedu += parseInt(brojSedistaPoRedu[i]);
+		tableID.push("t"+i);
 	}
-	
-	
+	var brojRedova = Math.floor(seats.length/ukupnoSedistaPoRedu)+1;
+	var ostatak = seats.length % ukupnoSedistaPoRedu;
 	
 	$('#seats').html(text);
 	
@@ -85,13 +94,13 @@ function drawSeats(seats,configuration)
 	text = "";
 	for(k = 0; k < tableID.length; k++)
 	{
-		counter1 = counter1 + brojSedistaPoRedu[i];
+		counter1 = counter1 + parseInt(brojSedistaPoRedu[k]);
 		for(i = 0; i < brojRedova; i++)
 		{
 			if(i != (brojRedova-1))
 			{
 				text += '<tr>';
-				for(j = counter; i < counter1; j++)
+				for(j = counter; j < counter1; j++)
 				{
 					text += '<td id="'+i+'-'+j+'">'+i+'</td>';
 				}
@@ -100,7 +109,7 @@ function drawSeats(seats,configuration)
 			else if(i == (brojRedova-1) && ostatak > 0)
 			{
 				text += '<tr>';
-				for(j = counter; i < counter1; j++)
+				for(j = counter; j < counter1; j++)
 				{
 					text += '<td id="'+i+'-'+j+'">'+i+'</td>';
 					ostatak--;
@@ -112,35 +121,43 @@ function drawSeats(seats,configuration)
 		}
 		counter = counter1;
 		$('#'+tableID[k]).html(text);
+		
 		text = "";
 		
 	}
 	$.each(seats,function(index,value)
 			{
+		
+				$('#'+value.brojReda+'-'+value.brojKolone).css('background-color','rgb(255, 255, 255)');
+				
 				if(value.rezervisano == true)
 				{
 					$('#'+value.brojReda+'-'+value.brojKolone).css('background-color', 'grey');
 				}
 				else
 				{
-					$('#'+value.brojReda+'-'+value.brojKolone).unbind("click").click(function(){
-						if($(this).css('background-color') === 'rgb(255, 255, 255)')
+					$('#'+value.brojReda+'-'+value.brojKolone).click(function(){
+						if($('#'+value.brojReda+'-'+value.brojKolone).css('background-color') === 'rgb(255, 255, 255)')
 						{
+							
 							$('#'+value.brojReda+'-'+value.brojKolone).css('background-color', 'rgb(187, 148, 231)');
-							dodajSediste(value.brojReda+'-'+value.brojKolone);
+							dodajSediste(value.brojReda+'-'+value.brojKolone+'-'+value.idKarte);
 						}
 						else
 						{
+							
 							$('#'+value.brojReda+'-'+value.brojKolone).css('background-color', 'rgb(255, 255, 255)');
-							obrisiSediste(value.brojReda+'-'+value.brojKolone);
+							obrisiSediste(value.brojReda+'-'+value.brojKolone+'-'+value.idKarte);
 						}				   
 					  });			
 				}
 			});
+			
 }
 
 function popuniPrijatelje(prijatelji)
 {
+	
 	var text = '<table class="table table-striped" id="tableFriends">';
 	    text += '<thead><tr><th scope="col">First Name</th> <th scope="col">Last Name</th> <th scope="col">Invite</th>  </tr>  </thead><tbody>'
 	  	
@@ -153,6 +170,7 @@ function popuniPrijatelje(prijatelji)
 				var tip = info[3];
 				if(tip == "FRIENDS")
 				{
+					imaPrijatelje = true;
 					text += '<tr><td>'+friendName+'</td><td>'+friendLastName+'</td><td> <input type="checkbox" id="'+friendID+'ch"></td></tr>'
 				}
 			});
@@ -201,6 +219,7 @@ function dodajSediste(sediste)
  */
 function dalje()
 {
+	alert('usao');
 	if(status == "izborSedista")
 	{
 		if(selectedSeats.length == 1)
@@ -212,27 +231,37 @@ function dalje()
 		
 		if(selectedSeats.length > 0)
 		{
-			$('#pregledSedista').hide();
-			$('#pregledPrijatelja').show();
+			if(imaPrijatelje)
+			{
+				$('#pregledSedista').hide();
+				$('#pregledPrijatelja').show();
+				status = "pozivanjePrijatelja";
+			}
+			else
+			{
+				$('#pregledSedista').hide();
+				$('#passengers').show();
+				brojPrijatelja = selectedSeats.length  - 1;
+				status = "passengers";
+			}
 			
-			status = "pozivanjePrijatelja";
 		}	
 	}
 	else if(status == "pozivanjePrijatelja")
 	{
-		if(invitedFriends.length > (selectedSeats - 1))
+		if(invitedFriends.length > (selectedSeats.length  - 1))
 		{
 			alert('Pozvano je vise prijatelja nego rezervisanih mesta');
 		}
-		else if(invitedFriends.length == (selectedSeats - 1))
+		else if(invitedFriends.length == (selectedSeats.length  - 1))
 		{
 			$('#pregledPrijatelja').hide();
 			$('#finishReservation').show();
 			status = "finishRezervation-pozivanjePrijatelja";
 		}
-		else if(invitedFriends.length < (selectedSeats - 1))
+		else if(invitedFriends.length < (selectedSeats.length  - 1))
 		{
-			brojPrijatelja = (selectedSeats - 1) - invitedFriends.length;
+			brojPrijatelja = (selectedSeats.length - 1) - invitedFriends.length;
 			status = "passengers";
 			$('#pregledPrijatelja').hide();
 			$('#passengers').show();
@@ -285,14 +314,25 @@ function back()
 	}
 	else if(status == "passengers")
 	{
-		$('#pregledPrijatelja').show();
-		$('#passengers').hide();
-		
+		if(imaPrijatelje)
+		{
+			$('#pregledPrijatelja').show();
+			$('#passengers').hide();
+			passengers = [];
+		}
+		else
+		{	
+			
+			$('#passengers').hide();
+			$('#pregledSedista').show();
+			passengers = [];
+		}
 	}
 	else if(status == "pozivanjePrijatelja")
 	{
 		$('#pregledPrijatelja').hide();
 		$('#pregledSedista').show();
+		status = "izborSedista";
 		invitedFriends = [];
 		
 	}
@@ -309,6 +349,35 @@ function zavrsiRezervaciju(mode)
 	
 	
 
+}
+
+function addPassenger()
+{
+	var ispravno = true;
+	
+	if($('#name').val() == "")
+		ispravno = false;
+	if($('#lastName').val() == "")
+		ispravno = false;
+	if($('#phone').val() == "")
+		ispravno = false;
+	if($('#passport').val() == "")
+		ispravno = false;
+	if($('#email').val() == "")
+		ispravno = false;
+	if($('#birthday').val() == "")
+		ispravno = false;
+	
+	var passenger = {ime : $('#name').val(), prezime : $('#lastName').val(), 
+		telefon : $('#phone').val(), passport : $('#passport').val(), mail : $('#email').val(),
+		datumRodjenja : $('#birthday').val()
+	};
+
+	if(ispravno)
+		passengers.push(passenger);
+	
+	
+	
 }
 
 

@@ -48,7 +48,7 @@ td, th {
 
 </style>
 </head>
-<body>
+<body onload="onLoad()">
 	<div class="container">
 		<h1>Reserve Seats</h1>
 	</div>
@@ -62,8 +62,8 @@ td, th {
 		<div class= "col-md-4">
 			<table>
 				<tr><td>Reserved</td><td style="background-color: grey"></td></tr>
-				<tr><td>Free</td><td style="background-color: rgb(187, 148, 231)"></td></tr>
-				<tr><td>Taken</td><td style="background-color: rgb(255, 255, 255)"></td></tr>
+				<tr><td>Free</td><td style="background-color: rgb(255, 255, 255)"></td></tr>
+				<tr><td>Taken</td><td style="background-color: rgb(187, 148, 231)"></td></tr>
 			</table>
 		</div>	
 	</div>
@@ -97,7 +97,7 @@ td, th {
 							</div>
 							<div class="col-md-6">
 										<div class="form-group">
-											<input class="form-control" id = "endDestination" type="text" required placeholder="Last Name">
+											<input class="form-control" id = "lastName" type="text" required placeholder="Last Name">
 												<span id="errorLastName"></span>
 										</div>
 							</div>
@@ -131,7 +131,11 @@ td, th {
 							</div>
 	   			</div>
 	   			<div class="row">
-	   				<button type="button" class="btn btn-primary" id="addPasenger">Add</button>
+		   			<div class="col-md-6">
+			   			<div class="form-group">
+			   				<button type="button" class="btn btn-primary" id="addPasenger">Add</button>
+			   			</div>
+			   		</div>
 	   			</div>
 	   			
 	   	 </form>
@@ -167,19 +171,21 @@ td, th {
 	
 	
 	<div class="container" id="buttons">
-		<div  class= "col-md-9">
+		<div class = "row">
+			<div  class= "col-md-3">
+				
+			</div>
+			<div class= "col-md-3">
+				<button type="button" id="cancelBtn" class="btn btn-default">Cancel</button>
 			
-		</div>
-		<div class= "col-md-1">
-			<button type="button" id="cancelBtn" class="btn btn-default">Cancel</button>
-		
-		</div>
-		<div class= "col-md-1">
-			<button type="button" id="backBtn" class="btn btn-default">Back</button>
-		
-		</div>	
-		<div class= "col-md-1">
-			<button type="button" id="nextBtn" class="btn btn-primary">Next</button>
+			</div>
+			<div class= "col-md-3">
+				<button type="button" id="backBtn" class="btn btn-default" onclick="back()">Back</button>
+			
+			</div>	
+			<div class= "col-md-3">
+				<button type="button" id="nextBtn" class="btn btn-primary" onclick="dalje()">Next</button>
+			</div>
 		</div>
 	</div>
 	

@@ -26,7 +26,7 @@ public class FlightService {
 	 */
 	public List<Flight> findActiveFlights(Date date)
 	{
-		return repozitorujum.findFlights(date);
+		return repozitorujum.findByVremePoletanja(date);
 	}
 	
 	public Flight findOneFlightById(Long id)

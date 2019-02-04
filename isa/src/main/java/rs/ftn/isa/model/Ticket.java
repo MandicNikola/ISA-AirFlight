@@ -7,6 +7,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -37,6 +38,14 @@ public class Ticket {
 	@OneToOne(mappedBy = "ticket", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
 	private Pozivnica pozivnica;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	private ReservationTicket reservationTicket;
+	
+	 @OneToOne(fetch = FetchType.LAZY,
+	            cascade =  CascadeType.ALL,
+	            mappedBy = "karta")
+	 private PassengerInfo passengerInfo;
 	
 	
 	@ManyToOne(fetch = FetchType.EAGER)
