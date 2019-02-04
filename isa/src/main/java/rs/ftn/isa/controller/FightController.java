@@ -99,18 +99,21 @@ public class FightController {
 			Date datePovratka = new SimpleDateFormat("yyyy-MM-dd").parse(datumPovratka);
 			if(datePoletanja.after(datePovratka))
 				return new ResponseEntity<List<FlightDTO>>(new ArrayList<FlightDTO>(), HttpStatus.OK);
-			
+			System.out.println("usao u pretragu2");
 			retFlights = servis.findFlightsBetweenDates(datePoletanja, datePovratka);
 			
 		}
 		else
 		{
+			System.out.println("usao u pretragu1");
+			System.out.println(datumPoletanja);
 			Date datePoletanja = new SimpleDateFormat("yyyy-MM-dd").parse(datumPoletanja);
 			retFlights = servis.findActiveFlights(datePoletanja);
 		}
 		
 		//ukoliko nije pronasao nijedan let
 		System.out.println("usao ovde");
+		System.out.println(retFlights.size());
 		if(retFlights == null || retFlights.size() == 0)
 			return new ResponseEntity<List<FlightDTO>>(new ArrayList<FlightDTO>(), HttpStatus.OK);
 		//obrisemo tipove koji mi ne odgovaraju
@@ -127,8 +130,7 @@ public class FightController {
 		
 		//ukoliko je broj osoba veci onda vrsim pretragu koja mi treba
 		
-		String klasaPuta = "all";
-		
+		String klasaPuta = flight.getKlasa();
 		
 		if(klasaPuta.equals("mixed"))
 		{
@@ -178,7 +180,7 @@ public class FightController {
 			dto.setVremePoletanja(vremePoletanja);
 			dto.setVremeSletanja(vremeSletanja);
 			dto.setBrojPresedanja(brojPresedanja);
-			
+			dto.setDuzina(let.getDuzina());
 			
 			retFlightDto.add(dto);
 		}
@@ -240,15 +242,15 @@ public class FightController {
 		{
 			if(ticket.getKlasa().equals(klasa))
 			{
-			Seat sediste = ticket.getSediste();
-			SeatDTO dto = new SeatDTO();
-			dto.setIdSedista(sediste.getId());
-			dto.setIdKarte(ticket.getId());
-			dto.setRezervisano(ticket.isRezervisano());
-			dto.setBrojKolone(sediste.getKolona());
-			dto.setBrojReda(dto.getBrojReda());
-			dto.setKonfiguracija(configuration);
-			retSeats.add(dto);
+				Seat sediste = ticket.getSediste();
+				SeatDTO dto = new SeatDTO();
+				dto.setIdSedista(sediste.getId());
+				dto.setIdKarte(ticket.getId());
+				dto.setRezervisano(ticket.isRezervisano());
+				dto.setBrojKolone(sediste.getKolona());
+				dto.setBrojReda(dto.getBrojReda());
+				dto.setKonfiguracija(configuration);
+				retSeats.add(dto);
 		
 			}
 		}

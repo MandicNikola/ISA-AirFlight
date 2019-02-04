@@ -919,7 +919,8 @@ function findFlights()
 	alert(ispravno);
 	if(ispravno)
 	{
-		
+		alert(pretragaToJson(pocetak,kraj,tip,klasa,startDestination,endDestination,brPutnika));
+
 		$.ajax({
 					type : 'POST',
 					url : "api/letovi/findFlights",
@@ -930,6 +931,24 @@ function findFlights()
 					success : function(data)
 					{
 						alert(data);
+						if(data.length > 0)
+						{
+							var letovi = data;
+							$('#pretragaLetova').empty();
+							var text = '<table class="table table-striped">';
+							text += '<thead><tr><th>Vreme poletanja/sletanja</th><th>Broj presedanja: </th><th>Trajanje leta</th><th>Kompanija</th><th>Klasa</th><th>Cena</th></tr></thead><tbody>'
+							$.each(letovi,function(index,value)
+									{
+										
+										text += '<tr><td>'+value.vremePoletanja+'/'+value.vremeSletanja+'</td>';
+										text += '<td>'+value.brojPresedanja+'</td><td>'+value.duzina+'</td><td>'+value.nazivKompanije+'</td><td>'+value.klasa+'</td><td>'+value.cena+'</td><td><button type="button" id="'+value.idLeta+'='+value.klasa+'" onclick="book(this)" class="btn btn-primary">Book</button></td>';
+										text += '</tr>';
+									});
+							text += '</tbody></table>';
+							$('#pretragaLetova').html(text);
+							$("#pretragaDiv").show();
+							
+						}
 						
 					},
 					error: function(XMLHttpRequest, textStatus, errorThrown){
@@ -943,10 +962,10 @@ function findFlights()
 
 }
 
-function ispisLetova()
+function book(button)
 {
-	
-
+	var id = button.id;
+	window.location = "ReserveFlight.html?"+id;
 
 }
 

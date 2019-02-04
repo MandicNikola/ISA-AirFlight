@@ -11,6 +11,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import rs.ftn.isa.model.Pozivnica;
 import rs.ftn.isa.model.User;
 
 @Service
@@ -51,6 +53,24 @@ public class EmailService {
 		javaMailSender.send(mail);
 */
 		System.out.println("Email poslat!");
+	}
+	/*
+	 * metoda za slanje pozivnica za let koje su mi potrebne
+	 */
+	@Async
+	public void sendInvitationAsync(User user, Pozivnica pozivnica) throws MessagingException
+	{
+		System.out.println("Slanje emaila...");
+		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "utf-8");
+
+		String htmlMsg = "<h3>Pozdrav "+user.getIme()+"</h3><br> <p>Da dobili ste pozvnicu za let  <a href=\"http://localhost:8080/api/korisnici/aktiviraj/"+user.getMail()+"\">link</a></p>";
+		mimeMessage.setContent(htmlMsg, "text/html");
+		helper.setTo(user.getMail());
+		helper.setSubject("Pozivnica za let");
+		helper.setFrom(env.getProperty("spring.mail.username"));
+		javaMailSender.send(mimeMessage);
+		
 	}
 
 

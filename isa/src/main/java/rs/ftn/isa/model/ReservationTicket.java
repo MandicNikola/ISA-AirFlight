@@ -5,10 +5,13 @@ import java.sql.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -22,22 +25,19 @@ public class ReservationTicket {
 	@Column(name = "datumRezervacije", nullable = false)
 	private java.util.Date datumRezervacije;
 	
-	@Column(name = "prosla", nullable = false)
-	private boolean zavrsena;
-	
-	@Column(name = "finalizirana", nullable = false)
-	private boolean finalizirana;
-	
-	@Column(name = "rezervacijaAvion", nullable = true)
-	private Long rezervacijaAvion;
-	
-	@Column(name = "rezervacijaHotel", nullable = true)
-	private Long rezervacijaHotel;
+	@Enumerated(EnumType.STRING)
+	@Column(name="status")
+	private StatusRezervacije status;
 	
 	
 	//imaju korisnika na kog se vezuju
 	@ManyToOne(fetch = FetchType.EAGER)
 	private User korisnik;
+	
+	@ManyToOne( fetch = FetchType.EAGER)
+    @JoinColumn(name = "ticket_id")
+	private Ticket ticket;
+	
 
 	public ReservationTicket()
 	{
@@ -64,35 +64,15 @@ public class ReservationTicket {
 	}
 
 
-	public boolean isZavrsena() {
-		return zavrsena;
+	
+
+	public StatusRezervacije getStatus() {
+		return status;
 	}
 
-
-	public void setZavrsena(boolean zavrsena) {
-		this.zavrsena = zavrsena;
+	public void setStatus(StatusRezervacije status) {
+		this.status = status;
 	}
-
-
-	public Long getRezervacijaAvion() {
-		return rezervacijaAvion;
-	}
-
-
-	public void setRezervacijaAvion(Long rezervacijaAvion) {
-		this.rezervacijaAvion = rezervacijaAvion;
-	}
-
-
-	public Long getRezervacijaHotel() {
-		return rezervacijaHotel;
-	}
-
-
-	public void setRezervacijaHotel(Long rezervacijaHotel) {
-		this.rezervacijaHotel = rezervacijaHotel;
-	}
-
 
 	public User getKorisnik() {
 		return korisnik;

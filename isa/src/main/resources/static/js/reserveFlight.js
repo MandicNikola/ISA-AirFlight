@@ -4,6 +4,9 @@
 
 var selectedSeats = [];
 var status;
+var brojPrijatelja = -1;
+var invitedFriends = [];
+
 function onLoad()
 {
 	var adresa = window.location.search.substring(1);
@@ -14,6 +17,7 @@ function onLoad()
 	
 	$('#passengers').hide();
 	$('#pregledPrijatelja').hide();
+	$('#finishReservation').hide();
 	
 	
 	$.ajax({
@@ -38,14 +42,13 @@ function onLoad()
 									}
 										
 								});
-						
+						$('#pregledPrijatelja').show();
 					}
+					
+					
 				}
 				
 			});
-	
-	
-
 }
 
 /*
@@ -150,17 +153,33 @@ function popuniPrijatelje(prijatelji)
 				var tip = info[3];
 				if(tip == "FRIENDS")
 				{
-					text += '<tr><td>'+friendName+'</td><td>'+friendLastName+'</td><td> <input type="checkbox" id="'+friendID+'"></td></tr>'
+					text += '<tr><td>'+friendName+'</td><td>'+friendLastName+'</td><td> <input type="checkbox" id="'+friendID+'ch"></td></tr>'
 				}
 			});
 	    
-	    text += '</tbody>';
+	    text += '</tbody></table>';
 	
 	    $('#prijatelji').html(text);
+	    $.each(prijatelji,function(index,value)
+				{
+					var info = value.split('-');
+					var friendID = info[2];
+					
+					$('#'+friendID+'ch').change(function()
+							{
+								if($('#'+friendID+'ch').is(":checked"))
+								{
+								   invitedFriends.push(friendID);
+								}
+								else
+								{
+									invitedFriends.splice(invitedFriends.indexOf(friendID),1);
+								}
+							});			
+				});
 	    
 	    
-	    
-	    
+	        
 }
 
 
@@ -186,29 +205,117 @@ function dalje()
 	{
 		if(selectedSeats.length == 1)
 		{
-			
+			$('#pregledSedista').hide();
+			$('#finishReservation').show();
+			status = "finishRezervation-izborSedista";
 		}
 		
 		if(selectedSeats.length > 0)
 		{
 			$('#pregledSedista').hide();
+			$('#pregledPrijatelja').show();
 			
 			status = "pozivanjePrijatelja";
-		}
-		
-		
+		}	
 	}
-
+	else if(status == "pozivanjePrijatelja")
+	{
+		if(invitedFriends.length > (selectedSeats - 1))
+		{
+			alert('Pozvano je vise prijatelja nego rezervisanih mesta');
+		}
+		else if(invitedFriends.length == (selectedSeats - 1))
+		{
+			$('#pregledPrijatelja').hide();
+			$('#finishReservation').show();
+			status = "finishRezervation-pozivanjePrijatelja";
+		}
+		else if(invitedFriends.length < (selectedSeats - 1))
+		{
+			brojPrijatelja = (selectedSeats - 1) - invitedFriends.length;
+			status = "passengers";
+			$('#pregledPrijatelja').hide();
+			$('#passengers').show();
+				
+		}
+	}
+	else if(status == "passengers")
+	{
+		if(brojPrijatelja == 0)
+		{
+			$('#passengers').hide();
+			$('#finishReservation').show();
+			status = "finishRezervation-passengers";
+		}
+		else
+		{
+			alert('Popunite sve putnike!');
+		}
+	}
+	else if(status.includes("finish"))
+	{
+		var mode = "zavrsi";
+		zavrsiRezervaciju(mode);
+	}
+	
+	
+	
 }
 
 function back()
 {
 	
+	if(status == "finishRezervation-passengers")
+	{
+		$('#finishReservation').hide();
+		$('#passengers').show();
+		status = "passengers";
+		
+	}
+	else if(status == "finishRezervation-pozivanjePrijatelja")
+	{
+		$('#pregledPrijatelja').show();
+		$('#finishReservation').hide();
+	}
+	else if(status == "finishRezervation-izborSedista")
+	{
+		$('#finishReservation').hide();
+		$('#pregledSedista').show();
+		
+	}
+	else if(status == "passengers")
+	{
+		$('#pregledPrijatelja').show();
+		$('#passengers').hide();
+		
+	}
+	else if(status == "pozivanjePrijatelja")
+	{
+		$('#pregledPrijatelja').hide();
+		$('#pregledSedista').show();
+		invitedFriends = [];
+		
+	}
+	
 
 }
+
+
+/*
+ * funkcija za zavrsetak rezervacije koja mi je potrebna sacuvam rezervaciju 
+ */
+function zavrsiRezervaciju(mode)
+{
+	
+	
+
+}
+
+
 /*
  * filter funkcije koja mi treba za rad vezan za ovo
  */
+
 $(document).ready(function(){
 	  $("#searchFriends").on("keyup", function() {
 	    var value = $(this).val().toLowerCase();

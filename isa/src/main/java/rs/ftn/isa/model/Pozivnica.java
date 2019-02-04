@@ -37,7 +37,7 @@ public class Pozivnica {
 	 @JoinColumn(name = "ticket_id")
 	 private Ticket ticket;
 	 
-	 @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	 @ManyToOne(fetch = FetchType.EAGER)
 	 private User korisnik;
 	 
 	
