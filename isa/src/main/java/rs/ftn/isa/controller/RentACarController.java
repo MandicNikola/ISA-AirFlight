@@ -45,8 +45,6 @@ public class RentACarController {
 	@Autowired 
 	private RentACarServiceImpl servis;
 	
-	
-	
 	@RequestMapping(value="/all", method = RequestMethod.GET)
 	public List<RentACar> getAllRents(){		
 		return  servis.findAll();
@@ -131,10 +129,10 @@ public class RentACarController {
 		 for(RentACar R : sviRent) {
 			 System.out.println("Adresa je "+R.getAdresa());
 			 String naziv=nazivGrad.toLowerCase();
-			 String gradRent=R.getAdresa().toLowerCase();
+			 String gradRent=R.getGrad().toLowerCase();
 			 String nazivRenta=R.getNaziv().toLowerCase();
 			 
-			 if(gradRent.contains(naziv)) {
+			 if(gradRent.equals(naziv)) {
 				 System.out.println("Pronadjen rent po gradu" + R.getNaziv());
 				 nadjeniRent.add(R);
 			 }

@@ -544,7 +544,7 @@ function hotelShow(){
 			if(lista == null){
 				console.log('Nema servise');
 			}else{
-				ispisiHotele(lista);
+				iscrtajHotele(lista);
 			}
 		}
 	});
@@ -626,21 +626,22 @@ function sortirajHotele(){
 					}else if(lista.length==0){
 						console.log('Nema hotela')
 					}else{
-						ispisiHotele(lista);
+						iscrtajHotele(lista);
 						
 					}
 				}
 			});
 	 }
 	}
-function ispisiHotele(lista){
+function iscrtajHotele(lista){
 	console.log('usao u ispisi hotele u js');
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
-	
-	$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaHotel\" ><tr><th> Name </th><th> Promotional description</th><th>Grade</th><th></th><th></th></tr>");
+	$("#ispisiTabelu").empty();
+
+	$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaHotel\" ><tr><th> Name </th><th> City </th><th> Address </th><th>Grade</th><th></th><th></th></tr>");
 		
 		$.each(pom, function(index, servis) {
-			$("#tabelaHotel").append("<tr><td class=\"hoverName\" onclick=\"hotelProfil('"+servis.id+"')\">"+servis.naziv+"</td><td > "+servis.opis+"</td><td > "+servis.ocena+"</td><td><button  class=\"btn btn-dark\" onclick=\"changeHotel('"+servis.id+"')\">Change</button></td><td><button  class=\"btn btn-dark\" onclick=\"deleteHotel('"+servis.id+"')\">Delete</button></td></tr>");
+			$("#tabelaHotel").append("<tr><td class=\"hoverName\" onclick=\"hotelProfil('"+servis.id+"')\">"+servis.naziv+"</td><td > "+servis.grad+"</td><td > "+servis.adresa+"</td><td > "+servis.ocena+"</td><td><button  class=\"btn btn-dark\" onclick=\"changeHotel('"+servis.id+"')\">Change</button></td><td><button  class=\"btn btn-dark\" onclick=\"deleteHotel('"+servis.id+"')\">Delete</button></td></tr>");
 		});
 	 $("#ispisiTabelu").append("</table>");
 }
@@ -694,10 +695,10 @@ function carShow(){
 function ispisiAutoservise(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#ispisiTabelu").empty();
-	 $("#ispisiTabelu").append("<table class=\"table table-striped table-hover\" id=\"tabelaRent\" ><tr><th> Name </th><th> Promotional description</th><th>Address</th><th></th><th></th></tr>");
+	 $("#ispisiTabelu").append("<table class=\"table table-striped table-hover\" id=\"tabelaRent\" ><tr><th> Name </th><th> City </th><th>Address</th><th></th><th></th></tr>");
 		
 		$.each(pom, function(index, servis) {
-			$("#tabelaRent").append("<tr><td class=\"hoverName\" onclick=\"visitCar('"+servis.id+"')\">"+servis.naziv+"</td><td > "+servis.opis+"</td><td > "+servis.adresa+"</td><td><button  class=\"btn btn-info\" onclick=\"izmeniRent('"+servis.id+"')\">Izmeni</button><td><button  class=\"btn btn-info\" onclick=\"obrisiRent('"+servis.id+"')\">Obrisi</button></td></tr>");
+			$("#tabelaRent").append("<tr><td class=\"hoverName\" onclick=\"visitCar('"+servis.id+"')\">"+servis.naziv+"</td><td > "+servis.grad+"</td><td > "+servis.adresa+"</td><td><button  class=\"btn btn-info\" onclick=\"izmeniRent('"+servis.id+"')\">Izmeni</button><td><button  class=\"btn btn-info\" onclick=\"obrisiRent('"+servis.id+"')\">Obrisi</button></td></tr>");
 			
 		});
 	 $("#ispisiTabelu").append("</table>");
@@ -999,10 +1000,10 @@ function ispisiHotele(lista){
 	console.log('usao u ispisi hotele u js kad pretrazuje hotele');
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	$("#ispisiTabelu").empty();
-	$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaHotel\" ><tr><th> Name </th><th> Promotional description</th><th>Grade</th><th></th><th></th></tr>");
+	$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaHotel\" ><tr><th> Name </th><th> City </th><th> Adress </th><th>Grade</th><th></th><th></th></tr>");
 		
 		$.each(pom, function(index, servis) {
-			$("#tabelaHotel").append("<tr><td class=\"hoverName\" onclick=\"hotelProfil('"+servis.id+"')\">"+servis.naziv+"</td><td > "+servis.opis+"</td><td > "+servis.ocena+"</td><td><button  class=\"btn btn-dark\" onclick=\"changeHotel('"+servis.id+"')\">Change</button></td><td><button  class=\"btn btn-dark\" onclick=\"deleteHotel('"+servis.id+"')\">Delete</button></td></tr>");
+			$("#tabelaHotel").append("<tr><td class=\"hoverName\" onclick=\"hotelProfil('"+servis.id+"')\">"+servis.naziv+"</td><td> "+servis.grad+"</td><td> "+servis.adresa+"</td><td > "+servis.ocena+"</td><td><button  class=\"btn btn-dark\" onclick=\"changeHotel('"+servis.id+"')\">Change</button></td><td><button  class=\"btn btn-dark\" onclick=\"deleteHotel('"+servis.id+"')\">Delete</button></td></tr>");
 		});
 	 $("#ispisiTabelu").append("</table>");
 }
@@ -1114,7 +1115,9 @@ function adminSistem(){
 function ispisiAdmineSistema(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	console.log('dosao u ispisi adminaSistema')
-
+    $("#sortHotele").hide();
+	$("#sortCar").hide();
+	$("#sortAvione").hide();
 	$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaAdmini\" ><tr><th> Name </th><th> Surname</th></tr>");
 		$.each(pom, function(index, servis) {
 			$("#tabelaAdmini").append("<tr><td>"+servis.ime+"</td><td>"+servis.prezime+"</td></tr>");
