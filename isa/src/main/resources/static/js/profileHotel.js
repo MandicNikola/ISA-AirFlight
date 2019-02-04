@@ -1,18 +1,38 @@
 /**
  * 
  */
+
+function sakrijAdminovo(){
+	$("#admin").hide();
+	$("#adminKat").hide();
+	$("#adminAdditional").hide();
+	$("#adminDisc").hide();
+	$("#adminPersonal").hide();
+	$("#adminPass").hide();
+	
+}
+function prikaziAdminovo(){
+	$("#admin").show();
+	$("#adminKat").show();
+	$("#adminAdditional").show();
+	$("#adminDisc").show();
+	$("#adminPersonal").show();
+	$("#adminPass").show();
+	
+}
 $(document).ready(function($) {
 	var user = sessionStorage.getItem("ulogovan");
 	console.log('dosao u gornji ready');
 	var dnevnichart;
 	var sedmicnichart;
 	var mjesecnichart;
+	sakrijAdminovo();
 	if(user!=null && user!="null" && user!="undefined") {
 			console.log('ima korisnika');
 			var korisnik=JSON.parse(user);
 			console.log(korisnik.tip);
 			if(korisnik.tip == 'ADMIN_SISTEM'){
-				
+				prikaziAdminovo();
 				var pom=window.location.search.substring(1);
 				var id= pom.split('=')[1];
 				console.log('Usao u dodajgrafik');
@@ -715,7 +735,9 @@ $(document).ready(function(){
     	showRoomsForDiscounts();
     	$("#informacije").hide();
     	$("#divPopust").show();
-		$("#ispisiTabelu").hide();
+    	$("#postojeciPopust").hide();
+		
+    	$("#ispisiTabelu").hide();
 		$("#sobe").hide(); 
 		$("#cijene").hide();
 		$("#konfig").hide();
