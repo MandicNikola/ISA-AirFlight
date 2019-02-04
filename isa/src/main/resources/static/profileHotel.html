@@ -169,12 +169,28 @@
     border-radius: 3px;
      font-family: 'Josefin Sans', sans-serif;
 }
-  #monthChoose,#godinaIzbor,#prosecnaOcijena{
+  #monthChoose,#godinaIzbor{
   	margin-left:20px;
   }
-  #prosecnaOcijena,#listaSoba{
-	     font-family: 'Josefin Sans', sans-serif;
-	  
+  #listaSoba{
+	    font-family: 'Josefin Sans', sans-serif;
+	  	margin-left:30px;
+  		font-size:16px;
+		margin-top:8px;	
+  }
+  #ocijenaHot{
+  		margin-top:5px;
+  		text-align:center;
+  		padding-top:3px;
+  		margin-left:30px;
+  		font-family: 'Josefin Sans', sans-serif;
+		font-size:16px;
+		color:rgba(214, 111, 239,1);
+		width:25%;
+		font-weight: bold;
+		border: 1px solid #C3C3C3;
+ 	 	border-radius: 5px;
+   
   }
   #fastDiv{
  		margin-top: 25px;
@@ -251,8 +267,10 @@ input[type="date"]:valid::before { display: none }
 			  
 			 <div id="izvestaj" class="container-fluid">
 			  		<section >
-						<p id="prosecnaOcijena">Average rating of hotel is: </p>
+			  			<div id = "ocijenaHot"><p id="prosecnaOcijena">Average rating of hotel is: </p></div>
+							
 						</section>
+						
 					<p id = "listaSoba"> List of rooms: </p>
 						<div id="izvestajSoba">
 						</div>
