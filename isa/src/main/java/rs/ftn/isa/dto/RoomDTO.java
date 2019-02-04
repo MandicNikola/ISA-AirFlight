@@ -1,5 +1,7 @@
 package rs.ftn.isa.dto;
 
+import java.util.ArrayList;
+
 public class RoomDTO {
 	private Long id;
 	private String tip; 
@@ -15,6 +17,8 @@ public class RoomDTO {
 	private boolean imarez;
 	private Long popust;
 	private int vrijednostPopusta;
+	private ArrayList<String> nazivUsluga;
+	private boolean imaNazive;
 	public RoomDTO() {}
 	
 	public RoomDTO(Long id, String tip, double ocena, String hotel, Long idRez) {
@@ -145,6 +149,22 @@ public class RoomDTO {
 
 	public void setVrijednostPopusta(int vrijednostPopusta) {
 		this.vrijednostPopusta = vrijednostPopusta;
+	}
+
+	public ArrayList<String> getNazivUsluga() {
+		return nazivUsluga;
+	}
+
+	public void setNazivUsluga(ArrayList<String> nazivUsluga) {
+		this.nazivUsluga = nazivUsluga;
+	}
+
+	public boolean isImaNazive() {
+		return imaNazive;
+	}
+
+	public void setImaNazive(boolean imaNazive) {
+		this.imaNazive = imaNazive;
 	}
 	
 	

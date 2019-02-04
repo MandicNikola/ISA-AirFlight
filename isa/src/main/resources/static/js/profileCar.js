@@ -400,7 +400,9 @@ function dodajDatum(){
 	
 }
 function ispisiDatum(data){
-	$("#cenovnikKategorije").append("<p><i class=\"glyphicon glyphicon-calendar\"> </i> Effective date : "+data.datum_primene+"</p>");
+	var dat1 = data.datum_primene.split('T')[0];
+	
+	$("#cenovnikKategorije").append("<p><i class=\"glyphicon glyphicon-calendar\"> </i> Effective date : "+dat1+"</p>");
 	
 }
 

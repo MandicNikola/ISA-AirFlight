@@ -798,26 +798,65 @@ function ispisiFast(lista){
 	
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	// RoomDTO(room.getId(),room.getTip(),room.getOcjena(),room.getSprat(),room.getKapacitet(),room.getCijena(),room.getBalkon()		
-	 $("#fastPonuda").append("<table class=\"table table-hover\" id=\"tabelaSobeFast\" ><tr><th>Room type </th><th>Capacity</th><th>Floor</th><th>Average Rating</th><th>Price per night</th><th>Discount (%)</th><th>Balcony</th><th></th></tr>");
+	 $("#fastPonuda").append("<table class=\"table table-hover\" id=\"tabelaSobeFast\" ><tr><th>Room type </th><th>Capacity</th><th>Floor</th><th>Average Rating</th><th>Price per night</th><th>Discount (%)</th><th>Balcony</th><th></th><th></th></tr>");
 		
 		$.each(pom, function(index, data) {
 			var prenos = data.id +"."+data.popust;
 			console.log(prenos);
+			var dodatneusluge = '';
+			var sveusluge  = data.nazivUsluga;
+			$.each(sveusluge, function(index, podatak) {
+				duzina = sveusluge.length-1;
+				if(index !=duzina){
+						dodatneusluge += podatak+"*";
+					
+					}else{
+						dodatneusluge += podatak;
+					
+					}
+				});
+			
+			console.log(dodatneusluge);
 			if(data.balkon == 'da'){
-				
-				$("#tabelaSobeFast").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td>"+data.ocena+"</td><td>"+data.cijena+"</td><td>"+data.vrijednostPopusta+"</td><td><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\" ></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"rezervisiFast("+prenos+")\">Reserve</button></tr>");
+				if(data.imaNazive){
+					$("#tabelaSobeFast").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td>"+data.ocena+"</td><td>"+data.cijena+"</td><td>"+data.vrijednostPopusta+"</td><td><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\" ></td><td><button  class=\"btn btn-info\" onclick=\"prikaziUkljucene('"+dodatneusluge+"')\">Included additional services</button></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"rezervisiFast("+prenos+")\">Reserve</button></td></tr>");
+				}else{
+					$("#tabelaSobeFast").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td>"+data.ocena+"</td><td>"+data.cijena+"</td><td>"+data.vrijednostPopusta+"</td><td><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\" ></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"rezervisiFast("+prenos+")\">Reserve</button></td></tr>");
+					
+				}
+	
 			}else{
-				$("#tabelaSobeFast").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td>"+data.ocena+"</td><td>"+data.cijena+"</td><td>"+data.vrijednostPopusta+"</td><td><input type=\"checkbox\" disabled=\"disabled\" ></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"rezervisiFast("+prenos+")\">Reserve</button></tr>");
-				
+					if(data.imaNazive){
+						                                                                                                                                                                                                                                                                                    
+						$("#tabelaSobeFast").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td>"+data.ocena+"</td><td>"+data.cijena+"</td><td>"+data.vrijednostPopusta+"</td><td><input type=\"checkbox\" disabled=\"disabled\" ></td><td><button  class=\"btn btn-info\" onclick=\"prikaziUkljucene('"+dodatneusluge+"')\">Included additional services</button></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"rezervisiFast("+prenos+")\">Reserve</button></td></tr>");
+					}else{
+						$("#tabelaSobeFast").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td>"+data.ocena+"</td><td>"+data.cijena+"</td><td>"+data.vrijednostPopusta+"</td><td><input type=\"checkbox\" disabled=\"disabled\" ></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"rezervisiFast("+prenos+")\">Reserve</button></td></tr>");
+						
+					}	
 				
 			}
 		});
 		
-	 $("#fastPonuda").append("</table>");
+	 $("#fastPonuda").append("</table><div class=\"container\" id = \"ukljuceneUsluge\"></div>");
 
 	
 }
+function prikaziUkljucene(lista){
+	console.log('dosao ovdje');
+	var pom = lista.split('*');
+	$("#ukljuceneUsluge").empty()
+	
+	$.each(pom, function(index, podatak) {
+		var broj = index+1;
+		$("#ukljuceneUsluge").append("<p> "+broj+". "+podatak+"</p>")
 
+	});
+
+	
+	
+	console.log(lista);
+	
+}
 function rezervisiFast(sobapopust){
 	var pocetak=$('#pocetakFast').text();
 	var kraj=$('#krajFast').text();
@@ -1060,9 +1099,11 @@ function dodajDatum(){
 }
 function ispisiDatum(data){
 	var pom=JSON.stringify(data);
-	console.log(pom);
 	console.log('datum je  '+data.datum_primene);
-	$("#cijene").append("<p><i class=\"glyphicon glyphicon-calendar\"> </i> Effective date : "+data.datum_primene+"</p>");
+	var dat1 = data.datum_primene.split('T')[0];
+	
+	$("#datCijene").empty();
+	$("#datCijene").append("<i class=\"glyphicon glyphicon-calendar\"> </i> Effective date : "+dat1);
 
 }
 
@@ -1717,45 +1758,7 @@ function addDiscountForRooms(idRoom){
 
 	$("#dugmePopust").empty();
 	$("#dugmePopust").append("<button type=\"button\"  class=\"btn btn-lg\" onclick = \"dodajPopustSistem("+idRoom+")\">Add</button></div>");
-	$.ajax({
-		method:'GET',
-		url: "/api/hoteli/getUsluge/"+id,
-		success: function(lista){
-			if(lista==null){
-				console.log('Nema usluga');
-				nemaUslugaPopusti();
-			}else if(lista.length == 0){
-				console.log('Prazne usluga');
-				nemaUslugaPopusti();
-			}else{
-				console.log('Ima usluga ');
-				
-				imaUslugaPopusti(lista);
-				
-			}
-		}
-	});
-	
-	//$("#dodajPopust").show();
-}
-function nemaUslugaPopusti(){
 	$("#dodajPopust").show();
-	$("#uslugePopust").empty();
-	
-}
-function imaUslugaPopusti(data){
-	var lista = data == null ? [] : (data instanceof Array ? data : [ data ]);
-	$("#dodajPopust").show();
-	
-	$("#uslugePopust").empty();
-	
-	$("#uslugePopust").append("<table class=\"table table-hover\" id=\"tblDodatne\" ><tr><th>Service name </th><th>Rate</th><th></th></tr>");
-	$.each(lista, function(index, usluga) {
-			$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td>"+usluga.cena+"</td><td><input type=\"checkbox\" name= \"cekiraneUsluge\" id=\""+usluga.id+"\" value=\""+usluga.id+"\"></td></tr>");
-	});
-    $("#uslugePopust").append("</table>");                                                                                                     
-    $("#uslugePopust").show();
-		
 }
 function dodajPopustSistem(idRoom){
 	console.log(idRoom);
@@ -1771,24 +1774,10 @@ function dodajPopustSistem(idRoom){
 	$('#brojBodova').val("");
 	$('#procenat').val("");
 	
-	var listaUsl="";
-	  
-	
-	  $('input[name = "cekiraneUsluge"]').each(function () {
-		  console.log('usao ovdje');
-		  if(this.checked){
-			  listaUsl += (listaUsl=="" ? $(this).val() : "." + $(this).val());
-				  
-		    } 
-		});
-	  if(listaUsl == ""){
-		  listaUsl = "nema";
-	  }
 
-	console.log(listaUsl);
 	$.ajax({
 		type : 'POST',
-		url : "/api/hoteli/definisiPopust/"+id+"/soba/"+idRoom+"/pocetak/"+pocetak+"/kraj/"+kraj+"/bodovi/"+bodovi+"/procenat/"+procenat+"/listaUsl/"+listaUsl,
+		url : "/api/hoteli/definisiPopust/"+id+"/soba/"+idRoom+"/pocetak/"+pocetak+"/kraj/"+kraj+"/bodovi/"+bodovi+"/procenat/"+procenat,
 		success : function(povratna) {
 						console.log('uspjesno');
 						pomocnaFA();
