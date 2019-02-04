@@ -65,7 +65,6 @@ public class HotelController {
 				System.out.println("Sortiraj po imenu rastuce");
 				Collections.sort(svi, Hotel.HotelNameComparator);
 				for(Hotel H : svi) {
-					System.out.println(H.getNaziv());
 					sortiranaLista.add(H);
 				}
 				
@@ -74,23 +73,19 @@ public class HotelController {
 				//sortiraj po nazivu od Z-A
 				Collections.sort(svi, Hotel.HotelNameComparator);
 				for(int i=svi.size()-1; i>=0; i--) {
-					System.out.println(svi.get(i).getNaziv());
 					sortiranaLista.add(svi.get(i));
 				}
 				
 			}else if(uslov.equals("CityA")) {
 				//sortiraj po gradu od A-Z
-				System.out.println("Sortiraj po gradu rastuce");
-
+			
 				Collections.sort(svi, Hotel.HotelCityComparator);
 				for(Hotel H : svi) {
-					System.out.println(H.getAdresa());
 					sortiranaLista.add(H);
 				}
 			}else {
 				//sortiraj po gradu od Z-A
-				System.out.println("Sortiraj po gradu rastuce");
-
+			
 				Collections.sort(svi, Hotel.HotelCityComparator);
 				for(int i=svi.size()-1; i>=0; i--) {
 					System.out.println(svi.get(i).getAdresa());
@@ -1035,7 +1030,7 @@ public ArrayList<Hotel> pronadjiHotele(@RequestBody ReservationHotelDTO rez,@Pat
 			 ArrayList<Hotel> povratna = new ArrayList<Hotel>();
 			 List<Hotel> hoteli = servis.findAll();
 			 for(Hotel hotel:hoteli) {
-				if(hotel.getAdresa().toLowerCase().equals(info.toLowerCase()) || hotel.getNaziv().toLowerCase().contains(info.toLowerCase())) {
+				if(hotel.getGrad().toLowerCase().equals(info.toLowerCase()) || hotel.getNaziv().toLowerCase().contains(info.toLowerCase())) {
 					for(Room soba:hotel.getSobe()) {
 						//provjera za sobu da li zadovoljava uslove
 						Room room = soba;

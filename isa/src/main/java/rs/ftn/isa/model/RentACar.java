@@ -172,8 +172,8 @@ public class RentACar {
 	 public static Comparator<RentACar> RentCityComparator = new Comparator<RentACar>() {
 
 			public int compare(RentACar u1, RentACar u2) {
-			   String city1 = u1.getAdresa().toUpperCase();
-			   String city2 = u2.getAdresa().toUpperCase();
+			   String city1 = u1.getGrad().toUpperCase();
+			   String city2 = u2.getGrad().toUpperCase();
 
 			   //sortiranje od A-Z
 			   return city1.compareTo(city2);
