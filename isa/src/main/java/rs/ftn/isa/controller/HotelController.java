@@ -1030,7 +1030,7 @@ public ArrayList<Hotel> pronadjiHotele(@RequestBody ReservationHotelDTO rez,@Pat
 			 ArrayList<Hotel> povratna = new ArrayList<Hotel>();
 			 List<Hotel> hoteli = servis.findAll();
 			 for(Hotel hotel:hoteli) {
-				if(hotel.getAdresa().toLowerCase().equals(info.toLowerCase()) || hotel.getNaziv().toLowerCase().contains(info.toLowerCase())) {
+				if(hotel.getGrad().toLowerCase().equals(info.toLowerCase()) || hotel.getNaziv().toLowerCase().contains(info.toLowerCase())) {
 					for(Room soba:hotel.getSobe()) {
 						//provjera za sobu da li zadovoljava uslove
 						Room room = soba;

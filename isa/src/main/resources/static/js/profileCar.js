@@ -1210,30 +1210,81 @@ function addDiscountForCars(idRoom){
 }
 
 function dodajPopustSistem(idVozilo){
-	$("#dodajPopust").hide();
+	
+	let ispravno = true;
 	var pocetak=$('#sincewhen').val();
 	var kraj=$('#untilwhen').val();
 	var bodovi=$('#brojBodova').val();
 	var procenat=$('#procenat').val();
+	$("#errorPopust").empty();
+	$("#errorBodovi").empty();
+	$("#errorDatPopust").empty();
+	$("#errorEndPopust").empty();
 	
-	$('#sincewhen').val('');
-	$('#untilwhen').val('');
-	$('#brojBodova').val("");
-	$('#procenat').val("");
+	if(!pocetak){
+		ispravno = false;
+		$("#errorDatPopust").text("You need to select the date").css('color', 'red');
+	}
+	if(!kraj){	
+		$("#errorEndPopust").text("You need to select the date").css('color', 'red');
+		ispravno = false;		
+	}
 	
-	$.ajax({
-		type : 'POST',
-		url : "/api/vozila/definisiPopust/"+idVozilo+"/pocetak/"+pocetak+"/kraj/"+kraj+"/bodovi/"+bodovi+"/procenat/"+procenat,
-		success : function(povratna) {
-						console.log('uspjesno');
-						pomocnaFA();
-		},
-		error: function(XMLHttpRequest, textStatus, errorThrown){
-			alert('greska');
-		}
-		});
+	if(!bodovi){
+		$("#errorBodovi").text("You need to fill out this field.").css('color', 'red');
+		ispravno = false;		
+	}
+	if(isNaN(bodovi)){
+		ispravno = false;
+		$("#errorBodovi").text("You need to enter digits.").css('color', 'red');
+		
+	}
+	if(bodovi<=0){
+		ispravno = false;
+		$("#errorBodovi").text("Number of points must be greater than 0.").css('color', 'red');
+		
+	}
+	
+	if(!procenat){
+		ispravno = false;
+		$("#errorPopust").text("You need to fill out this field.").css('color', 'red');
+		
+	}
+	if(isNaN(procenat)){
+		ispravno = false;
+		$("#errorPopust").text("You need to enter digits.").css('color', 'red');
+		
+	}
+	if(procenat<=0){
+		ispravno = false;
+		$("#errorPopust").text("Number of percentage must be greater than 0.").css('color', 'red');
+	}
+	
+
+	if(ispravno == true){
+		$("#dodajPopust").hide();
+		
+		$('#sincewhen').val('');
+		$('#untilwhen').val('');
+		$('#brojBodova').val("");
+		$('#procenat').val("");
+
+		$.ajax({
+			type : 'POST',
+			url : "/api/vozila/definisiPopust/"+idVozilo+"/pocetak/"+pocetak+"/kraj/"+kraj+"/bodovi/"+bodovi+"/procenat/"+procenat,
+			success : function(povratna) {
+							console.log('uspjesno');
+							pomocnaFA();
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				alert('greska');
+			}
+			});
 
 	
+	}else{
+		alert('You need to fill out all the fields correctly.')
+	}	
 }
 function pomocnaFA(){
 	showCarsForDiscounts();
