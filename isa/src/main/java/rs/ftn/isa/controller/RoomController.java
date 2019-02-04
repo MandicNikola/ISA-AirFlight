@@ -26,10 +26,12 @@ import rs.ftn.isa.dto.RoomDTO;
 import rs.ftn.isa.model.Discount;
 import rs.ftn.isa.model.Filijala;
 import rs.ftn.isa.model.Hotel;
+import rs.ftn.isa.model.PricelistHotel;
 import rs.ftn.isa.model.RezervacijaHotel;
 import rs.ftn.isa.model.Room;
 import rs.ftn.isa.model.StatusRezervacije;
 import rs.ftn.isa.model.User;
+import rs.ftn.isa.model.Usluga;
 import rs.ftn.isa.service.RoomServiceImp;
 
 @RestController
@@ -210,7 +212,14 @@ public class RoomController {
 				RoomDTO sobaDTO = new RoomDTO(room.getId(),room.getTip(),room.getOcjena(),room.getSprat(),room.getKapacitet(),room.getCijena(),room.getBalkon());
 				sobaDTO.setPopust(odgovarajuciPopust.getId());
 				sobaDTO.setVrijednostPopusta(odgovarajuciPopust.getVrijednost());
+				ArrayList<String> dodatne = vratiNazive(odgovarajuciPopust,r.getHotel());
+				sobaDTO.setNazivUsluga(dodatne);
+				if(dodatne.size()!=0) {
+					sobaDTO.setImaNazive(true);
+				}
+				
 				pronadjeneSobe.add(sobaDTO);
+				
 				break;
 			}
 			//moram provjeriti prvi slucaj: da li je check in > od krajeva svih rezervacija koje postoje za tu sobu
@@ -242,6 +251,11 @@ public class RoomController {
 				RoomDTO sobaDTO = new RoomDTO(room.getId(),room.getTip(),room.getOcjena(),room.getSprat(),room.getKapacitet(),room.getCijena(),room.getBalkon());
 				sobaDTO.setPopust(odgovarajuciPopust.getId());
 				sobaDTO.setVrijednostPopusta(odgovarajuciPopust.getVrijednost());
+				ArrayList<String> dodatne = vratiNazive(odgovarajuciPopust,r.getHotel());
+				if(dodatne.size()!=0) {
+					sobaDTO.setImaNazive(true);
+				}
+				sobaDTO.setNazivUsluga(dodatne);
 				
 				pronadjeneSobe.add(sobaDTO);
 			}
@@ -258,6 +272,61 @@ public class RoomController {
 		return pronadjeneSobe;
 	}	
 
+	public ArrayList<String> vratiNazive(Discount popust,Hotel hotel){
+		ArrayList<String> naziviPopusta = new ArrayList<String>();
+		
+		PricelistHotel aktivni = null;
+		for(PricelistHotel ph:hotel.getCijenovnici()) {
+			if(ph.isAktivan()) {
+				aktivni = ph;
+				break;
+			}
+			
+		}
+		ArrayList<Usluga> postojeceusluge = new ArrayList<Usluga>();
+		if(aktivni.getUsluge()!= null) {
+			if(aktivni.getUsluge().size() != 0) {
+				for(Usluga u:aktivni.getUsluge()) {
+					postojeceusluge.add(u);
+				}
+			}
+		}
+		if(postojeceusluge.size() != 0) {
+			if(popust.getVrijednost()<5) {
+				naziviPopusta.add(postojeceusluge.get(0).getNaziv());
+			
+			}
+			if(popust.getVrijednost()>=5 && popust.getVrijednost() <10) {
+				naziviPopusta.add(postojeceusluge.get(0).getNaziv());
+				if(postojeceusluge.size()>=2) {
+					naziviPopusta.add(postojeceusluge.get(1).getNaziv());
+						
+				}
+			}
+			
+			if(popust.getVrijednost()>=10 && popust.getVrijednost() <15) {
+				naziviPopusta.add(postojeceusluge.get(0).getNaziv());
+				if(postojeceusluge.size()>=3) {
+					naziviPopusta.add(postojeceusluge.get(2).getNaziv());		
+				}
+			}
+			if(popust.getVrijednost()>=20 && popust.getVrijednost() <25) {
+				naziviPopusta.add(postojeceusluge.get(0).getNaziv());
+				if(postojeceusluge.size()>=2) {
+					naziviPopusta.add(postojeceusluge.get(1).getNaziv());
+						
+				}
+				if(postojeceusluge.size()>=3) {
+					naziviPopusta.add(postojeceusluge.get(2).getNaziv());
+						
+				}
+			}
+			if(popust.getVrijednost()>=25 && popust.getVrijednost() <30) {
+				naziviPopusta.add(postojeceusluge.get(0).getNaziv());
+			}
+		}					
+		return naziviPopusta;
+	}	
 	//metoda koja formira rezervaciju
 	//url : "/api/rooms/rezervisiFast/"+info+"/sobapopust/"+param,
 	
