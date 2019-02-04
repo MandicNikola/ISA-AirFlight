@@ -174,8 +174,8 @@ public class Hotel {
 	 public static Comparator<Hotel> HotelCityComparator = new Comparator<Hotel>() {
 
 			public int compare(Hotel h1, Hotel h2) {
-			   String city1 = h1.getAdresa().toUpperCase();
-			   String city2 = h2.getAdresa().toUpperCase();
+			   String city1 = h1.getGrad().toUpperCase();
+			   String city2 = h2.getGrad().toUpperCase();
 
 			   //sortiranje od A-Z
 			   return city1.compareTo(city2);

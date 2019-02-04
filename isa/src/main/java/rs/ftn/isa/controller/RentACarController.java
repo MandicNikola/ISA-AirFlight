@@ -60,38 +60,28 @@ public class RentACarController {
 		
 		if(uslov.equals("NameA")) {
 			//sortiraj po nazivu od A-Z
-			System.out.println("Sortiraj po imenu rastuce");
 			Collections.sort(svi, RentACar.RentNameComparator);
 			for(RentACar R : svi) {
-				System.out.println(R.getNaziv());
 				sortiranaLista.add(R);
 			}
 			
 		}else if(uslov.equals("NameD")) {
-			System.out.println("Sortiraj po imenu opadajuce");
 			//sortiraj po nazivu od Z-A
 			Collections.sort(svi, RentACar.RentNameComparator);
 			for(int i=svi.size()-1; i>=0; i--) {
-				System.out.println(svi.get(i).getNaziv());
 				sortiranaLista.add(svi.get(i));
 			}
 			
 		}else if(uslov.equals("CityA")) {
 			//sortiraj po gradu od A-Z
-			System.out.println("Sortiraj po gradu rastuce");
-
-			Collections.sort(svi, RentACar.RentCityComparator);
+					Collections.sort(svi, RentACar.RentCityComparator);
 			for(RentACar R : svi) {
-				System.out.println(R.getAdresa());
 				sortiranaLista.add(R);
 			}
 		}else {
 			//sortiraj po gradu od Z-A
-			System.out.println("Sortiraj po gradu rastuce");
-
-			Collections.sort(svi, RentACar.RentCityComparator);
+					Collections.sort(svi, RentACar.RentCityComparator);
 			for(int i=svi.size()-1; i>=0; i--) {
-				System.out.println(svi.get(i).getAdresa());
 				sortiranaLista.add(svi.get(i));
 			}
 		}
