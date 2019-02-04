@@ -1762,19 +1762,40 @@ function addDiscountForRooms(idRoom){
 }
 function dodajPopustSistem(idRoom){
 	console.log(idRoom);
-	$("#dodajPopust").hide();
 	var pocetak=$('#sincewhen').val();
 	var kraj=$('#untilwhen').val();
 	var bodovi=$('#brojBodova').val();
 	var procenat=$('#procenat').val();
 	var adresa = window.location.search.substring(1);
 	var id = adresa.split('=')[1];
-	$('#sincewhen').val('');
-	$('#untilwhen').val('');
-	$('#brojBodova').val("");
-	$('#procenat').val("");
 	
-
+	
+	let ispravno = true;
+	 
+	if(!pocetak){
+		ispravno = false;
+	}
+	if(!kraj){	
+		ispravno = false;		
+	}
+	
+	if(!bodovi){
+		ispravno = false;		
+	}
+	if(!procenat){
+		ispravno = false;		
+	}
+	if(ispravno == false){
+		alert('All fields are mandatory.');
+	}
+	if(ispravno == true){
+		$("#dodajPopust").hide();
+		$('#sincewhen').val('');
+		$('#untilwhen').val('');
+		$('#brojBodova').val("");
+		$('#procenat').val("");
+		
+		
 	$.ajax({
 		type : 'POST',
 		url : "/api/hoteli/definisiPopust/"+id+"/soba/"+idRoom+"/pocetak/"+pocetak+"/kraj/"+kraj+"/bodovi/"+bodovi+"/procenat/"+procenat,
@@ -1787,7 +1808,7 @@ function dodajPopustSistem(idRoom){
 		}
 		});
 
-	
+	}
 }
 function listOfDiscount(idRoom){
 	$("#sobePopusti").hide();
