@@ -528,8 +528,8 @@ function addConfiguration(){
 	$("#ispisiTabelu").empty();
 	$("#ispisiTabelu").append("<div class=\"container\"><h3>New configuration</h3><form method=\"post\" class=\"konfiguracija\"  id = \"formaKat\" >");
 		$("#formaKat").append("<div class=\"form-group\">");
-		$("#formaKat").append("<input  type = \"text\" class=\"form-control\" id=\"katNaziv\" placeholder=\"Configuration name\">"); 	
-		$("#formaKat").append("</div><button type=\"submit\" class=\"btn btn-default\">Add</button></form>");
+		$("#formaKat").append("<input  type = \"text\" class=\"form-control\" id=\"katNaziv\" placeholder=\"Configuration name\"><span id = \"errorKatNaziv\"></span>"); 	
+		$("#formaKat").append("</div><div><button type=\"submit\" class=\"btn btn-default\">Add</button></div></form>");
 	$("#ispisiTabelu").append("</div>");
 }
 
@@ -556,12 +556,11 @@ function dodajHoteluKategoriju(data){
 					alert('Greska pri dodavanju kategorije hotelu');
 					
 				}else{
-					alert('dodavanje super');
 					resetProfil();
 				}	
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("greska pri unosu novog hotela");
+			alert("greska ");
 			   
 		}
 	});
@@ -570,7 +569,16 @@ function dodajHoteluKategoriju(data){
 }
 
 $(document).on('submit','.konfiguracija',function(e){
-	e.preventDefault();	
+	e.preventDefault();
+	
+	var naziv=$('#katNaziv').val();
+	
+	let ispravno = true;
+	if(!naziv){
+		ispravno = false;
+		$("#errorKatNaziv").text("You have to enter name a category name.").css('color', 'red');
+	}
+	if(ispravno == true){
 	$.ajax({
 		type : 'POST',
 		url : "/api/kategorije/kat",
@@ -591,7 +599,9 @@ $(document).on('submit','.konfiguracija',function(e){
 			   
 		}
 	});
-	
+	}else{
+		alert("Enter the category name");
+	}
 });
 function resetProfil(){
 	$("#tabovi").show();
@@ -1264,7 +1274,7 @@ function formaPopusti(lista){
 		 $("#dodatne").append("<option  value=\""+data.id+"\">"+data.naziv+"</option>");	 
 		 
 	 });
-		$("#ispisiTabelu").append("</select><div class=\"container\"><input  type = \"number\"  min=\"1\" max=\"99\" class=\"form-control\" id=\"popust\" placeholder=\"discount in %\"></div><div><button id=\"dugmePopust\"  class=\"btn btn-info\" onclick=\"popustFunkcija()\"  >Change</button></div></div>");
+		$("#ispisiTabelu").append("</select><div class=\"container\"><input  type = \"number\"  min=\"1\" max=\"99\" class=\"form-control\" id=\"popust\" placeholder=\"discount in %\"><span id=\"errorPopust\"></span></div><div><button id=\"dugmePopustHotel\"  class=\"btn btn-info\" onclick=\"popustFunkcija()\"  >Change</button></div></div>");
 
 }
 function popustFunkcija(){
@@ -1276,8 +1286,26 @@ function popustFunkcija(){
 	var idUsluga =$('#dodatne').val();
 	console.log("izbor je "+idUsluga);
 	
+	let ispravnp = true;
+	
+	if(!vr){
+		$("#errorPopust").text("You need to fill out this field.").css('color', 'red');
+		ispravno = false;		
+	}
+	if(isNaN(vr)){
+		ispravno = false;
+		$("#errorPopust").text("You need to enter digits.").css('color', 'red');
+		
+	}
+	if(vr<=0){
+		ispravno = false;
+		console.log('usao ovdje');
+		$("#errorPopust").text("Value of discount must be greater than 0.").css('color', 'red');
+		
+	}
+	
 	var pom = idUsluga+"-"+vr+"-"+id;
-
+	if(ispravno == true){
 	$.ajax({
 		type : 'POST',
 		url : "/api/hoteli/dodajPopust/"+pom,
@@ -1291,7 +1319,9 @@ function popustFunkcija(){
 		}
 	});
 
-	
+	}else{
+		alert('The discount must be a non-negative number.')
+	}
 }
 function addUsluga(){
 	var adresa = window.location.search.substring(1);
@@ -1727,7 +1757,7 @@ function showRoomsForDiscounts(){
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);
 	var id = adresa.split('=')[1];
-
+	
 	$.ajax({
 		method:'GET',
 		url: "/api/hoteli/getRoomsForDiscount/"+id,
@@ -1752,6 +1782,7 @@ function writeRoomsForDiscounts(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#sobePopusti").empty();
 	 $("#sobePopusti").show();
+	 
 	//public RoomDTO(Long id, String tip, int kapacitet, int sprat,boolean imapopust) 
 			
 	 $("#sobePopusti").append("<table class=\"table table-hover\" id=\"tabelaSoba1\" ><tr><th>Room type </th><th>Capacity</th><th>Price per night</th><th></th><th></th><th></th></tr>");
@@ -1775,6 +1806,11 @@ function writeRoomsForDiscounts(lista){
 function addDiscountForRooms(idRoom){
 	var adresa = window.location.search.substring(1);
 	var id = adresa.split('=')[1];
+	//resetujem greske iz prethodnog slucaja
+	$("#errorDatPopust").text('');
+	$("#errorEndPopust").text('');
+	$("#errorBodovi").text('');
+	$("#errorPopust").text('');
 	
 	$("#sobePopusti").hide();
 
@@ -1796,20 +1832,44 @@ function dodajPopustSistem(idRoom){
 	 
 	if(!pocetak){
 		ispravno = false;
+		$("#errorDatPopust").text("You need to select the date").css('color', 'red');
 	}
 	if(!kraj){	
+		$("#errorEndPopust").text("You need to select the date").css('color', 'red');
 		ispravno = false;		
 	}
 	
 	if(!bodovi){
+		$("#errorBodovi").text("You need to fill out this field.").css('color', 'red');
 		ispravno = false;		
 	}
+	if(isNaN(bodovi)){
+		ispravno = false;
+		$("#errorBodovi").text("You need to enter digits.").css('color', 'red');
+		
+	}
+	if(bodovi<=0){
+		ispravno = false;
+		$("#errorBodovi").text("Number of points must be greater than 0.").css('color', 'red');
+		
+	}
+	
 	if(!procenat){
-		ispravno = false;		
+		ispravno = false;
+		$("#errorPopust").text("You need to fill out this field.").css('color', 'red');
+		
 	}
-	if(ispravno == false){
-		alert('All fields are mandatory.');
+	if(isNaN(procenat)){
+		ispravno = false;
+		$("#errorPopust").text("You need to enter digits.").css('color', 'red');
+		
 	}
+	if(procenat<=0){
+		ispravno = false;
+		$("#errorPopust").text("Number of percentage must be greater than 0.").css('color', 'red');
+	}
+	
+
 	if(ispravno == true){
 		$("#dodajPopust").hide();
 		$('#sincewhen').val('');
@@ -1830,7 +1890,9 @@ function dodajPopustSistem(idRoom){
 		}
 		});
 
-	}
+	}else{
+		alert('You need to fill out all the fields correctly.')
+	}	
 }
 function listOfDiscount(idRoom){
 	$("#sobePopusti").hide();
