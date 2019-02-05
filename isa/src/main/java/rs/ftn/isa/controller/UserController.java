@@ -378,6 +378,26 @@ public class UserController {
 		return admini;
 	}
 
+	@RequestMapping(value="/getAdminsServis/{id}", method = RequestMethod.GET)
+	public ArrayList<User> getAdminsOfServis(@PathVariable Long id){
+		System.out.println("dosao u get admine renta id servisa "+id);
+		String idString = id.toString();
+		List<User> korisnici = servis.findAll();
+		ArrayList<User> admini = new ArrayList<User>();
+		for(User user:korisnici) {
+				if(user.getTip()==Role.ADMIN_AVIO) {
+					String servis = user.getServis().toString();
+					if(servis.equals(idString)) {
+						System.out.println("dosao po "+user.getIme());
+						admini.add(user);
+					}
+				}
+			}
+		if(admini.size() == 0) {
+			return new ArrayList<User>();
+		}
+		return admini;
+	}
 	
 	@RequestMapping(value="/newAdminSistem/{id}", method = RequestMethod.POST)
 	public  void noviAdminSistema(@PathVariable Long id){
@@ -421,6 +441,22 @@ public class UserController {
 	}
 	
 	
+	@RequestMapping(value="/newAdminServis/{pomocna}", method = RequestMethod.POST)
+	public  void noviAdminServis(@PathVariable String pomocna){
+		System.out.println("usao u izmjeni admina servisa dobio "+pomocna);
+		String[] pom = pomocna.split("-");
+		String userID = pom[0];
+		String servisID = pom[1];
+		Long userid = Long.parseLong(userID);
+		Long servisid = Long.parseLong(servisID);
+		User korisnik = servis.findOneById(userid );
+		korisnik.setTip(Role.ADMIN_AVIO);
+		korisnik.setServis(servisid);
+		korisnik.setAdminPotvrdio(false);
+		servis.saveUser(korisnik);
+		System.out.println("sacuvan korisnik kao admin servis");
+	}
+	
 	@RequestMapping(value="/removeAdminHotel/{id}", method = RequestMethod.POST)
 	public  void removeAdminHotel(@PathVariable Long id){
 		User korisnik = servis.findOneById(id);
@@ -433,6 +469,16 @@ public class UserController {
 	
 	@RequestMapping(value="/removeAdminRent/{id}", method = RequestMethod.POST)
 	public  void removeAdminRent(@PathVariable Long id){
+		User korisnik = servis.findOneById(id);
+		korisnik.setTip(Role.REGISTROVAN);	
+		korisnik.setServis(0L);
+		servis.saveUser(korisnik);
+		System.out.println("sacuvan korisnik kao registrovan");
+	}
+	
+	
+	@RequestMapping(value="/removeAdminServis/{id}", method = RequestMethod.POST)
+	public  void removeAdminServis(@PathVariable Long id){
 		User korisnik = servis.findOneById(id);
 		korisnik.setTip(Role.REGISTROVAN);	
 		korisnik.setServis(0L);
