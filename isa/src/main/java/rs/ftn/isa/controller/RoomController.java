@@ -210,7 +210,8 @@ public class RoomController {
 			Set<RezervacijaHotel> rezervacije = room.getRezervacije(); 
 			if(rezervacije.size() == 0) {
 				RoomDTO sobaDTO = new RoomDTO(room.getId(),room.getTip(),room.getOcjena(),room.getSprat(),room.getKapacitet(),room.getCijena(),room.getBalkon());
-				sobaDTO.setPopust(odgovarajuciPopust.getId());
+				sobaDTO.setBodoviPopusta(odgovarajuciPopust.getBodovi());
+				
 				sobaDTO.setVrijednostPopusta(odgovarajuciPopust.getVrijednost());
 				ArrayList<String> dodatne = vratiNazive(odgovarajuciPopust,r.getHotel());
 				sobaDTO.setNazivUsluga(dodatne);
@@ -249,7 +250,7 @@ public class RoomController {
 			if(odobrenCheckIN == true || odobrenCheckOUT == true) {
 				System.out.println("odobrena soba");
 				RoomDTO sobaDTO = new RoomDTO(room.getId(),room.getTip(),room.getOcjena(),room.getSprat(),room.getKapacitet(),room.getCijena(),room.getBalkon());
-				sobaDTO.setPopust(odgovarajuciPopust.getId());
+				sobaDTO.setBodoviPopusta(odgovarajuciPopust.getBodovi());
 				sobaDTO.setVrijednostPopusta(odgovarajuciPopust.getVrijednost());
 				ArrayList<String> dodatne = vratiNazive(odgovarajuciPopust,r.getHotel());
 				if(dodatne.size()!=0) {
@@ -330,14 +331,17 @@ public class RoomController {
 	//metoda koja formira rezervaciju
 	//url : "/api/rooms/rezervisiFast/"+info+"/sobapopust/"+param,
 	
-			@RequestMapping(value="/rezervisiFast/{info}/sobapopust/{sobapopust}/idhotel/{idhotel}", 
+			@RequestMapping(value="/rezervisiFast/{info}/sobapopust/{sobapopust}/idhotel/{idhotel}/idRez/{idRez}", 
 					method = RequestMethod.POST,
 					produces = MediaType.APPLICATION_JSON_VALUE
 					)
 			public @ResponseBody RezervacijaHotel brzaRez(@PathVariable("info") String info,
-		            @PathVariable("sobapopust") String sobapopust,@PathVariable("idhotel") Long idhotel,@Context HttpServletRequest request){
+		            @PathVariable("sobapopust") String sobapopust,@PathVariable("idhotel") Long idhotel,@PathVariable("idRez") Long idRez,@Context HttpServletRequest request){
 				RezervacijaHotel povratna = new RezervacijaHotel();
-				User korisnik = (User)request.getSession().getAttribute("ulogovan");		
+				User korisnik = (User)request.getSession().getAttribute("ulogovan");	
+				if(korisnik == null) {
+					return null;
+				}
 				List<Room> sobe = servis.findRoomsByHotel(idhotel);
 				
 				String[] infoPom = info.split("\\*");
@@ -346,7 +350,8 @@ public class RoomController {
 				
 				String[] pom = sobapopust.split("\\.");
 				String sobaID = pom[0];
-				String popustID = pom[1];
+				String popustVrijednost = pom[2];
+				int popustVr = Integer.parseInt(popustVrijednost);
 				Room izabranaSoba = null;
 				for(Room soba:sobe) {
 					if(soba.getId().toString().equals(sobaID)) {
@@ -354,16 +359,6 @@ public class RoomController {
 						break;
 					}
 				}
-				Discount izabraniPopust = null;
-				System.out.println("velicina "+izabranaSoba.getPopusti().size());
-				for(Discount dis:izabranaSoba.getPopusti()) {
-					if(dis.getId().toString().equals(popustID)) {
-						izabraniPopust = dis;
-						break;
-					}
-					
-				}
-				
 				
 				String[] datIN=checkIN.split("-");
 				
@@ -392,16 +387,17 @@ public class RoomController {
 				int dani = daysBetween(datumCheckIn, datumCheckOut);
 				double cijena = dani*izabranaSoba.getCijena();
 				//uracunajpopust
-				povratna.setCijena((double)cijena*((double)(100-izabraniPopust.getVrijednost())/100));
+				povratna.setCijena((double)cijena*((double)(100-popustVr)/100));
 				
 				povratna.setUserHotel(korisnik);
 				korisnik.getRezHotela().add(povratna);
 				povratna.setStatus(StatusRezervacije.AKTIVNA);
-				
+				povratna.setRezavion(idRez);
 				Set<RezervacijaHotel> rezSobe = izabranaSoba.getRezervacije();
 				rezSobe.add(povratna);				
 				izabranaSoba.setRezervacije(rezSobe);	
 				servis.saveRoom(izabranaSoba);
+			
 				return povratna;
 			
 			}

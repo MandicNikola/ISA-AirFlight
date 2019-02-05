@@ -17,6 +17,8 @@ public class RoomDTO {
 	private boolean imarez;
 	private Long popust;
 	private int vrijednostPopusta;
+	private int bodoviPopusta;
+	
 	private ArrayList<String> nazivUsluga;
 	private boolean imaNazive;
 	public RoomDTO() {}
@@ -166,8 +168,15 @@ public class RoomDTO {
 	public void setImaNazive(boolean imaNazive) {
 		this.imaNazive = imaNazive;
 	}
-	
-	
-	
+
+	public int getBodoviPopusta() {
+		return bodoviPopusta;
+	}
+
+	public void setBodoviPopusta(int bodoviPopusta) {
+		this.bodoviPopusta = bodoviPopusta;
+	}
+
+
 	
 }
