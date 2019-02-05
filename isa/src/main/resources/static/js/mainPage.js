@@ -1,3 +1,7 @@
+
+
+var filterData = [];
+
 function onLoad(){
 	var user = sessionStorage.getItem("ulogovan");
 	console.log(user);
@@ -931,16 +935,28 @@ function findFlights()
 					
 					success : function(data)
 					{
+						
 						alert(data);
 						if(data.length > 0)
-						{
+						{	
+							var maxCena = 0;
+							var maxDuration = 0;
+							
+							
 							var letovi = data;
+							var filterData = data;
 							$('#pretragaLetova').empty();
 							var text = '<table class="table table-striped">';
-							text += '<thead><tr><th>Vreme poletanja/sletanja</th><th>Broj presedanja: </th><th>Trajanje leta</th><th>Kompanija</th><th>Klasa</th><th>Cena</th></tr></thead><tbody>'
+							text += '<thead><tr><th>Vreme poletanja/sletanja</th><th>Broj presedanja: </th><th>Trajanje leta</th><th>Kompanija</th><th>Klasa</th><th>Cena</th></tr></thead><tbody>';
 							$.each(letovi,function(index,value)
 									{
 										
+										if(maxCena < value.cena)
+											maxCena = value.cena;
+										
+										if(maxDuration < value.duzina)
+											maxCena = value.duzina;
+								
 										text += '<tr><td>'+value.vremePoletanja+'/'+value.vremeSletanja+'</td>';
 										text += '<td>'+value.brojPresedanja+'</td><td>'+value.duzina+'</td><td>'+value.nazivKompanije+'</td><td>'+value.klasa+'</td><td>'+value.cena+'</td><td><button type="button" id="'+value.idLeta+'='+value.klasa+'" onclick="book(this)" class="btn btn-primary">Book</button></td>';
 										text += '</tr>';
@@ -948,6 +964,34 @@ function findFlights()
 							text += '</tbody></table>';
 							$('#pretragaLetova').html(text);
 							$("#pretragaDiv").show();
+							
+							$("#rangePrice").attr({
+							       "max" : maxCena,       
+							       "min" : 0         
+							    });
+							$("#rangeDuration").attr({
+							       "max" : maxDuration,       
+							       "min" : 0         
+							    });
+							
+							$.ajax({
+								method:'GET',
+								url: "/api/kompanije/all",
+								success: function(lista){
+									if(lista == null){
+										
+									}else{
+										var text1 = "";
+										$('#selectKompanijaFilter').empty();
+										$.each(lista,function(index,value)
+												{
+													text1 += '<option value="'+value.naziv+'">'+value.naziv+'</option>';
+												});	
+										$('#selectKompanijaFilter').html(text1);
+									}
+								}
+							});
+							
 							
 						}
 						
@@ -986,6 +1030,15 @@ function pretragaToJson(pocetak,kraj,tip,klasa,startDestination,endDestination,b
 			});
 	
 }
+
+
+
+
+
+
+
+
+
 
 
 function preuzmiPodatke() {
@@ -1062,6 +1115,39 @@ $(document).ready(function(){
 	 
 	    
 	    });
+	   
+	   
+	   
+	  $(".filteri").change(function(){
+		  filter(filterData);
+	  });
+
+   
+	function filter(data)
+	{
+		var klasa = $('#selectKlasaFilter').val();
+		var price = $('#rangePrice').val();
+		var duration = $('#rangeDuration').val();
+		var kompanija = $('#selectKompanijaFilter').val();
+		$('#pretragaLetova').empty();
+		var text = '<table class="table table-striped">';
+		text += '<thead><tr><th>Vreme poletanja/sletanja</th><th>Broj presedanja: </th><th>Trajanje leta</th><th>Kompanija</th><th>Klasa</th><th>Cena</th></tr></thead><tbody>';
+		$.each(data,function(index,value)
+				{
+					if(klasa == value.klasa && value.duzina <= duration && value.cena <= price && value.nazivKompanije == kompanija)
+					{
+						text += '<tr><td>'+value.vremePoletanja+'/'+value.vremeSletanja+'</td>';
+						text += '<td>'+value.brojPresedanja+'</td><td>'+value.duzina+'</td><td>'+value.nazivKompanije+'</td><td>'+value.klasa+'</td><td>'+value.cena+'</td><td><button type="button" id="'+value.idLeta+'='+value.klasa+'" onclick="book(this)" class="btn btn-primary">Book</button></td>';
+						text += '</tr>';
+					}
+				});
+		text += '</tbody></table>';
+		$('#pretragaLetova').html(text);
+		
+
+    }	   
+	   
+	   
 	   	
 });
 function visitCar(id){

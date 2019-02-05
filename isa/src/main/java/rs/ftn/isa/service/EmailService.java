@@ -64,7 +64,7 @@ public class EmailService {
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "utf-8");
 
-		String htmlMsg = "<h3>Pozdrav "+user.getIme()+"</h3><br> <p>Da dobili ste pozvnicu za let  <a href=\"http://localhost:8080/pozivnica?id="+pozivnica.getId()+"\">link</a></p>";
+		String htmlMsg = "<h3>Pozdrav "+user.getIme()+"</h3><br> <p>Da dobili ste pozvnicu za let  <a href=\"http://localhost:8080/pozivnica.html?id="+pozivnica.getId()+"\">link</a></p>";
 		mimeMessage.setContent(htmlMsg, "text/html");
 		helper.setTo(user.getMail());
 		helper.setSubject("Pozivnica za let");

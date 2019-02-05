@@ -499,6 +499,41 @@ public class FightController {
 	}
 	
 	
+	@RequestMapping(value="/pozivnicaFlight/{id}", 
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<FlightDTO> getFlightPozivnica(@PathVariable("id") Long id) throws ParseException		
+	{
+		
+		Pozivnica pozivnica = servisPozivnica.findOneById(id);
+		if(pozivnica == null)
+			return new ResponseEntity<FlightDTO>(HttpStatus.BAD_REQUEST);
+		
+		
+		Ticket karta = pozivnica.getTicket();
+		
+		Flight let = karta.getLet();
+		
+		FlightDTO retDto = new FlightDTO();
+		retDto.setLokPoletanja(let.getPoletanje().getNaziv());
+		retDto.setLokSletanja(let.getSletanje().getNaziv());
+		
+		SimpleDateFormat formatDatum = new SimpleDateFormat("yyyy-MM-dd");
+		retDto.setDatumPoletanja(formatDatum.format(let.getDatumPoletanja()));
+		retDto.setDatumSletanja(formatDatum.format(let.getDatumSletanja()));
+		SimpleDateFormat formatVreme = new SimpleDateFormat("HH:mm");
+		String vremePoletanja = formatVreme.format(let.getVremePoletanja());
+		String vremeSletanja = formatVreme.format(let.getVremeSletanja());
+		
+		retDto.setVremePoletanja(vremePoletanja);
+		retDto.setVremeSletanja(vremeSletanja);
+		
+		retDto.setCena(let.getCena());
+		retDto.setKlasa(karta.getKlasa());
+		
+		
+		return new ResponseEntity<FlightDTO>(retDto, HttpStatus.OK);
+	}
 	
 	
 	
