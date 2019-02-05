@@ -139,7 +139,10 @@ public class VoziloController {
 			User korisnik = (User)request.getSession().getAttribute("ulogovan");		
 			
 			String[] niz=podatak.split("=");
-			
+			Long glavnaRez=0L;
+			if(niz.length==6) {
+				glavnaRez=Long.parseLong(niz[5]);
+			}
 			Long idVozilo=Long.parseLong(niz[0]);
 			
 			String startDatum=niz[1];
@@ -191,6 +194,7 @@ public class VoziloController {
 			RezervacijaRentCar rezervacija = new RezervacijaRentCar();
 			rezervacija.setStatus(StatusRezervacije.AKTIVNA);
 			rezervacija.setCena(cenaVozila);
+			rezervacija.setGlavnRez(glavnaRez);
 			rezervacija.setKorisnik(korisnik);
 			korisnik.getRezRent().add(rezervacija);
 			System.out.println("Datum preuzimanja je "+datPreuzimanja);
@@ -574,6 +578,7 @@ public @ResponseBody ArrayList<VehicleDTO> nadjiVozilaPopust(@PathVariable Strin
 						VehicleDTO novaPonuda = new VehicleDTO(V.getId(), V.getMarka(), V.getModel(), V.getGodiste(), V.getSedista(), V.getKategorija(), V.isImapopusta());
 						novaPonuda.setCena(cena);
 						novaPonuda.setPopust(popust.getVrijednost());
+						novaPonuda.setBodovi(popust.getBodovi());
 						ponuda.add(novaPonuda);
 				
 					}

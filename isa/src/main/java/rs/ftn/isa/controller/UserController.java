@@ -637,17 +637,18 @@ public class UserController {
 		return user;
 	}
 
-	@RequestMapping(value="/dodajRez", 
+	@RequestMapping(value="/dodajRez/{bodovi}", 
 			method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody RezervacijaRentCar dodajRezervaciju(@RequestBody RezervacijaRentCar rez ){		
+	public @ResponseBody RezervacijaRentCar dodajRezervaciju(@PathVariable String bodovi,@RequestBody RezervacijaRentCar rez ){		
 	System.out.println("Usao u sacuvaj korisnika");
 	System.out.println("Id je "+rez.getKorisnik().getId());
+	int brojBodova = Integer.parseInt(bodovi);
 	User korisnik  = rez.getKorisnik();
-	System.out.println("Ispis korisnika je "+korisnik);
+	int noviBodovi= korisnik.getBodovi()-brojBodova;
+	korisnik.setBodovi(noviBodovi);
 	User kor=	servis.saveUser(korisnik);
-	//	System.out.println("vratio je sacuvanog");
-		return rez;
+    return rez;
 	}
 	
 	@RequestMapping(value="/addRezSobe", 

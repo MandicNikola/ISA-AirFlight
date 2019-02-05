@@ -13,6 +13,7 @@ public class VehicleDTO {
 	private double cena;
 	private double cenaPopust;
 	private int popust;
+	private int bodovi;
 
 	
 	public VehicleDTO() {
@@ -52,6 +53,13 @@ public class VehicleDTO {
 	}
 	public void setGodiste(int godiste) {
 		this.godiste = godiste;
+	}
+	
+	public int getBodovi() {
+		return bodovi;
+	}
+	public void setBodovi(int bodovi) {
+		this.bodovi = bodovi;
 	}
 	public int getSedista() {
 		return sedista;
