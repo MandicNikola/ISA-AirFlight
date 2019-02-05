@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import rs.ftn.isa.dto.FilijalaDTO;
 import rs.ftn.isa.dto.RoomDTO;
 import rs.ftn.isa.dto.VehicleDTO;
 import rs.ftn.isa.model.CategoryCar;
@@ -35,6 +38,30 @@ public class FilijalaController {
 	public List<Filijala> getAllFilijale(){		
 		return  servis.findAll();
 	}
+	
+	@RequestMapping(value="/poGradu/{grad}", method = RequestMethod.GET)
+	public ResponseEntity<List<FilijalaDTO>> filijaleUGradu(@PathVariable String grad){		
+		
+		
+		List<Filijala> filijale = servis.findAllByGrad(grad);
+		if(filijale == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		ArrayList<FilijalaDTO> retDto = new ArrayList<FilijalaDTO>();
+		for(Filijala filijala : filijale)
+		{
+			FilijalaDTO dto = new FilijalaDTO();
+			dto.setAdresa(filijala.getUlica());
+			dto.setGrad(filijala.getGrad());
+			dto.setIdServisa(filijala.getServis().getId());
+			dto.setNaziv(filijala.getServis().getNaziv());
+			retDto.add(dto);
+		}
+		
+		return new ResponseEntity<List<FilijalaDTO>>(retDto, HttpStatus.OK);
+	}
+	
+	
 	
 	@RequestMapping(value="/vratiFilijalu/{id}",
 					method = RequestMethod.GET,

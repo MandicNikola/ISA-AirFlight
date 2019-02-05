@@ -306,12 +306,17 @@ public class FightController {
 		String vremePoletanja = formatVreme.format(let.getVremePoletanja());
 		String vremeSletanja = formatVreme.format(let.getVremeSletanja());
 		
+		SimpleDateFormat formatDatum = new SimpleDateFormat("yyyy-MM-dd");
+		String datumSletanja = formatDatum.format(let.getDatumSletanja());
+		
+		
 		int brojPresedanja = let.getPresedanja().size();
 		dto.setVremePoletanja(vremePoletanja);
 		dto.setVremeSletanja(vremeSletanja);
 		dto.setBrojPresedanja(brojPresedanja);
 		dto.setDuzina(let.getDuzina());
 		dto.setKlasa(klasaPuta);
+		dto.setDatumSletanja(datumSletanja);
 		
 	
 		return dto;
@@ -405,9 +410,13 @@ public class FightController {
 		karta.setReservationTicket(rezervation);
 		
 		servisKorisnik.saveUser(user);
+		System.out.println(rezervation.getId());
+		
+		karta = servisKarata.findOneById(id);
 		
 		
-		return new ResponseEntity<Long>(rezervation.getId(), HttpStatus.OK);
+		
+		return new ResponseEntity<Long>(karta.getReservationTicket().getId(), HttpStatus.OK);
 	}
 	
 	

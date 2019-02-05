@@ -7,6 +7,8 @@ public class HotelDTO {
 	private String adresa;
 	private String opis;
 	private String grad;
+	private Long id;
+	
 	public HotelDTO() {
 		super();
 		
@@ -17,6 +19,15 @@ public class HotelDTO {
 		this.adresa = adresa;
 		this.opis = opis;
 		this.grad = grad;
+	}
+	
+	
+	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 	public HotelDTO(Hotel hotel) {
 		this(hotel.getNaziv(), hotel.getAdresa(),hotel.getOpis(),hotel.getGrad());

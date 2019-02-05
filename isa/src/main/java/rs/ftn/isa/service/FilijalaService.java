@@ -12,6 +12,7 @@ public interface FilijalaService {
 
 	List<Filijala> findAll();
 	List<Filijala> findAllByUlica(String ulica);
+	List<Filijala> findAllByGrad(String grad);
 	
 	Filijala saveFilijala(Filijala filijala);
 	void removeFilijala(Long id);
