@@ -6,6 +6,16 @@ $(document).ready(function($) {
 	var podatak = window.location.search.substring(1);
 	console.log("Usao u showGraf");
 	var niz= podatak.split("=");
+	
+	if(niz.length > 2){
+		console.log('ima rezervacija');
+		  $("#res").show();
+		  $("#fastRes").show();
+		
+	}else{
+		$("#res").hide();
+		$("#fastRes").hide();
+	}
 	var id= niz[1];
 	
 	if(user!=null && user!="null" && user!="undefined") {
@@ -142,33 +152,37 @@ $(document).ready(function($) {
 
 	$("#findFast").click(function() {
 		
-		
+		var urlDelovi= podatak.split("=");
+		//http://localhost:8080/profileHotel.html?id=1115=254=2019-02-06=Novi%20Sad=1
+		var idRez = urlDelovi[2];
 		var end = $("#datumFast").val();
-		var start="2019-02-02";
+		var start=urlDelovi[3];
+		var grad=urlDelovi[4];
 		//kasnije dodati
-		//var date1 = Date.parse(pocetak);
-	//	var date2 = Date.parse(datum);
-		//if (date1 > date2) {
-			//$("#errorFast").text("Drop-off date must be greater than pick-up date").css('color', 'red');
-		//}else{
+		var date1 = Date.parse(start);
+		var date2 = Date.parse(end);
 		
-		//}
-		
-		$.ajax({
-			method:'GET',
-			url: "/api/vozila/getFast/"+id+"/start/"+start+"/end/"+end+"/grad/Novi Sad",
-			success: function(lista){
-				if(lista == null){
-					console.log('Nema podataka');
-				}else if(lista.length==0){
-					console.log('Nema podataka');
-				}else{
-					console.log("ima podataka");
-					console.log(lista.length);
-					ispisiBrzeRez(lista,start,end);
+		if (date1 > date2) {
+			$("#errorFast").text("Drop-off date must be greater than pick-up date").css('color', 'red');
+		}else{
+			$.ajax({
+				method:'GET',
+				url: "/api/vozila/getFast/"+id+"/start/"+start+"/end/"+end+"/grad/"+grad,
+				success: function(lista){
+					if(lista == null){
+						console.log('Nema podataka');
+					}else if(lista.length==0){
+						console.log('Nema podataka');
+					}else{
+						console.log("ima podataka");
+						console.log(lista.length);
+						ispisiBrzeRez(lista,start,end);
+					}
 				}
-			}
-		});
+			});
+			
+
+		}
 		
 	});
 
@@ -341,7 +355,7 @@ function ispisiBrzeRez(skup,odDat,doDat){
 	
 	$("#resultFast").append("<table class=\"table table-hover\" id=\"tabelaFast\" ><tr><th>Model</th><th>Brand</th><th>Original price</th><th>Discount</th><th></th></tr>");
 	$.each(lista, function(index, clan) {
-		var param=clan.id+","+clan.cena+","+clan.popust;
+		var param=clan.id+","+clan.cena+","+clan.popust+","+clan.bodovi;
 		console.log(param);
      	$("#tabelaFast").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+clan.model+"</td><td> "+clan.marka+"</td><td>"+clan.cena+"</td><td>"+clan.popust+"</td><td><button class=\"btn btn-info\" onclick=\"rezervisiVozilo('"+param+"')\">Reserve</button></td></tr>");
 
@@ -1077,7 +1091,7 @@ function izlistajPonude(data){
 		$.each(niz, function(index, pom) {
 			
 			var cena=pom.cena;
-			var param=pom.id+","+cena+",0";
+			var param=pom.id+","+cena+",0,0";
 			$("#tabelaPonuda").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+pom.marka+"</td><td > "+pom.model+"</td><td > "+pom.godiste+"</td><td > "+pom.sedista+"</td><td> "+pom.kategorija+"</td><td> "+pom.cena+"</td><td><button class=\"btn btn-info\" onclick=\"rezervisiVozilo('"+param+"')\">Reserve</button></td><td></tr>");
 				
 		});
@@ -1090,6 +1104,7 @@ function rezervisiVozilo(param){
 	var id=param.split(',')[0];
 	var cena= param.split(',')[1];
 	var flag = param.split(',')[2];
+	var bodovi = param.split(',')[3];
 	console.log('Usao u rezervisi vozilo '+ id + " cena je "+cena+"a flag je "+flag);
 	if(flag == 0){
 		var pocetak =  $("#pocetak").text();
@@ -1100,15 +1115,22 @@ function rezervisiVozilo(param){
 		var kraj =  $("#endDate").text();
 		
 	}
-	
+	var urlDelovi= podatak.split("=");
+	var glavnaRez = 0;
+
+	if(urlDelovi.length>2){
+		glavnaRez=urlDelovi[2]
+	}
+	//http://localhost:8080/profileHotel.html?id=1115=254=2019-02-06=Novi%20Sad=1
+
 	console.log("pocetak je"+ pocetak+" kraj je "+ kraj);
-	var podatak = id+"="+pocetak+"="+kraj+"="+cena+"="+flag;
+	var podatak = id+"="+pocetak+"="+kraj+"="+cena+"="+flag+"="+glavnaRez;
 	$.ajax({
 		type : 'POST',
 		url : "/api/vozila/dodajRezervaciju/"+podatak,
 		success : function(povratna) {
 			console.log('zavrsena rezervacija');
-			poveziKorisnika(povratna);
+			poveziKorisnika(povratna, bodovi);
 		//	ispisiUspesno();
 			//pozoviProfil(povratna.model);
 		},
@@ -1117,7 +1139,7 @@ function rezervisiVozilo(param){
 		}
 		});
 }
-function poveziKorisnika(pom){
+function poveziKorisnika(pom, bodovi){
 	console.log('usao u poveziKorisnika');
 	console.log(pom);
  var sending= JSON.stringify(pom);			
@@ -1126,7 +1148,7 @@ function poveziKorisnika(pom){
 	
 	$.ajax({
 		type : 'POST',
-		url : "/api/korisnici/dodajRez",
+		url : "/api/korisnici/dodajRez/"+bodovi,
 		contentType : "application/json",
 		data: sending,
 		dataType : 'json',		
