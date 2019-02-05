@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import rs.ftn.isa.model.ReservationTicket;
+import rs.ftn.isa.model.Ticket;
 import rs.ftn.isa.repository.ReservationTicketRepository;
 
 @Service
@@ -23,6 +24,8 @@ public class ReservationTicketServiceImp implements ReservationTicketService{
 		// TODO Auto-generated method stub
 		repozitorijum.save(reservation);
 	}
+
+	
 	
 	
 	

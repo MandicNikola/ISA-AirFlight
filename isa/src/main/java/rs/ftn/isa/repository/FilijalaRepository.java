@@ -14,4 +14,6 @@ public interface FilijalaRepository extends JpaRepository<Filijala, Long> {
 	Filijala findOneByGrad(String grad);
 	Filijala findOneByUlica(String ulica);
 	List<Filijala> findAllByUlica(String ulica);
+	List<Filijala> findAllByGrad(String grad);
+	
 }

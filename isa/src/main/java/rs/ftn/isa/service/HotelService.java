@@ -14,6 +14,7 @@ public interface HotelService {
 	Hotel findHotelById(Long id);
 	Hotel saveHotel(Hotel hotel);
 	void removeHotel(Long id);
+	List<Hotel> findAllByGrad(String grad);
 	
 	 
 }

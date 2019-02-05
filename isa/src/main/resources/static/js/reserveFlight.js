@@ -9,11 +9,19 @@ var invitedFriends = [];
 var imaPrijatelje = false;
 var passengers = [];
 
+var idRezervacije = -1;
+var lokacija;
+var datumSletanja;
+
 function onLoad()
 {
-	var adresa = window.location.search.substring(1);
+	var adresa = decodeURIComponent(window.location.search.substring(1));
+	
 	var idLet = adresa.split('=')[1];
 	var tip = adresa.split('=')[2];
+	lokacija = adresa.split('=')[4];
+	datumSletanja = adresa.split('=')[3];
+	alert(lokacija);
 	
 	status = "izborSedista";
 	
@@ -375,6 +383,8 @@ function zavrsiRezervaciju(mode)
 			success : function(data)
 			{
 				alert(data);
+				idRezervacije = data;
+				
 				if(invitedFriends.length > 0)
 				{
 					var pozivnice = [];
@@ -396,21 +406,58 @@ function zavrsiRezervaciju(mode)
 						data : JSON.stringify(pozivnice),
 						success : function(data1)
 						{
-							alert("uspesno");
+							alert("uspesno");	
+												
 						}
 				
 					});
 				}
+				if(mode == "oba")
+				{
+					window.location = "redirekcija.html?id="+"hotel"+'='+idRezervacije+"="+lokacija+"="+datumSletanja+"="+"1";
+				}
+				else if(mode == "rentAcar")
+				{
+					window.location = "redirekcija.html?id="+"rent"+'='+idRezervacije+"="+lokacija+"="+datumSletanja+"="+"0";
+				}
+				else if(mode == "hotels")
+				{
+					window.location = "redirekcija.html?id="+"hotel"+'='+idRezervacije+"="+lokacija+"="+datumSletanja+"="+"0";
+				}
+				else
+				{
+					window.location = "mainPage.html";
+				}
+				
 			}
 					
 		});
 		
 		
 	}
-	
-	
+}
+
+
+function both()
+{
+	var mode = "oba";
+	zavrsiRezervaciju(mode);
+}
+
+function rentAcar()
+{
+	var mode = "rentAcar";
+	zavrsiRezervaciju(mode);
 
 }
+
+function hotels()
+{
+	var mode = "hotels";
+	zavrsiRezervaciju(mode);
+	
+}
+
 
 function addPassenger()
 {

@@ -52,6 +52,30 @@ public class HotelController {
 		}
 		
 		//vraca hotele sortirane po nekom kriterijumu
+		
+		@RequestMapping(value="/hotel/{grad}", method = RequestMethod.GET)
+		public ResponseEntity<List<HotelDTO>> findAllByGrad(@PathVariable String grad){	
+			System.out.println(grad);
+			
+			List<Hotel> hoteli= servis.findAllByGrad(grad);
+			if(hoteli == null)
+				return new ResponseEntity<List<HotelDTO>>(HttpStatus.BAD_REQUEST);
+			
+			List<HotelDTO> retDto = new ArrayList<HotelDTO>();
+			for(Hotel hotel : hoteli)
+			{
+				HotelDTO dto = new HotelDTO();
+				dto.setId(hotel.getId());
+				dto.setAdresa(hotel.getAdresa());
+				dto.setGrad(hotel.getGrad());
+				dto.setNaziv(hotel.getNaziv());
+				retDto.add(dto);
+			}
+						
+			return new ResponseEntity<List<HotelDTO>>(retDto, HttpStatus.OK);
+		}
+		
+		
 		@RequestMapping(value="/sort/{uslov}", method = RequestMethod.GET)
 		public List<Hotel> getSortedHotels(@PathVariable String uslov){		
 			

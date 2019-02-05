@@ -59,4 +59,10 @@ public class FilijalaServiceImpl implements FilijalaService{
 		return repozitorijum.findAllByUlica(ulica);
 	}
 
+	@Override
+	public List<Filijala> findAllByGrad(String grad) {
+		// TODO Auto-generated method stub
+		return repozitorijum.findAllByGrad(grad);
+	}
+
 }

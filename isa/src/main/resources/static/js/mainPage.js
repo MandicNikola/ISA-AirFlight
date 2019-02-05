@@ -955,10 +955,10 @@ function findFlights()
 											maxCena = value.cena;
 										
 										if(maxDuration < value.duzina)
-											maxCena = value.duzina;
+											maxDuration = value.duzina;
 								
 										text += '<tr><td>'+value.vremePoletanja+'/'+value.vremeSletanja+'</td>';
-										text += '<td>'+value.brojPresedanja+'</td><td>'+value.duzina+'</td><td>'+value.nazivKompanije+'</td><td>'+value.klasa+'</td><td>'+value.cena+'</td><td><button type="button" id="'+value.idLeta+'='+value.klasa+'" onclick="book(this)" class="btn btn-primary">Book</button></td>';
+										text += '<td>'+value.brojPresedanja+'</td><td>'+value.duzina+'</td><td>'+value.nazivKompanije+'</td><td>'+value.klasa+'</td><td>'+value.cena+'</td><td><button type="button" id="'+value.idLeta+'='+value.klasa+'='+value.datumSletanja+'" onclick="book(this)" class="btn btn-primary">Book</button></td>';
 										text += '</tr>';
 									});
 							text += '</tbody></table>';
@@ -988,6 +988,10 @@ function findFlights()
 													text1 += '<option value="'+value.naziv+'">'+value.naziv+'</option>';
 												});	
 										$('#selectKompanijaFilter').html(text1);
+										  $(".filteri").change(function(){
+											  filter(letovi);
+										  });
+
 									}
 								}
 							});
@@ -1010,7 +1014,9 @@ function findFlights()
 function book(button)
 {
 	var id = button.id;
-	window.location = "ReserveFlight.html?id="+id;
+	var endDestination = $("#endDestination").val();
+	
+	window.location = "ReserveFlight.html?id="+id+'='+endDestination;
 
 }
 
@@ -1098,6 +1104,37 @@ $(document).on("mouseleave", ".hoverName",function(){
 		
 	
 });
+
+
+//proveriti zasto mi ne radi filter funckija
+function filter(data)
+{
+	var klasa = $('#selectKlasaFilter').val();
+	var price = $('#rangePrice').val();
+	var duration = $('#rangeDuration').val();
+	var kompanija = $('#selectKompanijaFilter').val();
+	$('#pretragaLetova').empty();
+	var text = '<table class="table table-striped">';
+	text += '<thead><tr><th>Vreme poletanja/sletanja</th><th>Broj presedanja: </th><th>Trajanje leta</th><th>Kompanija</th><th>Klasa</th><th>Cena</th></tr></thead><tbody>';
+	$.each(data,function(index,value)
+			{
+				
+				if(klasa == value.klasa && value.duzina <= duration && value.cena <= price && value.nazivKompanije == kompanija)
+				{
+					
+					text += '<tr><td>'+value.vremePoletanja+'/'+value.vremeSletanja+'</td>';
+					text += '<td>'+value.brojPresedanja+'</td><td>'+value.duzina+'</td><td>'+value.nazivKompanije+'</td><td>'+value.klasa+'</td><td>'+value.cena+'</td><td><button type="button" id="'+value.idLeta+'='+value.klasa+'" onclick="book(this)" class="btn btn-primary">Book</button></td>';
+					text += '</tr>';
+				}
+			});
+	text += '</tbody></table>';
+	$('#pretragaLetova').html(text);
+	
+
+}	   
+   
+
+
 $(document).ready(function(){
 	   $("li#odjava").click(function(){
 	    	console.log("usao u funkciju");
@@ -1118,35 +1155,9 @@ $(document).ready(function(){
 	   
 	   
 	   
-	  $(".filteri").change(function(){
-		  filter(filterData);
-	  });
-
+	
    
-	function filter(data)
-	{
-		var klasa = $('#selectKlasaFilter').val();
-		var price = $('#rangePrice').val();
-		var duration = $('#rangeDuration').val();
-		var kompanija = $('#selectKompanijaFilter').val();
-		$('#pretragaLetova').empty();
-		var text = '<table class="table table-striped">';
-		text += '<thead><tr><th>Vreme poletanja/sletanja</th><th>Broj presedanja: </th><th>Trajanje leta</th><th>Kompanija</th><th>Klasa</th><th>Cena</th></tr></thead><tbody>';
-		$.each(data,function(index,value)
-				{
-					if(klasa == value.klasa && value.duzina <= duration && value.cena <= price && value.nazivKompanije == kompanija)
-					{
-						text += '<tr><td>'+value.vremePoletanja+'/'+value.vremeSletanja+'</td>';
-						text += '<td>'+value.brojPresedanja+'</td><td>'+value.duzina+'</td><td>'+value.nazivKompanije+'</td><td>'+value.klasa+'</td><td>'+value.cena+'</td><td><button type="button" id="'+value.idLeta+'='+value.klasa+'" onclick="book(this)" class="btn btn-primary">Book</button></td>';
-						text += '</tr>';
-					}
-				});
-		text += '</tbody></table>';
-		$('#pretragaLetova').html(text);
-		
-
-    }	   
-	   
+	
 	   
 	   	
 });

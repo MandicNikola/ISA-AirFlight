@@ -50,5 +50,12 @@ public class HotelServiceImpl implements HotelService {
 	}
 
 
+	@Override
+	public List<Hotel> findAllByGrad(String grad) {
+		// TODO Auto-generated method stub
+		return hotelRepozitorijum.findAllByGrad(grad);
+	}
+
+
 	
 }
