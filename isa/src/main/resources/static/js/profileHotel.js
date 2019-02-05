@@ -37,28 +37,53 @@ $(document).ready(function($) {
 				var id= pom.split('=')[1];
 				console.log('Usao u dodajgrafik');
 
-				$.ajax({
-					method:'GET',
-					url: "/api/rezervacijehotel/dnevnigrafik/"+id,
-					success: function(lista){
-						if(lista == null){
-							console.log('Nema podataka');
-						}else if(lista.length==0){
-							console.log('Nema podataka');
-						}else{
-							console.log("ima podataka");
-							 	
-							iscrtajGrafik(lista,dnevnichart,"myChart","Number of reservations per day");
-							
-						}
-					}
-				});
-
+				
 			}
 	
 	}	
+
+	$( "#dnevniDugme" ).click(function() {
+		var podatak = window.location.search.substring(1);
+		console.log("Usao u showGraf");
+		var niz= podatak.split("=");
+		var id= niz[1];
+		
+		var godina = $("#godinaChart").val();
+		var mjesec = $("#mjesecChart").val();
+		if(isNaN(godina)){
+			console.log('nije broj');
+			alert('Enter correct year');
+		}else if(godina.length!=4){
+			console.log('duzina ne valja');
+			alert('Enter correct year');
+		}else if(godina < 2016){
+			alert('Year must be greater than 2016');
+		}else{
+			console.log('sve okej godina je '+godina);
+		
+			
+			$.ajax({
+				method:'GET',
+				url: "/api/rezervacijehotel/dnevnigrafik/"+id+"/brojMjeseci/"+mjesec+"/godina/"+godina,
+				success: function(lista){
+					if(lista == null){
+						console.log('Nema podataka');
+					}else if(lista.length==0){
+						console.log('Nema podataka');
+					}else{
+						console.log("ima podataka");
+						 	
+						iscrtajGrafik(lista,dnevnichart,"myChart","Number of reservations per day");
+						
+					}
+				}
+			});
+
+		}
+	});
+
 	
-	$( "#mjesecniDugme" ).click(function() {
+	$("#mjesecniDugme").click(function() {
 		var podatak = window.location.search.substring(1);
 		console.log("Usao u showGraf");
 		var niz= podatak.split("=");
@@ -229,7 +254,7 @@ function onLoad(){
 	$("#dodajPopust").hide();
 	$("#izvestaj").hide();
 	//?
-	$("#dnevniGrafik").show();
+	$("#dnevniGrafik").hide();
 	$("#fastDiv").hide();
 	
 	var adresa = window.location.search.substring(1);
@@ -262,7 +287,8 @@ function ispisiProfilHotela(hotel){
 	$("#adresa").append("<div class=\"mapouter\"><div class=\"gmap_canvas\"><iframe width=\"600\" height=\"500\" id=\"gmap_canvas\" src=\"https://maps.google.com/maps?q="+adresagrad+"&t=&z=13&ie=UTF8&iwloc=&output=embed\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\"></iframe><a href=\"https://www.embedgooglemap.net\">embedgooglemap.net</a></div><style>.mapouter{text-align:right;height:500px;width:600px;}.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:600px;}</style></div>")
 	
 	var adresa = window.location.search.substring(1);
-	var id = adresa.split('=')[1];
+	var url = adresa.split('=');
+	var id = url[1];
 	
 	$.ajax({
 		method:'GET',
@@ -625,12 +651,23 @@ function resetujGreske(){
 
 $(document).ready(function(){
 	
-	
+	var pom=window.location.search.substring(1);
+	if(pom.length >= 2){
+		
+		$("#reservation").show();
+		$("#fast").show();
+		
+	}else{
+		$("#reservation").hide();
+		$("#fast").hide();
+		
+	}
+	$("#rezervacije").hide();
+
 	$("#sobe").hide();
 	$("#cijene").hide();
 	$("#divPopust").hide();
 	$("#konfig").hide();
-	$("#rezervacije").hide();
 	$("#adminStrana").hide();
 	$("#promjenaLozinke").hide();
 	$("#dodajPopust").hide();
@@ -800,9 +837,12 @@ $(document).ready(function(){
 function izlistajFast(){
 	$("#fastPonuda").empty();
 	var adresa = window.location.search.substring(1);
+	var pom = adresa.split('=');
+	
 	var id = adresa.split('=')[1];
 	var kraj=$('#checkoutFast').val();
-	var pocetak = "2019-02-02";
+	var pocetak = adresa[3];
+	
 	console.log(kraj);
 	 $("#fastPonuda").empty();
 
@@ -811,7 +851,7 @@ function izlistajFast(){
 
 	$.ajax({
 		method:'GET',
-		url: "/api/rooms/getFast/"+id+"/checkout/"+kraj+"/checkin/2019-02-02",
+		url: "/api/rooms/getFast/"+id+"/checkout/"+kraj+"/checkin/"+kraj,
 		success: function(data){
 			if(data == null){
 				console.log('Nema soba');
@@ -833,7 +873,7 @@ function ispisiFast(lista){
 	 $("#fastPonuda").append("<table class=\"table table-hover\" id=\"tabelaSobeFast\" ><tr><th>Room type </th><th>Capacity</th><th>Floor</th><th>Average Rating</th><th>Price per night</th><th>Discount (%)</th><th>Balcony</th><th></th><th></th></tr>");
 		
 		$.each(pom, function(index, data) {
-			var prenos = data.id +"."+data.popust;
+			var prenos = data.id +"."+data.bodoviPopusta+"."+data.vrijednostPopusta;
 			console.log(prenos);
 			var dodatneusluge = '';
 			var sveusluge  = data.nazivUsluga;
@@ -884,8 +924,6 @@ function prikaziUkljucene(lista){
 
 	});
 
-	
-	
 	console.log(lista);
 	
 }
@@ -897,17 +935,20 @@ function rezervisiFast(sobapopust){
 	var id = adresa.split('=')[1];
 	console.log(info);
 	console.log(sobapopust);
+	var bodovi = sobapopust.split('\\*')[1];
+	var adresa = window.location.search.substring(1);
+	var pom = adresa.split('=');
+	
+	var idRez = adresa[2];
 
 	 $.ajax({
 			type : 'POST',
-			url : "/api/rooms/rezervisiFast/"+info+"/sobapopust/"+sobapopust+"/idhotel/"+id,
+			url : "/api/rooms/rezervisiFast/"+info+"/sobapopust/"+sobapopust+"/idhotel/"+id+"/idRez/"+idRez,
 			success : function(povratna) {
-						if(povratna.length==0){
-							console.log('neuspjesno');
-						}else if(povratna == 0){
+						if(povratna==null){
 							console.log('neuspjesno');
 						}else{
-							dodajUseruBrzu(povratna);		
+							dodajUseruBrzu(povratna,bodovi);		
 							console.log('uspjesno');
 						}
 			},
@@ -918,12 +959,12 @@ function rezervisiFast(sobapopust){
 
 	
 }
-function dodajUseruBrzu(data){
+function dodajUseruBrzu(data,bodovi){
 	 console.log('dosao je da doda rez korisniku');
 	 var rezervacija= JSON.stringify(data);
 	  $.ajax({
 			type : 'POST',
-			url : "/api/korisnici/addRezSobe",
+			url : "/api/korisnici/addRezSobe/"+bodovi,
 			contentType : "application/json",
 			data: rezervacija,
 			dataType : 'json',		

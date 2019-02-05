@@ -651,12 +651,16 @@ public class UserController {
     return rez;
 	}
 	
-	@RequestMapping(value="/addRezSobe", 
+	@RequestMapping(value="/addRezSobe/{bodovi}", 
 			method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody User dodajRezSobe(@RequestBody RezervacijaHotel rez ){		
+	public @ResponseBody User dodajRezSobe(@RequestBody RezervacijaHotel rez,@PathVariable String bodovi){		
 		System.out.println("Usao u sacuvaj korisnika pri rez sobe"+rez.getUserHotel().getId());
 		User korisnik = rez.getUserHotel();
+		int bod = Integer.parseInt(bodovi);
+		int trenutni = korisnik.getBodovi();
+		int novi = trenutni -bod;
+		korisnik.setBodovi(novi);
 		User kor=	servis.saveUser(korisnik);
 		System.out.println("vratio je sacuvanog");
 	return kor;
@@ -664,7 +668,7 @@ public class UserController {
 	
 	
 	
-	@RequestMapping(value="/changePass",
+	@RequestMapping(value="/changePass/{id}/",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 public @ResponseBody User changePassAdmin(@RequestParam String oldPass,@RequestParam String lozinka1,@RequestParam String lozinka2 ,@Context HttpServletRequest request){

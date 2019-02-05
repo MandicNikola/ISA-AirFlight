@@ -127,13 +127,34 @@ public class RezervacijaHotelController {
 	
 	}
 	
-	@RequestMapping(value="/dnevnigrafik/{id}",
+	@RequestMapping(value="/dnevnigrafik/{id}/brojMjeseci/{brojMj}/godina/{godina}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ArrayList<ChartDTO> getDailyChart(@PathVariable String id){		
+	public @ResponseBody ArrayList<ChartDTO> getDailyChart(@PathVariable String id,@PathVariable String brojMj,@PathVariable String godina){		
+		int god =Integer.parseInt(godina);
+		int mjesec = Integer.parseInt(brojMj);
+	
 			System.out.println("Usao u getDaily chart");
 			List<RezervacijaHotel> sveRez=servis.findAll();
 			ArrayList<ChartDTO> podaci = new ArrayList<ChartDTO>();
+			
+			Calendar calendar = Calendar.getInstance();
+			
+			Date newDate  = new Date(god-1900, mjesec-1, 1);
+			System.out.println("Datum prvi je "+ newDate.toString());
+			
+			calendar.setTime(newDate);
+			podaci.add(new ChartDTO(newDate, 0));
+			int brojDanaMj = calendar.getActualMaximum(Calendar.DATE);
+			while(newDate.getDate()+1 <= brojDanaMj) {
+				
+				calendar.add(Calendar.DATE, 1);
+				newDate= calendar.getTime();
+				podaci.add(new ChartDTO(newDate, 0));
+			
+			}
+			
+			
 			
 			for(RezervacijaHotel rezervacija:sveRez) {
 				Long idHotela = 0L;
@@ -158,41 +179,28 @@ public class RezervacijaHotelController {
 						
 						String datum1 = "";
 						datum1 = formater.format(date1);
+						String[] nizS = datum1.split("-");
 						
-						System.out.println("************");
-						System.out.println("Datumi su : 1--> "+datum1+" a 2->>> "+datum2);
-						ChartDTO noviPodatak = null;
-						for(ChartDTO chart: podaci) {
+						if((god==Integer.parseInt(nizS[0])) && (mjesec==Integer.parseInt(nizS[1]))) {
+						for(int i = 0;i<podaci.size();i++) {
 							
-							String datumPoredjenje =chart.getDatum().toString();
-						    System.out.println("Datum poredjenja je "+datumPoredjenje);
-							datumPoredjenje = formater.format(chart.getDatum());
-							System.out.println("Datum formatiran je "+datumPoredjenje);
-							datumPoredjenje = datumPoredjenje.split(" ")[0];
-							System.out.println("Datum poredjenja posle splitovanja je "+datumPoredjenje);
-											
+							String datumPoredjenje =podaci.get(i).getDatum().toString();
+					    	System.out.println("datum "+datumPoredjenje);
+							datumPoredjenje = formater.format(podaci.get(i).getDatum());
+							System.out.println("datum2 "+datumPoredjenje);
+							
 							if(datumPoredjenje.equals(datum1)) {
-									noviPodatak=chart;
-									System.out.println("Vec postoji taj datum");
+								
+									int broj = podaci.get(i).getBroj()+1;
+									podaci.get(i).setBroj(broj);
 									break;
-							}
+								}
 													
 						}
-						if(noviPodatak != null) {
-							podaci.remove(noviPodatak);
-							noviPodatak.setBroj(noviPodatak.getBroj()+1);
-							podaci.add(noviPodatak);
-							System.out.println("Postoji datum u listi");
-						}else {
-							podaci.add(new ChartDTO(date1, 1));
-							System.out.println("Novi datum je");
-						}
-
-						
 						c.setTime(date1); 
 						c.add(Calendar.DATE, 1);
 						date1 =c.getTime();
-
+						}
 						
 					}
 				}
@@ -200,9 +208,7 @@ public class RezervacijaHotelController {
 				Collections.sort(podaci);
 				System.out.println("Broj podataka u listi je "+podaci.size());
 				return podaci;
-
-			
-
+				
 	}
 	 public static Date parseDate(String date) {
 	     try {
@@ -246,7 +252,7 @@ public class RezervacijaHotelController {
 			podaci.add(new ChartDTO(newDate, 0));
 			
 			int brojDanaMj = calendar.getActualMaximum(Calendar.DATE);
-			while(newDate.getDate()+7 < brojDanaMj) {
+			while(newDate.getDate()+7 <= brojDanaMj) {
 						
 				calendar.add(Calendar.DATE, 7);
 				newDate= calendar.getTime();
