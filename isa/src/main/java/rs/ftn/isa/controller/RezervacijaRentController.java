@@ -70,27 +70,35 @@ public class RezervacijaRentController {
 	}
 
 	@SuppressWarnings("deprecation")
-	@RequestMapping(value="/dailychart/{idRent}",
+	@RequestMapping(value="/dailychart/{podatak}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ArrayList<ChartDTO> getDailyChart(@PathVariable String idRent){		
+	public @ResponseBody ArrayList<ChartDTO> getDailyChart(@PathVariable String podatak){		
 			System.out.println("Usao u getDaily chart");
 			ArrayList<ChartDTO> podaci = new ArrayList<ChartDTO>();
 			List<RezervacijaRentCar> sveRez=servis.findAll();
-	        
+	        String[] niz=podatak.split("=");
+	        String idRent=niz[0];
+	        int godina =Integer.parseInt(niz[1]);
+			int mesec = Integer.parseInt(niz[2]);
+			Calendar kalendar = Calendar.getInstance();
+			Date newDate  = new Date(godina-1900, mesec-1, 1);
+			
+			int brojDana = kalendar.getActualMaximum(Calendar.DATE);
+			while(newDate.getDate()+1 <= brojDana) {
+				kalendar.add(Calendar.DATE, 1);
+				newDate= kalendar.getTime();
+				podaci.add(new ChartDTO(newDate, 0));
+			}
+		
 			//treba da nadjemo sve rezervacije od rent-a-car sa idRez
 			for(RezervacijaRentCar rezervacija:sveRez) {
 					Vehicle vozilo = rezervacija.getVozilo();
 					String idServis = vozilo.getFilijala().getServis().getId().toString();
 					
 					if(idServis.equals(idRent)) {
-						//System.out.println("Pripada rent-a-car");
-						//dodajemo u listu
 						Date date1= rezervacija.getDatumPreuzimanja();
-					
 						Date date2= rezervacija.getDatumVracanja();
-						//System.out.println("Pocetak rez "+date1.toString());
-						//System.out.println("Kraj rez "+date2.toString());
 						Calendar c = Calendar.getInstance(); 
 						String datum2  =date2.toString();
 						datum2  = datum2.split(" ")[0];
@@ -101,42 +109,27 @@ public class RezervacijaRentController {
 
 							String datum1 = "";
 							datum1 = formater.format(date1);
-							
-						//	System.out.println("************");
-							//System.out.println("Datumi su : 1--> "+datum1+" a 2->>> "+datum2);
-							ChartDTO noviPodatak = null;
-							for(ChartDTO chart: podaci) {
+							String[] nizS = datum1.split("-");
+							int godRez=Integer.parseInt(nizS[1]);
 
-								String datumPoredjenje =chart.getDatum().toString();
-								//System.out.println("Datum poredjenja je "+datumPoredjenje);
-						    	datumPoredjenje = formater.format(chart.getDatum());
-								//System.out.println("Datum formatiran je "+datumPoredjenje);
-
-						    	datumPoredjenje = datumPoredjenje.split(" ")[0];
-
-								//System.out.println("Datum poredjenja posle splitovanja je "+datumPoredjenje);
-										
-										if(datumPoredjenje.equals(datum1)) {
-											noviPodatak=chart;
-									//		System.out.println("Vec postoji taj datum");
-											break;
-										}
-							
-							}
-							if(noviPodatak!=null) {
-								int broj = noviPodatak.getBroj()+1;
-								podaci.remove(noviPodatak);
-								noviPodatak.setBroj(broj);
-								podaci.add(noviPodatak);
-								for(int k=0;k<podaci.size();k++) {
-										System.out.println(podaci.get(k));
+							if((godina==Integer.parseInt(nizS[0])) && (mesec==godRez)) {
+								int index=-1;
+								for(int i=0;i < podaci.size(); i++) {
+									
+									String datumPoredjenje =podaci.get(i).getDatum().toString();
+							    	System.out.println("datum "+datumPoredjenje);
+									datumPoredjenje = formater.format(podaci.get(i).getDatum());
+									System.out.println("datum2 "+datumPoredjenje);
+							    
+									if(datumPoredjenje.equals(datum1)) {
+										index=i;
+							    		break;
+									}
 								}
-								//System.out.println("Postoji datum u listi");
-							}else {
-								podaci.add(new ChartDTO(date1, 1));
-								//System.out.println("Novi datum je");
-							}
-
+								int broj = podaci.get(index).getBroj()+1;
+								podaci.get(index).setBroj(broj);
+							}	
+							
 							c.setTime(date1); 
 							c.add(Calendar.DATE, 1);
 							date1 =c.getTime();
@@ -177,7 +170,7 @@ public class RezervacijaRentController {
 			newDate= kalendar.getTime();
 			podaci.add(new ChartDTO(newDate, 0));
 			int brojDana = kalendar.getActualMaximum(Calendar.DATE);
-			while(newDate.getDate()+7 < brojDana) {
+			while(newDate.getDate()+7 <= brojDana) {
 						
 				kalendar.add(Calendar.DATE, 7);
 				newDate= kalendar.getTime();

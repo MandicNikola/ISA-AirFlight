@@ -22,42 +22,18 @@ $(document).ready(function($) {
 			console.log('ima korisnika');
 			var korisnik=JSON.parse(user);
 			console.log(korisnik.tip);
-			if(korisnik.tip == 'ADMIN_SISTEM'){
-				  $("#res").hide();
-				  $("#fastRes").hide();
-				console.log('Usao u dodajgrafik');
-
-				$.ajax({
-					method:'GET',
-					url: "/api/rezervacijerent/dailychart/"+id,
-					success: function(lista){
-						if(lista == null){
-							console.log('Nema podataka');
-						}else if(lista.length==0){
-							console.log('Nema podataka');
-						}else{
-							var kont="dayChart";
-							var naslov="Number of reservations per day";
-							console.log("ima podataka");
-							iscrtajGrafik(lista,kont,naslov, chartDay);
-							
-						}
-					}
-				});
-
-			}else{
+			if(korisnik.tip != 'ADMIN_SISTEM'){
 				 $("#business").hide();
 				 $("#admini").hide();
 				 $("#sistemPopust").hide();
-				$(".side").hide();
+				 $(".side").hide();
 			}
 	
 	}else{
-
 		 $("#business").hide();
 		 $("#admini").hide();
 		 $("#sistemPopust").hide();
-		$(".side").hide();
+		 $(".side").hide();
 	}	
 	
 	
@@ -109,7 +85,48 @@ $(document).ready(function($) {
 			});		
 	
 	}
+	$("#showGraf1").click(function() {
+		var podatak = window.location.search.substring(1);
+		console.log("Usao u showGraf");
+		
+		var godina = $("#yearCh2").val();
+		var mesec = $("#monthCh2").val();
+		if(isNaN(godina)){
+			console.log('nije broj');
+			alert('Enter correct year');
+		}else if(godina.length!=4){
+			console.log('duzina ne valja');
+			alert('Enter correct year');
+		}else if(godina < 2018){
+			alert('Year must be greater than 2018');
+		}else{
+			console.log('sve okej godina je '+godina);
+		console.log(mesec);
+		
+		var podatak = id+"="+godina+"="+mesec;
 
+		$.ajax({
+			method:'GET',
+			url: "/api/rezervacijerent/dailychart/"+podatak,
+			success: function(lista){
+				if(lista == null){
+					console.log('Nema podataka');
+				}else if(lista.length==0){
+					console.log('Nema podataka');
+				}else{
+					var kont="dayChart";
+					var naslov="Number of reservations per day";
+					console.log("ima podataka");
+					iscrtajGrafik(lista,kont,naslov, chartDay);
+					
+				}
+			}
+		});
+		
+		}
+	});
+
+	
 	$("#showGraf").click(function() {
 		var podatak = window.location.search.substring(1);
 		console.log("Usao u showGraf");
