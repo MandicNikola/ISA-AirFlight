@@ -37,28 +37,53 @@ $(document).ready(function($) {
 				var id= pom.split('=')[1];
 				console.log('Usao u dodajgrafik');
 
-				$.ajax({
-					method:'GET',
-					url: "/api/rezervacijehotel/dnevnigrafik/"+id,
-					success: function(lista){
-						if(lista == null){
-							console.log('Nema podataka');
-						}else if(lista.length==0){
-							console.log('Nema podataka');
-						}else{
-							console.log("ima podataka");
-							 	
-							iscrtajGrafik(lista,dnevnichart,"myChart","Number of reservations per day");
-							
-						}
-					}
-				});
-
+				
 			}
 	
 	}	
+
+	$( "#dnevniDugme" ).click(function() {
+		var podatak = window.location.search.substring(1);
+		console.log("Usao u showGraf");
+		var niz= podatak.split("=");
+		var id= niz[1];
+		
+		var godina = $("#godinaChart").val();
+		var mjesec = $("#mjesecChart").val();
+		if(isNaN(godina)){
+			console.log('nije broj');
+			alert('Enter correct year');
+		}else if(godina.length!=4){
+			console.log('duzina ne valja');
+			alert('Enter correct year');
+		}else if(godina < 2016){
+			alert('Year must be greater than 2016');
+		}else{
+			console.log('sve okej godina je '+godina);
+		
+			
+			$.ajax({
+				method:'GET',
+				url: "/api/rezervacijehotel/dnevnigrafik/"+id+"/brojMjeseci/"+mjesec+"/godina/"+godina,
+				success: function(lista){
+					if(lista == null){
+						console.log('Nema podataka');
+					}else if(lista.length==0){
+						console.log('Nema podataka');
+					}else{
+						console.log("ima podataka");
+						 	
+						iscrtajGrafik(lista,dnevnichart,"myChart","Number of reservations per day");
+						
+					}
+				}
+			});
+
+		}
+	});
+
 	
-	$( "#mjesecniDugme" ).click(function() {
+	$("#mjesecniDugme").click(function() {
 		var podatak = window.location.search.substring(1);
 		console.log("Usao u showGraf");
 		var niz= podatak.split("=");
@@ -939,7 +964,7 @@ function dodajUseruBrzu(data,bodovi){
 	 var rezervacija= JSON.stringify(data);
 	  $.ajax({
 			type : 'POST',
-			url : "/api/korisnici/addRezSobe",
+			url : "/api/korisnici/addRezSobe/"+bodovi,
 			contentType : "application/json",
 			data: rezervacija,
 			dataType : 'json',		
