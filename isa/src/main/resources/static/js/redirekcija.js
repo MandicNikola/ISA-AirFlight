@@ -66,8 +66,8 @@ function load()
 				
 				text += "<table class=\"table table-hover\" id=\"tabVozilo\" ><thead><tr><th>Naziv</th><th>Adresa</th><th>Grad</th></tr></thead>";
 				
-				$.each(data, function(index, hotel) {
-					text += "<tr class=\"thead-light \"><td class=\"hoverName\">"+hotel.naziv+" Filijala</td><td> "+hotel.adresa+"</td><td > "+hotel.grad+'</td><td><button type="button" id="'+hotel.idServisa+'" onclick="go(this)" class="btn btn-info">Go</button></td></tr>';
+				$.each(data, function(index, rent) {
+					text += "<tr class=\"thead-light \"><td class=\"hoverName\">"+rent.naziv+" Filijala</td><td> "+rent.adresa+"</td><td > "+rent.grad+'</td><td><button type="button" id="'+rent.idServisa+'" onclick="goRent(this)" class="btn btn-info">Go</button></td></tr>';
 					
 				});
 			    text += "</table>";
