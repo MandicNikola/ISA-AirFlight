@@ -36,8 +36,6 @@ $(document).ready(function($) {
 				var pom=window.location.search.substring(1);
 				var id= pom.split('=')[1];
 				console.log('Usao u dodajgrafik');
-
-				
 			}
 	
 	}	
