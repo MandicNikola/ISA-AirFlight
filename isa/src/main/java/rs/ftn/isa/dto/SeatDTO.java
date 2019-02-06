@@ -1,6 +1,12 @@
 package rs.ftn.isa.dto;
 
-public class SeatDTO {
+import java.util.Comparator;
+
+import rs.ftn.isa.model.Seat;
+
+
+
+public class SeatDTO implements Comparable<SeatDTO>{
 
 	private Long idSedista;
 	private Long idKarte;
@@ -18,6 +24,14 @@ public class SeatDTO {
 	}
 
 
+	public SeatDTO(Seat s)
+	{
+		idSedista = s.getId();
+		brojReda = s.getRed();
+		brojKolone = s.getKolona();
+		
+	}
+	
 	public Long getIdSedista() {
 		return idSedista;
 	}
@@ -75,6 +89,13 @@ public class SeatDTO {
 
 	public void setKonfiguracija(String konfiguracija) {
 		this.konfiguracija = konfiguracija;
+	}
+
+
+	@Override
+	public int compareTo(SeatDTO o) {
+		// TODO Auto-generated method stub
+		return Comparator.comparing(SeatDTO::getBrojReda).thenComparing(SeatDTO::getBrojKolone).compare(this, o);
 	}
 	
 	

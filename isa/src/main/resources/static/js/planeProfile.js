@@ -35,10 +35,52 @@ function info()
 	onLoad();
 }
 
-function configuration()
+function konfiguracija()
 {
 	
-	
+	$.ajax
+	({
+		type : 'GET',
+		url : 'api/avioni/seats/'+idAviona+'/ekonomska',
+		dataType : 'json',
+		success : function(data)
+		{
+			alert(data);
+			var configuration = data[0].konfiguracija;
+			var klasa = "economic";
+			drawSeats(data,configuration,klasa);
+			
+			$.ajax
+			({
+				type : 'GET',
+				url : 'api/avioni/seats/'+idAviona+'/biznis',
+				dataType : 'json',
+				success : function(data1)
+				{
+					var klasa = "business";
+					var configuration = data1[0].konfiguracija;
+					drawSeats(data1,configuration,klasa);
+					
+					$.ajax
+					({
+						type : 'GET',
+						url : 'api/avioni/seats/'+idAviona+'/first',
+						dataType : 'json',
+						success : function(data2)
+						{
+							var klasa = "first";
+							var configuration = data2[0].konfiguracija;
+							drawSeats(data2,configuration,klasa);
+							$('#planeInfo').hide();
+							$('#configurationPan').show();
+							$('#services').hide();
+						}
+					});
+				}
+			});
+			
+		}
+	});
 	
 }
 
@@ -211,7 +253,7 @@ $(document).ready(function(){
 
 
 
-function drawSeats(seats,configuration)
+function drawSeats(seats,configuration,klasa)
 {
 	
 	var brojSedistaPoRedu = configuration.split('-');
@@ -224,14 +266,14 @@ function drawSeats(seats,configuration)
 	
 	for(i = 0; i < brojSedistaPoRedu.length; i++)
 	{
-		text += '<div class="col-md-'+Math.floor(12/brojSedistaPoRedu.length)+'"><table id="t'+i+'"></table></div>';
+		text += '<div class="col-md-'+Math.floor(12/brojSedistaPoRedu.length)+'"><table id="t'+i+klasa+'"></table></div>';
 		ukupnoSedistaPoRedu += parseInt(brojSedistaPoRedu[i]);
 		tableID.push("t"+i);
 	}
 	var brojRedova = Math.floor(seats.length/ukupnoSedistaPoRedu)+1;
 	var ostatak = seats.length % ukupnoSedistaPoRedu;
 	
-	$('#seats').html(text);
+	$('#'+klasa+'class').html(text);
 	
 	
 	var counter = 0;
@@ -275,11 +317,11 @@ function drawSeats(seats,configuration)
 	}
 	$.each(seats,function(index,value)
 			{
-		
 				$('#'+value.brojReda+'-'+value.brojKolone).css('background-color','rgb(255, 255, 255)');
 				
 				if(value.rezervisano == true)
 				{
+					
 					$('#'+value.brojReda+'-'+value.brojKolone).css('background-color', 'grey');
 				}
 				else

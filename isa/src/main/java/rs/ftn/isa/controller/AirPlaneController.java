@@ -1,6 +1,8 @@
 package rs.ftn.isa.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -19,15 +21,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.AirplaneDTO;
 import rs.ftn.isa.dto.PlaneDTO;
+import rs.ftn.isa.dto.SeatDTO;
 import rs.ftn.isa.dto.UslugaAvionDTO;
 import rs.ftn.isa.model.AirPlane;
 import rs.ftn.isa.model.AirplaneCompany;
 import rs.ftn.isa.model.Seat;
 import rs.ftn.isa.model.Segment;
+import rs.ftn.isa.model.Ticket;
 import rs.ftn.isa.model.UslugaAvion;
 import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.service.AirPlaneServiceImpl;
 import rs.ftn.isa.service.AirplaneServiceCompanyImpl;
+import rs.ftn.isa.service.UslugaAvionService;
 
 @RestController
 @RequestMapping("api/avioni")
@@ -38,6 +43,9 @@ public class AirPlaneController {
 	
 	@Autowired
 	AirplaneServiceCompanyImpl companyService;
+	
+	@Autowired
+	UslugaAvionService servisUsluga;
 	
 	@RequestMapping(value="/{id}",
 			method = RequestMethod.GET,
@@ -103,8 +111,20 @@ public class AirPlaneController {
 		String konfiguracijaNova = airplane.getKonfiguracija();
 		String konfiguracijaStara = avion.getKonfiguracija();
 		
+		ArrayList<Seat> sedista = new ArrayList<Seat>();
 		if(!konfiguracijaNova.equals(konfiguracijaStara))
 		{
+			for(Segment segment : avion.getSegmenti())
+			{
+				for(Seat seat : segment.getSeats())
+				{
+					sedista.add(seat);		
+				}
+				Collections.sort(sedista);
+				setNewConfiguration(konfiguracijaNova, sedista);
+				sedista = new ArrayList<Seat>();
+				System.out.println("odradio");
+			}
 			
 		}
 		
@@ -116,10 +136,35 @@ public class AirPlaneController {
 	/*
 	 * metoda sa kojom cu podesiti sedista u novoj konfiguraciji
 	 */
-	private void setNewConfiguration()
+	private void setNewConfiguration(String konfiguracija, ArrayList<Seat> seats)
 	{
+		String[] configuration = konfiguracija.split("-");
 		
+		int redovi = 0;
+		for(int i = 0; i < configuration.length; i++)
+		{
+			int broj = Integer.parseInt(configuration[i]);
+			redovi += broj;
+		}
+		int red = 0;
+		for(int i = 0; i < seats.size(); i++)
+		{
+			int brojac = i % redovi;
+			Seat sediste = seats.get(i);
+			sediste.setRed(red);
+			sediste.setKolona(brojac);
+			
+			if((brojac+1) == redovi)
+				red++;
+			
+		}	
 	}
+	
+	
+	
+	
+	
+	
 	
 	/*
 	 * 	metoda za dodavanje nove usluge u avion
@@ -143,7 +188,7 @@ public class AirPlaneController {
 		Set<Segment> segmenti = avion.getSegmenti();
 		for(Segment segment : segmenti)
 		{
-			if(segment.getClass().equals(uslugaNew.getKlasa()))
+			if(segment.getNaziv().equals(uslugaNew.getKlasa()))
 			{
 				uslugaNew.setSegment(segment);
 				segment.getUsluge().add(uslugaNew);
@@ -245,18 +290,81 @@ public class AirPlaneController {
 		return new ResponseEntity<List<UslugaAvionDTO>>(uslugaAvionDTOs, HttpStatus.OK);
 	}
 	
+	@RequestMapping(value="/seats/{id}/{klasa}",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<SeatDTO>> getSedistaKlasa(@PathVariable("id") Long id, @PathVariable("klasa") String klasa){	
+		
+		AirPlane avion = servis.findAirPlaneById(id);
+		if(avion == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		Date currentDate = new Date();
+		ArrayList<SeatDTO> retDTOs = new ArrayList<SeatDTO>();
+		for(Segment segment : avion.getSegmenti())
+		{
+			if(segment.getNaziv().equals(klasa))
+			{
+				for(Seat seat : segment.getSeats())
+				{
+					SeatDTO dto = new SeatDTO(seat);
+					dto.setKonfiguracija(avion.getKonfiguracija());
+					retDTOs.add(dto);
+					if(seat.getKarte().size() == 0)
+					{
+						dto.setRezervisano(false);
+					}
+					else
+					{
+						for(Ticket ticket : seat.getKarte())
+						{
+							if(ticket.isRezervisano())
+							{
+								if(ticket.getLet().getDatumPoletanja().after(currentDate))
+								{
+									dto.setRezervisano(true);
+									break;
+								}
+							}
+						}
+						dto.setRezervisano(false);
+					}
+				}
+				break;
+			}
+		}
+		//sortiram sedista radi lakseg iscrtavanja
+		if(retDTOs.size() > 0)
+			Collections.sort(retDTOs);
+		
+		return new ResponseEntity<List<SeatDTO>>(retDTOs, HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value="/obrisiUslugu/{id}",
+			method = RequestMethod.POST,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> obrisiUslugu(@PathVariable Long id){	
+		
+		UslugaAvion usluga = servisUsluga.findOneById(id);
+		
+		if(usluga == null)
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		
+		Segment segment = usluga.getSegment();
+		AirPlane avion = segment.getPlane();
+		
+		segment.getUsluge().remove(usluga);
+		usluga.setSegment(null);
+		servis.saveAirPlane(avion);
+		
+		return new ResponseEntity<String>("uspesno obrisano!", HttpStatus.OK);
+	}
 	
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	
 }

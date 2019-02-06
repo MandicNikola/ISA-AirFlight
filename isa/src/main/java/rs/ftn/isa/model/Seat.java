@@ -1,5 +1,6 @@
 package rs.ftn.isa.model;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -16,8 +17,10 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import rs.ftn.isa.dto.SeatDTO;
+
 @Entity
-public class Seat {
+public class Seat implements Comparable<Seat>{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -123,6 +126,13 @@ public class Seat {
 
 	public void setKarte(Set<Ticket> karte) {
 		this.karte = karte;
+	}
+
+
+	@Override
+	public int compareTo(Seat o) {
+		// TODO Auto-generated method stub
+		return Comparator.comparing(Seat::getRed).thenComparing(Seat::getKolona).compare(this, o);
 	}
 	
 	
