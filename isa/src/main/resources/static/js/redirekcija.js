@@ -7,6 +7,7 @@ var idRez;
 var datumSletanja;
 var status;
 var lokacija;
+var brojKarata;
 
 function load()
 {
@@ -20,6 +21,7 @@ function load()
 	 lokacija = decoded.split('=')[3];
 	 datumSletanja = decoded.split('=')[4];
 	 status = decoded.split('=')[5];
+	 brojKarata = decoded.split('=')[6];
 	
 	
 	if(tip == "hotel")
@@ -86,7 +88,7 @@ function go(button)
 {
 	var id = button.id;
 	
-	window.location = "profileHotel.html?id="+id+'='+idRez+'='+datumSletanja+'='+lokacija+'='+status;
+	window.location = "profileHotel.html?id="+id+'='+idRez+'='+datumSletanja+'='+lokacija+'='+status+'='+brojKarata;
 		
 }
 
@@ -94,7 +96,7 @@ function goRent(button)
 {
 	var id = button.id;
 	
-	window.location = "profileCar.html?id="+id+'='+idRez+'='+datumSletanja+'='+lokacija+'='+status;
+	window.location = "profileCar.html?id="+id+'='+idRez+'='+datumSletanja+'='+lokacija+'='+status+'='+brojKarata;
 
 		
 

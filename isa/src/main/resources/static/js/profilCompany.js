@@ -108,7 +108,7 @@ function showPlanes()
 
 				$.each(data,function(index,value)
 				{
-					text += "<tr><td class=\"hoverName\" >"+value.naziv+"</td><td>"+value.konfiguracija+'</td><td><button  class=\"btn btn-info\" onclick=\"changeConfiguration('"+value.id+"')\">Change configuration</button></td><td><button  class=\"btn btn-info\" onclick=\"deletePlane('"+value.id+"')\">Delete</button></td></tr>";
+					text += "<tr><td class=\"hoverName\" >"+value.naziv+"</td><td>"+value.konfiguracija+'<td></td><td><button type="button" id="'+value.id+'" onclick="changeConfiguration(this)" class="btn btn-info">Change configuration</button></td><td><button type="button" id="'+value.id+'" onclick="delete(this)" class="btn btn-warning">Delete</button></td></tr>'
 
 				});
 				text += "</table>"
@@ -123,8 +123,9 @@ function showPlanes()
 
 }
 
-function changeConfiguration(id)
+function changeConfiguration(btn)
 {
+	var id = btn.id;
 	window.location = "PlaneProfile.html?id="+id;
 
 }

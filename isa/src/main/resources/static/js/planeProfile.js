@@ -47,13 +47,15 @@ function services()
 	$.ajax(
 			{
 				type : 'GET',
-				url: 'api/avioni/usluge'+idAviona,
+				url: 'api/avioni/usluge/'+idAviona,
 				dataType : 'json',
 				success : function(data)
 				{
 					if(data == null || data.length == 0)
 					{
-						
+						$('#planeInfo').hide();
+						$('#configurationPan').hide();
+						$('#services').show();
 					}
 					else
 					{
@@ -70,6 +72,12 @@ function services()
 					}
 				}
 			});
+	
+}
+
+function removeUsluga(id)
+{
+	
 	
 }
 
@@ -94,7 +102,6 @@ $(document).on('submit','.plane',function(e){
 		}
 		
 		sendPlane= JSON.stringify(updatePlane);			
-		console.log('user je ' + senduser);
 		 
 		$.ajax({
 			type : 'POST',
@@ -113,7 +120,7 @@ $(document).on('submit','.plane',function(e){
 
 
 
-$(document).on('submit','."service"',function(e){
+$(document).on('submit','.service',function(e){
 	e.preventDefault();	
 	
 	var naziv = $('#nazivUsluga').val();
@@ -140,7 +147,7 @@ $(document).on('submit','."service"',function(e){
 		}
 		
 		sendService= JSON.stringify(service);			
-		console.log('user je ' + senduser);
+		
 		 
 		$.ajax({
 			type : 'POST',

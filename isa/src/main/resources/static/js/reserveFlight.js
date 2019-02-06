@@ -9,6 +9,8 @@ var invitedFriends = [];
 var imaPrijatelje = false;
 var passengers = [];
 
+var brojKarata;
+
 var idRezervacije = -1;
 var lokacija;
 var datumSletanja;
@@ -371,6 +373,7 @@ function zavrsiRezervaciju(mode)
 					putnici.push(putnik);
 				});
 		
+		brojKarata = selectedSeats.length;
 		var idTicket = selectedSeats.pop().split("-")[2];
 		
 		
@@ -414,15 +417,15 @@ function zavrsiRezervaciju(mode)
 				}
 				if(mode == "oba")
 				{
-					window.location = "redirekcija.html?id="+"hotel"+'='+idRezervacije+"="+lokacija+"="+datumSletanja+"="+"1";
+					window.location = "redirekcija.html?id="+"hotel"+'='+idRezervacije+"="+lokacija+"="+datumSletanja+"="+"1"+"="+brojKarata;
 				}
 				else if(mode == "rentAcar")
 				{
-					window.location = "redirekcija.html?id="+"rent"+'='+idRezervacije+"="+lokacija+"="+datumSletanja+"="+"0";
+					window.location = "redirekcija.html?id="+"rent"+'='+idRezervacije+"="+lokacija+"="+datumSletanja+"="+"0"+"="+brojKarata;
 				}
 				else if(mode == "hotels")
 				{
-					window.location = "redirekcija.html?id="+"hotel"+'='+idRezervacije+"="+lokacija+"="+datumSletanja+"="+"0";
+					window.location = "redirekcija.html?id="+"hotel"+'='+idRezervacije+"="+lokacija+"="+datumSletanja+"="+"0"+"="+brojKarata;
 				}
 				else
 				{

@@ -42,7 +42,7 @@ public class FilijalaController {
 	@RequestMapping(value="/poGradu/{grad}", method = RequestMethod.GET)
 	public ResponseEntity<List<FilijalaDTO>> filijaleUGradu(@PathVariable String grad){		
 		
-		
+		System.out.println(grad);
 		List<Filijala> filijale = servis.findAllByGrad(grad);
 		if(filijale == null)
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -50,6 +50,7 @@ public class FilijalaController {
 		ArrayList<FilijalaDTO> retDto = new ArrayList<FilijalaDTO>();
 		for(Filijala filijala : filijale)
 		{
+			System.out.println("filijala");
 			FilijalaDTO dto = new FilijalaDTO();
 			dto.setAdresa(filijala.getUlica());
 			dto.setGrad(filijala.getGrad());
