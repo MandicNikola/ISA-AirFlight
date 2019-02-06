@@ -1,5 +1,9 @@
 package rs.ftn.isa.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import javax.ws.rs.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.AirplaneDTO;
 import rs.ftn.isa.dto.PlaneDTO;
+import rs.ftn.isa.dto.UslugaAvionDTO;
 import rs.ftn.isa.model.AirPlane;
 import rs.ftn.isa.model.AirplaneCompany;
 import rs.ftn.isa.model.Seat;
 import rs.ftn.isa.model.Segment;
+import rs.ftn.isa.model.UslugaAvion;
 import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.service.AirPlaneServiceImpl;
 import rs.ftn.isa.service.AirplaneServiceCompanyImpl;
@@ -82,6 +88,74 @@ public class AirPlaneController {
 		companyService.saveAirplaneCompany(company);
 		return new ResponseEntity<Long>(id, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value="updatePlane/{id}",
+			method = RequestMethod.POST,
+			consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> updatePlane(@PathVariable Long id, @RequestBody PlaneDTO airplane){	
+		
+		System.out.println(" Nasao avion");
+		AirPlane avion = servis.findAirPlaneById(id);
+		if(avion == null)
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		
+		avion.setNaziv(airplane.getNaziv());
+		String konfiguracijaNova = airplane.getKonfiguracija();
+		String konfiguracijaStara = avion.getKonfiguracija();
+		
+		if(!konfiguracijaNova.equals(konfiguracijaStara))
+		{
+			
+		}
+		
+		servis.saveAirPlane(avion);
+		
+		return new ResponseEntity<String>("uspesan update", HttpStatus.OK);
+	}
+	
+	/*
+	 * metoda sa kojom cu podesiti sedista u novoj konfiguraciji
+	 */
+	private void setNewConfiguration()
+	{
+		
+	}
+	
+	/*
+	 * 	metoda za dodavanje nove usluge u avion
+	 */
+	@RequestMapping(value="addService/{id}",
+			method = RequestMethod.POST,
+			consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> addService(@PathVariable Long id, @RequestBody UslugaAvionDTO usluga){	
+		
+		System.out.println(" Nasao avion");
+		AirPlane avion = servis.findAirPlaneById(id);
+		if(avion == null)
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		
+		UslugaAvion uslugaNew = new UslugaAvion();
+		uslugaNew.setNaziv(usluga.getNaziv());
+		uslugaNew.setCena(usluga.getCena());
+		uslugaNew.setKlasa(usluga.getKlasa());
+		uslugaNew.setOpis(usluga.getOpis());
+		
+		Set<Segment> segmenti = avion.getSegmenti();
+		for(Segment segment : segmenti)
+		{
+			if(segment.getClass().equals(uslugaNew.getKlasa()))
+			{
+				uslugaNew.setSegment(segment);
+				segment.getUsluge().add(uslugaNew);
+				break;
+			}
+		}
+		
+		servis.saveAirPlane(avion);
+		
+		return new ResponseEntity<String>("uspesan update", HttpStatus.OK);
+	}
+	
 	
 	
 	private void setConfigurationAndSeats(AirPlane plane)
@@ -147,6 +221,35 @@ public class AirPlaneController {
 		
 		
 	}
+	
+	@RequestMapping(value="/usluge/{id}",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<UslugaAvionDTO>> getUsluge(@PathVariable Long id){	
+		
+		AirPlane avion = servis.findAirPlaneById(id);
+		if(avion == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		
+		ArrayList<UslugaAvionDTO> uslugaAvionDTOs = new ArrayList<UslugaAvionDTO>();
+		for(Segment segment : avion.getSegmenti())
+		{
+			for(UslugaAvion usluga : segment.getUsluge())
+			{
+				UslugaAvionDTO dto = new UslugaAvionDTO(usluga);
+				uslugaAvionDTOs.add(dto);
+			}
+		}
+		
+		return new ResponseEntity<List<UslugaAvionDTO>>(uslugaAvionDTOs, HttpStatus.OK);
+	}
+	
+	
+	
+	
+	
+	
 	
 	
 	

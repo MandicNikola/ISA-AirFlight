@@ -104,11 +104,11 @@ function showPlanes()
 				$("#planesStrana").empty();
 				var text = "";
 				
-				text = "<table class=\"table table-striped\" id=\"tabelaAvion\" ><tr><th> Name </th><th colspan='2'> Operations </th></tr>";
+				text = "<table class=\"table table-striped\" id=\"tabelaAvion\" ><tr><th> Name </th><th>Configuration</th><th> Operations </th></tr>";
 
 				$.each(data,function(index,value)
 				{
-					text += "<tr><td class=\"hoverName\" >"+value.naziv+"</td><td><button  class=\"btn btn-info\" onclick=\"changeConfiguration('"+value.id+"')\">Change configuration</button></td><td><button  class=\"btn btn-info\" onclick=\"deletePlane('"+value.id+"')\">Delete</button></td></tr>";
+					text += "<tr><td class=\"hoverName\" >"+value.naziv+"</td><td>"+value.konfiguracija+'</td><td><button  class=\"btn btn-info\" onclick=\"changeConfiguration('"+value.id+"')\">Change configuration</button></td><td><button  class=\"btn btn-info\" onclick=\"deletePlane('"+value.id+"')\">Delete</button></td></tr>";
 
 				});
 				text += "</table>"
@@ -123,6 +123,15 @@ function showPlanes()
 
 }
 
+function changeConfiguration(id)
+{
+	window.location = "PlaneProfile.html?id="+id;
+
+}
+
+
+
+//ovde za letove odraditi ispravku koja mi treba jos
 function showFlights()
 {
 	var adresa = window.location.search.substring(1);

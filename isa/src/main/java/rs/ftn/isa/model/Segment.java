@@ -43,6 +43,11 @@ public class Segment {
 	private AirPlane plane;
 	
 	
+	@OneToMany(mappedBy = "segment",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	private  Set<UslugaAvion> usluge = new HashSet<UslugaAvion>();
+	
+	
 	public Segment()
 	{
 		
@@ -68,15 +73,18 @@ public class Segment {
 	}
 
 
-
-
-
 	public void setId(Long id) {
 		this.id = id;
 	}
 
+	public Set<UslugaAvion> getUsluge() {
+		return usluge;
+	}
 
 
+	public void setUsluge(Set<UslugaAvion> usluge) {
+		this.usluge = usluge;
+	}
 
 
 	public String getNaziv() {
