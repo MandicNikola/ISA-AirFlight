@@ -856,7 +856,9 @@ function izlistajFast(){
 		url: "/api/rooms/getFast/"+id+"/checkout/"+kraj+"/checkin/"+pocetak,
 		success: function(data){
 			if(data == null){
-				console.log('Nema soba');
+				nemaFast();
+			}else if(data.length == 0){
+				nemaFast();
 			}else{
 				ispisiFast(data);
 				
@@ -865,10 +867,17 @@ function izlistajFast(){
 	});
 	
 }
+function nemaFast(){
+	 $("#fastPonuda").empty();
+	 $("#fastPonuda").show();
+	 $("#fastPonuda").append("<div id = \"nemaFast\"><p>There are no rooms with a defined discount for user number of points</p></div>");
+}
 function ispisiFast(lista){
 	console.log('stigao u ispisiFast');
-	 $("#fastPonuda").show();
-	
+	 $("#fastPonuda").empty();
+		
+	$("#fastPonuda").show();
+		
 	
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	// RoomDTO(room.getId(),room.getTip(),room.getOcjena(),room.getSprat(),room.getKapacitet(),room.getCijena(),room.getBalkon()		
@@ -990,6 +999,9 @@ function uspjesnaFast(data){
 	console.log('usao u ispisi Uspjesno');
 	$("#formaFast").hide();
 	$("#fastPonuda").empty();
+	$("#reservation").hide();
+	$("#fast").hide();
+	
 	$("#fastPonuda").append("<div id= \"obavj\"><p>You have successfully made a reservation.</p><p>Total price:"+data.cijena+"</p><p>We are looking forward to have you as our guests</p></div>");
 	var adresa = window.location.search.substring(1);
 	// da li ide da rezervise rent a car
@@ -1789,7 +1801,9 @@ function dodajUseruRez(data){
 	
 }
 function ispisiUspjesno(data){
-	 
+	$("#reservation").hide();
+	$("#fast").hide();
+	
 	$("#korakDodatne").empty();
 	$("#korakDodatne").append("<div id= \"obavj\"><p>You have successfully made a reservation.</p><p>Total price:"+data.cijena+"</p><p>We are looking forward to have you as our guests</p></div>");
 	var adresa = window.location.search.substring(1);

@@ -34,7 +34,7 @@ public class PricelistHotel {
 	@Column(name = "aktivan", nullable = false)
 	private boolean aktivan;
 	
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER)
 	  private Hotel hotelski;
 	 
 	//cijenovnik ima vise usluga,jedna usluga jedan cijenovnik
