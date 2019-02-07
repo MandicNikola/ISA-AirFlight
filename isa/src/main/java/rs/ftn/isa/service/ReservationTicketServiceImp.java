@@ -1,5 +1,7 @@
 package rs.ftn.isa.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,12 @@ public class ReservationTicketServiceImp implements ReservationTicketService{
 	public void saveReservation(ReservationTicket reservation) {
 		// TODO Auto-generated method stub
 		repozitorijum.save(reservation);
+	}
+
+	@Override
+	public List<ReservationTicket> findAll() {
+		// TODO Auto-generated method stub
+		return repozitorijum.findAll();
 	}
 
 	

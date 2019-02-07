@@ -18,6 +18,8 @@ public class SeatDTO implements Comparable<SeatDTO>{
 	private String konfiguracija;
 	
 	
+	private String status;
+	
 	public SeatDTO()
 	{
 		
@@ -89,6 +91,15 @@ public class SeatDTO implements Comparable<SeatDTO>{
 
 	public void setKonfiguracija(String konfiguracija) {
 		this.konfiguracija = konfiguracija;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 

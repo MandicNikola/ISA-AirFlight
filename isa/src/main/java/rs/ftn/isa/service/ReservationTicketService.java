@@ -1,5 +1,7 @@
 package rs.ftn.isa.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import rs.ftn.isa.model.ReservationTicket;
@@ -10,5 +12,5 @@ public interface ReservationTicketService {
 
 	ReservationTicket findOneById(Long id);
 	void saveReservation(ReservationTicket reservation);
-	
+	List<ReservationTicket> findAll();
 }

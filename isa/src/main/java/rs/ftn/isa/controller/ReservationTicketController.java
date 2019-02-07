@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.ChartDTO;
+import rs.ftn.isa.model.ReservationTicket;
 import rs.ftn.isa.model.RezervacijaHotel;
 import rs.ftn.isa.model.Room;
+import rs.ftn.isa.model.Ticket;
+import rs.ftn.isa.service.ReservationTicketServiceImp;
 import rs.ftn.isa.service.RezervacijaHotelServiceImp;
 
 @RestController
@@ -27,7 +30,8 @@ public class ReservationTicketController {
 	@Autowired
 	RezervacijaHotelServiceImp servis;
 	
-	
+	@Autowired
+	ReservationTicketServiceImp servisKarata;
 	
 	
 	@RequestMapping(value="/dnevnigrafik/{id}/brojMjeseci/{brojMj}/godina/{godina}",
@@ -38,7 +42,7 @@ public class ReservationTicketController {
 		int mjesec = Integer.parseInt(brojMj);
 	
 			System.out.println("Usao u getDaily chart");
-			List<RezervacijaHotel> sveRez=servis.findAll();
+			List<ReservationTicket> sveRez=servisKarata.findAll();
 			ArrayList<ChartDTO> podaci = new ArrayList<ChartDTO>();
 			
 			Calendar calendar = Calendar.getInstance();
@@ -59,26 +63,25 @@ public class ReservationTicketController {
 			
 			
 			
-			for(RezervacijaHotel rezervacija:sveRez) {
-				Long idHotela = 0L;
-				for(Room sobe:rezervacija.getSobe()) {
-					idHotela = sobe.getHotel().getId();
+			for(ReservationTicket rezervacija:sveRez) {
+				Long idKompanije = 0L;
+				for(Ticket karta:rezervacija.getKarte()) {
+					idKompanije = karta.getLet().getAvioKomp().getId();
 					break;
 				}
 				//rezervacija od odbaranog hotela
-				if(idHotela.toString().equals(id)) {
+				if(idKompanije.toString().equals(id)) {
 					
-					Date date1= rezervacija.getDatumDolaska();
-					Date date2= rezervacija.getDatumOdlaska();
+					Date date1= rezervacija.getDatumRezervacije();
+				//	Date date2= rezervacija.getDatumOdlaska();
 					System.out.println("Pocetak rez "+date1.toString());
-					System.out.println("Kraj rez "+date2.toString());
+				//	System.out.println("Kraj rez "+date2.toString());
 					Calendar c = Calendar.getInstance(); 
 				
-					String datum2  =date2.toString();
-					datum2  = datum2.split(" ")[0];
+					//String datum2  =date2.toString();
+					//datum2  = datum2.split(" ")[0];
 
 					SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
-					while(poredi(date1,date2)) {
 						
 						String datum1 = "";
 						datum1 = formater.format(date1);
@@ -94,7 +97,7 @@ public class ReservationTicketController {
 							
 							if(datumPoredjenje.equals(datum1)) {
 								
-									int broj = podaci.get(i).getBroj()+1;
+									int broj = podaci.get(i).getBroj()+rezervacija.getKarte().size();
 									podaci.get(i).setBroj(broj);
 									break;
 								}
@@ -105,7 +108,7 @@ public class ReservationTicketController {
 						date1 =c.getTime();
 						}
 						
-					}
+					
 				}
 			}
 				Collections.sort(podaci);

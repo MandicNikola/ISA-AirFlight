@@ -36,6 +36,9 @@ public class Seat implements Comparable<Seat>{
 	@Column(name = "klasa", nullable = false)
 	private String klasa;
 	
+	@Column(name = "status", nullable = false)
+	String status;
+	
 	//segment kome pripadaju sedista
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Segment segment;
@@ -126,6 +129,18 @@ public class Seat implements Comparable<Seat>{
 
 	public void setKarte(Set<Ticket> karte) {
 		this.karte = karte;
+	}
+
+	
+	
+
+	public String getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 

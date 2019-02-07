@@ -114,6 +114,7 @@ public class AirPlaneController {
 		ArrayList<Seat> sedista = new ArrayList<Seat>();
 		if(!konfiguracijaNova.equals(konfiguracijaStara))
 		{
+			avion.setKonfiguracija(konfiguracijaNova);
 			for(Segment segment : avion.getSegmenti())
 			{
 				for(Seat seat : segment.getSeats())
@@ -229,7 +230,7 @@ public class AirPlaneController {
 		{
 			int brojac = i % redovi;
 			Seat sediste = new Seat(red, brojac, "ekonomska");
-			
+			sediste.setStatus("aktivno");
 			segmentEconomic.getSeats().add(sediste);
 			sediste.setSegment(segmentEconomic);
 			
@@ -242,7 +243,7 @@ public class AirPlaneController {
 		{
 			int brojac = i % redovi;
 			Seat sediste = new Seat(red, brojac, "biznis");
-			
+			sediste.setStatus("aktivno");
 			segmentBiznis.getSeats().add(sediste);
 			sediste.setSegment(segmentBiznis);
 			
@@ -255,7 +256,7 @@ public class AirPlaneController {
 		{
 			int brojac = i % redovi;
 			Seat sediste = new Seat(red, brojac, "first");
-			
+			sediste.setStatus("aktivno");
 			segmentFirst.getSeats().add(sediste);
 			sediste.setSegment(segmentFirst);
 			
@@ -309,6 +310,7 @@ public class AirPlaneController {
 				{
 					SeatDTO dto = new SeatDTO(seat);
 					dto.setKonfiguracija(avion.getKonfiguracija());
+					dto.setStatus(seat.getStatus());
 					retDTOs.add(dto);
 					if(seat.getKarte().size() == 0)
 					{
@@ -341,9 +343,9 @@ public class AirPlaneController {
 	}
 	
 	
+	//proveriti zasto mi post metoda ne vraca nista
 	@RequestMapping(value="/obrisiUslugu/{id}",
-			method = RequestMethod.POST,
-			produces = MediaType.APPLICATION_JSON_VALUE)
+			method = RequestMethod.POST)
 	public ResponseEntity<String> obrisiUslugu(@PathVariable Long id){	
 		
 		UslugaAvion usluga = servisUsluga.findOneById(id);
@@ -357,9 +359,96 @@ public class AirPlaneController {
 		segment.getUsluge().remove(usluga);
 		usluga.setSegment(null);
 		servis.saveAirPlane(avion);
+		servisUsluga.removeUslugaAvion(usluga);
 		
-		return new ResponseEntity<String>("uspesno obrisano!", HttpStatus.OK);
+		
+		return new ResponseEntity<String>( HttpStatus.OK);
 	}
+	
+	
+	@RequestMapping(value="/obrisiSediste/{id}/{klasa}",
+			method = RequestMethod.POST,
+			consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> obrisiSediste(@PathVariable("id") Long id,@PathVariable("klasa") String klasa,@RequestBody SeatDTO sediste){	
+		
+		AirPlane avion = servis.findAirPlaneById(id);
+		
+		if(avion == null)
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		
+		for(Segment segment : avion.getSegmenti())
+		{
+			if(segment.getNaziv().equals(klasa))
+			{
+				Set<Seat> sedista = segment.getSeats();
+				for(Seat seat : sedista)
+				{
+					if(seat.getId().equals(sediste.getIdSedista()))
+					{
+						seat.setStatus("obrisano");
+						break;
+					}
+				}
+				break;
+			}
+		}
+		servis.saveAirPlane(avion);
+		
+		
+		return new ResponseEntity<String>("Sediste uspesno obrisano", HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value="/dodajSediste/{id}/{klasa}",
+			method = RequestMethod.POST)
+	public ResponseEntity<String> dodajSediste(@PathVariable("id") Long id,@PathVariable("klasa") String klasa){	
+		
+		AirPlane avion = servis.findAirPlaneById(id);
+		
+		if(avion == null)
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		
+		for(Segment segment : avion.getSegmenti())
+		{
+			if(segment.getNaziv().equals(klasa))
+			{
+				Set<Seat> sedista = segment.getSeats();
+				ArrayList<Seat> sedistaList = new ArrayList<Seat>();
+				for(Seat seat : sedista)
+				{
+					sedistaList.add(seat);
+				}
+				
+				Collections.sort(sedistaList);
+				boolean dodato = false;
+				
+				for(Seat seat : sedistaList)
+				{
+					if(seat.getStatus().equals("obrisano"))
+					{
+						seat.setStatus("aktivno");
+						dodato = true;
+						break;
+					}
+				}
+				if(!dodato)
+				{
+					Seat seatNew = new Seat();
+					seatNew.setStatus("aktivno");
+					
+					sedistaList.add(seatNew);
+					
+					setNewConfiguration(avion.getKonfiguracija(), sedistaList);
+				}
+				break;
+			}
+		}
+		servis.saveAirPlane(avion);
+		
+		
+		return new ResponseEntity<String>("uspesno odradjeno dodavanje", HttpStatus.OK);
+	}
+	
 	
 	
 	
