@@ -761,41 +761,32 @@ public class HotelController {
 			int brojBodova  = korisnik.getBodovi();
 			System.out.println("dosao da vrati ponude " + rez.getBrojKreveta());
 			ArrayList<Room> sobe = new ArrayList<Room>();
-			
+			System.out.println("dobio je datum "+rez.getCheckIn()+" a datum odlaska je "+rez.getCheckOut());
 			for(Room soba:hotel.getSobe()) {
 				//provjera za sobu da li zadovoljava uslove
 				Room room = soba;
 				Set<RezervacijaHotel> rezervacije = room.getRezervacije(); 
 				
 				//moram provjeriti prvi slucaj: da li je check in > od krajeva svih rezervacija koje postoje za tu sobu
-				boolean odobrenCheckIN = true;
+				boolean nijeOdobrena= false;
 				for(RezervacijaHotel pom:rezervacije) {	
-					
-					if(rez.getCheckIn().compareTo(pom.getDatumOdlaska())<=0) {
-						System.out.println("nije odobren check in");
-						odobrenCheckIN = false;
-						break;
-					}
-				}
-				//odobren check in,provjeravam check out ..da li je check out < od pocetaka svih rezervacija koje postoje za datu sobu
-				boolean odobrenCheckOUT= true;
 				
-					for(RezervacijaHotel pom:rezervacije) {	
-						
-						if(rez.getCheckOut().compareTo(pom.getDatumDolaska())>=0) {
+					if(rez.getCheckIn().compareTo(pom.getDatumOdlaska())<0) {
+						System.out.println("nije odobren check in");
+						System.out.println("datum kad pocinje "+rez.getCheckIn()+" datum kad odlazim"+pom.getDatumOdlaska());
+						if(rez.getCheckOut().compareTo(pom.getDatumDolaska())>0) {
+							System.out.println("datum kad zavrsava "+rez.getCheckOut()+" datum kad dolazim"+pom.getDatumDolaska());
 							System.out.println("nije odobren check out");
-							odobrenCheckOUT = false;
-							break;
+							//odobrenCheckOUT = false;
+							nijeOdobrena = true;
 						}
 					}
-					
-				
-				//odobrena je soba
-				if(odobrenCheckIN == true || odobrenCheckOUT == true) {
+				}
+				if(nijeOdobrena == false) {
 					System.out.println("odobrena soba");
 					sobe.add(soba);
-				}
 				
+				}
 			}
 			
 			//ubacim samo sobe koje su trazenog tipa(jednokrevetne,dvokrevetne itd)
@@ -809,8 +800,9 @@ public class HotelController {
 							Date krajPopusta = dis.getDatumdo();
 							if(!(rez.getCheckIn().after(krajPopusta)||(rez.getCheckOut().before(pocetakPopusta)))) {
 								flag = true;
+								System.out.println("Soba je na popustu za taj broj bodova");
+								
 							}
-							System.out.println("Soba je na popustu za taj broj bodova");
 							break;
 						}
 					}
