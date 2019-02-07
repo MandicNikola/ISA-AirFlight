@@ -182,30 +182,41 @@ public class RezervacijaHotelController {
 						String[] nizS = datum1.split("-");
 						
 						if((god==Integer.parseInt(nizS[0])) && (mjesec==Integer.parseInt(nizS[1]))) {
-						for(int i = 0;i<podaci.size();i++) {
-							
-							String datumPoredjenje =podaci.get(i).getDatum().toString();
-					    	System.out.println("datum "+datumPoredjenje);
-							datumPoredjenje = formater.format(podaci.get(i).getDatum());
-							System.out.println("datum2 "+datumPoredjenje);
-							
-							if(datumPoredjenje.equals(datum1)) {
+							for(int i = 0;i<podaci.size();i++) {
 								
-									int broj = podaci.get(i).getBroj()+1;
-									podaci.get(i).setBroj(broj);
-									break;
-								}
-													
+								String datumPoredjenje =podaci.get(i).getDatum().toString();
+						    	System.out.println("datum "+datumPoredjenje);
+								datumPoredjenje = formater.format(podaci.get(i).getDatum());
+								System.out.println("datum2 "+datumPoredjenje);
+								
+								if(datumPoredjenje.equals(datum1)) {
+									
+										int broj = podaci.get(i).getBroj()+1;
+										podaci.get(i).setBroj(broj);
+										break;
+									}
+														
+							}
 						}
 						c.setTime(date1); 
 						c.add(Calendar.DATE, 1);
 						date1 =c.getTime();
-						}
+						System.out.println("datum prvi je "+date1);
+				
 						
 					}
 				}
 			}
 				Collections.sort(podaci);
+				for(int p=0;p<podaci.size();p++) {
+					calendar.setTime(podaci.get(p).getDatum()); 
+					calendar.add(Calendar.DATE, 1);
+					Date datePom =calendar.getTime();
+					
+					podaci.get(p).setDatum(datePom);
+					System.out.println(podaci.get(p));
+			    }
+
 				System.out.println("Broj podataka u listi je "+podaci.size());
 				return podaci;
 				
@@ -389,7 +400,7 @@ public class RezervacijaHotelController {
 					datumRez.setMinutes(0);
 					datumRez.setSeconds(0);
 					
-					if(datumOd.before(datumRez)) {
+					if(datumOd.compareTo(datumRez)<=0) {
 						prihod += rezervacija.getCijena();
 					}
 				}

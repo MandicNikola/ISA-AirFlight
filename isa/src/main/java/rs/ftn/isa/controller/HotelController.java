@@ -852,12 +852,12 @@ public class HotelController {
 			return pronadjeneSobe;
 		}	
 		//metoda koja formira rezervaciju
-		@RequestMapping(value="/rezervisi/{info}/sobe/{nizSoba}/nizUsluga/{listaUsl}/idHotela/{id}", 
+		@RequestMapping(value="/rezervisi/{info}/sobe/{nizSoba}/nizUsluga/{listaUsl}/idHotela/{id}/idRez/{idRez}", 
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE
 				)
 		public @ResponseBody RezervacijaHotel rezervacija(@PathVariable("info") String info,
-	            @PathVariable("nizSoba") String nizSoba,@PathVariable("listaUsl") String listaUsl,@PathVariable("id") Long id,@Context HttpServletRequest request){
+	            @PathVariable("nizSoba") String nizSoba,@PathVariable("listaUsl") String listaUsl,@PathVariable("id") Long id,@PathVariable("idRez") Long idRez,@Context HttpServletRequest request){
 			System.out.println("uusao u rezervisi u rezervaciji");
 			System.out.println("info "+info);
 			System.out.println("nizSoba "+nizSoba);
@@ -982,6 +982,8 @@ public class HotelController {
 			RezervacijaHotel rez = new RezervacijaHotel();
 			rez.setDatumDolaska(datumCheckIn);
 			rez.setDatumOdlaska(datumCheckOut);
+			//setujemo kojoj rezervaciji u aviokompaniji pripada
+			rez.setRezavion(idRez);
 			int dani = daysBetween(datumCheckIn, datumCheckOut);
 			double cijena = 0;
 			//popust na cijenu sobe dobija
@@ -1011,13 +1013,15 @@ public class HotelController {
 				korisnik.getRezHotela().add(rez);
 				System.out.println("dodao korisnika u rez "+korisnik.getIme());
 			}
+			//dodavanje soba
 			for(Room room:sobe) {
 				Room soba = room;
 				hotel.getSobe().remove(room);
 				Set<RezervacijaHotel> rezSobe = room.getRezervacije();
-				rezSobe.add(rez);				
-				System.out.println("Dodao je rezervaciju "+rez.getId());
+				rezSobe.add(rez);		
+				System.out.println("dodao je rez u sobu");
 				soba.setRezervacije(rezSobe);
+				
 				hotel.getSobe().add(soba);
 			}
 			if(imaUsluga) {
