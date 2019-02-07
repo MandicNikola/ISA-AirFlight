@@ -42,8 +42,6 @@ import rs.ftn.isa.service.*;
 import rs.ftn.isa.controller.*;
 
 
-
-
 @SpringBootApplication
 public class IsaApplication {
 

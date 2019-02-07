@@ -138,6 +138,7 @@ public class RoomController {
 	public @ResponseBody ArrayList<RoomDTO> getFast(@PathVariable Long id,@PathVariable String checkout,@PathVariable String checkin,@Context HttpServletRequest request) throws ParseException{		
 		User korisnik = (User)request.getSession().getAttribute("ulogovan");		
 		int brojBodova = 0;
+		System.out.println(" id hotela "+id+" checkout "+checkout+" checkin"+checkin);
 		if(korisnik != null) {
 			 brojBodova  = korisnik.getBodovi();
 		}else {
@@ -200,6 +201,8 @@ public class RoomController {
 			}
 			//nema definisan popust za tako mali broj bodova
 			if(izabraniPopust == -1) {
+
+				System.out.println("nema izabran popust za mali broj bod");
 				return new ArrayList<RoomDTO>();
 			}
 			Discount odgovarajuciPopust = popusti.get(izabraniPopust);
@@ -214,9 +217,12 @@ public class RoomController {
 				
 				sobaDTO.setVrijednostPopusta(odgovarajuciPopust.getVrijednost());
 				ArrayList<String> dodatne = vratiNazive(odgovarajuciPopust,r.getHotel());
-				sobaDTO.setNazivUsluga(dodatne);
+				
 				if(dodatne.size()!=0) {
 					sobaDTO.setImaNazive(true);
+					sobaDTO.setNazivUsluga(dodatne);
+					
+					System.out.println("ima nazive");
 				}
 				
 				pronadjeneSobe.add(sobaDTO);
@@ -255,8 +261,10 @@ public class RoomController {
 				ArrayList<String> dodatne = vratiNazive(odgovarajuciPopust,r.getHotel());
 				if(dodatne.size()!=0) {
 					sobaDTO.setImaNazive(true);
+					sobaDTO.setNazivUsluga(dodatne);
+					
+					System.out.println("ima nazive");
 				}
-				sobaDTO.setNazivUsluga(dodatne);
 				
 				pronadjeneSobe.add(sobaDTO);
 			}
@@ -268,7 +276,7 @@ public class RoomController {
 			return new ArrayList<RoomDTO>();
 		}
 		for(RoomDTO romdto:pronadjeneSobe) {
-			System.out.println(" id "+romdto.getId()+" popust "+romdto.getPopust());
+			System.out.println(" id "+romdto.getId()+" popust "+romdto.getVrijednostPopusta());
 		}
 		return pronadjeneSobe;
 	}	
@@ -285,6 +293,9 @@ public class RoomController {
 			
 		}
 		ArrayList<Usluga> postojeceusluge = new ArrayList<Usluga>();
+		if(aktivni == null) {
+			return naziviPopusta;
+		}
 		if(aktivni.getUsluge()!= null) {
 			if(aktivni.getUsluge().size() != 0) {
 				for(Usluga u:aktivni.getUsluge()) {
@@ -326,6 +337,7 @@ public class RoomController {
 				naziviPopusta.add(postojeceusluge.get(0).getNaziv());
 			}
 		}					
+		
 		return naziviPopusta;
 	}	
 	//metoda koja formira rezervaciju
@@ -395,7 +407,10 @@ public class RoomController {
 				povratna.setRezavion(idRez);
 				Set<RezervacijaHotel> rezSobe = izabranaSoba.getRezervacije();
 				rezSobe.add(povratna);				
-				izabranaSoba.setRezervacije(rezSobe);	
+				izabranaSoba.setRezervacije(rezSobe);
+				izabranaSoba.setRezervisana(true);
+				int broj = izabranaSoba.getBrojRezervacija();
+				izabranaSoba.setBrojRezervacija(broj+1);
 				servis.saveRoom(izabranaSoba);
 			
 				return povratna;

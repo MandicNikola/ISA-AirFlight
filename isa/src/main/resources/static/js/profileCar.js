@@ -408,6 +408,29 @@ function kategorija(naziv){
 	});
 	
 }
+function dodajCen(){
+	var podatak = window.location.search.substring(1);
+	var niz= podatak.split("=");
+	var id= niz[1]; 
+	
+	$.ajax({
+		method:'GET',
+		url: "/api/rents/getAktivanCenovnik/"+id,
+		success: function(data){
+			if(data==null){
+				console.log('Nema usluga');
+			}else if(data.length == 0){
+				console.log('Prazne usluga');
+			}else{
+				console.log('Ima usluga u cenovniku');
+				$("#obrisiCen").append("<button class=\"btn btn-info\" onclick=\"obrisiCenovnik('"+data.id+"')\">Delete</button>")
+
+			}
+		}
+	});
+	
+
+}
 function dodajDatum(){
 	var podatak = window.location.search.substring(1);
 	var niz= podatak.split("=");
@@ -434,10 +457,23 @@ function ispisiDatum(data){
 	var dat1 = data.datum_primene.split('T')[0];
 	
 	$("#cenovnikKategorije").append("<p><i class=\"glyphicon glyphicon-calendar\"> </i> Effective date : "+dat1+"</p>");
-	
+	}
+
+function obrisiCenovnik(id){
+
+	$.ajax({
+		type : 'POST',
+		url : "/api/cenovnici/deleteCenovnik/"+id,
+		success : function(pov) {
+			    $("#cenovnikKategorije").empty();
+				$("#obrisiCen").empty();
+				console.log('obrisan cenovnik');
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+	});
 }
-
-
 function ispisiCenovnik(skup){
 		
 		console.log('usao u ispisiCenovnik');
@@ -572,19 +608,31 @@ var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 			}
 			 $("#filijale").append("</div>");
 		});
-	popuniSelect(skup);
+		var podatak = window.location.search.substring(1);
+		var niz= podatak.split("=");
+		if(niz.length>2){
+			popuniSelect(skup);
+		}
+	
 }
 function popuniSelect(skup){
-	
+	var podatak = window.location.search.substring(1);
+	var urlDelovi= podatak.split("=");
+	var grad=urlDelovi[4];
+	grad= grad.replace("%20"," ");
+	console.log(grad);
 	console.log('Usao u popuni select');
 	
 	var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 	 $.each(lista, function(index, data) {
-		 	var adresa=data.grad +", "+data.ulica;
-		 $("#pickLocation").append("<option  value=\""+data.id+"\">"+adresa+"</option>");
-
+		 var adresa=data.grad +", "+data.ulica;
+			
+		 if(data.grad == grad){
+		 	 $("#pickLocation").append("<option  value=\""+data.id+"\">"+adresa+"</option>");
+	
+	     }
 		 $("#dropLocation").append("<option  value=\""+data.id+"\">"+adresa+"</option>");
-		 
+
 	 });
 	
 }
@@ -794,6 +842,9 @@ $(document).ready(function(){
 		$("#adminStrana").hide();
 		$("#cenovnik").show();
 		$("#cenovnikKategorije").empty();
+		$("#obrisiCen").empty();
+		dodajCen();
+
     });
     
   $("a#sistemPopust").click(function(){
@@ -806,7 +857,11 @@ $(document).ready(function(){
 	 	$("#izvestaj").hide();
 	 	$("#adminStrana").hide();
 		$("#cenovnik").hide();
+		$("#popustiTab").hide();
+		
 		$("#divPopust").show();
+		$("#poruka").hide();
+		
 		$("#dodajPopust").hide();
 		$("#divLozinka").hide();
 		$("#divFast").hide();
@@ -1117,7 +1172,8 @@ function izlistajPonude(data){
 	
 }
 function rezervisiVozilo(param){
-    
+	var podatak = window.location.search.substring(1);
+	
 	var id=param.split(',')[0];
 	var cena= param.split(',')[1];
 	var flag = param.split(',')[2];
@@ -1219,8 +1275,6 @@ function writeCarsForDiscounts(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#autaPopusti").empty();
 	 $("#autaPopusti").show();
-		//VehicleDTO voz = new VehicleDTO(vv.getId(),vv.getMarka(),vv.getModel(),vv.getGodiste(),vv.getSedista(),vv.getKategorija(),vv.isImapopusta());
-//Long id, String marka, String model, int godiste, int sedista, CategoryCar kategorija,
 	 $("#autaPopusti").append("<table class=\"table table-hover\" id=\"tabelaAuta1\" ><tr><th> Mark </th><th>Model</th><th>Year</th><th>Seats</th><th>Category</th><th></th><th></th></tr>");
 		console.log('dosao ovdje');
 		$.each(pom, function(index, data) {
@@ -1240,23 +1294,71 @@ function writeCarsForDiscounts(lista){
 
 	
 }
-function addDiscountForCars(idRoom){
+function addDiscountForCars(idCar){
 	$("#autaPopusti").hide();
-
+	$("#postojeciPopusti").hide();
+	
+	$("#poruka").hide();
+	   
 	$("#dugmePopust").empty();
-	$("#dugmePopust").append("<button type=\"button\"  class=\"btn btn-lg\" onclick = \"dodajPopustSistem("+idRoom+")\">Add</button></div>");				
-	$("#dodajPopust").show();
+	$("#dugmePopust").append("<button type=\"button\"  class=\"btn btn-lg\" onclick = \"pronadjiIzabraneBod("+idCar+")\">Add</button></div>");				
+	
+	$.ajax({
+		method:'GET',
+		url: "/api/special/all",
+		success: function(lista){
+			if(lista == null){
+				nemaBonusPopusta();
+			}else if(lista.length==0){
+				nemaBonusPopusta();
+			}else{
+				dodajProcente(lista);
+				
+			}
+		}
+	});
+}
+function nemaBonusPopusta(){
+	 $("#dodajPopust").hide();
+	 $("#poruka").show();
+		
+}
+function dodajProcente(lista){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	console.log('dosao u dodaj procenata')
+	
+	$("#selectBodove").empty();
+	 $.each(pom, function(index, data) {
+		 	
+		 $("#selectBodove").append("<option value=\""+data.id+"\" >"+data.bodovi+"</option>");	 
+		 
+	 });
+	 $("#dodajPopust").show();
+		
+	
 }
 
-function dodajPopustSistem(idVozilo){
+function pronadjiIzabraneBod(idCar){
+	var idPopusta = $("#selectBodove").val();
+	console.log('idPopusta');
+	$.ajax({
+		method:'GET',
+		url: "/api/special/getById/"+idPopusta,
+		success: function(lista){
+				dodajPopustSistem(lista,idCar);
+			
+		}
+	});
+	
+}
+
+function dodajPopustSistem(popust,idVozilo){
 	
 	let ispravno = true;
 	var pocetak=$('#sincewhen').val();
 	var kraj=$('#untilwhen').val();
-	var bodovi=$('#brojBodova').val();
-	var procenat=$('#procenat').val();
-	$("#errorPopust").empty();
-	$("#errorBodovi").empty();
+	var bodovi=popust.bodovi;
+	var procenat=popust.vrijednost;
 	$("#errorDatPopust").empty();
 	$("#errorEndPopust").empty();
 	
@@ -1269,45 +1371,12 @@ function dodajPopustSistem(idVozilo){
 		ispravno = false;		
 	}
 	
-	if(!bodovi){
-		$("#errorBodovi").text("You need to fill out this field.").css('color', 'red');
-		ispravno = false;		
-	}
-	if(isNaN(bodovi)){
-		ispravno = false;
-		$("#errorBodovi").text("You need to enter digits.").css('color', 'red');
-		
-	}
-	if(bodovi<=0){
-		ispravno = false;
-		$("#errorBodovi").text("Number of points must be greater than 0.").css('color', 'red');
-		
-	}
-	
-	if(!procenat){
-		ispravno = false;
-		$("#errorPopust").text("You need to fill out this field.").css('color', 'red');
-		
-	}
-	if(isNaN(procenat)){
-		ispravno = false;
-		$("#errorPopust").text("You need to enter digits.").css('color', 'red');
-		
-	}
-	if(procenat<=0){
-		ispravno = false;
-		$("#errorPopust").text("Number of percentage must be greater than 0.").css('color', 'red');
-	}
-	
-
 	if(ispravno == true){
 		$("#dodajPopust").hide();
 		
 		$('#sincewhen').val('');
 		$('#untilwhen').val('');
-		$('#brojBodova').val("");
-		$('#procenat').val("");
-
+	
 		$.ajax({
 			type : 'POST',
 			url : "/api/vozila/definisiPopust/"+idVozilo+"/pocetak/"+pocetak+"/kraj/"+kraj+"/bodovi/"+bodovi+"/procenat/"+procenat,
@@ -1331,7 +1400,7 @@ function pomocnaFA(){
 	
 }
 function listOfDiscount(idVozilo){
-	$("#autaPopusti").hide();
+	//$("#autaPopusti").hide();
 	
 	$.ajax({
 		method:'GET',
@@ -1349,7 +1418,6 @@ function writeDiscountsOfVozilo(lista,idVozilo){
 	 var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#postojeciPopusti").empty();
 	 $("#postojeciPopusti").show();
-	//public RoomDTO(Long id, String tip, int kapacitet, int sprat,boolean imapopust) 
 			
 	 $("#postojeciPopusti").append("<table class=\"table table-hover\" id=\"popustiTab\" ><tr><th>Since when </th><th>Until when</th><th>Number of user points</th><th>Discount percentage</th><th></th></tr>");
 		
@@ -1372,7 +1440,7 @@ function removeDisc(slanje){
 		url : "/api/popusti/ukloniPopust/"+slanje,
 		success : function(povratna) {
 						console.log('uspjesno');
-						promjeniBrojPopusta(slanje);
+						promeniBrojPopusta(slanje);
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
 			alert('greska');
@@ -1381,7 +1449,7 @@ function removeDisc(slanje){
 
 	
 }
-function promjeniBrojPopusta(slanje){
+function promeniBrojPopusta(slanje){
 	console.log(slanje);
 	var adresa = window.location.search.substring(1);
 	var id = adresa.split('=')[1];

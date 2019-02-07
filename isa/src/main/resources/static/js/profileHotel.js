@@ -648,10 +648,12 @@ function resetujGreske(){
 }
 
 $(document).ready(function(){
+	console.log('stigao ovdje gore');
 	
 	var pom=window.location.search.substring(1);
-	if(pom.length >= 2){
-		
+	var pom1 = pom.split("=");
+	if(pom1.length >= 3){
+		console.log('stigao ovdje');
 		$("#reservation").show();
 		$("#fast").show();
 		
@@ -780,6 +782,8 @@ $(document).ready(function(){
     	showRoomsForDiscounts();
     	$("#informacije").hide();
     	$("#divPopust").show();
+    	$("#poruka").hide();
+    		
     	$("#postojeciPopust").hide();
 		
     	$("#ispisiTabelu").hide();
@@ -839,7 +843,7 @@ function izlistajFast(){
 	
 	var id = adresa.split('=')[1];
 	var kraj=$('#checkoutFast').val();
-	var pocetak = adresa[3];
+	var pocetak = pom[3];
 	
 	console.log(kraj);
 	 $("#fastPonuda").empty();
@@ -849,10 +853,12 @@ function izlistajFast(){
 
 	$.ajax({
 		method:'GET',
-		url: "/api/rooms/getFast/"+id+"/checkout/"+kraj+"/checkin/"+kraj,
+		url: "/api/rooms/getFast/"+id+"/checkout/"+kraj+"/checkin/"+pocetak,
 		success: function(data){
 			if(data == null){
-				console.log('Nema soba');
+				nemaFast();
+			}else if(data.length == 0){
+				nemaFast();
 			}else{
 				ispisiFast(data);
 				
@@ -861,10 +867,17 @@ function izlistajFast(){
 	});
 	
 }
+function nemaFast(){
+	 $("#fastPonuda").empty();
+	 $("#fastPonuda").show();
+	 $("#fastPonuda").append("<div id = \"nemaFast\"><p>There are no rooms with a defined discount for user number of points</p></div>");
+}
 function ispisiFast(lista){
 	console.log('stigao u ispisiFast');
-	 $("#fastPonuda").show();
-	
+	 $("#fastPonuda").empty();
+		
+	$("#fastPonuda").show();
+		
 	
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	// RoomDTO(room.getId(),room.getTip(),room.getOcjena(),room.getSprat(),room.getKapacitet(),room.getCijena(),room.getBalkon()		
@@ -873,6 +886,7 @@ function ispisiFast(lista){
 		$.each(pom, function(index, data) {
 			var prenos = data.id +"."+data.bodoviPopusta+"."+data.vrijednostPopusta;
 			console.log(prenos);
+			
 			var dodatneusluge = '';
 			var sveusluge  = data.nazivUsluga;
 			$.each(sveusluge, function(index, podatak) {
@@ -889,18 +903,21 @@ function ispisiFast(lista){
 			console.log(dodatneusluge);
 			if(data.balkon == 'da'){
 				if(data.imaNazive){
-					$("#tabelaSobeFast").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td>"+data.ocena+"</td><td>"+data.cijena+"</td><td>"+data.vrijednostPopusta+"</td><td><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\" ></td><td><button  class=\"btn btn-info\" onclick=\"prikaziUkljucene('"+dodatneusluge+"')\">Included additional services</button></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"rezervisiFast("+prenos+")\">Reserve</button></td></tr>");
+					$("#tabelaSobeFast").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td>"+data.ocena+"</td><td>"+data.cijena+"</td><td>"+data.vrijednostPopusta+"</td><td><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\" ></td><td><button  class=\"btn btn-info\" onclick=\"prikaziUkljucene('"+dodatneusluge+"')\">Included additional services</button></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"rezervisiFast('"+prenos+"')\">Reserve</button></td></tr>");
 				}else{
-					$("#tabelaSobeFast").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td>"+data.ocena+"</td><td>"+data.cijena+"</td><td>"+data.vrijednostPopusta+"</td><td><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\" ></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"rezervisiFast("+prenos+")\">Reserve</button></td></tr>");
+					$("#tabelaSobeFast").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td>"+data.ocena+"</td><td>"+data.cijena+"</td><td>"+data.vrijednostPopusta+"</td><td><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\" ></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"rezervisiFast('"+prenos+"')\">Reserve</button></td></tr>");
 					
 				}
 	
 			}else{
+				
 					if(data.imaNazive){
-						                                                                                                                                                                                                                                                                                    
-						$("#tabelaSobeFast").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td>"+data.ocena+"</td><td>"+data.cijena+"</td><td>"+data.vrijednostPopusta+"</td><td><input type=\"checkbox\" disabled=\"disabled\" ></td><td><button  class=\"btn btn-info\" onclick=\"prikaziUkljucene('"+dodatneusluge+"')\">Included additional services</button></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"rezervisiFast("+prenos+")\">Reserve</button></td></tr>");
+						        console.log('usao ovdje');                                                                                                                                                                                                                                                                            
+						$("#tabelaSobeFast").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td>"+data.ocena+"</td><td>"+data.cijena+"</td><td>"+data.vrijednostPopusta+"</td><td><input type=\"checkbox\" disabled=\"disabled\" ></td><td><button  class=\"btn btn-info\" onclick=\"prikaziUkljucene('"+dodatneusluge+"')\">Included additional services</button></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"rezervisiFast('"+prenos+"')\">Reserve</button></td></tr>");
 					}else{
-						$("#tabelaSobeFast").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td>"+data.ocena+"</td><td>"+data.cijena+"</td><td>"+data.vrijednostPopusta+"</td><td><input type=\"checkbox\" disabled=\"disabled\" ></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"rezervisiFast("+prenos+")\">Reserve</button></td></tr>");
+				        console.log('usao u donje ovdje');                                                                                                                                                                                                                                                                            
+						
+						$("#tabelaSobeFast").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.sprat+"</td><td>"+data.ocena+"</td><td>"+data.cijena+"</td><td>"+data.vrijednostPopusta+"</td><td><input type=\"checkbox\" disabled=\"disabled\" ></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"rezervisiFast('"+prenos+"')\">Reserve</button></td></tr>");
 						
 					}	
 				
@@ -933,12 +950,12 @@ function rezervisiFast(sobapopust){
 	var id = adresa.split('=')[1];
 	console.log(info);
 	console.log(sobapopust);
-	var bodovi = sobapopust.split('\\*')[1];
-	var adresa = window.location.search.substring(1);
+	var bodovi = sobapopust.split('.')[1];
+	console.log(bodovi);
 	var pom = adresa.split('=');
 	
-	var idRez = adresa[2];
-
+	var idRez = pom[2];
+	console.log(idRez);
 	 $.ajax({
 			type : 'POST',
 			url : "/api/rooms/rezervisiFast/"+info+"/sobapopust/"+sobapopust+"/idhotel/"+id+"/idRez/"+idRez,
@@ -959,6 +976,7 @@ function rezervisiFast(sobapopust){
 }
 function dodajUseruBrzu(data,bodovi){
 	 console.log('dosao je da doda rez korisniku');
+	 console.log(bodovi);
 	 var rezervacija= JSON.stringify(data);
 	  $.ajax({
 			type : 'POST',
@@ -972,7 +990,7 @@ function dodajUseruBrzu(data,bodovi){
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown){
 				console.log('usao u gresku');
-				alert('greska');
+			
 			}
 			});
 	
@@ -981,9 +999,21 @@ function uspjesnaFast(data){
 	console.log('usao u ispisi Uspjesno');
 	$("#formaFast").hide();
 	$("#fastPonuda").empty();
-
-	$("#fastPonuda").append("<div id= \"obavj\"><p>You have successfully made a reservation.</p><p>Total price:"+data.cijena+"</p><p>We are looking forward to have you as our guests</p></div>");
+	$("#reservation").hide();
+	$("#fast").hide();
 	
+	$("#fastPonuda").append("<div id= \"obavj\"><p>You have successfully made a reservation.</p><p>Total price:"+data.cijena+"</p><p>We are looking forward to have you as our guests</p></div>");
+	var adresa = window.location.search.substring(1);
+	// da li ide da rezervise rent a car
+	var flagdalje  = adresa.split('=')[5];	
+	if(flagdalje == 1){
+		var idRezervacije = adresa.split('=')[2];
+		var  datumSletanja = adresa.split('=')[3];
+		var lokacija = adresa.split('=')[4];
+		var brojKarata = adresa.split('=')[6];
+		window.location = "redirekcija.html?id="+"rent"+'='+idRezervacije+"="+lokacija+"="+datumSletanja+"="+"0"+"="+brojKarata;
+	}
+
 }
 function dodajIzvjestaj(){
 	var adresa = window.location.search.substring(1);
@@ -1671,17 +1701,24 @@ function zavrsiRezBezUsluga(nizSoba){
 	var listaUsl="nema";
 	var adresa = window.location.search.substring(1);
     var id = adresa.split('=')[1];
+    var idRez = adresa.split('=')[2];
+    var brKarata = adresa.split('=')[6];
+    if(osobe > brKarata){
+    	console.log(' nedovoljno karata');
+    	nedovoljnoKarata();
+    }else{
 	  
 	  $.ajax({
 			type : 'POST',
-			url : "/api/hoteli/rezervisi/"+info+"/sobe/"+nizSoba+"/nizUsluga/"+listaUsl+"/idHotela/"+id,
+			url : "/api/hoteli/rezervisi/"+info+"/sobe/"+nizSoba+"/nizUsluga/"+listaUsl+"/idHotela/"+id+"/idRez/"+idRez,
 			success : function(povratna) {
 						if(povratna.length==0){
 							console.log('neuspjesno');
 						}else if(povratna == 0){
 							console.log('neuspjesno');
 						}else{
-							ispisiUspjesno(povratna);		
+							dodajUseruRez(povratna);
+							
 							console.log('uspjesno');
 						}
 			},
@@ -1689,7 +1726,13 @@ function zavrsiRezBezUsluga(nizSoba){
 				alert('greska');
 			}
 			});
-	  
+    }
+}
+function nedovoljnoKarata(){
+	alert('Please choose again. Number of people can not be greater then number of beds.')
+	$("#reserveHotel").show();		
+	$("#korak").hide();
+	$("#korakDodatne").hide();
 }
 function zavrsiRez(nizSoba){
 	var pocetak=$('#checkin').val();
@@ -1716,10 +1759,17 @@ function zavrsiRez(nizSoba){
 	  var adresa = window.location.search.substring(1);
 		console.log('adesa je '+adresa);
 		var id = adresa.split('=')[1];
-	  
+	
+		var idRez = adresa.split('=')[2];
+	    var brKarata = adresa.split('=')[6];
+	    if(osobe > brKarata){
+	    	console.log(' nedovoljno karata');
+	    	nedovoljnoKarata();
+	    }else{
+		
 	  $.ajax({
 			type : 'POST',
-			url : "/api/hoteli/rezervisi/"+info+"/sobe/"+nizSoba+"/nizUsluga/"+listaUsl+"/idHotela/"+id,
+			url : "/api/hoteli/rezervisi/"+info+"/sobe/"+nizSoba+"/nizUsluga/"+listaUsl+"/idHotela/"+id+"/idRez/"+idRez,
 			success : function(povratna) {
 					dodajUseruRez(povratna);
 					},
@@ -1727,14 +1777,14 @@ function zavrsiRez(nizSoba){
 				alert('greska');
 			}
 			});
-	  
+	    }
 }
 function dodajUseruRez(data){
 	 console.log('dosao je da doda rez korisniku');
 	 var rezervacija= JSON.stringify(data);
 	  $.ajax({
 			type : 'POST',
-			url : "/api/korisnici/addRezSobe",
+			url : "/api/korisnici/addRezSobe/0",
 			contentType : "application/json",
 			data: rezervacija,
 			dataType : 'json',		
@@ -1751,10 +1801,22 @@ function dodajUseruRez(data){
 	
 }
 function ispisiUspjesno(data){
-	 
+	$("#reservation").hide();
+	$("#fast").hide();
+	
 	$("#korakDodatne").empty();
 	$("#korakDodatne").append("<div id= \"obavj\"><p>You have successfully made a reservation.</p><p>Total price:"+data.cijena+"</p><p>We are looking forward to have you as our guests</p></div>");
-	
+	var adresa = window.location.search.substring(1);
+	// da li ide da rezervise rent a car
+	var flagdalje  = adresa.split('=')[5];	
+	if(flagdalje == 1){
+		var idRezervacije = adresa.split('=')[2];
+		var  datumSletanja = adresa.split('=')[3];
+		var lokacija = adresa.split('=')[4];
+		var brojKarata = adresa.split('=')[6];
+		window.location = "redirekcija.html?id="+"rent"+'='+idRezervacije+"="+lokacija+"="+datumSletanja+"="+"0"+"="+brojKarata;
+	}
+
 }
 function changePass(){
 	 $("#tabovi").hide();
@@ -1848,11 +1910,13 @@ function addDiscountForRooms(idRoom){
 	//resetujem greske iz prethodnog slucaja
 	$("#errorDatPopust").text('');
 	$("#errorEndPopust").text('');
-	
-	$("#sobePopusti").hide();
 
+	$("#postojeciPopusti").hide();
+	$("#sobePopusti").hide();
+	$("#poruka").hide();
+		
 	$("#dugmePopust").empty();
-	$("#dugmePopust").append("<button type=\"button\"  class=\"btn btn-lg\" onclick = \"dodajPopustSistem("+idRoom+")\">Add</button></div>");
+	$("#dugmePopust").append("<button type=\"button\" id=\"dugmePopustBonus\" class=\"btn btn-lg\" onclick = \"pronadjiIzabraneBod("+idRoom+")\">Add</button></div>");
 	pokupiPostojecePopuste();
 	
 }
@@ -1862,9 +1926,9 @@ function pokupiPostojecePopuste(){
 		url: "/api/special/all",
 		success: function(lista){
 			if(lista == null){
-				console.log('Nema popusta')
+				nemaBonusPopusta();
 			}else if(lista.length==0){
-				console.log('Nema popusta')
+				nemaBonusPopusta();
 			}else{
 				dodajProcente(lista);
 				
@@ -1872,6 +1936,11 @@ function pokupiPostojecePopuste(){
 		}
 	});
 	
+}
+function nemaBonusPopusta(){
+	 $("#dodajPopust").hide();
+	 $("#poruka").show();
+		
 }
 function dodajProcente(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
@@ -1886,16 +1955,28 @@ function dodajProcente(lista){
 		
 	
 }
-function dodajPopustSistem(idRoom){
+function pronadjiIzabraneBod(idRoom){
+	var idPopusta = $("#selectBodove").val();
+	console.log('idPopusta');
+	$.ajax({
+		method:'GET',
+		url: "/api/special/getById/"+idPopusta,
+		success: function(lista){
+				dodajPopustSistem(lista,idRoom);
+			
+		}
+	});
+	
+}
+function dodajPopustSistem(lista,idRoom){
+	
 	console.log(idRoom);
 	var pocetak=$('#sincewhen').val();
 	var kraj=$('#untilwhen').val();
-	var bodovi=$('#brojBodova').val();
-	var procenat=$('#procenat').val();
+	var bodovi=lista.bodovi;
+	var procenat=lista.vrijednost;
 	var adresa = window.location.search.substring(1);
-	var id = adresa.split('=')[1];
-	
-	
+	var id = adresa.split('=')[1];	
 	let ispravno = true;
 	 
 	if(!pocetak){
@@ -1931,11 +2012,13 @@ function dodajPopustSistem(idRoom){
 	}	
 }
 function listOfDiscount(idRoom){
-	$("#sobePopusti").hide();
+	//$("#sobePopusti").hide();
+	$("#poruka").hide();
+	
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);
 	var id = adresa.split('=')[1];
-
+	
 	$.ajax({
 		method:'GET',
 		url: "/api/hoteli/getRoomDiscount/"+id+"/idRoom/"+idRoom,

@@ -83,7 +83,9 @@ public class RezervacijaRentController {
 			int mesec = Integer.parseInt(niz[2]);
 			Calendar kalendar = Calendar.getInstance();
 			Date newDate  = new Date(godina-1900, mesec-1, 1);
-			
+			System.out.println(newDate.toString());
+			podaci.add(new ChartDTO(newDate, 0));
+			kalendar.setTime(newDate);
 			int brojDana = kalendar.getActualMaximum(Calendar.DATE);
 			while(newDate.getDate()+1 <= brojDana) {
 				kalendar.add(Calendar.DATE, 1);
@@ -139,6 +141,14 @@ public class RezervacijaRentController {
 					
 			}
 			Collections.sort(podaci);
+			for(int p=0;p<podaci.size();p++) {
+				kalendar.setTime(podaci.get(p).getDatum()); 
+				kalendar.add(Calendar.DATE, 1);
+				Date datePom =kalendar.getTime();
+				podaci.get(p).setDatum(datePom);
+				System.out.println(podaci.get(p));
+		    }
+		
 			System.out.println("Broj podataka u listi je "+podaci.size());
 			return podaci;
 	}
