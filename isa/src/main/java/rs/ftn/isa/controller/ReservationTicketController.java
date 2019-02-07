@@ -24,7 +24,7 @@ import rs.ftn.isa.service.ReservationTicketServiceImp;
 import rs.ftn.isa.service.RezervacijaHotelServiceImp;
 
 @RestController
-@RequestMapping(value="api/reservationTIckets")
+@RequestMapping(value="api/reservationTickets")
 public class ReservationTicketController {
 
 	@Autowired
@@ -34,12 +34,14 @@ public class ReservationTicketController {
 	ReservationTicketServiceImp servisKarata;
 	
 	
-	@RequestMapping(value="/dnevnigrafik/{id}/brojMjeseci/{brojMj}/godina/{godina}",
+	@RequestMapping(value="/dailychart/{podatak}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ArrayList<ChartDTO> getDailyChart(@PathVariable String id,@PathVariable String brojMj,@PathVariable String godina){		
-		int god =Integer.parseInt(godina);
-		int mjesec = Integer.parseInt(brojMj);
+	public @ResponseBody ArrayList<ChartDTO> getDailyChart(@PathVariable String podatak){		
+			String[] niz=podatak.split("=");
+	        String id=niz[0];
+	        int god =Integer.parseInt(niz[1]);
+			int mesec = Integer.parseInt(niz[2]);
 	
 			System.out.println("Usao u getDaily chart");
 			List<ReservationTicket> sveRez=servisKarata.findAll();
@@ -47,7 +49,7 @@ public class ReservationTicketController {
 			
 			Calendar calendar = Calendar.getInstance();
 			
-			Date newDate  = new Date(god-1900, mjesec-1, 1);
+			Date newDate  = new Date(god-1900, mesec-1, 1);
 			System.out.println("Datum prvi je "+ newDate.toString());
 			
 			calendar.setTime(newDate);
@@ -87,7 +89,7 @@ public class ReservationTicketController {
 						datum1 = formater.format(date1);
 						String[] nizS = datum1.split("-");
 						
-						if((god==Integer.parseInt(nizS[0])) && (mjesec==Integer.parseInt(nizS[1]))) {
+						if((god==Integer.parseInt(nizS[0])) && (mesec==Integer.parseInt(nizS[1]))) {
 						for(int i = 0;i<podaci.size();i++) {
 							
 							String datumPoredjenje =podaci.get(i).getDatum().toString();
@@ -103,9 +105,6 @@ public class ReservationTicketController {
 								}
 													
 						}
-						c.setTime(date1); 
-						c.add(Calendar.DATE, 1);
-						date1 =c.getTime();
 						}
 						
 					
@@ -190,13 +189,15 @@ public class ReservationTicketController {
 			return prihod;
 	}
 	
-	@RequestMapping(value="/mjesecnigrafik/{id}/godina/{godina}",
+	@RequestMapping(value="/monthlychart/{podatak}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ArrayList<ChartDTO> mjesecnigrafik(@PathVariable String id,@PathVariable String godina){		
-			int god =Integer.parseInt(godina);
+	public @ResponseBody ArrayList<ChartDTO> mjesecnigrafik(@PathVariable String podatak){		
+			String[] niz = podatak.split("=");
+			String id = niz[0];
+			int god =Integer.parseInt(niz[1]);
 				
-			List<RezervacijaHotel> sveRez=servis.findAll();
+			List<ReservationTicket> sveRez=servisKarata.findAll();
 			ArrayList<ChartDTO> podaci = new ArrayList<ChartDTO>();
 			
 			Calendar calendar = Calendar.getInstance();
@@ -207,19 +208,17 @@ public class ReservationTicketController {
 				podaci.add(new ChartDTO(newDate, 0));
 			}
 
-			for(RezervacijaHotel rezervacija:sveRez) {
-				Long idHotela = 0L;
-				for(Room sobe:rezervacija.getSobe()) {
-					idHotela = sobe.getHotel().getId();
+			for(ReservationTicket rezervacija:sveRez) {
+				Long idKompanije = 0L;
+				for(Ticket sobe:rezervacija.getKarte()) {
+					idKompanije = sobe.getLet().getAvioKomp().getId();
 					break;
 				}
 				//rezervacija od odbaranog hotela
-				if(idHotela.toString().equals(id)) {
-					Date date1= rezervacija.getDatumDolaska();
-					Date date2= rezervacija.getDatumOdlaska();
-					Calendar c = Calendar.getInstance(); 
-				 while(poredi(date1,date2)) {
-						
+				if(idKompanije.toString().equals(id)) {
+					Date date1= rezervacija.getDatumRezervacije();
+					//Date date2= rezervacija.getDatumOdlaska();
+				 
 						String datum1 = "";
 						datum1 = formater.format(date1);
 						String[] pom = datum1.split("-");
@@ -227,12 +226,10 @@ public class ReservationTicketController {
 						if(Integer.parseInt(pom[0]) == god) {
 							System.out.println("Poklapa se godina");
 						    int mjesec=Integer.parseInt(pom[1])-1;    
-						    podaci.get(mjesec).setBroj(podaci.get(mjesec).getBroj()+1);
+						    podaci.get(mjesec).setBroj(podaci.get(mjesec).getBroj()+rezervacija.getKarte().size());
 						}
-						c.setTime(date1); 
-						c.add(Calendar.DATE, 1);
-						date1 =c.getTime();
-						}
+					
+						
 				}
 			}
 				Collections.sort(podaci);
@@ -250,5 +247,117 @@ public class ReservationTicketController {
 				return podaci;
 
 	}
+	
+	
+	@RequestMapping(value="/weeklychart/{podatak}",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ArrayList<ChartDTO> sedmicnigrafik(@PathVariable String podatak){		
+			String[] niz = podatak.split("=");
+			String id = niz[0];
+			int god =Integer.parseInt(niz[1]);
+			int mesec = Integer.parseInt(niz[2]);
+		
+			
+			List<ReservationTicket> sveRez=servisKarata.findAll();
+			ArrayList<ChartDTO> podaci = new ArrayList<ChartDTO>();
+			
+			Calendar calendar = Calendar.getInstance();
+			
+			Date newDate  = new Date(god-1900, mesec-1, 1);
+			System.out.println("Datum prvi je "+ newDate.toString());
+			
+			calendar.setTime(newDate);
+			int danNedelja = calendar.get(Calendar.DAY_OF_WEEK);
+			if(danNedelja!=1) {
+				danNedelja=danNedelja-1;
+			}else {
+				danNedelja=7;
+			}
+			System.out.println("Dan u nedelji je" + danNedelja);
+			
+			//dodajemo pocetke nedelja u listu
+			podaci.add(new ChartDTO(newDate, 0));
+			//int noviDan = 8-danNedelja; 
+			calendar.add(Calendar.DATE, 8-danNedelja);
+			newDate= calendar.getTime();
+			System.out.println("Drugi dan je "+newDate.toString());
+			
+			podaci.add(new ChartDTO(newDate, 0));
+			
+			int brojDanaMj = calendar.getActualMaximum(Calendar.DATE);
+			while(newDate.getDate()+7 <= brojDanaMj) {
+						
+				calendar.add(Calendar.DATE, 7);
+				newDate= calendar.getTime();
+				podaci.add(new ChartDTO(newDate, 0));
+			
+			}
+			for(int p=0;p<podaci.size();p++) {
+					System.out.println(podaci.get(p));
+			}
+			
+
+			for(ReservationTicket rezervacija:sveRez) {
+				Long idKompanije = 0L;
+				for(Ticket sobe:rezervacija.getKarte()) {
+					idKompanije = sobe.getLet().getAvioKomp().getId();
+					break;
+				}
+				//rezervacija od odbaranog hotela
+				if(idKompanije.toString().equals(id)) {
+					
+					Date date1= rezervacija.getDatumRezervacije();
+					//Date date2= rezervacija.getDatumOdlaska();
+
+					SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+					
+						
+						String datum1 = "";
+						datum1 = formater.format(date1);
+						String[] nizS = datum1.split("-");
+						
+						
+						if((god==Integer.parseInt(nizS[0])) && (mesec==Integer.parseInt(nizS[1]))) {
+							int index=-1;
+							//prolazimo kroz listu u kojoj se nalaze poceci nedelja
+							for(int i=1;i<podaci.size();i++) {	
+								Date datumPoredjenje =podaci.get(i).getDatum();
+								if(date1.before(datumPoredjenje)) {
+									index=i-1;	
+									break;
+								}
+							}
+							
+							if(index != -1) {
+								int broj = podaci.get(index).getBroj()+rezervacija.getKarte().size();
+								podaci.get(index).setBroj(broj);
+							}else {
+								
+								int broj=podaci.get(podaci.size()-1).getBroj()+rezervacija.getKarte().size();
+								podaci.get(podaci.size()-1).setBroj(broj);
+							}
+					
+						}
+					
+					
+				}
+			}
+				Collections.sort(podaci);
+				
+				for(int p=0;p<podaci.size();p++) {
+					calendar.setTime(podaci.get(p).getDatum()); 
+					calendar.add(Calendar.DATE, 1);
+					Date datePom =calendar.getTime();
+					
+					podaci.get(p).setDatum(datePom);
+					System.out.println(podaci.get(p));
+			    }
+			
+				System.out.println("Broj podataka u listi je "+podaci.size());
+				return podaci;
+
+	}
+
 	
 }

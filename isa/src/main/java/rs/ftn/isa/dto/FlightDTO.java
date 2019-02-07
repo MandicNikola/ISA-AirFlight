@@ -45,6 +45,8 @@ public class FlightDTO {
 	private int brojLjudi;
 	private int brojPresedanja;
 	
+	public String avion;
+	
 	
 	public FlightDTO() {
 		super();
@@ -56,6 +58,22 @@ public class FlightDTO {
 	
 	public String getLokPoletanja() {
 		return lokPoletanja;
+	}
+
+
+
+
+
+	public String getAvion() {
+		return avion;
+	}
+
+
+
+
+
+	public void setAvion(String avion) {
+		this.avion = avion;
 	}
 
 

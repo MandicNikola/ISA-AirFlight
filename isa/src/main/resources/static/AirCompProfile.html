@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
   <script type="text/javascript"  src="/js/profilCompany.js"></script>
 
   <style>
@@ -137,6 +138,14 @@
 	    background-color: #2f2f2f;
 	    color: #ffffff;
 	}
+	
+	.table
+	{
+		width : 100% !important;
+		font-size: 10px;
+		max-width: 100% !important;
+	}
+	
   </style>
 </head>
 
@@ -161,9 +170,11 @@
 					   		<li class="active"><a id="info" onclick="info()">Information</a></li>
 						    <li><a id="planes" onclick="showPlanes()">Planes</a></li>
 						    <li><a id="flights" onclick="showFlights()">Flights</a></li>
-						    <li><a id="fastTickets" onclick="showFastTickets()">Fast tickets</a></li>	  
-						  	<li><a id="admini" >Administrators</a></li>	
-						  	<li><a id="cenovnik" >Pricelist</a></li>			  
+						    <li><a id="fastTickets" onclick="showFastTickets()">Fast tickets</a></li>	
+						    <li><a id="discount" onclick="discount()">Discounts</a></li>	
+						    <li><a id="report" onclick="report()">Business report</a></li>	  
+						  	<li><a id="admini" onclick="showAdministrators()" >Administrators</a></li>	
+						  	<li><a id="cenovnik" onclick="priceList()">Pricelist</a></li>			  
 					  </ul>
 			  		</div>
 			  		
@@ -189,7 +200,31 @@
 					    </section>
 			 	 	</div>
 			  		
-			  		<div id="flightsStrana">
+			  		<div id="flightsStrana" class="container-fluid">
+			  			<div class="panel panel-primary filterableFlights"  style="width:75%;">
+				            <div class="panel-heading">
+				                <h3 class="panel-title">Letovi</h3>
+				                <div class="pull-right">
+				                    <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+				                </div>
+				            </div>
+				            <table class="table table-filtered" >
+				                <thead>
+				                    <tr class="filters">
+				                        <th><input type="text" class="form-control" placeholder="FROM" disabled></th>
+						                <th><input type="text" class="form-control" placeholder="TO" disabled></th>
+						                 <th><input type="text" class="form-control" placeholder="Date departing" disabled></th>
+						                <th><input type="text" class="form-control" placeholder="Date landing" disabled></th>
+						                <th><input type="text" class="form-control" placeholder="Plane" disabled></th>
+						                <th><input type="text" class="form-control" placeholder="Presedanja" disabled></th>
+						                <th><input type="text" class="form-control" placeholder="Duzina" disabled></th>
+				                    </tr>
+				                </thead>
+				    			<tbody id="tabelaLetovi">
+				    			
+								</tbody >
+				            </table>
+					      </div>	
 			  		</div>
 			  		
 			  		<div id="planesStrana">
@@ -204,39 +239,80 @@
 			  		<div id="flightsSearchStrana">
 			  		</div>	
 			  		
-			  	<div id="izvestaj" class="container-fluid">
+			  		<div id="discountStrana" class="container-fluid">
+			  			
+			  			<div class="panel panel-primary filterableTicket"  style="width:75%;">
+				            <div class="panel-heading">
+				                <h3 class="panel-title">Discount</h3>
+				                <div class="pull-right">
+				                    <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+				                </div>
+				            </div>
+				            <table class="table table-filtered" >
+				                <thead>
+				                    <tr class="filters">
+				                        <th><input type="text" class="form-control" placeholder="#" disabled></th>
+				                        <th><input type="text" class="form-control" placeholder="FROM/TO" disabled></th>
+				                        <th><input type="text" class="form-control" placeholder="Date" disabled></th>
+				                         <th><input type="text" class="form-control" placeholder="Seat" disabled></th>
+				                        <th><input type="text" class="form-control" placeholder="Class" disabled></th>
+				                        <th><input type="text" class="form-control" placeholder="Price" disabled></th>
+				                    </tr>
+				                </thead>
+				    			<tbody id="tabelaKarte">
+				    			
+								</tbody >
+				            </table>
+					      </div>	
+			  		</div>
+			  		
+			  	   <div id="izvestaj" class="container-fluid">
 			  		<section >
-			  			<div id = "ocijenaHot"><p id="prosecnaOcijena">Average rating of company is: </p></div>
-							
+						<p id="prosecnaOcena">Average rating of our company  is  </p>
 						</section>
-						
-					<p id = "listaSoba"> List of rooms: </p>
-						<div id="izvestajSoba">
+					<p>List of our planes </p>
+						<div id="izvestajAvioni">
 						</div>
-						<div id = "prihodi">
-							<div class="form-group row">
-							<div class="col-xs-3"><input id = "odPrihodi"  class="form-control" type="date" required="required" data-placeholder="Since when"></div>
-							<div class="col-xs-1"><button type="button" id="PrihodDugme" class="btn btn-light" onclick = "pronadjiPrihode()">Show income</button></div>	
-							<div class="col-xs-2" id = "divVrijednost"></div>
-							</div>
+							<div class="row" >
+								<h3 class="look">
+									<span> <i class="glyphicon glyphicon-folder-open"></i> </span>See income of the company: 
+								</h3>
+								<div class="form-group row ">				      	
+							        <div class="col-xs-1">
+									      <label class="form-label">Since:</label>
+									</div>
+							   		<div class="col-xs-4" id="income">
+									   		<div class="input-group">
+												<span class="input-group-addon"> <i class="glyphicon glyphicon-calendar"></i></span>
+												<input class="form-control" id="incomeDate" type="date" data-placeholder="Choose the begining of period" data-toggle="tooltip" data-placement="top" title="Date since when you want to calculate income" >
+												<span id="errorIncome"></span>
+											</div>
+									</div>
+									<div class="col-xs-2">
+							   			<button id="seeIncome"  class="btn btn-info" >Calculate</button>
+									</div>
+							   		<div class="col-xs-4" id="incomeResult">
+									</div>
+							    </div>
+						    			 
 						</div>
-						<div class="row" id="dailyChoose">
-								<h3 id="look">
-									<span> <i class="glyphicon glyphicon-calendar"></i></span>Look at daily reservations
+						<div class="row" id="dayChoose">
+								<h3 class="look">
+									<span> <i class="glyphicon glyphicon-calendar"></i></span>Look at number of reserved tickets per day
 							    </h3>
 								
 								<div class="form-group row ">				      	
 							        <div class="col-xs-1">
-									      <label >Choose year:</label>
+									      <label >Year:</label>
 									</div>
 							   		<div class="col-xs-2">
-										<input type="text" maxlength ="4" class="form-control" id="godinaChart" placeholder="Enter year" >
+										<input type="text" maxlength ="4" class="form-control" id="yearCh2" placeholder="Enter year" >
 									</div>	   	  
 							   		<div class="col-xs-1">
-									      <label >Choose month:</label>
+									      <label >Month:</label>
 									 </div>
 									 <div class="col-xs-3">
-									      <select class="form-control" id="mjesecChart"  >
+									      <select class="form-control" id="monthCh2"  >
 									      	<option value="1">January</option>
 									      	<option value="2">February</option>
 									      	<option value="3">March</option>
@@ -252,29 +328,27 @@
 									   	  </select>
 							   		</div>
 							   		<div class="col-xs-2">
-							   			<button id="dnevniDugme"  class="btn btn-info" >Show</button>
+							   			<button id="showGraf1"  class="btn btn-info" >Show</button>
 									</div>
 							    </div>
 						    			 
-						</div>	
-					
-						<canvas id="myChart">
+						</div>
+						<canvas id="dayChart">
 						</canvas>
-					
-					<div class="row" id="monthChoose">
-								<h3 id="look">
-									<span> <i class="glyphicon glyphicon-calendar"></i></span>Look at weekly reservations
+						<div class="row" id="monthChoose">
+								<h3 class="look">
+									<span> <i class="glyphicon glyphicon-calendar"></i></span>Look at weekly reservations of tickets
 							    </h3>
 								
 								<div class="form-group row ">				      	
 							        <div class="col-xs-1">
-									      <label >Choose year:</label>
+									      <label >Year:</label>
 									</div>
 							   		<div class="col-xs-2">
 										<input type="text" maxlength ="4" class="form-control" id="yearChart" placeholder="Enter year" >
 									</div>	   	  
 							   		<div class="col-xs-1">
-									      <label >Choose month:</label>
+									      <label >Month:</label>
 									 </div>
 									 <div class="col-xs-3">
 									      <select class="form-control" id="monthChart"  >
@@ -293,44 +367,70 @@
 									   	  </select>
 							   		</div>
 							   		<div class="col-xs-2">
-							   			<button id="mjesecniDugme"  class="btn btn-info" >Show</button>
+							   			<button id="showGraf"  class="btn btn-info" >Show</button>
 									</div>
 							    </div>
 						    			 
 						</div>
 						<canvas id="weekChart">
 						</canvas>
-					
-						<div class="row" id="godinaIzbor">
-								<h3 id="look">
-									<span> <i class="glyphicon glyphicon-calendar"></i></span>Look at weekly reservations
-							    </h3>
+						<div class="row" >
+								<h3 class="look">
+									<span> <i class="glyphicon glyphicon-calendar"></i></span>Monthly reservations tickets:
+								</h3>
 								
 								<div class="form-group row ">				      	
 							        <div class="col-xs-1">
-									      <label >Choose year:</label>
+									      <label >Year:</label>
 									</div>
 							   		<div class="col-xs-2">
-										<input type="text" maxlength ="4" class="form-control" id="yearGodisnji" placeholder="Choose year" >
-									</div>	   	  
-							   		
-							   		<div class="col-xs-2">
-							   			<button id="godisnjiDugme"  class="btn btn-info" >Show</button>
+										<input type="text" maxlength ="4" class="form-control" id="yearCh" placeholder="Enter year" >
+									</div>
+									<div class="col-xs-2">
+							   			<button id="showGraf2"  class="btn btn-info" >Show</button>
 									</div>
 							    </div>
 						    			 
 						</div>
-						<canvas id="mjesecniChart">
+						<canvas id="monthGrafik">
 						</canvas>
-					    
-			   </div> 
-			  		
-			  		
-			  		
-			  		
+						
+			   </div>
+			 <div id = "divLozinka">
+			 <div class="container" id="pass">
+			  				<form method="post" class="changePassword" >  					
+							     <div class="form-group row">
+							        <div class="col-xs-6">	
+							            <i class="glyphicon glyphicon-eye-close"></i>
+							            <label for="pwd">Old password:</label>
+								        <input type="password"  required class="form-control" id="lozinkaOld" placeholder="Enter your password" name="loz1">
+								  	    <div id= "lozinkaError"></div>
+							        </div>
+							    </div>
+								<div class="form-group row">
+								      <div class="col-xs-6">
+									      <i class="glyphicon glyphicon-eye-close"></i>
+							              <label for="pwd">New password:</label>
+									      <input type="password" class="form-control" required id="lozinka1" placeholder="Enter new password" name="loz2">
+									      <div id='poruka'></div>	
+									  </div>			      
+							    </div>
+							    <div class="form-group row">
+								      <div class="col-xs-6">
+									      <i class="glyphicon glyphicon-eye-close"></i>
+							              <label for="pwd">Repeat new password:</label>
+									      <input type="password" class="form-control" required id="lozinka2" placeholder="Repeat password" name="loz2">
+									      <div id='poruka'></div>	
+									  </div>			      
+							    </div>  				    
+						    <button type="submit" id="potvrdiBtn1" class="btn btn-default btn-lg">Confirm</button>
+						  </form>
+				</div>
+			 </div>	
+			  	
 			  				  			  		
 				</div>
-				<aside class="col-md-2">
+				<aside  class="col-md-2 side">
 					<div class="okvir" id ="admin">
 						<button onclick = "addPlane()" type="button" class="btn btn-link">Add plane</button>
 					</div>
@@ -340,13 +440,11 @@
 					<div class="okvir" id = "adminDestinacija">
 						<button  type="button" class="btn btn-link" onclick="addDestination()">Add destination</button>
 					</div>
-					
-					<div class="okvir" id = "adminIzvestaj">
-						<button  type="button" class="btn btn-link" onclick="report()">Report</button>
+					<div class="okvir" id = "adminDestinacija">
+						<button  type="button" class="btn btn-link" onclick="changePassword()">Change password</button>
 					</div>
-						
-					<div class="okvir">
-						<button type="button" class="btn btn-link" id="adminProfile" onclick="profileAdmin()">My profile</button>
+					<div class="okvir" id = "adminDestinacija">
+						<button  type="button" class="btn btn-link" onclick="changePersonalData()">Change personal data</button>
 					</div>
 							
 				</aside>

@@ -3,7 +3,7 @@
  */
 
 var idAviona;
-var selektovanoSediste;
+var selektovanoSediste ="";
 
 
 function onLoad()
@@ -361,16 +361,24 @@ function drawSeats(seats,configuration,klasa)
 						if($('#'+value.brojReda+'-'+value.brojKolone+'-'+klasa).css('background-color') === 'rgb(255, 255, 255)')
 						{
 							if(selektovanoSediste == "" || selektovanoSediste == null)
-								selektovanoSediste = 
+							{
+								selektovanoSediste = value.brojReda+'-'+value.brojKolone+'-'+klasa+'-'+value.idSedista;
+							}
+							else
+							{
+								var podaci = selektovanoSediste.split('-');
+								$('#'+podaci[0]+'-'+podaci[1]+'-'+klasa).css('background-color', 'rgb(255, 255, 255)');
+								selektovanoSediste = value.brojReda+'-'+value.brojKolone+'-'+klasa+'-'+value.idSedista;
+							}
+								
 							$('#'+value.brojReda+'-'+value.brojKolone+'-'+klasa).css('background-color', 'rgb(187, 148, 231)');
 							
-							dodajSediste(value.brojReda+'-'+value.brojKolone+'-'+value.idSedista);
 						}
 						else
 						{
 							
 							$('#'+value.brojReda+'-'+value.brojKolone+'-'+klasa).css('background-color', 'rgb(255, 255, 255)');
-							obrisiSediste(value.brojReda+'-'+value.brojKolone+'-'+value.idKarte);
+							selektovanoSediste = "";
 						}				   
 					  });			
 				}
@@ -388,13 +396,49 @@ function addSeat(klasa)
 {
 	alert(klasa);
 	
+	$.ajax
+	({
+		type : 'POST',
+		url : 'api/avioni/dodajSediste/'+idAviona+'/'+klasa,
+		success : function(data)
+		{
+			alert(data);
+			konfiguracija();
+		}
+	});
+	
 	
 }
 
 function removeSeat(klasa)
 {
 	alert(klasa);
-	
+	if(selektovanoSediste == "" || selektovanoSediste == null)
+	{
+		alert("selektujte sediste");
+	}
+	else
+	{
+		alert(selektovanoSediste);
+		var podaci = selektovanoSediste.split('-');
+		
+		var podatak = {idSedista : podaci[3]};
+		
+		$.ajax
+		({
+			type : 'POST',
+			url : 'api/avioni/obrisiSediste/'+idAviona+'/'+klasa,
+			contentType: "application/json",
+			data : JSON.stringify(podatak),
+			success: function(data)
+			{
+				alert(data);
+				konfiguracija();
+			}
+			
+			
+		});
+	}
 	
 }
 

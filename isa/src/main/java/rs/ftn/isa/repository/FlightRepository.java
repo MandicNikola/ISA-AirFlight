@@ -28,6 +28,9 @@ public interface FlightRepository extends JpaRepository<Flight, Long>{
 	List<Flight> findFlightsBetweenDates(@Param("date") Date date, @Param("date1") Date date1);
 	
 	
+
+	
+	
 	Flight findOneById(Long id);
 	
 }

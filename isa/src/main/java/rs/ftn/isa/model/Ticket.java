@@ -58,7 +58,24 @@ public class Ticket {
 		
 	}
 
-	
+	public double getCena()
+	{
+		double cena = 0;
+		cena += getLet().getCena();
+		
+		for(Segment segment : this.getLet().getPlane().getSegmenti())
+		{
+			if(segment.getNaziv().equals(this.getKlasa()))
+			{
+				for(UslugaAvion usluga : segment.getUsluge())
+					cena += usluga.getCena();
+				break;
+			}
+			
+		}
+		
+		return cena;
+	}
 	
 	
 	public Ticket(boolean rezervisano, String klasa) {

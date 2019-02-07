@@ -25,6 +25,7 @@ import rs.ftn.isa.dto.AirplaneDTO;
 import rs.ftn.isa.dto.DestinationDTO;
 import rs.ftn.isa.dto.FlightDTO;
 import rs.ftn.isa.dto.HotelDTO;
+import rs.ftn.isa.dto.TicketDTO;
 import rs.ftn.isa.model.AirPlane;
 import rs.ftn.isa.model.AirplaneCompany;
 import rs.ftn.isa.model.CijenovnikSoba;
@@ -359,6 +360,49 @@ public class AirplaneCompanyController {
 			 
 	}
 	
+	@RequestMapping(value="/tickets/{id}", 
+			method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	public  ResponseEntity<List<TicketDTO>> getTickets(@PathVariable Long id) throws ParseException{		
+		
+		AirplaneCompany company = service.findAirplaneCompanyById(id);
+		
+		if(company == null)
+			return new ResponseEntity<List<TicketDTO>>(HttpStatus.BAD_REQUEST);
+		
+		
+		Date currentDate = new Date();
+		SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+		
+		String dateStr = formater.format(currentDate);
+		currentDate = formater.parse(dateStr);
+		
+		ArrayList<TicketDTO> retTicketDtos = new ArrayList<TicketDTO>();
+		for(Flight let : company.getLetovi())
+		{
+			if(let.getDatumPoletanja().after(currentDate))
+			{
+				for(Ticket ticket : let.getKarte())
+				{
+					if(!ticket.isRezervisano())
+					{
+						TicketDTO dto = new TicketDTO(ticket);
+						dto.setDatumPoletanja(formater.format(let.getDatumPoletanja()));
+						dto.setLokPoletanja(let.getPoletanje().getNaziv());
+						dto.setLokSletanja(let.getSletanje().getNaziv());
+						dto.setCena(ticket.getCena());
+						
+						retTicketDtos.add(dto);
+					}
+				}
+			}
+		}
+		Collections.sort(retTicketDtos);
+		
+		
+		return new ResponseEntity<List<TicketDTO>>(retTicketDtos, HttpStatus.OK);
+	}
+	
+	
 	
 	
 	
@@ -381,6 +425,10 @@ public class AirplaneCompanyController {
 			
 			flightDto.setIdLeta(flight.getId());
 			flightDto.setCena(flight.getCena());
+			flightDto.setAvion(flight.getPlane().getNaziv());
+			flightDto.setDuzina(flight.getDuzina());
+			flightDto.setLokPoletanja(flight.getPoletanje().getNaziv());
+			flightDto.setLokSletanja(flight.getSletanje().getNaziv());
 			
 			Date datePoletanje = flight.getVremePoletanja();
 			Date dateSletanje = flight.getVremeSletanja();
@@ -406,6 +454,7 @@ public class AirplaneCompanyController {
 					flightDto.getPresedanja().add(destination.getId());
 				}
 			}
+			retSet.add(flightDto);
 		}
 		
 		return new ResponseEntity<Set<FlightDTO>>(retSet, HttpStatus.OK);
