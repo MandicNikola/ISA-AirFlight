@@ -575,16 +575,23 @@ var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 	popuniSelect(skup);
 }
 function popuniSelect(skup){
-	
+	var podatak = window.location.search.substring(1);
+	var urlDelovi= podatak.split("=");
+	var grad=urlDelovi[4];
+	grad= grad.replace("%20"," ");
+	console.log(grad);
 	console.log('Usao u popuni select');
 	
 	var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 	 $.each(lista, function(index, data) {
-		 	var adresa=data.grad +", "+data.ulica;
-		 $("#pickLocation").append("<option  value=\""+data.id+"\">"+adresa+"</option>");
-
+		 var adresa=data.grad +", "+data.ulica;
+			
+		 if(data.grad == grad){
+		 	 $("#pickLocation").append("<option  value=\""+data.id+"\">"+adresa+"</option>");
+	
+	     }
 		 $("#dropLocation").append("<option  value=\""+data.id+"\">"+adresa+"</option>");
-		 
+
 	 });
 	
 }
@@ -1121,7 +1128,8 @@ function izlistajPonude(data){
 	
 }
 function rezervisiVozilo(param){
-    
+	var podatak = window.location.search.substring(1);
+	
 	var id=param.split(',')[0];
 	var cena= param.split(',')[1];
 	var flag = param.split(',')[2];
@@ -1244,6 +1252,8 @@ function writeCarsForDiscounts(lista){
 }
 function addDiscountForCars(idCar){
 	$("#autaPopusti").hide();
+	$("#postojeciPopusti").hide();
+	
 	$("#poruka").hide();
 	   
 	$("#dugmePopust").empty();
