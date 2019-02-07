@@ -407,7 +407,8 @@ public class RoomController {
 				povratna.setRezavion(idRez);
 				Set<RezervacijaHotel> rezSobe = izabranaSoba.getRezervacije();
 				rezSobe.add(povratna);				
-				izabranaSoba.setRezervacije(rezSobe);	
+				izabranaSoba.setRezervacije(rezSobe);
+				izabranaSoba.setRezervisana(true);
 				servis.saveRoom(izabranaSoba);
 			
 				return povratna;

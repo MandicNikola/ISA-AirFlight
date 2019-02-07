@@ -981,7 +981,7 @@ function dodajUseruBrzu(data,bodovi){
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown){
 				console.log('usao u gresku');
-				alert('greska');
+			
 			}
 			});
 	
@@ -990,9 +990,18 @@ function uspjesnaFast(data){
 	console.log('usao u ispisi Uspjesno');
 	$("#formaFast").hide();
 	$("#fastPonuda").empty();
-
 	$("#fastPonuda").append("<div id= \"obavj\"><p>You have successfully made a reservation.</p><p>Total price:"+data.cijena+"</p><p>We are looking forward to have you as our guests</p></div>");
-	
+	var adresa = window.location.search.substring(1);
+	// da li ide da rezervise rent a car
+	var flagdalje  = adresa.split('=')[5];	
+	if(flagdalje == 1){
+		var idRezervacije = adresa.split('=')[2];
+		var  datumSletanja = adresa.split('=')[3];
+		var lokacija = adresa.split('=')[4];
+		var brojKarata = adresa.split('=')[6];
+		window.location = "redirekcija.html?id="+"rent"+'='+idRezervacije+"="+lokacija+"="+datumSletanja+"="+"0"+"="+brojKarata;
+	}
+
 }
 function dodajIzvjestaj(){
 	var adresa = window.location.search.substring(1);

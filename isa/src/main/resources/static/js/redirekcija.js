@@ -22,8 +22,8 @@ function load()
 	 datumSletanja = decoded.split('=')[4];
 	 status = decoded.split('=')[5];
 	 brojKarata = decoded.split('=')[6];
-	
-	
+	 lokacija = lokacija.replace('%20',' ');
+	console.log(lokacija);
 	if(tip == "hotel")
 	{
 		
