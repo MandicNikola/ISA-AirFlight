@@ -408,6 +408,29 @@ function kategorija(naziv){
 	});
 	
 }
+function dodajCen(){
+	var podatak = window.location.search.substring(1);
+	var niz= podatak.split("=");
+	var id= niz[1]; 
+	
+	$.ajax({
+		method:'GET',
+		url: "/api/rents/getAktivanCenovnik/"+id,
+		success: function(data){
+			if(data==null){
+				console.log('Nema usluga');
+			}else if(data.length == 0){
+				console.log('Prazne usluga');
+			}else{
+				console.log('Ima usluga u cenovniku');
+				$("#obrisiCen").append("<button class=\"btn btn-info\" onclick=\"obrisiCenovnik('"+data.id+"')\">Delete</button>")
+
+			}
+		}
+	});
+	
+
+}
 function dodajDatum(){
 	var podatak = window.location.search.substring(1);
 	var niz= podatak.split("=");
@@ -434,10 +457,23 @@ function ispisiDatum(data){
 	var dat1 = data.datum_primene.split('T')[0];
 	
 	$("#cenovnikKategorije").append("<p><i class=\"glyphicon glyphicon-calendar\"> </i> Effective date : "+dat1+"</p>");
-	
+	}
+
+function obrisiCenovnik(id){
+
+	$.ajax({
+		type : 'POST',
+		url : "/api/cenovnici/deleteCenovnik/"+id,
+		success : function(pov) {
+			    $("#cenovnikKategorije").empty();
+				$("#obrisiCen").empty();
+				console.log('obrisan cenovnik');
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+	});
 }
-
-
 function ispisiCenovnik(skup){
 		
 		console.log('usao u ispisiCenovnik');
@@ -572,7 +608,12 @@ var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 			}
 			 $("#filijale").append("</div>");
 		});
-	popuniSelect(skup);
+		var podatak = window.location.search.substring(1);
+		var niz= podatak.split("=");
+		if(niz.length>2){
+			popuniSelect(skup);
+		}
+	
 }
 function popuniSelect(skup){
 	var podatak = window.location.search.substring(1);
@@ -801,6 +842,9 @@ $(document).ready(function(){
 		$("#adminStrana").hide();
 		$("#cenovnik").show();
 		$("#cenovnikKategorije").empty();
+		$("#obrisiCen").empty();
+		dodajCen();
+
     });
     
   $("a#sistemPopust").click(function(){
