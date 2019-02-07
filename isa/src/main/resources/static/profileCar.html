@@ -90,7 +90,9 @@
  	 #polje{
  	 	background-color: white;
  	 	padding:5px;
- 	 	width:50%;
+ 	 	width:70%;
+     	border: 2px solid #C3C3C3;
+ 
  	 }
  	 #prikazCenovnika{
  	 	background-color: white;
@@ -494,55 +496,91 @@
 			 	<div  id="polje" >
 			 		<form method="post" class="dodavanje">
 			 		<h2>Add a service</h2>
-			 		
-			 		<div class="form-group row ">				      	
-				        <div class="col-xs-8">
-						       <i class="glyphicon glyphicon-user"></i>
-						      <label for="days">Above days:</label>
-						      <input type="text" class="form-control" id="days" placeholder="Enter min number of days" >
-						   	  
-				   		</div>
-				    </div>
-				    <div class="form-group row">
-				      <div class="col-xs-8">
-				       		  <i class="glyphicon  glyphicon-euro"></i>
-						      <label>Price per day for A category:</label>
-						      <input type="number" class="form-control" id="catA" min="1" placeholder="Enter Price">
-					</div>
-				    </div>
-			    	<div class="form-group row">			    	
-				        <div class="col-xs-8">
-				              <i class="glyphicon  glyphicon-euro"></i>
-				              <label>Price per day for B category:</label>
-						      <input type="number" class="form-control" id="catB" min="1" placeholder="Enter Price" >
-						      
-				    	</div>
-				    </div>
-				    <div class="form-group row">				    
-				        <div class="col-xs-8">	
-				           	 <i class="glyphicon  glyphicon-euro"></i>
-				              <label>Price per day for C category:</label>
-						      <input type="number" min="0" class="form-control" id="catC" placeholder="Enter price">
-						     
-				    	</div>
-				    </div>
-			    	<div class="form-group row">
-			    		 <div class="col-xs-8">	
-			    	     	 <i class="glyphicon  glyphicon-euro"></i>
-						      <label>Price per day for category D:</label>
-						      <input type="number" min="0" class="form-control" id="catD" placeholder="Enter price" >
-						   	
-						 </div>
-				    </div>
-				    <div class="form-group row">
-				        <div class="col-xs-8">	
-				            <i class="glyphicon  glyphicon-euro"></i>
-				            <label>Price per day for category E:</label>
-					        <input type="number" min="0" class="form-control" id="catE" placeholder="Enter price">
-					  	  
-				        </div>
-				    </div>    				    
-			    <button type="button" id="potvrdiBtn" class="btn btn-default btn-lg">Add</button>
+			 			<div class="row">
+							<div class="col-md-5">
+										<div class="form-group">
+											 <span class="form-label">Above days </span>
+											
+										</div>
+							</div>
+							<div class="col-md-5">
+										<div class="input-group">
+											<span class="input-group-addon"> <i class="glyphicon glyphicon-user"></i></span>
+											<input class="form-control" type="number" id="days" placeholder="Enter number of days" min="1" required>
+										</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-5">
+										<div class="form-group">
+											 <span class="form-label">Price per day for A category:</span>
+											
+										</div>
+							</div>
+							<div class="col-md-5">
+										<div class="input-group">
+											<span class="input-group-addon"> <i class="glyphicon glyphicon-euro"></i></span>
+										   <input type="number" class="form-control" id="catA" min="1" placeholder="Enter Price">
+										</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-5">
+										<div class="form-group">
+											 <span class="form-label">Price per day for B category:</span>
+											
+										</div>
+							</div>
+							<div class="col-md-5">
+										<div class="input-group">
+											<span class="input-group-addon"> <i class="glyphicon glyphicon-euro"></i></span>
+										 <input type="number" class="form-control" id="catB" min="1" placeholder="Enter Price" >
+						      			</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-5">
+										<div class="form-group">
+											 <span class="form-label">Price per day for C category:</span>
+											
+										</div>
+							</div>
+							<div class="col-md-5">
+										<div class="input-group">
+											<span class="input-group-addon"> <i class="glyphicon glyphicon-euro"></i></span>
+										  <input type="number" min="0" class="form-control" id="catC" placeholder="Enter price">
+						   			   </div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-5">
+										<div class="form-group">
+											 <span class="form-label">Price per day for D category:</span>
+											
+										</div>
+							</div>
+							<div class="col-md-5">
+										<div class="input-group">
+											<span class="input-group-addon"> <i class="glyphicon glyphicon-euro"></i></span>
+										      <input type="number" min="0" class="form-control" id="catD" placeholder="Enter price" >
+						 				</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-5">
+										<div class="form-group">
+											 <span class="form-label">Price per day for E category:</span>
+											
+										</div>
+							</div>
+							<div class="col-md-5">
+										<div class="input-group">
+											<span class="input-group-addon"> <i class="glyphicon glyphicon-euro"></i></span>
+										     <input type="number" min="0" class="form-control" id="catE" placeholder="Enter price">
+					  	  				</div>
+							</div>
+						</div>
+			  <button type="button" id="potvrdiBtn" class="btn btn-default btn-lg">Add</button>
 			  </form>
 			 	</div>
 			  </div>

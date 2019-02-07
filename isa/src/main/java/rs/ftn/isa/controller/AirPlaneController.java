@@ -373,6 +373,10 @@ public class AirPlaneController {
 		
 		AirPlane avion = servis.findAirPlaneById(id);
 		
+		Date currentDate = new Date();
+		
+		boolean dozvola = true;
+		
 		if(avion == null)
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		
@@ -385,7 +389,19 @@ public class AirPlaneController {
 				{
 					if(seat.getId().equals(sediste.getIdSedista()))
 					{
-						seat.setStatus("obrisano");
+						for(Ticket ticket : seat.getKarte())
+						{
+							if(ticket.isRezervisano())
+							{
+								if(ticket.getLet().getDatumPoletanja().after(currentDate))
+								{
+									dozvola = false;
+									break;
+								}
+							}
+						}
+						if(dozvola)
+							seat.setStatus("obrisano");
 						break;
 					}
 				}

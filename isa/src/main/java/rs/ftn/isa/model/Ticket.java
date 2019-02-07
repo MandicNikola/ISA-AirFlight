@@ -1,6 +1,8 @@
 package rs.ftn.isa.model;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -49,6 +52,8 @@ public class Ticket {
 	            mappedBy = "karta")
 	 private PassengerInfo passengerInfo;
 	
+	@OneToMany(mappedBy="kartaPopust",fetch = FetchType.LAZY,cascade=CascadeType.ALL)
+	private Set<DiscountTicket> popustiKarte = new HashSet<DiscountTicket>();
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Seat sediste;
@@ -112,6 +117,14 @@ public class Ticket {
 
 
 
+
+	public Set<DiscountTicket> getPopustiKarte() {
+		return popustiKarte;
+	}
+
+	public void setPopustiKarte(Set<DiscountTicket> popustiKarte) {
+		this.popustiKarte = popustiKarte;
+	}
 
 	public PassengerInfo getPassengerInfo() {
 		return passengerInfo;
