@@ -780,6 +780,8 @@ $(document).ready(function(){
     	showRoomsForDiscounts();
     	$("#informacije").hide();
     	$("#divPopust").show();
+    	$("#poruka").hide();
+    		
     	$("#postojeciPopust").hide();
 		
     	$("#ispisiTabelu").hide();
@@ -1850,9 +1852,9 @@ function addDiscountForRooms(idRoom){
 	$("#errorEndPopust").text('');
 	
 	$("#sobePopusti").hide();
-
+	
 	$("#dugmePopust").empty();
-	$("#dugmePopust").append("<button type=\"button\"  class=\"btn btn-lg\" onclick = \"dodajPopustSistem("+idRoom+")\">Add</button></div>");
+	$("#dugmePopust").append("<button type=\"button\" id=\"dugmePopustBonus\" class=\"btn btn-lg\" onclick = \"pronadjiIzabraneBod("+idRoom+")\">Add</button></div>");
 	pokupiPostojecePopuste();
 	
 }
@@ -1862,9 +1864,9 @@ function pokupiPostojecePopuste(){
 		url: "/api/special/all",
 		success: function(lista){
 			if(lista == null){
-				console.log('Nema popusta')
+				nemaBonusPopusta();
 			}else if(lista.length==0){
-				console.log('Nema popusta')
+				nemaBonusPopusta();
 			}else{
 				dodajProcente(lista);
 				
@@ -1872,6 +1874,11 @@ function pokupiPostojecePopuste(){
 		}
 	});
 	
+}
+function nemaBonusPopusta(){
+	 $("#dodajPopust").hide();
+	 $("#poruka").show();
+		
 }
 function dodajProcente(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
@@ -1886,16 +1893,29 @@ function dodajProcente(lista){
 		
 	
 }
-function dodajPopustSistem(idRoom){
+function pronadjiIzabraneBod(idRoom){
+	var idPopusta = $("#selectBodove").val();
+	console.log('idPopusta');
+	$.ajax({
+		method:'GET',
+		url: "/api/special/getById/"+idPopusta,
+		success: function(lista){
+				dodajPopustSistem(lista,idRoom);
+			
+		}
+	});
+	
+}
+function dodajPopustSistem(lista,idRoom){
+	
+	
 	console.log(idRoom);
 	var pocetak=$('#sincewhen').val();
 	var kraj=$('#untilwhen').val();
-	var bodovi=$('#brojBodova').val();
-	var procenat=$('#procenat').val();
+	var bodovi=lista.bodovi;
+	var procenat=lista.vrijednost;
 	var adresa = window.location.search.substring(1);
-	var id = adresa.split('=')[1];
-	
-	
+	var id = adresa.split('=')[1];	
 	let ispravno = true;
 	 
 	if(!pocetak){
