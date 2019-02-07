@@ -20,7 +20,13 @@
 		    border-bottom: 2px solid #C3C3C3;
 		    padding: 4px;
  	}
- 	
+ 	#labelaBroj{
+ 		margin-bottom:1px;
+ 	}
+ 	#ispisiSelectBodovi{
+ 		margin-top:1px;
+ 		
+ 	}
  	 .jumbotron{
  	 	border: 2px solid #C3C3C3;
  	 	border-radius: 5px;
@@ -43,9 +49,13 @@
  	 	text-color:#bfbfbf !important;
  	 	margin-top:2px;
  	 }
+ 	 #dugmePopustBonus{
+ 	 	margin-top:14px;
+ 	 	padding:7px;
+ 	 }
  	 #dugmePopust{
- 	 	padding: 0px !important;
- 	 	margin: 0px !important;
+ 	 		margin-top:12px;
+ 	 
  	 }
  	 .okvir:hover{
  	 	background-color: #C3C3C3;
@@ -169,10 +179,11 @@
     border-radius: 3px;
      font-family: 'Josefin Sans', sans-serif;
 }
+
   #monthChoose,#godinaIzbor{
   	margin-left:20px;
   }
-  #listaSoba{
+  #listaSoba,#porukaCSS{
 	    font-family: 'Josefin Sans', sans-serif;
 	  	margin-left:30px;
   		font-size:16px;
@@ -389,7 +400,9 @@ input[type="date"]:valid::before { display: none }
 			 	<section>
 			 	<div class="container" id="sobePopusti"></div>
 			 	<div class="container" id="postojeciPopusti"></div>
-			 	
+			 	<div class="container" id = "poruka">
+			 		<p id = "porukaCSS">There is no any defined discount</p>
+			 	</div>
 			 	<div class="container" id="dodajPopust">
 			 		<div class = "row">
 				   		 	<div class="col-md-6">
@@ -414,26 +427,24 @@ input[type="date"]:valid::before { display: none }
 							</div>
 				     </div>
 				      <div class="row">
-				   		  <div class="col-md-3">
-										 <label for="male">Number of user points:</label>
-												
-						 </div>
-						  <div class="col-md-4">
-								<div class="form-group">
-									 		<div  id="ispisiSelect">
-												<select class="form-control" id="selectBodove"></select>	
-											</div>
-									
-								</div>					
-						 </div> 	  	  
-				    	  <div class="col-md-3">
+				   		 
+						 <div class="col-md-6" >
+								<div class="form-group" id="labelaBroj">
+										<label for="points">Number of user points:</label>			
+						 		</div>													 		
+						 		<div class="form-group">
+										<div  id="ispisiSelectBodovi">	
+										<select class="form-control" id="selectBodove"></select>	
+										</div>					
+						
+						 		</div> 
+						</div> 			  	  
+				    	  <div class="col-md-6">
 						 		<div id="dugmePopust"></div>
-					
 						 </div> 	  	  
-				    	
-				   </div>
 					
-			 	</div>			
+			 		</div>
+			 		</div>			
 			 	</section>
 			 </div>
 			 <div id="adminStrana" class="container-fluid">

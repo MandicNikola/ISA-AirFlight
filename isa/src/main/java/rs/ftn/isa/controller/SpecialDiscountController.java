@@ -26,6 +26,13 @@ public class SpecialDiscountController {
 		return  servis.findAll();
 	}	
 	
+	
+	@RequestMapping(value="/getById/{id}", method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody SpecialDiscount getSpecialDiscount(@PathVariable Long id){
+		System.out.println("dosao po specijalni popust");
+		return  servis.findOneById(id);
+	}
 	@RequestMapping(value="/obrisiSpecijalni/{id}", method = RequestMethod.POST)
 	public  void obrisiSpecijalni(@PathVariable Long id){
 		servis.deleteSpecialDiscount(id);		
