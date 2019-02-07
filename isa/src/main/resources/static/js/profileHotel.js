@@ -1689,17 +1689,24 @@ function zavrsiRezBezUsluga(nizSoba){
 	var listaUsl="nema";
 	var adresa = window.location.search.substring(1);
     var id = adresa.split('=')[1];
+    var idRez = adresa.split('=')[2];
+    var brKarata = adresa.split('=')[6];
+    if(osobe > brKarata){
+    	console.log(' nedovoljno karata');
+    	nedovoljnoKarata();
+    }else{
 	  
 	  $.ajax({
 			type : 'POST',
-			url : "/api/hoteli/rezervisi/"+info+"/sobe/"+nizSoba+"/nizUsluga/"+listaUsl+"/idHotela/"+id,
+			url : "/api/hoteli/rezervisi/"+info+"/sobe/"+nizSoba+"/nizUsluga/"+listaUsl+"/idHotela/"+id+"/idRez/"+idRez,
 			success : function(povratna) {
 						if(povratna.length==0){
 							console.log('neuspjesno');
 						}else if(povratna == 0){
 							console.log('neuspjesno');
 						}else{
-							ispisiUspjesno(povratna);		
+							dodajUseruRez(povratna);
+							
 							console.log('uspjesno');
 						}
 			},
@@ -1707,7 +1714,13 @@ function zavrsiRezBezUsluga(nizSoba){
 				alert('greska');
 			}
 			});
-	  
+    }
+}
+function nedovoljnoKarata(){
+	alert('Please choose again. Number of people can not be greater then number of beds.')
+	$("#reserveHotel").show();		
+	$("#korak").hide();
+	$("#korakDodatne").hide();
 }
 function zavrsiRez(nizSoba){
 	var pocetak=$('#checkin').val();
@@ -1734,10 +1747,17 @@ function zavrsiRez(nizSoba){
 	  var adresa = window.location.search.substring(1);
 		console.log('adesa je '+adresa);
 		var id = adresa.split('=')[1];
-	  
+	
+		var idRez = adresa.split('=')[2];
+	    var brKarata = adresa.split('=')[6];
+	    if(osobe > brKarata){
+	    	console.log(' nedovoljno karata');
+	    	nedovoljnoKarata();
+	    }else{
+		
 	  $.ajax({
 			type : 'POST',
-			url : "/api/hoteli/rezervisi/"+info+"/sobe/"+nizSoba+"/nizUsluga/"+listaUsl+"/idHotela/"+id,
+			url : "/api/hoteli/rezervisi/"+info+"/sobe/"+nizSoba+"/nizUsluga/"+listaUsl+"/idHotela/"+id+"/idRez/"+idRez,
 			success : function(povratna) {
 					dodajUseruRez(povratna);
 					},
@@ -1745,14 +1765,14 @@ function zavrsiRez(nizSoba){
 				alert('greska');
 			}
 			});
-	  
+	    }
 }
 function dodajUseruRez(data){
 	 console.log('dosao je da doda rez korisniku');
 	 var rezervacija= JSON.stringify(data);
 	  $.ajax({
 			type : 'POST',
-			url : "/api/korisnici/addRezSobe",
+			url : "/api/korisnici/addRezSobe/0",
 			contentType : "application/json",
 			data: rezervacija,
 			dataType : 'json',		
@@ -1772,7 +1792,17 @@ function ispisiUspjesno(data){
 	 
 	$("#korakDodatne").empty();
 	$("#korakDodatne").append("<div id= \"obavj\"><p>You have successfully made a reservation.</p><p>Total price:"+data.cijena+"</p><p>We are looking forward to have you as our guests</p></div>");
-	
+	var adresa = window.location.search.substring(1);
+	// da li ide da rezervise rent a car
+	var flagdalje  = adresa.split('=')[5];	
+	if(flagdalje == 1){
+		var idRezervacije = adresa.split('=')[2];
+		var  datumSletanja = adresa.split('=')[3];
+		var lokacija = adresa.split('=')[4];
+		var brojKarata = adresa.split('=')[6];
+		window.location = "redirekcija.html?id="+"rent"+'='+idRezervacije+"="+lokacija+"="+datumSletanja+"="+"0"+"="+brojKarata;
+	}
+
 }
 function changePass(){
 	 $("#tabovi").hide();

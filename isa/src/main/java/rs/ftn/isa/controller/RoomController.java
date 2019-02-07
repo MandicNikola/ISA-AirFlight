@@ -409,6 +409,8 @@ public class RoomController {
 				rezSobe.add(povratna);				
 				izabranaSoba.setRezervacije(rezSobe);
 				izabranaSoba.setRezervisana(true);
+				int broj = izabranaSoba.getBrojRezervacija();
+				izabranaSoba.setBrojRezervacija(broj+1);
 				servis.saveRoom(izabranaSoba);
 			
 				return povratna;
