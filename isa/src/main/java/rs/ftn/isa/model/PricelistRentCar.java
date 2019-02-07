@@ -30,7 +30,7 @@ public class PricelistRentCar {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	private Long id;
 	
 	@Column(name="datum_primene", nullable = false)
 	private Date datum_primene;
@@ -42,7 +42,7 @@ public class PricelistRentCar {
 	private Set<Usluga> usluge = new HashSet<Usluga>();
 
 	
-	@ManyToOne( fetch = FetchType.EAGER, cascade =  CascadeType.ALL)
+	@ManyToOne( fetch = FetchType.EAGER)
 	@JoinColumn(name = "rentcar_id")
 	private RentACar rentcar; 
 	
@@ -77,7 +77,7 @@ public class PricelistRentCar {
 		this.usluge = usluge;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -89,7 +89,7 @@ public class PricelistRentCar {
 		this.rentcar = rentcar;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
