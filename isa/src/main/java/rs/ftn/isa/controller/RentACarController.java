@@ -167,9 +167,9 @@ public class RentACarController {
 						//prolazimo kroz sve rezervacije koje su napravljene za ovo vozilo
 						for(RezervacijaRentCar rez : rezervacije) {	
 							//ako je datum preuzimanja vozila pre datuma vracanja iz rezervacije
-							if(datPreuzimanja.before(rez.getDatumVracanja())) {
+							if(datPreuzimanja.compareTo(rez.getDatumVracanja())<0) {
 								 //datum vracanja auta posle datuma preuzimanja iz rezervacije, preklapaju se termini, vozilo nam ne odgovara
-									if(datVracanje.after(rez.getDatumPreuzimanja())){
+									if(datVracanje.compareTo(rez.getDatumPreuzimanja())>0){
 										System.out.println("provera2--> Datum vracanja je posle datuma preuzimanja iz rezervacije");
 									}else {
 										postojiVozilo=true;
@@ -663,10 +663,10 @@ public class RentACarController {
 				//prolazimo kroz sve rezervacije koje su napravljene za ovo vozilo
 				for(RezervacijaRentCar R : rezervacije) {	
 					//ako je datum preuzimanja vozila pre datuma vracanja iz rezervacije
-					if(rezervacija.getPickUp().before(R.getDatumVracanja())) {
+					if(rezervacija.getPickUp().compareTo(R.getDatumVracanja())<0) {
 						System.out.println("provera1-> Datum preuzimanja je pre datuma vracanja iz liste rezervacije");
 						 //datum vracanja auta posle datuma preuzimanja iz rezervacije, preklapaju se termini, vozilo nam ne odgovara
-							if(rezervacija.getDropOff().after(R.getDatumPreuzimanja())){
+							if(rezervacija.getDropOff().compareTo(R.getDatumPreuzimanja())>0){
 								dozvolaPickUp = false;
 								System.out.println("provera2--> Datum vracanja je posle datuma preuzimanja iz rezervacije");
 							}
