@@ -1,11 +1,16 @@
 package rs.ftn.isa.controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -16,10 +21,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.ChartDTO;
+import rs.ftn.isa.dto.ReservationTicketDTO;
 import rs.ftn.isa.model.ReservationTicket;
 import rs.ftn.isa.model.RezervacijaHotel;
+import rs.ftn.isa.model.RezervacijaRentCar;
 import rs.ftn.isa.model.Room;
 import rs.ftn.isa.model.Ticket;
+import rs.ftn.isa.model.User;
 import rs.ftn.isa.service.ReservationTicketServiceImp;
 import rs.ftn.isa.service.RezervacijaHotelServiceImp;
 
@@ -130,20 +138,6 @@ public class ReservationTicketController {
 	
 
 	
-	public boolean poredi(Date date1, Date date2) {
-		if(date1.getYear()==date2.getYear() && date1.getMonth()==date2.getMonth() && date1.getDate()==date2.getDate()) {
-			System.out.println("Isti su");
-			return false;
-		}else {
-			System.out.println("Nisu isti");
-			System.out.println("Godine suu "+date1.getYear() + " a drugi "+date2.getYear());
-			System.out.println("Meseci suu "+date1.getMonth() + " a drugi "+date2.getMonth());
-			System.out.println("Dani  suu "+date1.getDate() + " a drugi "+date2.getDate());
-			
-			return true;
-		}
-		}
-	
 	
 	@RequestMapping(value="/vratiPrihode/{id}/pocetak/{pocetak}",
 			method = RequestMethod.GET,
@@ -156,16 +150,15 @@ public class ReservationTicketController {
 			
 			String[] datIN=pocetak.split("-");
 			int godina=Integer.parseInt(datIN[0]);
-			//mjesec krece od 0
-			int mjesec=Integer.parseInt(datIN[1])-1;
+			//mesec krece od 0
+			int mesec=Integer.parseInt(datIN[1])-1;
 			int dan=Integer.parseInt(datIN[2]);
 		
 			Calendar calendar = Calendar.getInstance();
-			calendar.set(godina, mjesec, dan);
+			calendar.set(godina, mesec, dan);
 			calendar.add(Calendar.DATE,-1);
 			Date datumOd = calendar.getTime();
 			
-			//treba da nadjemo sve rezervacije od hotela sa idRez
 			for(RezervacijaHotel rezervacija:sveRez) {
 				Long idHotela = 0L;
 				for(Room sobe:rezervacija.getSobe()) {
@@ -214,7 +207,6 @@ public class ReservationTicketController {
 					idKompanije = sobe.getLet().getAvioKomp().getId();
 					break;
 				}
-				//rezervacija od odbaranog hotela
 				if(idKompanije.toString().equals(id)) {
 					Date date1= rezervacija.getDatumRezervacije();
 					//Date date2= rezervacija.getDatumOdlaska();
@@ -359,5 +351,61 @@ public class ReservationTicketController {
 
 	}
 
-	
+	@RequestMapping(value="/istorijaAvion",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ArrayList<ReservationTicketDTO> getHistoryAvion(@Context HttpServletRequest request){		
+		ArrayList<ReservationTicket> rezervacije = new ArrayList<ReservationTicket>();
+		ArrayList<ReservationTicketDTO> rezervacijeDTO = new ArrayList<ReservationTicketDTO>();
+		
+		User korisnik = (User)request.getSession().getAttribute("ulogovan");		
+		System.out.println("Usao u getHis avion");
+		if(korisnik!=null) {
+			System.out.println("Neko je ulogovan");
+			Long idKor=korisnik.getId();
+			String idKorS=idKor.toString();
+			System.out.println("Id je "+idKor);
+			
+			List<ReservationTicket> sveRez=servisKarata.findAll();
+			System.out.println("Ukupan broj rez "+sveRez.size());
+			
+			for(ReservationTicket rezervacija:sveRez) {
+				Long idRezKor=rezervacija.getKorisnik().getId();
+				String idRezS=idRezKor.toString();
+				System.out.println("Id rez korisnik je "+idRezKor);
+				if(idKorS.equals(idRezS)) {
+						System.out.println("Id je "+rezervacija.getId());
+						rezervacije.add(rezervacija);
+					}
+				}
+		}
+		for(ReservationTicket rez : rezervacije) {
+			ReservationTicketDTO rezDTO = new ReservationTicketDTO(rez.getStatus(), rez.getId());
+			rezDTO.setOcenjenaKompanija(rez.isOcenjenaKompanija());
+			rezDTO.setOcenjenLet(rez.isOcenjenLet());
+
+			Ticket karta=null;
+			for(Ticket T:rez.getKarte()) {
+				karta=T;
+				break;
+			}
+			if(karta!=null) {
+				rezDTO.setCena(karta.getCena());
+				rezDTO.setKlasa(karta.getKlasa());
+				rezDTO.setIdKompanije(karta.getLet().getAvioKomp().getId());
+				rezDTO.setIdLet(karta.getLet().getId());
+				rezDTO.setNazivKompanije(karta.getLet().getAvioKomp().getNaziv());
+				rezDTO.setDatumPoletanja(karta.getLet().getDatumPoletanja());
+				rezDTO.setDatumSletanja(karta.getLet().getDatumSletanja());
+				rezDTO.setMestoPoletanja(karta.getLet().getPoletanje().getNaziv());
+				rezDTO.setMestoSletanja(karta.getLet().getSletanje().getNaziv());
+			}
+			rezervacijeDTO.add(rezDTO);
+					
+		}
+				
+		return rezervacijeDTO;
+	}
+
+
 }

@@ -39,6 +39,9 @@ public class ReservationTicket {
 	@Column(name = "ocenjenaKompanija", nullable = true)
 	private boolean ocenjenaKompanija;
 	
+	@Column(name = "ocenjenLet", nullable = true)
+	private boolean ocenjenLet;
+	
 	
 	//imaju korisnika na kog se vezuju
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -107,6 +110,14 @@ public class ReservationTicket {
 
 	public void setKorisnik(User korisnik) {
 		this.korisnik = korisnik;
+	}
+
+	public boolean isOcenjenLet() {
+		return ocenjenLet;
+	}
+
+	public void setOcenjenLet(boolean ocenjenLet) {
+		this.ocenjenLet = ocenjenLet;
 	}
 	
 	

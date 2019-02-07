@@ -757,6 +757,43 @@ public @ResponseBody User changePersonalData(@RequestBody UserDTO novi,@Context 
 			return user;
 		
 }	
+	@RequestMapping(value="/cekirajOcenu/{podatak}",
+			method = RequestMethod.POST,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody User cekirajOcenu(@PathVariable String podatak, @Context HttpServletRequest request){
+		System.out.println("Usao u cekirajOcenu");
+		
+		User user = (User) request.getSession().getAttribute("ulogovan");
+		String [] niz =podatak.split("=");
+		int broj = Integer.parseInt(niz[1]);
+		String id=niz[0];
+		System.out.println("broj je "+broj );
+		System.out.println("id je "+id );
 
+		if(user!=null) {
+			Set<ReservationTicket> sveRez= user.getResTicket();
+			ReservationTicket res=null;
+			for(ReservationTicket R : sveRez) {
+				String idR=R.getId().toString();
+				if(id.equals(idR)) {
+					res=R;
+					break;
+				}
+			}
+			if(res!=null) {
+				user.getResTicket().remove(res);
+				if(broj==1) {
+					res.setOcenjenaKompanija(true);
+				}else {
+					res.setOcenjenLet(true);
+				}
+				user.getResTicket().add(res);
+				servis.saveUser(user);
+			}
+		}
+		
+		return user;
+		
+	}		
 
 }
