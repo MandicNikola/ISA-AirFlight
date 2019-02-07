@@ -3,6 +3,11 @@
 var filterData = [];
 
 function onLoad(){
+	
+	$("#ispisiSelect").hide();
+	$("#divBodPopust").hide();
+	$("#zaAdminaSistema").hide();
+	
 	var user = sessionStorage.getItem("ulogovan");
 	console.log(user);
 	console.log('provera logovanja');
@@ -13,6 +18,14 @@ function onLoad(){
 		var korisnik = JSON.parse(user);
 		$("#imeKorisnika").text(korisnik.ime);
 		$("#history").show();
+		if(korisnik.tip == 'ADMIN_SISTEM'){
+			
+			$("#zaAdminaSistema").show();
+			//$("#reserveCar").hide();
+			//$("#reserveHotel").hide();
+			//$('#reserveFlight').hide();
+			
+		}
 		ispisiIstoriju();
 	
 	}else{
@@ -1190,13 +1203,149 @@ function addCarHire(){
 		
 }
 
-function adminSistem(){
-	$("#ispisiSelect").show();
+function bonusPopust(){
+	$("#ispisiSelect").hide();
+	$("#divBodPopust").show();
 	  
 	$("#ispisiTabelu").empty();
 	 $.ajax({
 			method:'GET',
-			url: "/api/korisnici/vratiAdmineSistema",
+			url: "/api/special/all",
+			success: function(lista){
+				if(lista == null){
+					console.log('Nema popusta')
+				}else if(lista.length==0){
+					console.log('Nema popusta')
+				}else{
+					ispisiProcente(lista);
+					
+				}
+			}
+		});
+
+	
+}
+function ispisiProcente(lista){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	console.log('dosao u ispisi procente')
+    $("#sortHotele").hide();
+	$("#sortCar").hide();
+	$("#sortAvione").hide();
+	
+	$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaProcenti\" ><tr><th> Number of user points </th><th> Percentage</th><th></th></tr>");
+		$.each(pom, function(index, servis) {
+			$("#tabelaProcenti").append("<tr><td>"+servis.bodovi+"</td><td>"+servis.vrijednost+"</td><td><button type=\"button\" onclick=\"deleteProcenat("+servis.id+")\" class=\"btn btn-light\">Remove</button></td></tr>");
+		});
+	 $("#ispisiTabelu").append("</table>");
+	 dodajNovogAdmina();
+}
+function deleteProcenat(id){
+	$.ajax({
+		type : 'POST',
+		url : "/api/special/obrisiSpecijalni/"+id,
+		success : function(data) {
+			
+				console.log('obrisana popust specijalni');
+				bonusPopust();
+			
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+	});
+	
+	
+}
+$(document).on('submit','.bodpopust',function(e){
+	e.preventDefault();	
+	var bodovi=$('#brojBodova').val();
+	var procenat=$('#procenat').val();
+	let ispravno = true;
+	
+	if(!bodovi){
+		$("#errorBodovi").text("You need to fill out this field.").css('color', 'red');
+		ispravno = false;		
+	}
+	if(isNaN(bodovi)){
+		ispravno = false;
+		$("#errorBodovi").text("You need to enter digits.").css('color', 'red');
+		
+	}
+	if(bodovi<=0){
+		ispravno = false;
+		$("#errorBodovi").text("Number of points must be greater than 0.").css('color', 'red');
+		
+	}
+	
+	if(!procenat){
+		ispravno = false;
+		$("#errorPopust").text("You need to fill out this field.").css('color', 'red');
+		
+	}
+	if(isNaN(procenat)){
+		ispravno = false;
+		$("#errorPopust").text("You need to enter digits.").css('color', 'red');
+		
+	}
+	if(procenat<=0){
+		ispravno = false;
+		$("#errorPopust").text("Number of percentage must be greater than 0.").css('color', 'red');
+	}
+	
+	if(ispravno == true){
+
+	
+	$.ajax({
+		type : 'POST',
+		url : "/api/special/newspecial/",
+		contentType : 'application/json',
+		dataType : "json",
+		data:toJSON(),
+		success : function(data) {
+			if(data.bodovi == 0){
+				alert('Discount for the selected number of user points exists.');
+
+			}else{
+				console.log('tu sam');
+				pomocnaFa();		
+			}
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("greska pri unosu nove sobe");
+			
+		}
+	});
+	}else{
+		alert('You need to fill out all the fields correctly.');
+	}
+});
+function pomocnaFa(){
+	console.log('dosao u ispisi uspjeh');
+	$('#procenat').val('');
+	$('#brojBodova').val('');
+	$("#errorBodovi").text('');
+	$("#errorPopust").text('');
+	bonusPopust();
+}
+
+function toJSON(){
+	return JSON.stringify({
+		"vrijednost" : $('#procenat').val(),			
+		"bodovi" : $('#brojBodova').val()
+	});
+}
+function ispisiUspjeh(){
+	console.log('stigao ovdje');
+}
+
+function adminSistem(){
+	$("#divBodPopust").hide();
+	
+	$("#ispisiSelect").show();
+	$("#ispisiTabelu").empty();
+	 $.ajax({
+			method:'GET',
+			url: "/api/korisnici/vratiDefinisanePopuste",
 			success: function(lista){
 				if(lista == null){
 					console.log('Nema admina')
@@ -1208,6 +1357,7 @@ function adminSistem(){
 				}
 			}
 		});
+	
 }
 function ispisiAdmineSistema(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);

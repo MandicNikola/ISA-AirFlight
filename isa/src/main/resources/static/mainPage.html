@@ -23,7 +23,9 @@
 	  background-size: cover;      
   
   }
-  
+  #divBodPopust{
+  	width:60%;
+  }
   #pozadinaHotel{
     background-image: url(img/hotelDiv.jpg);  
 	background-size: cover;      
@@ -95,9 +97,12 @@
  	margin-bottom: 10px;
  }
   #ispisiSelect{
- 	 	width: 40%;
-  		
+ 	 	width: 40%;		
  	 }
+ 	#dugmeBodPopust{
+ 		margin-left:650px;
+ 		margin-bottom:5px;
+ 	} 
  input[type=number]{
     width: 40px;
   } 
@@ -448,7 +453,34 @@ input[type="date"]:valid::before { display: none }
 	</select>	
 	<div><button id="dugmeAdminSelekt"  class="btn btn-info" onclick="izmjeniAdmineSistema()" >Add</button></div>
 </div>
-
+<div  class="container fluid" id ="divBodPopust">
+	<h3>Add new special discount</h3>
+	 <form method="post" class="bodpopust" id="bodpopust" >	
+	
+	 <div class="row">
+	 	
+				   		  <div class="col-md-6">
+								<div class="form-group">
+									 <div class="input-group">	
+								   		<span class="input-group-addon"> <i class="glyphicon glyphicon-pencil"></i></span>
+										<input class="form-control" id = "brojBodova"  type="number" min="1" required="required" placeholder="Number of user points">		
+										    <span id="errorBodovi"></span>	
+									</div>
+								</div>					
+						 </div>
+						  <div class="col-md-6">
+								<div class="form-group">
+									 <div class="input-group">	
+								   		<span class="input-group-addon"> <i class="glyphicon glyphicon-pencil"></i></span>
+										<input class="form-control" id = "procenat"  type="number" min="1" required="required" placeholder="Discount percentage">		
+											<span id="errorPopust"></span>
+									</div>
+								</div>					
+						 </div> 	  	  
+		</div>
+		 <button id = "dugmeBodPopust" type="submit" class="btn btn-light"  >Add</button>
+		</form>							    
+</div>
 <div class="container" id = "ispisiTabelu">
 	
 </div>
@@ -470,11 +502,12 @@ input[type="date"]:valid::before { display: none }
 <!-- Footer -->
 <footer class="container-fluid bg-4 text-center">
   <p>
-  	<div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
+  	<div class="btn-group btn-group-lg" id = "zaAdminaSistema" role="group" aria-label="Basic example">
   	<button type="button" class="btn btn-secondary" onclick = "addPlane()">Add plane</button>
   	<button type="button" class="btn btn-secondary" onclick = "addHotel()">Add hotel</button>
   	<button type="button" class="btn btn-secondary" onclick = "addCarHire()">Add car-hire</button>
   	<button type="button" class="btn btn-secondary" onclick = "adminSistem()">Administrators</button>
+    <button type="button" class="btn btn-secondary" onclick = "bonusPopust()">Special discounts</button>
   
    </div>
   <p>Copyrights Made By <a href="http://localhost:8080/mainPage.html">Airfinity</a></p> 

@@ -36,8 +36,6 @@ $(document).ready(function($) {
 				var pom=window.location.search.substring(1);
 				var id= pom.split('=')[1];
 				console.log('Usao u dodajgrafik');
-
-				
 			}
 	
 	}	
@@ -1850,14 +1848,43 @@ function addDiscountForRooms(idRoom){
 	//resetujem greske iz prethodnog slucaja
 	$("#errorDatPopust").text('');
 	$("#errorEndPopust").text('');
-	$("#errorBodovi").text('');
-	$("#errorPopust").text('');
 	
 	$("#sobePopusti").hide();
 
 	$("#dugmePopust").empty();
 	$("#dugmePopust").append("<button type=\"button\"  class=\"btn btn-lg\" onclick = \"dodajPopustSistem("+idRoom+")\">Add</button></div>");
-	$("#dodajPopust").show();
+	pokupiPostojecePopuste();
+	
+}
+function pokupiPostojecePopuste(){
+	$.ajax({
+		method:'GET',
+		url: "/api/special/all",
+		success: function(lista){
+			if(lista == null){
+				console.log('Nema popusta')
+			}else if(lista.length==0){
+				console.log('Nema popusta')
+			}else{
+				dodajProcente(lista);
+				
+			}
+		}
+	});
+	
+}
+function dodajProcente(lista){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	console.log('dosao u izbor procenata')
+	$("#selectBodove").empty();
+	 $.each(pom, function(index, data) {
+		 	
+		 $("#selectBodove").append("<option value=\""+data.id+"\" >"+data.bodovi+"</option>");	 
+		 
+	 });
+	 $("#dodajPopust").show();
+		
+	
 }
 function dodajPopustSistem(idRoom){
 	console.log(idRoom);
@@ -1880,43 +1907,11 @@ function dodajPopustSistem(idRoom){
 		ispravno = false;		
 	}
 	
-	if(!bodovi){
-		$("#errorBodovi").text("You need to fill out this field.").css('color', 'red');
-		ispravno = false;		
-	}
-	if(isNaN(bodovi)){
-		ispravno = false;
-		$("#errorBodovi").text("You need to enter digits.").css('color', 'red');
-		
-	}
-	if(bodovi<=0){
-		ispravno = false;
-		$("#errorBodovi").text("Number of points must be greater than 0.").css('color', 'red');
-		
-	}
-	
-	if(!procenat){
-		ispravno = false;
-		$("#errorPopust").text("You need to fill out this field.").css('color', 'red');
-		
-	}
-	if(isNaN(procenat)){
-		ispravno = false;
-		$("#errorPopust").text("You need to enter digits.").css('color', 'red');
-		
-	}
-	if(procenat<=0){
-		ispravno = false;
-		$("#errorPopust").text("Number of percentage must be greater than 0.").css('color', 'red');
-	}
-	
 
 	if(ispravno == true){
 		$("#dodajPopust").hide();
 		$('#sincewhen').val('');
 		$('#untilwhen').val('');
-		$('#brojBodova').val("");
-		$('#procenat').val("");
 		
 		
 	$.ajax({
