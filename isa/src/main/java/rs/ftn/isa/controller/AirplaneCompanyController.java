@@ -38,6 +38,7 @@ import rs.ftn.isa.model.Seat;
 import rs.ftn.isa.model.Segment;
 import rs.ftn.isa.model.Ticket;
 import rs.ftn.isa.model.Usluga;
+import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.service.AirPlaneServiceImpl;
 import rs.ftn.isa.service.AirplaneServiceCompanyImpl;
 import rs.ftn.isa.service.DestinationService;
@@ -464,7 +465,40 @@ public class AirplaneCompanyController {
 	
 	
 
+	@RequestMapping(value="/oceniKompaniju/{parametar}", 
+			method = RequestMethod.POST,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody AirplaneCompany oceniKompaniju(@PathVariable String parametar){		
+	  System.out.println("Usao u oceni avion");
+	 String[] niz = parametar.split("=");
+	 Long id= Long.parseLong(niz[0]);
+	 int ocena =Integer.parseInt(niz[1]);
+	 AirplaneCompany kompanija =service.findAirplaneCompanyById(id);
+	    
+	if(kompanija!=null) {
+			System.out.println("Brojac jee"+ kompanija.getBrojac());
+				int brojOcena=kompanija.getBrojac();
+				System.out.println("Broj ocena je "+brojOcena+ " trenutna ocena je "+kompanija.getOcena());
+				double ukOcena = kompanija.getOcena()*brojOcena;
+				System.out.println("Pomnozena ocena "+ukOcena);
+				ukOcena = ukOcena+ocena;
+				System.out.println("Dodata ocena "+ukOcena);
+				brojOcena++;
+				ukOcena=(double)ukOcena/brojOcena;
+				System.out.println("Podeljena ocena je "+ukOcena);
+				
+				kompanija.setBrojac(brojOcena);
+				kompanija.setOcena(ukOcena);
+				
+				service.saveAirplaneCompany(kompanija);
+				
+				return kompanija;
+		}else {
+			return null;
+		}
 	
+	}	
+
 	
 	
 

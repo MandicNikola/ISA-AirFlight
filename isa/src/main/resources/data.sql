@@ -5,8 +5,8 @@ insert into user ( id, ime, prezime, mail, telefon, grad, verifikovan, lozinka,t
 insert into user ( id, ime, prezime, mail, telefon, grad, verifikovan, lozinka,tip,admin_potvrdio, bodovi) values (194,'AdminRENT', 'Rentic','rent@gmail.com', 0645691,'Beograd', 'da','074af2bf8e84854902eead553819b4517c2bac61c5d367a45831b05bf7789a81','ADMIN_RENT',false, 0);
 insert into user ( id, ime, prezime, mail, telefon, grad, verifikovan, lozinka,tip,admin_potvrdio, bodovi) values (195,'AdminSISTEM', 'Adminic','admin@gmail.com', 0645691,'Beograd', 'da','074af2bf8e84854902eead553819b4517c2bac61c5d367a45831b05bf7789a81','ADMIN_SISTEM',false,0);
 
-insert into kompanije ( id, naziv, adresa, opis) values (575,'Fly', 'Dunavska','Punctual');
-insert into kompanije ( id, naziv, adresa, opis) values (757,'BrrClouds', 'Matice Srpska','Fast');
+insert into kompanije ( id, naziv, adresa, opis, ocena, brojac ) values (575,'Fly', 'Dunavska','Punctual',0,0);
+insert into kompanije ( id, naziv, adresa, opis, ocena, brojac) values (757,'BrrClouds', 'Matice Srpska','Fast',0,0);
 
 insert into hotel ( id, naziv, adresa,grad, opis, ocena, brojac) values (1245,'Marinas', 'Temerinska 10','Novi Sad','divno', 4, 0);
 insert into hotel ( id, naziv, adresa,grad, opis, ocena, brojac) values (1115,'Anjica', 'Fruskogorska 18','Novi Sad','divno',0, 0);
