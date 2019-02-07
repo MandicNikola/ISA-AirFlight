@@ -1349,7 +1349,6 @@ function writeDiscountsOfVozilo(lista,idVozilo){
 	 var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#postojeciPopusti").empty();
 	 $("#postojeciPopusti").show();
-	//public RoomDTO(Long id, String tip, int kapacitet, int sprat,boolean imapopust) 
 			
 	 $("#postojeciPopusti").append("<table class=\"table table-hover\" id=\"popustiTab\" ><tr><th>Since when </th><th>Until when</th><th>Number of user points</th><th>Discount percentage</th><th></th></tr>");
 		

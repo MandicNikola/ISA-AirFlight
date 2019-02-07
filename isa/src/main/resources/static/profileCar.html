@@ -105,6 +105,13 @@
  	 	border-radius: 5px;
  	 	
  	 }
+ 	 #labPoeni, #fg{
+ 	 margin-bottom:2px;
+ 	}
+ 	#dugmePopust{
+ 		margin-top:5px;
+ 		
+ 	}
   #prviJumbo p{
   	margin:0px;
   }
@@ -232,6 +239,10 @@
 		</div>
 		<div id = "divPopust" class="container-fluid"> 
 			 	<section>
+			 	<h3 class="look">
+				   Add a discount	
+			    </h3>
+								
 			 	<div class="container" id="autaPopusti"></div>
 			 	<div class="container" id="postojeciPopusti"></div>
 			 	
@@ -256,28 +267,23 @@
 								   </div>
 							</div>
 				     </div>
-				      <div class="row">
-				   		  <div class="col-md-6">
-								<div class="form-group">
-									 <div class="input-group">	
-								   		<span class="input-group-addon"> <i class="glyphicon glyphicon-pencil"></i></span>
-										<input class="form-control" id = "brojBodova"  type="number" min="1" required="required" placeholder="Number of user points">		
-									    <span id="errorBodovi"></span>
-									</div>
-								</div>					
-						 </div>
-						  <div class="col-md-6">
-								<div class="form-group">
-									 <div class="input-group">	
-								   		<span class="input-group-addon"> <i class="glyphicon glyphicon-pencil"></i></span>
-										<input class="form-control" id = "procenat"  type="number" min="1" required="required" placeholder="Discount percentage">		
-										<span id="errorPopust"></span>
-									</div>
-								</div>					
-						 </div> 	  	  
-				    </div>
-					<div id="dugmePopust">
-					</div>
+				     <div class="row">				   		 
+						 <div class="col-md-6" >
+								<div class="form-group" id="fg">
+										<label for="points" id="labPoeni">Number of user points:</label>			
+						 		</div>													 		
+						 		<div class="form-group">
+										<div  id="ispisiSelectBodovi">	
+										<select class="form-control" id="selectBodove"></select>	
+										</div>					
+						
+						 		</div> 
+						</div> 	  
+					 </div>	
+					 		  	  
+				    	  <div class="col-md-6">
+						 		<div id="dugmePopust"></div>
+						 </div>  			      
 			 	</div>			
 			 	</section>
 			 </div>
