@@ -806,7 +806,11 @@ $(document).ready(function(){
 	 	$("#izvestaj").hide();
 	 	$("#adminStrana").hide();
 		$("#cenovnik").hide();
+		$("#popustiTab").hide();
+		
 		$("#divPopust").show();
+		$("#poruka").hide();
+		
 		$("#dodajPopust").hide();
 		$("#divLozinka").hide();
 		$("#divFast").hide();
@@ -1219,8 +1223,6 @@ function writeCarsForDiscounts(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#autaPopusti").empty();
 	 $("#autaPopusti").show();
-		//VehicleDTO voz = new VehicleDTO(vv.getId(),vv.getMarka(),vv.getModel(),vv.getGodiste(),vv.getSedista(),vv.getKategorija(),vv.isImapopusta());
-//Long id, String marka, String model, int godiste, int sedista, CategoryCar kategorija,
 	 $("#autaPopusti").append("<table class=\"table table-hover\" id=\"tabelaAuta1\" ><tr><th> Mark </th><th>Model</th><th>Year</th><th>Seats</th><th>Category</th><th></th><th></th></tr>");
 		console.log('dosao ovdje');
 		$.each(pom, function(index, data) {
@@ -1240,23 +1242,69 @@ function writeCarsForDiscounts(lista){
 
 	
 }
-function addDiscountForCars(idRoom){
+function addDiscountForCars(idCar){
 	$("#autaPopusti").hide();
-
+	$("#poruka").hide();
+	   
 	$("#dugmePopust").empty();
-	$("#dugmePopust").append("<button type=\"button\"  class=\"btn btn-lg\" onclick = \"dodajPopustSistem("+idRoom+")\">Add</button></div>");				
-	$("#dodajPopust").show();
+	$("#dugmePopust").append("<button type=\"button\"  class=\"btn btn-lg\" onclick = \"pronadjiIzabraneBod("+idCar+")\">Add</button></div>");				
+	
+	$.ajax({
+		method:'GET',
+		url: "/api/special/all",
+		success: function(lista){
+			if(lista == null){
+				nemaBonusPopusta();
+			}else if(lista.length==0){
+				nemaBonusPopusta();
+			}else{
+				dodajProcente(lista);
+				
+			}
+		}
+	});
+}
+function nemaBonusPopusta(){
+	 $("#dodajPopust").hide();
+	 $("#poruka").show();
+		
+}
+function dodajProcente(lista){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	console.log('dosao u dodaj procenata')
+	
+	$("#selectBodove").empty();
+	 $.each(pom, function(index, data) {
+		 	
+		 $("#selectBodove").append("<option value=\""+data.id+"\" >"+data.bodovi+"</option>");	 
+		 
+	 });
+	 $("#dodajPopust").show();
+		
+	
 }
 
-function dodajPopustSistem(idVozilo){
+function pronadjiIzabraneBod(idCar){
+	var idPopusta = $("#selectBodove").val();
+	console.log('idPopusta');
+	$.ajax({
+		method:'GET',
+		url: "/api/special/getById/"+idPopusta,
+		success: function(lista){
+				dodajPopustSistem(lista,idCar);
+			
+		}
+	});
+	
+}
+
+function dodajPopustSistem(popust,idVozilo){
 	
 	let ispravno = true;
 	var pocetak=$('#sincewhen').val();
 	var kraj=$('#untilwhen').val();
-	var bodovi=$('#brojBodova').val();
-	var procenat=$('#procenat').val();
-	$("#errorPopust").empty();
-	$("#errorBodovi").empty();
+	var bodovi=popust.bodovi;
+	var procenat=popust.vrijednost;
 	$("#errorDatPopust").empty();
 	$("#errorEndPopust").empty();
 	
@@ -1269,45 +1317,12 @@ function dodajPopustSistem(idVozilo){
 		ispravno = false;		
 	}
 	
-	if(!bodovi){
-		$("#errorBodovi").text("You need to fill out this field.").css('color', 'red');
-		ispravno = false;		
-	}
-	if(isNaN(bodovi)){
-		ispravno = false;
-		$("#errorBodovi").text("You need to enter digits.").css('color', 'red');
-		
-	}
-	if(bodovi<=0){
-		ispravno = false;
-		$("#errorBodovi").text("Number of points must be greater than 0.").css('color', 'red');
-		
-	}
-	
-	if(!procenat){
-		ispravno = false;
-		$("#errorPopust").text("You need to fill out this field.").css('color', 'red');
-		
-	}
-	if(isNaN(procenat)){
-		ispravno = false;
-		$("#errorPopust").text("You need to enter digits.").css('color', 'red');
-		
-	}
-	if(procenat<=0){
-		ispravno = false;
-		$("#errorPopust").text("Number of percentage must be greater than 0.").css('color', 'red');
-	}
-	
-
 	if(ispravno == true){
 		$("#dodajPopust").hide();
 		
 		$('#sincewhen').val('');
 		$('#untilwhen').val('');
-		$('#brojBodova').val("");
-		$('#procenat').val("");
-
+	
 		$.ajax({
 			type : 'POST',
 			url : "/api/vozila/definisiPopust/"+idVozilo+"/pocetak/"+pocetak+"/kraj/"+kraj+"/bodovi/"+bodovi+"/procenat/"+procenat,
@@ -1331,7 +1346,7 @@ function pomocnaFA(){
 	
 }
 function listOfDiscount(idVozilo){
-	$("#autaPopusti").hide();
+	//$("#autaPopusti").hide();
 	
 	$.ajax({
 		method:'GET',
@@ -1371,7 +1386,7 @@ function removeDisc(slanje){
 		url : "/api/popusti/ukloniPopust/"+slanje,
 		success : function(povratna) {
 						console.log('uspjesno');
-						promjeniBrojPopusta(slanje);
+						promeniBrojPopusta(slanje);
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
 			alert('greska');
@@ -1380,7 +1395,7 @@ function removeDisc(slanje){
 
 	
 }
-function promjeniBrojPopusta(slanje){
+function promeniBrojPopusta(slanje){
 	console.log(slanje);
 	var adresa = window.location.search.substring(1);
 	var id = adresa.split('=')[1];
