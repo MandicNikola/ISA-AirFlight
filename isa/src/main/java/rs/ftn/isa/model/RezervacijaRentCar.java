@@ -31,10 +31,10 @@ public class RezervacijaRentCar implements Comparable<RezervacijaRentCar>{
 	@Column(name="status")
 	private StatusRezervacije status;
 	
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private boolean ocenjenRent;
 	
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private boolean ocenjenVozilo;
 	
 	
