@@ -1011,6 +1011,40 @@ public class HotelController {
 			System.out.println("Daatum je "+datumCheckOut);
 			Hotel hotel = servis.findHotelById(id);
 			ArrayList<Room> sobe = new ArrayList<Room>();
+			
+			boolean nijeOkRez = false;
+			
+			for(int i =0;i<indexSoba.size();i++) {
+				Long idSobe = Long.parseLong(indexSoba.get(i));
+				for(Room ss:hotel.getSobe()) {
+					if(ss.getId() == idSobe) {
+						Room sobica = ss;
+						for(RezervacijaHotel pom:sobica.getRezervacije()) {	
+							
+							if(datumCheckIn.compareTo(pom.getDatumOdlaska())<0) {
+								System.out.println("nije odobren check in");
+								if(datumCheckOut.compareTo(pom.getDatumDolaska())>0) {
+									System.out.println("nije odobren check out");
+									//odobrenCheckOUT = false;
+									nijeOkRez = true;
+									break;
+								}
+							}
+							
+						}
+						break;
+					}
+					
+				}
+				if(nijeOkRez) {
+					break;
+				}
+			}
+			if(nijeOkRez) {
+				 return null;
+
+			}
+			
 			for(int i =0;i<indexSoba.size();i++) {
 				Long idSobe = Long.parseLong(indexSoba.get(i));
 				

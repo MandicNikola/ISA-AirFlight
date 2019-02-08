@@ -309,6 +309,8 @@ function ispisiProfilHotela(hotel){
 }
 
 function ispisiSobe(lista){
+	var user = sessionStorage.getItem("ulogovan");
+	
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#sobe").empty();
 	 $("#sobe").show();
@@ -353,9 +355,9 @@ function ispisiSobe(lista){
 			$.each(pom, function(index, data) {
 				if(data.balkon == 'da'){
 					
-					$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.cijena+"</td><td>"+data.sprat+"</td><td>"+data.ocijena+"</td><td><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\" ></td></tr>");			
+					$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.cijena+"</td><td>"+data.sprat+"</td><td>"+data.ocena+"</td><td><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\" ></td></tr>");			
 				}else{
-					$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.cijena+"</td><td>"+data.sprat+"</td><td>"+data.ocijena+"</td><td><input type=\"checkbox\"  disabled=\"disabled\" ></td></tr>");			
+					$("#tabelaSoba").append("<tr><td class=\"hoverName\">"+data.tip+"</td><td> "+data.kapacitet+"</td><td>"+data.cijena+"</td><td>"+data.sprat+"</td><td>"+data.ocena+"</td><td><input type=\"checkbox\"  disabled=\"disabled\" ></td></tr>");			
 					
 				}
 			});
@@ -1726,20 +1728,21 @@ function zavrsiRezBezUsluga(nizSoba){
     var brKarata = adresa.split('=')[6];
     if(osobe > brKarata){
     	console.log(' nedovoljno karata');
-    	nedovoljnoKarata();
+    	alert('Please choose again. Number of people can not be greater then number of beds.')
+    	
+    	nemogucaRez();
     }else{
 	  
 	  $.ajax({
 			type : 'POST',
 			url : "/api/hoteli/rezervisi/"+info+"/sobe/"+nizSoba+"/nizUsluga/"+listaUsl+"/idHotela/"+id+"/idRez/"+idRez,
 			success : function(povratna) {
-						if(povratna.length==0){
-							console.log('neuspjesno');
-						}else if(povratna == 0){
+						if(povratna == ""){
+							alert('Some of selected rooms are not more available. Please choose again.');
+							nemogucaRez();
 							console.log('neuspjesno');
 						}else{
 							dodajUseruRez(povratna);
-							
 							console.log('uspjesno');
 						}
 			},
@@ -1749,8 +1752,7 @@ function zavrsiRezBezUsluga(nizSoba){
 			});
     }
 }
-function nedovoljnoKarata(){
-	alert('Please choose again. Number of people can not be greater then number of beds.')
+function nemogucaRez(){
 	$("#reserveHotel").show();		
 	$("#korak").hide();
 	$("#korakDodatne").hide();
@@ -1784,15 +1786,22 @@ function zavrsiRez(nizSoba){
 		var idRez = adresa.split('=')[2];
 	    var brKarata = adresa.split('=')[6];
 	    if(osobe > brKarata){
-	    	console.log(' nedovoljno karata');
-	    	nedovoljnoKarata();
+	    	alert('Please choose again. Number of people can not be greater then number of beds.')
+	    	
+	    	nemogucaRez();
 	    }else{
 		
 	  $.ajax({
 			type : 'POST',
 			url : "/api/hoteli/rezervisi/"+info+"/sobe/"+nizSoba+"/nizUsluga/"+listaUsl+"/idHotela/"+id+"/idRez/"+idRez,
 			success : function(povratna) {
-					dodajUseruRez(povratna);
+					if(povratna == ""){
+						alert('Some of selected rooms are not more available. Please choose again.');
+						nemogucaRez();
+						console.log('neuspjesno');
+					}else{
+						dodajUseruRez(povratna);
+					}
 					},
 			error: function(XMLHttpRequest, textStatus, errorThrown){
 				alert('greska');

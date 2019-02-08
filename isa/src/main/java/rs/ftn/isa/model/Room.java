@@ -64,6 +64,8 @@ public class Room {
 	@Column(name = "broj_rezervacija")	
 	private int brojRezervacija; 
    
+	@Version 
+	private Long Version;
 	
     //jedna soba pripada jednog hotelu.
 	@ManyToOne( fetch = FetchType.EAGER)
@@ -278,6 +280,14 @@ public class Room {
 
 	public void setPopusti(Set<Discount> popusti) {
 		this.popusti = popusti;
+	}
+
+	public Long getVersion() {
+		return Version;
+	}
+
+	public void setVersion(Long version) {
+		Version = version;
 	}
 
 
