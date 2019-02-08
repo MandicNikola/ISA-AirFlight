@@ -22,11 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import rs.ftn.isa.dto.ReservationHotelDTO;
 import rs.ftn.isa.dto.RoomDTO;
 import rs.ftn.isa.model.Discount;
-import rs.ftn.isa.model.Filijala;
 import rs.ftn.isa.model.Hotel;
 import rs.ftn.isa.model.PricelistHotel;
 import rs.ftn.isa.model.RezervacijaHotel;
@@ -208,9 +205,7 @@ public class RoomController {
 					if(datumCheckIn.compareTo(pocetakPopusta)>=0 && datumCheckOut.compareTo(krajPopusta)<=0) {
 						moze = true;
 						izabraniPopust =index;
-
-						System.out.println("Odgovara datum u popustu");
-						
+						System.out.println("Odgovara datum u popustu");	
 					}
 				
 				}
@@ -249,13 +244,15 @@ public class RoomController {
 			boolean nijeOdobrena= false;
 			
 			for(RezervacijaHotel pom:rezervacije) {	
-				
-				if(datumCheckIn.compareTo(pom.getDatumOdlaska())<0) {
+				if(pom.getStatus()==StatusRezervacije.AKTIVNA) {
 					
-					if(datumCheckOut.compareTo(pom.getDatumDolaska())>0) {
-						System.out.println("nije odobren check out i check out");
-						nijeOdobrena= true;
-						break;
+					if(datumCheckIn.compareTo(pom.getDatumOdlaska())<0) {
+						
+						if(datumCheckOut.compareTo(pom.getDatumDolaska())>0) {
+							System.out.println("nije odobren check out i check out");
+							nijeOdobrena= true;
+							break;
+						}
 					}
 				}
 			}
@@ -408,7 +405,8 @@ public class RoomController {
 						izabranaSoba = soba;
 						
 						for(RezervacijaHotel rez:izabranaSoba.getRezervacije()) {	
-							
+							if(rez.getStatus()==StatusRezervacije.AKTIVNA) {
+								
 							if(datumCheckIn.compareTo(rez.getDatumOdlaska())<0) {
 								System.out.println("nije odobren check in");
 								if(datumCheckOut.compareTo(rez.getDatumDolaska())>0) {
@@ -418,7 +416,7 @@ public class RoomController {
 									break;
 								}
 							}
-							
+							}
 						}
 						break;
 					}

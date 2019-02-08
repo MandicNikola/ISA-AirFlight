@@ -56,8 +56,16 @@ $(document).ready(function($) {
 			console.log('ima korisnika');
 			var korisnik=JSON.parse(user);
 			console.log(korisnik.tip);
+			var podatak = window.location.search.substring(1);
+			
+			var id= podatak.split("=")[1];
 			if(korisnik.tip == 'ADMIN_HOTEL'){
-				prikaziAdminovo();
+				if(korisnik.servis==id){
+					console.log('servis je u korisnika '+korisnik.servis);
+					prikaziAdminovo();
+					
+				}
+				
 			}else if(korisnik.tip == 'ADMIN_SISTEM'){
 				prikaziAdminaSistema();
 			}else{
