@@ -628,9 +628,12 @@ public class RentACarController {
 	
 		String startLokacija = rezervacija.getStartLocation();
 		Long idPocetnaF = Long.parseLong(startLokacija);
-		
+		String idPocS=startLokacija;
+		System.out.println("Id pocetna je");
+		System.out.println(idPocS);
 		for(Filijala F : rent.getFilijale()) {
-				if(F.getId() == idPocetnaF) {
+			System.out.println(F.getId().toString());
+				if(F.getId().toString().equals(idPocS)) {
 					lociranaFilijala=F;
 					System.out.println("Pronadjena filijala iz koje se uzima vozilo");
 				}
