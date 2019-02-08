@@ -35,8 +35,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import rs.ftn.isa.TestUtil;
+import rs.ftn.isa.constants.FilijalaConstants;
 import rs.ftn.isa.constants.RentACarConstants;
 import rs.ftn.isa.constants.UserConstants;
+import rs.ftn.isa.model.Filijala;
 import rs.ftn.isa.model.RentACar;
 
 @RunWith(SpringRunner.class)
@@ -64,8 +66,7 @@ public class RentACarControllerTest {
 		.andExpect(content().contentType(contentType)).andExpect(jsonPath("$", hasSize(RentACarConstants.DB_COUNT)))
 		.andExpect(jsonPath("$.[*].id").value(hasItem(RentACarConstants.DB_ID.intValue())))
 		.andExpect(jsonPath("$.[*].naziv").value(hasItem(RentACarConstants.DB_NAZIV)))
-		.andExpect(jsonPath("$.[*].adresa").value(hasItem(RentACarConstants.DB_ADRESA)))
-		.andExpect(jsonPath("$.[*].opis").value(hasItem(RentACarConstants.DB_OPIS)));
+		.andExpect(jsonPath("$.[*].adresa").value(hasItem(RentACarConstants.DB_ADRESA)));
 	}
 	
 	@Test
@@ -84,8 +85,7 @@ public class RentACarControllerTest {
 		.andExpect(content().contentType(contentType))
 		.andExpect(jsonPath("$.id").value(RentACarConstants.DB_ID.intValue()))
 		.andExpect(jsonPath("$.naziv").value(RentACarConstants.DB_NAZIV))
-		.andExpect(jsonPath("$.adresa").value(RentACarConstants.DB_ADRESA))
-		.andExpect(jsonPath("$.opis").value(RentACarConstants.DB_OPIS));
+		.andExpect(jsonPath("$.adresa").value(RentACarConstants.DB_ADRESA));
 	}
 	
 	@Test
@@ -94,5 +94,22 @@ public class RentACarControllerTest {
 	public void testDeleteRent() throws Exception {
 		this.mockMvc.perform(delete(URL_PREFIX + "/obrisiRent/" + RentACarConstants.DB_ID)).andExpect(status().isOk());
 	}
+	
+
+	@Test
+	@Transactional
+	@Rollback(true)
+	public void testAddFilijala() throws Exception {
+		Filijala newFilijala = new Filijala();
+		newFilijala.setGrad(FilijalaConstants.NEW_GRAD);
+		newFilijala.setUlica(FilijalaConstants.NEW_ULICA);
+		
+				
+		String json = TestUtil.json(newFilijala);
+		this.mockMvc.perform(post(URL_PREFIX+ "/postavifilijalu/"+RentACarConstants.DB_UPDATE_ID).contentType(contentType).content(json)).andExpect(status().isOk())
+		.andExpect(jsonPath("$.naziv").value(RentACarConstants.DB_NAZIV))
+		.andExpect(jsonPath("$.id").value(RentACarConstants.DB_ID.intValue()));
+	}
+	
 	
 }
