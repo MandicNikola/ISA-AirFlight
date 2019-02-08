@@ -320,7 +320,7 @@ public class AirPlaneController {
 					{
 						for(Ticket ticket : seat.getKarte())
 						{
-							if(ticket.isRezervisano())
+							if(ticket.isRezervisano() || ticket.getPopustiKarte().size()>0)
 							{
 								if(ticket.getLet().getDatumPoletanja().after(currentDate))
 								{

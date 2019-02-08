@@ -12,11 +12,14 @@ public class TicketDTO implements Comparable<TicketDTO>{
 	
 	private String klasa;
 	private double cena;
+	private int popust;
 	
 	private String lokPoletanja;
 	private String lokSletanja;
 	
 	private String datumPoletanja;
+	
+	private Long idPopusta;
 	
 	//ostaje mi samo za cenu dorada
 	public TicketDTO()
@@ -92,6 +95,22 @@ public class TicketDTO implements Comparable<TicketDTO>{
 	public int compareTo(TicketDTO o) {
 		// TODO Auto-generated method stub
 		return Comparator.comparing(TicketDTO::getId).compare(this, o);
+	}
+
+	public Long getIdPopusta() {
+		return idPopusta;
+	}
+
+	public void setIdPopusta(Long idPopusta) {
+		this.idPopusta = idPopusta;
+	}
+
+	public int getPopust() {
+		return popust;
+	}
+
+	public void setPopust(int popust) {
+		this.popust = popust;
 	}
 	
 	

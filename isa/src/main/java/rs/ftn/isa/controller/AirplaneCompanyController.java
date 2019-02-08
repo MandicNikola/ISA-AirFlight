@@ -5,9 +5,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +34,7 @@ import rs.ftn.isa.model.AirPlane;
 import rs.ftn.isa.model.AirplaneCompany;
 import rs.ftn.isa.model.CijenovnikSoba;
 import rs.ftn.isa.model.Destination;
+import rs.ftn.isa.model.DiscountTicket;
 import rs.ftn.isa.model.Flight;
 import rs.ftn.isa.model.Hotel;
 import rs.ftn.isa.model.RentACar;
@@ -37,6 +42,7 @@ import rs.ftn.isa.model.Room;
 import rs.ftn.isa.model.Seat;
 import rs.ftn.isa.model.Segment;
 import rs.ftn.isa.model.Ticket;
+import rs.ftn.isa.model.User;
 import rs.ftn.isa.model.Usluga;
 import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.service.AirPlaneServiceImpl;
@@ -44,6 +50,7 @@ import rs.ftn.isa.service.AirplaneServiceCompanyImpl;
 import rs.ftn.isa.service.DestinationService;
 import rs.ftn.isa.service.DestinationServiceImp;
 import rs.ftn.isa.service.FlightService;
+import rs.ftn.isa.service.UserServiceImpl;
 
 
 @RestController
@@ -61,6 +68,9 @@ public class AirplaneCompanyController {
 	
 	@Autowired 
 	private DestinationServiceImp destinationService;
+	
+	@Autowired 
+	private UserServiceImpl korisnikServis;
 	
 	@RequestMapping(value="/novaAvioKompanija", 
 			method = RequestMethod.POST,
@@ -431,8 +441,11 @@ public class AirplaneCompanyController {
 			flightDto.setLokPoletanja(flight.getPoletanje().getNaziv());
 			flightDto.setLokSletanja(flight.getSletanje().getNaziv());
 			
-			Date datePoletanje = flight.getVremePoletanja();
-			Date dateSletanje = flight.getVremeSletanja();
+			Date vrPoletanje = flight.getVremePoletanja();
+			Date vrSletanje = flight.getVremeSletanja();
+			
+			Date datePoletanje = flight.getDatumPoletanja();
+			Date dateSletanje = flight.getDatumSletanja();
 			
 			
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -440,8 +453,8 @@ public class AirplaneCompanyController {
 			String datumPoletanja = format.format(datePoletanje);
 			String datumSletanja = format.format(dateSletanje);
 			
-			String vremePoletanja = formatVreme.format(datePoletanje);
-			String vremeSletanja = formatVreme.format(dateSletanje);
+			String vremePoletanja = formatVreme.format(vrPoletanje);
+			String vremeSletanja = formatVreme.format(vrSletanje);
 		
 			flightDto.setDatumPoletanja(datumPoletanja);
 			flightDto.setDatumSletanja(datumSletanja);
@@ -499,7 +512,81 @@ public class AirplaneCompanyController {
 	
 	}	
 
+	@RequestMapping(value="/fastTickets/{id}", 
+			method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	public  ResponseEntity<List<TicketDTO>> getFastTickets(@PathVariable Long id, @Context HttpServletRequest request) throws ParseException{		
+		
+		AirplaneCompany company = service.findAirplaneCompanyById(id);
+		
+		if(company == null)
+			return new ResponseEntity<List<TicketDTO>>(HttpStatus.BAD_REQUEST);
+		
+		User user = (User) request.getSession().getAttribute("ulogovan");
+		if(user == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		user = korisnikServis.findOneById(user.getId());
+		
+		int bodovi = user.getBodovi();
+		
+		Date currentDate = new Date();
+		SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+		
+		String dateStr = formater.format(currentDate);
+		currentDate = formater.parse(dateStr);
+		
+		ArrayList<TicketDTO> retTicketDtos = new ArrayList<TicketDTO>();
+		for(Flight let : company.getLetovi())
+		{
+			if(let.getDatumPoletanja().after(currentDate))
+			{
+				for(Ticket ticket : let.getKarte())
+				{
+					if(!ticket.isRezervisano() && ticket.getPopustiKarte().size() > 0)
+					{
+						TicketDTO dto = new TicketDTO(ticket);
+						dto.setDatumPoletanja(formater.format(let.getDatumPoletanja()));
+						dto.setLokPoletanja(let.getPoletanje().getNaziv());
+						dto.setLokSletanja(let.getSletanje().getNaziv());
+						dto.setCena(ticket.getCena());
+						
+						podesiPopust(ticket.getPopustiKarte(), dto, bodovi);
+						
+						retTicketDtos.add(dto);
+					}
+				}
+			}
+		}
+		Collections.sort(retTicketDtos);
+		
+		
+		return new ResponseEntity<List<TicketDTO>>(retTicketDtos, HttpStatus.OK);
+	}
+	
+	private void podesiPopust(Set<DiscountTicket> popusti, TicketDTO dto,int brojBodova)
+	{
+		
+		ArrayList<Integer> brojevi = new ArrayList<Integer>();
+		HashMap<Integer, DiscountTicket> mapa = new HashMap<Integer, DiscountTicket>();
+		for(DiscountTicket popust : popusti)
+		{
+			brojevi.add(popust.getBodovi());
+			mapa.put(popust.getBodovi(), popust);
+		}
+		
+		boolean pronasao = false;
+		Collections.sort(brojevi); 
+		
+		int trenutni = 0;
+		for(int i : brojevi)
+		{
+			if(i <= brojBodova)
+				trenutni = i;
+		}
+		
+		dto.setIdPopusta(mapa.get(trenutni).getId());
+		dto.setPopust(mapa.get(trenutni).getVrednost());
+	}
 	
 	
-
 }

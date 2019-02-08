@@ -32,6 +32,7 @@ import rs.ftn.isa.dto.PozivnicaDTO;
 import rs.ftn.isa.dto.SeatDTO;
 import rs.ftn.isa.model.AirplaneCompany;
 import rs.ftn.isa.model.Destination;
+import rs.ftn.isa.model.DiscountTicket;
 import rs.ftn.isa.model.Flight;
 import rs.ftn.isa.model.PassengerInfo;
 import rs.ftn.isa.model.Pozivnica;
@@ -41,6 +42,7 @@ import rs.ftn.isa.model.StatusRezervacije;
 import rs.ftn.isa.model.Ticket;
 import rs.ftn.isa.model.User;
 import rs.ftn.isa.service.DestinationServiceImp;
+import rs.ftn.isa.service.DiscountTicketServiceImp;
 import rs.ftn.isa.service.EmailService;
 import rs.ftn.isa.service.FlightService;
 import rs.ftn.isa.service.PozivnicaServiceImp;
@@ -68,6 +70,9 @@ public class FightController {
 	
 	@Autowired
 	PozivnicaServiceImp servisPozivnica;
+	
+	@Autowired
+	DiscountTicketServiceImp servisPopusti;
 	
 	/*
 	 * metoda ne vraca podatke koji su mi potrebni sutra to jos istestirati da proverim
@@ -350,7 +355,15 @@ public class FightController {
 				dto.setBrojKolone(sediste.getKolona());
 				dto.setBrojReda(sediste.getRed());
 				dto.setKonfiguracija(configuration);
+				
+				//ukoliko ima popust ovako ne sme da je rezervise
+				if(ticket.getPopustiKarte().size() > 0)
+					dto.setRezervisano(true);
+				
 				retSeats.add(dto);
+				
+				
+				
 		
 			}
 		}
@@ -581,13 +594,26 @@ public class FightController {
 	}	
 
 	
-	@RequestMapping(value="/fastReservation/{id}", 
+	@RequestMapping(value="/fastReservation/{id}/{idPopust}", 
 			method = RequestMethod.POST)
-	public ResponseEntity<String> fastReservation(@PathVariable Long id, @Context HttpServletRequest request)
+	public ResponseEntity<String> fastReservation(@PathVariable Long id,@PathVariable("idPopust") Long idPopust, @Context HttpServletRequest request)
 	{
 		User user = (User) request.getSession().getAttribute("ulogovan");
 		if(user == null)
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		
+		DiscountTicket discount = servisPopusti.findOneById(idPopust);
+		if(discount == null)
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		
+		//ukoliko mi korisnik ima manje bodova od predvidjenih
+		user = servisKorisnik.findOneById(user.getId());
+		
+		if(user.getBodovi() >= discount.getBodovi())
+			user.setBodovi(user.getBodovi() - discount.getBodovi());
+		else
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		
 		ReservationTicket rezervation = new ReservationTicket();
 		user = servisKorisnik.findOneById(user.getId());
 		
