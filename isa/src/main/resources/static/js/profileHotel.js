@@ -1355,7 +1355,7 @@ function popustFunkcija(){
 	var idUsluga =$('#dodatne').val();
 	console.log("izbor je "+idUsluga);
 	
-	let ispravnp = true;
+	let ispravno = true;
 	
 	if(!vr){
 		$("#errorPopust").text("You need to fill out this field.").css('color', 'red');

@@ -11,9 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -47,7 +46,9 @@ public class Hotel {
 	@Column(name="brojac")
 	private Integer brojac;
 	
-
+	@Version 
+	private Long Version;
+	
 	
 	@OneToMany(mappedBy = "hotelski",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore
@@ -187,6 +188,12 @@ public class Hotel {
 	}
 	public void setGrad(String grad) {
 		this.grad = grad;
+	}
+	public Long getVersion() {
+		return Version;
+	}
+	public void setVersion(Long version) {
+		Version = version;
 	}
 
 

@@ -12,7 +12,7 @@ public interface HotelService {
 
 	Hotel findHotelByNaziv(String naziv);
 	Hotel findHotelById(Long id);
-	Hotel saveHotel(Hotel hotel);
+	Hotel saveHotel(Hotel hotel) throws Exception;
 	void removeHotel(Long id);
 	List<Hotel> findAllByGrad(String grad);
 	
