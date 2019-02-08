@@ -12,7 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
+import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,7 +41,6 @@ public class RentACar {
 
 	@Column(name="brojac")
 	private Integer brojac;
-
 	
 	
 	@OneToMany(mappedBy = "servis", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -140,8 +139,8 @@ public class RentACar {
 	}
 	
 	
-	
-	 public double getOcena() {
+
+	public double getOcena() {
 		return ocena;
 	}
 	public void setOcena(double ocena) {

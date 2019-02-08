@@ -3,6 +3,7 @@ package rs.ftn.isa.model;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -39,6 +40,7 @@ public class Filijala {
         @JsonIgnore
     	private Set<Vehicle> vozila = new HashSet<Vehicle>();
 
+    	
     	    	
 		public Filijala() {}
 		

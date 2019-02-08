@@ -152,6 +152,7 @@ public class VoziloController {
 				glavnaRez=Long.parseLong(niz[5]);
 			}
 			Long idVozilo=Long.parseLong(niz[0]);
+			Vehicle vozilo = servis.findVehicleById(idVozilo);
 			
 			String startDatum=niz[1];
 			String[] datP=startDatum.split("-");
@@ -211,7 +212,6 @@ public class VoziloController {
 			rezervacija.setDatumVracanja(datVracanje);
 			System.out.println(rezervacija);
 	        			
-			Vehicle vozilo = servis.findVehicleById(idVozilo);
 			System.out.println("Nasao je vozilo ");
 			rezervacija.setVozilo(vozilo);
 			vozilo.getRezervacije().add(rezervacija);

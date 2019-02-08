@@ -7,6 +7,7 @@ function onLoad(){
 	$("#ispisiSelect").hide();
 	$("#divBodPopust").hide();
 	$("#zaAdminaSistema").hide();
+	$("#history").hide();
 	
 	var user = sessionStorage.getItem("ulogovan");
 	console.log(user);
@@ -17,17 +18,31 @@ function onLoad(){
 		$("#logovanje").hide();
 		var korisnik = JSON.parse(user);
 		$("#imeKorisnika").text(korisnik.ime);
-		$("#history").show();
 		if(korisnik.tip == 'ADMIN_SISTEM'){
 			
+			$("#reserveFlight").hide();
+			$("#reserveHotel").hide();
+			$("#reserveCar").hide();
+
 			$("#zaAdminaSistema").show();
 			//$("#reserveCar").hide();
 			//$("#reserveHotel").hide();
 			//$('#reserveFlight').hide();
 			
 		}
-		ispisiIstoriju();
-	
+		if(korisnik.tip == 'ADMIN_AVIO' ||korisnik.tip == 'ADMIN_HOTEL'||korisnik.tip == 'ADMIN_RENT' ){
+			$("#reserveFlight").hide();
+			$("#reserveHotel").hide();
+			$("#reserveCar").hide();
+		
+		}
+		if(korisnik.tip == 'REGISTROVAN'){
+			$("#history").show();
+			  ispisiIstoriju();
+						
+		}
+		
+		
 	}else{
 		$("#prikazKorisnika").hide();
 		$("#odjava").hide();
@@ -81,7 +96,7 @@ function dodajIstorijuHotel(){
 function ispisiIstorijuHotel(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#historyHotel").empty();
-		
+	 $("#historyHotel").append("<h4>Hotel booking history</h4>");	
 	$("#historyHotel").append("<table class=\"table table-striped\" id=\"histTableHotel\" ><tr><th>Hotel</th><th>Check-in date</th><th>Check-out date</th><th>Price</th><th>Status</th><th></th><th></th><th></th></tr>");
 		console.log('Ispisujemo niz rez hotela');
 		console.log(pom);
@@ -108,7 +123,7 @@ function ispisiIstorijuHotel(lista){
 			var btnOtkH = "otkH"+idRez;
 			
 			console.log("Broj dana je "+numberDays);
-			if(clan.status == "AKTIVNA"){
+			if(clan.status == "ZAVRSENA"){
 				if(numberDays >=3 ){
 					$("#histTableHotel").append("<tr><td class=\"hoverName\">"+hotel+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td id=\""+statId+"\"> "+clan.status+"</td><td><button  class=\"btn btn-info\" id="+btnOtkH+" onclick=\"otkaziHotel("+clan.id+")\">Cancel</button></td></tr>");
 							
@@ -203,7 +218,8 @@ function prikaziSobe(lista){
 	console.log('Usao u prikazi sobe');
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#ratingRooms").empty();
-	
+	 $("#ratingRooms").append("<h4>Rate rooms</h4>");
+
 	 $("#ratingRooms").append("<table class=\"table table-striped\" id=\"rateRoomTable\" ><tr><th>Hotel</th><th>Tip</th><th></th><th></th></tr>");
 
 	$.each(pom, function(index, soba) {
@@ -310,8 +326,8 @@ function dodajIstorijuRent(){
 function ispisiIstorijuRent(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#historyRent").empty();
-		
-	$("#historyRent").append("<table class=\"table table-striped\" id=\"histTableRent\" ><tr><th>Model of car</th><th>Pick-up date</th><th>Drop-off date</th><th>Price</th><th>Status</th><th></th><th></th><th></th><th></th></tr>");
+	 $("#historyRent").append("<h4>Rent-A-Car booking history</h4>");
+	$("#historyRent").append("<table class=\"table table-striped\" id=\"histTableRent\" ><tr><th>Company</th><th>Brand of car</th><th>Model</th><th>Pick-up date</th><th>Drop-off date</th><th>Price</th><th>Status</th><th></th><th></th><th></th><th></th></tr>");
 		console.log('Ispisujemo niz rez rent');	
 		console.log(pom);
 		$.each(pom, function(index, clan) {
@@ -339,36 +355,36 @@ function ispisiIstorijuRent(lista){
 			
 			if(clan.status == "ZAVRSENA"){
 				if(numberDays >= 3){
-					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td id=\""+statId+"\"> "+clan.status+"</td><td><button  class=\"btn btn-info\" id="+btnOtk+" onclick=\"otkaziVozilo("+voz.id+","+clan.id+")\">Cancel</button></td></tr>");
+					$("#histTableRent").append("<tr><td class=\"hoverName\">"+clan.mestoVracanja+"</td><td> "+voz.marka+"</td><td> "+voz.model+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td id=\""+statId+"\"> "+clan.status+"</td><td><button  class=\"btn btn-info\" id="+btnOtk+" onclick=\"otkaziVozilo("+voz.id+","+clan.id+")\">Cancel</button></td></tr>");
 						
 				}else{
-					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td > "+clan.status+"</td></tr>");
+					$("#histTableRent").append("<tr><td class=\"hoverName\">"+clan.mestoVracanja+"</td><td> "+voz.marka+"</td><td> "+voz.model+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td > "+clan.status+"</td></tr>");
 							
 				}
 			}else if(clan.status == "AKTIVNA"){
 				//nije ocenio ni vozilo ni rent-a-car servis
 				if(clan.ocenjenVozilo == false && clan.ocenjenRent == false){
 					console.log("1");
-					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> "+clan.status+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazRent+"></td><td><button  class=\"btn btn-info\" id="+btnRent+" onclick=\"oceniRent("+voz.id+","+clan.id+")\">Rate Rent Service</button></td><td> <input type=\"number\" id="+nazVozilo+" min=\"1\" max=\"5\"></td><td><button  class=\"btn btn-info\" id="+btnCar+" onclick=\"oceniVozilo("+voz.id+","+clan.id+")\">Rate Car</button></td></tr>");
+					$("#histTableRent").append("<tr><td class=\"hoverName\">"+clan.mestoVracanja+"</td><td> "+voz.marka+"</td><td> "+voz.model+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> "+clan.status+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazRent+"></td><td><button  class=\"btn btn-info\" id="+btnRent+" onclick=\"oceniRent("+voz.id+","+clan.id+")\">Rate Rent Service</button></td><td> <input type=\"number\" id="+nazVozilo+" min=\"1\" max=\"5\"></td><td><button  class=\"btn btn-info\" id="+btnCar+" onclick=\"oceniVozilo("+voz.id+","+clan.id+")\">Rate Car</button></td></tr>");
 				}else if(clan.ocenjenVozilo == false){
 					//nije ocenio vozilo, ali je ocenio rent-a-car
 					console.log("2");
-					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> "+clan.status+"</td> <td><input type=\"number\" id="+nazVozilo+" min=\"1\" max=\"5\"></td><td><button  class=\"btn btn-info\" id="+btnCar+" onclick=\"oceniVozilo("+voz.id+","+clan.id+")\">Rate Car</button></td></tr>");
+					$("#histTableRent").append("<tr><td class=\"hoverName\">"+clan.mestoVracanja+"</td><td> "+voz.marka+"</td><td> "+voz.model+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> "+clan.status+"</td> <td><input type=\"number\" id="+nazVozilo+" min=\"1\" max=\"5\"></td><td><button  class=\"btn btn-info\" id="+btnCar+" onclick=\"oceniVozilo("+voz.id+","+clan.id+")\">Rate Car</button></td></tr>");
 						
 				}else if(clan.ocenjenRent == false){
 					//nije ocenio rent-a-car ali je ocenio vozilo
 					console.log("3");
-					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> "+clan.status+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazRent+"></td><td><button  class=\"btn btn-info\" id="+btnRent+" onclick=\"oceniRent("+voz.id+","+clan.id+")\">Rate Rent Service</button></td></tr>");
+					$("#histTableRent").append("<tr><td class=\"hoverName\">"+clan.mestoVracanja+"</td><td> "+voz.marka+"</td><td> "+voz.model+"</td><td > "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> "+clan.status+"</td><td> <input type=\"number\" min=\"1\" max=\"5\" id="+nazRent+"></td><td><button  class=\"btn btn-info\" id="+btnRent+" onclick=\"oceniRent("+voz.id+","+clan.id+")\">Rate Rent Service</button></td></tr>");
 					
 				}else{
 					//ocenio je i rent-a-car i vozilo
 					console.log("4");
-					$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td > "+date1+"</td><td> "+date2+"</td><td> "+clan.status+"</td></tr>");
+					$("#histTableRent").append("<tr><td class=\"hoverName\">"+clan.mestoVracanja+"</td><td> "+voz.marka+"</td><td> "+voz.model+"</td><td > "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td> "+clan.status+"</td></tr>");
 					
 				}
 			}else{
 				//otkazana je
-				$("#histTableRent").append("<tr><td class=\"hoverName\">"+voz.model+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td > "+clan.status+"</td></tr>");
+				$("#histTableRent").append("<tr><td class=\"hoverName\">"+clan.mestoVracanja+"</td><td> "+voz.marka+"</td><td> "+voz.model+"</td><td> "+date1+"</td><td> "+date2+"</td><td> "+clan.cena+"</td><td > "+clan.status+"</td></tr>");
 				
 			}
 			
@@ -527,7 +543,7 @@ function dodajIstorijuPlane(){
 function ispisiIstorijuLetova(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	$("#historyAirplane").empty();
-		
+	 $("#historyAirplane").append("<h4>Flight booking history</h4>");
 	$("#historyAirplane").append("<table class=\"table table-striped\" id=\"histTableLet\"><tr><th>Company</th><th>From</th><th>To</th><th>Departure date</th><th>Arrival date</th><th>Status</th><th></th><th></th><th></th><th></th></tr>");
 		console.log(pom);
 		$.each(pom, function(index, clan) {
@@ -688,19 +704,26 @@ function oceniLet(idLet,idRez){
 
 function istorijaPrazna(broj){
 	if(broj==1){
-		$("#historyHotel").append("<h3>There is no any record in your history.</h3>");
+		 $("#historyHotel").append("<h4>Hotel booking history</h4>");	
+
+		$("#historyHotel").append("<h4>There is no any record in your history.</h4>");
 			
 	}else if(broj == 2){
-		$("#historyRent").append("<h3>There is no any record in your history.</h3>");
+		 $("#historyRent").append("<h4>Rent-A-Car booking history</h4>");	
+
+		$("#historyRent").append("<h4>There is no any record in your history.</h4>");
 		
 	}else{
 		//historyAirplane
-		$("#historyAirplane").append("<h3>There is no any record in your history.</h3>");
+		 $("#historyAirplane").append("<h4>Flight booking history</h4>");	
+
+		$("#historyAirplane").append("<h4>There is no any record in your history.</h4>");
 		
 	}
 	
 }
 function planeShow(){
+
 	$("#pozadinaAvion").show();
 	$("#pozadinaAuto").hide();
 	$("#pozadinaHotel").hide();
@@ -713,8 +736,25 @@ function planeShow(){
 	$("#sortAvione").show();
 	$("#sortPlane").val("none");
 	$("#ratingRooms").empty();
-	$('#reserveFlight').show();
-	 
+	var user = sessionStorage.getItem("ulogovan");
+
+	if(user!=null && user!="null" && user!="undefined") {
+		console.log("Postoji ulogovan korisnik");
+		$("#logovanje").hide();
+		var korisnik = JSON.parse(user);
+		if(korisnik.tip == 'ADMIN_AVIO' ||korisnik.tip == 'ADMIN_SISTEM'|| korisnik.tip == 'ADMIN_HOTEL' || korisnik.tip == 'ADMIN_RENT' ){
+			$("#reserveFlight").hide();
+			$("#reserveHotel").hide();
+			$("#reserveCar").hide();
+		}else{
+			$('#reserveFlight').show();
+				
+		}
+	}else{
+		$('#reserveFlight').show();
+		 	
+	}
+	
 	$.ajax({
 		method:'GET',
 		url: "/api/kompanije/all",
@@ -733,16 +773,33 @@ function hotelShow(){
 	
 	$("#pozadinaHotel").show();
 	$("#ispisiTabelu").empty();
-	$("#reserveHotel").show();
 	$("#sortHotele").show();
 	$("#sortHotel").val("none");
 	$("#reserveCar").hide();
 	$("#sortCar").hide();
 	$("#sortAvione").hide();
-	 $("#ispisiTabelu").empty();
-	 $("#ispisiSelect").hide();
-	 $("#ratingRooms").empty();
-	 $('#reserveFlight').hide();
+	$("#ispisiTabelu").empty();
+	$("#ispisiSelect").hide();
+	$("#ratingRooms").empty();
+	$('#reserveFlight').hide();
+	var user = sessionStorage.getItem("ulogovan");
+
+	if(user!=null && user!="null" && user!="undefined") {
+		console.log("Postoji ulogovan korisnik");
+		$("#logovanje").hide();
+		var korisnik = JSON.parse(user);
+		if(korisnik.tip == 'ADMIN_AVIO' ||korisnik.tip == 'ADMIN_SISTEM'|| korisnik.tip == 'ADMIN_HOTEL' || korisnik.tip == 'ADMIN_RENT' ){
+			$("#reserveFlight").hide();
+			$("#reserveHotel").hide();
+			$("#reserveCar").hide();
+		}else{
+			$("#reserveHotel").show();
+				
+		}
+	}else{
+		$("#reserveHotel").show();
+		 	
+	}		
 	
 	$.ajax({
 		method:'GET',
@@ -762,7 +819,7 @@ function ispisiAviokompanije(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#ispisiTabelu").empty();
 		
-	$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaAvion\" ><tr><th> Name </th><th> Promotional description</th><th>Address</th></tr>");
+	$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaAvion\" ><tr><th> Name </th><th> Promotional description</th><th>Address</th><th></th><th></th></tr>");
 		
 		$.each(pom, function(index, avio) {
 			$("#tabelaAvion").append("<tr><td class=\"hoverName\" >"+avio.naziv+"</td><td > "+avio.opis+"</td><td > "+avio.adresa+"</td><td><button  class=\"btn btn-info\" onclick=\"profileCompany('"+avio.id+"')\">Profile</button></td><td><button  class=\"btn btn-info\" onclick=\"deleteCompany('"+avio.id+"')\">Delete</button></td></tr>");
@@ -875,7 +932,6 @@ function carShow(){
 	$("#pozadinaAvion").hide();
 	$("#sortAvione").hide();
 	$("#pozadinaAuto").show();
-	$("#reserveCar").show();
 	$("#sortCar").show();
 	$("#sortAuto").val("none");
 	$("#reserveHotel").hide();
@@ -885,7 +941,24 @@ function carShow(){
 	 $("#ratingRooms").empty();
 	 $("#ispisiSelect").hide();
 	 $('#reserveFlight').hide();
-	
+	var user = sessionStorage.getItem("ulogovan");
+
+	 if(user!=null && user!="null" && user!="undefined") {
+			console.log("Postoji ulogovan korisnik");
+			$("#logovanje").hide();
+			var korisnik = JSON.parse(user);
+			if(korisnik.tip == 'ADMIN_AVIO' ||korisnik.tip == 'ADMIN_SISTEM'|| korisnik.tip == 'ADMIN_HOTEL' || korisnik.tip == 'ADMIN_RENT' ){
+				$("#reserveFlight").hide();
+				$("#reserveHotel").hide();
+				$("#reserveCar").hide();
+			}else{
+				$("#reserveCar").show();
+							
+			}
+		}else{
+			$("#reserveCar").show();
+			 	
+		}
 	$.ajax({
 		method:'GET',
 		url: "/api/rents/all",
