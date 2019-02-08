@@ -860,15 +860,16 @@ public class HotelController {
 				//moram provjeriti prvi slucaj: da li je check in > od krajeva svih rezervacija koje postoje za tu sobu
 				boolean nijeOdobrena= false;
 				for(RezervacijaHotel pom:rezervacije) {	
-				
-					if(rez.getCheckIn().compareTo(pom.getDatumOdlaska())<0) {
-						System.out.println("nije odobren check in");
-						System.out.println("datum kad pocinje "+rez.getCheckIn()+" datum kad odlazim"+pom.getDatumOdlaska());
-						if(rez.getCheckOut().compareTo(pom.getDatumDolaska())>0) {
-							System.out.println("datum kad zavrsava "+rez.getCheckOut()+" datum kad dolazim"+pom.getDatumDolaska());
-							System.out.println("nije odobren check out");
-							//odobrenCheckOUT = false;
-							nijeOdobrena = true;
+					if(pom.getStatus()==StatusRezervacije.AKTIVNA) {
+						if(rez.getCheckIn().compareTo(pom.getDatumOdlaska())<0) {
+							System.out.println("nije odobren check in");
+							System.out.println("datum kad pocinje "+rez.getCheckIn()+" datum kad odlazim"+pom.getDatumOdlaska());
+							if(rez.getCheckOut().compareTo(pom.getDatumDolaska())>0) {
+								System.out.println("datum kad zavrsava "+rez.getCheckOut()+" datum kad dolazim"+pom.getDatumDolaska());
+								System.out.println("nije odobren check out");
+								//odobrenCheckOUT = false;
+								nijeOdobrena = true;
+							}
 						}
 					}
 				}
@@ -1020,17 +1021,18 @@ public class HotelController {
 					if(ss.getId() == idSobe) {
 						Room sobica = ss;
 						for(RezervacijaHotel pom:sobica.getRezervacije()) {	
-							
-							if(datumCheckIn.compareTo(pom.getDatumOdlaska())<0) {
-								System.out.println("nije odobren check in");
-								if(datumCheckOut.compareTo(pom.getDatumDolaska())>0) {
-									System.out.println("nije odobren check out");
-									//odobrenCheckOUT = false;
-									nijeOkRez = true;
-									break;
+							if(pom.getStatus()==StatusRezervacije.AKTIVNA) {
+									
+								if(datumCheckIn.compareTo(pom.getDatumOdlaska())<0) {
+									System.out.println("nije odobren check in");
+									if(datumCheckOut.compareTo(pom.getDatumDolaska())>0) {
+										System.out.println("nije odobren check out");
+										//odobrenCheckOUT = false;
+										nijeOkRez = true;
+										break;
+									}
 								}
 							}
-							
 						}
 						break;
 					}
@@ -1170,7 +1172,8 @@ public class HotelController {
 		 public int daysBetween(Date d1, Date d2){
 	         return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
 	 }
-		 //metoda koja radi pretragu hotela sa pocetne strane
+		 
+		 //PRETRAGA SA POCETNE STRANE
 		 @RequestMapping(value="/pronadjiHotele/{info}",
 					method = RequestMethod.POST,
 					consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -1188,30 +1191,22 @@ public ArrayList<Hotel> pronadjiHotele(@RequestBody ReservationHotelDTO rez,@Pat
 						Set<RezervacijaHotel> rezervacije = room.getRezervacije(); 
 						
 						//moram provjeriti prvi slucaj: da li je check in > od krajeva svih rezervacija koje postoje za tu sobu
-						boolean odobrenCheckIN = true;
-						for(RezervacijaHotel pom:rezervacije) {	
-							
-							if(rez.getCheckIn().compareTo(pom.getDatumOdlaska())<=0) {
-								System.out.println("nije odobren check in");
-								odobrenCheckIN = false;
-								break;
-							}
-						}
-						//odobren check in,provjeravam check out ..da li je check out < od pocetaka svih rezervacija koje postoje za datu sobu
-						boolean odobrenCheckOUT= true;
+						boolean nijeOdobrena= false;
 						
-							for(RezervacijaHotel pom:rezervacije) {	
+						for(RezervacijaHotel pom:rezervacije) {	
+							if(pom.getStatus()==StatusRezervacije.AKTIVNA) {
 								
-								if(rez.getCheckOut().compareTo(pom.getDatumDolaska())>=0) {
-									System.out.println("nije odobren check out");
-									odobrenCheckOUT = false;
-									break;
+								if(rez.getCheckIn().compareTo(pom.getDatumOdlaska())<0) {
+									if(rez.getCheckOut().compareTo(pom.getDatumDolaska())>0) {
+										nijeOdobrena= true;
+										break;
+										}
 								}
 							}
-							
+						}
 						
 						//odobrena je soba
-						if(odobrenCheckIN == true || odobrenCheckOUT == true) {
+						if(nijeOdobrena == false) {
 							System.out.println("odobrena soba pa i hotel");
 							povratna.add(hotel);
 							break;
