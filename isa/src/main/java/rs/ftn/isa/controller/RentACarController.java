@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.RentACarDTO;
 import rs.ftn.isa.dto.ReservationRentDTO;
-import rs.ftn.isa.dto.RoomDTO;
 import rs.ftn.isa.dto.VehicleDTO;
 import rs.ftn.isa.model.Discount;
 import rs.ftn.isa.model.Filijala;

@@ -61,8 +61,23 @@ function onLoad(){
 	planeShow();
 	refreshHotel();
 	refreshCar();
+	refreshFlight();
+
 }
 
+function refreshFlight(){
+	
+	$.ajax({
+		method:'POST',
+		url: "/api/reservationTickets/refreshResFlight",
+		success: function(){
+			console.log('Zavrseno');
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+	});
+}
 function refreshHotel(){
 	
 	$.ajax({
