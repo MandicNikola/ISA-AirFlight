@@ -596,15 +596,15 @@ public class FightController {
 	
 	@RequestMapping(value="/fastReservation/{id}/{idPopust}", 
 			method = RequestMethod.POST)
-	public ResponseEntity<String> fastReservation(@PathVariable Long id,@PathVariable("idPopust") Long idPopust, @Context HttpServletRequest request)
+	public ResponseEntity<Long> fastReservation(@PathVariable Long id,@PathVariable("idPopust") Long idPopust, @Context HttpServletRequest request)
 	{
 		User user = (User) request.getSession().getAttribute("ulogovan");
 		if(user == null)
-			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Long>(HttpStatus.BAD_REQUEST);
 		
 		DiscountTicket discount = servisPopusti.findOneById(idPopust);
 		if(discount == null)
-			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Long>(HttpStatus.BAD_REQUEST);
 		
 		//ukoliko mi korisnik ima manje bodova od predvidjenih
 		user = servisKorisnik.findOneById(user.getId());
@@ -612,7 +612,7 @@ public class FightController {
 		if(user.getBodovi() >= discount.getBodovi())
 			user.setBodovi(user.getBodovi() - discount.getBodovi());
 		else
-			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Long>(HttpStatus.BAD_REQUEST);
 		
 		ReservationTicket rezervation = new ReservationTicket();
 		user = servisKorisnik.findOneById(user.getId());
@@ -641,7 +641,7 @@ public class FightController {
 		
 		karta = servisKarata.findOneById(id);
 		
-		return new ResponseEntity<String>("uspesno ste rezervisali kartu!", HttpStatus.OK);
+		return new ResponseEntity<Long>(karta.getLet().getAvioKomp().getId(), HttpStatus.OK);
 	}
 	
 	
