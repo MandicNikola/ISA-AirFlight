@@ -79,8 +79,16 @@ public class HotelServiceTest {
 		
 		int dbSizeBeforeAdd = hotelService.findAll().size();
 		
-		Hotel dbHotel = hotelService.saveHotel(hotel);
-		assertThat(dbHotel).isNotNull();
+		Hotel dbHotel;
+		try {
+			dbHotel = hotelService.saveHotel(hotel);
+			//pojma nemam???
+			assertThat(dbHotel).isNotNull();
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		when(hotelRepositoryMock.findAll()).thenReturn(Arrays.asList(new Hotel(HotelConstants.DB_ID, HotelConstants.DB_NAZIV, HotelConstants.DB_ADRESA, HotelConstants.DB_OPIS), hotel));
 		// Validate that new student is in the database

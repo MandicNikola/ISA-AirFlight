@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import rs.ftn.isa.model.Hotel;
 import rs.ftn.isa.model.Room;
@@ -27,11 +28,12 @@ public class HotelServiceImpl implements HotelService {
 		// TODO Auto-generated method stub
 		return 	hotelRepozitorijum.findOneByNaziv(naziv);	
 	}
+	@Transactional
 	@Override
-	public Hotel saveHotel(Hotel hotel) {
+	public Hotel saveHotel(Hotel hotel) throws Exception{
 		// TODO Auto-generated method stub
 		System.out.println(" sacuvaj hotel ");
-			return hotelRepozitorijum.save(hotel);
+		return hotelRepozitorijum.save(hotel);
 	}
 
 

@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.ftn.isa.dto.HotelDTO;
 import rs.ftn.isa.dto.ReservationHotelDTO;
 import rs.ftn.isa.dto.RoomDTO;
+import rs.ftn.isa.dto.RoomReservationDTO;
 import rs.ftn.isa.model.Category;
 import rs.ftn.isa.model.CijenovnikSoba;
 import rs.ftn.isa.model.Discount;
@@ -230,7 +231,13 @@ public class HotelController {
 		//inicijalno ocjena je 0
 				 Hotel newHotel = new Hotel(hotel.getNaziv(),hotel.getAdresa(),hotel.getOpis(),0);
 				 newHotel.setGrad(hotel.getGrad());
-				 servis.saveHotel(newHotel);
+				 try {
+					servis.saveHotel(newHotel);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					 return  new ResponseEntity<>(HttpStatus.CONFLICT);
+				
+				}
 				 return new ResponseEntity<>(new HotelDTO(newHotel), HttpStatus.CREATED); 
 			 }else {
 				 Hotel povratna = new Hotel(); 
@@ -253,7 +260,7 @@ public class HotelController {
 				method = RequestMethod.POST,
 				consumes = MediaType.APPLICATION_JSON_VALUE,
 				produces = MediaType.APPLICATION_JSON_VALUE)
-		public @ResponseBody Hotel dodajSobu(@RequestBody Room room,@PathVariable Long id){		
+		public ResponseEntity<Hotel> dodajSobu(@RequestBody Room room,@PathVariable Long id){		
 			
 			Hotel pom = servis.findHotelById(id);	
 			 
@@ -280,14 +287,22 @@ public class HotelController {
 			 room.setHotel(pom);
 			 pom.getSobe().add(room);
 			 	//update hotela
-			 servis.saveHotel(pom);
-			 return pom;
+			 try {
+				servis.saveHotel(pom);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				// TODO Auto-generated catch block
+				 return  new ResponseEntity<>(HttpStatus.CONFLICT);
+			
+			}
+			 return new ResponseEntity<Hotel>(pom,HttpStatus.OK);
 				 
 		}
 		@RequestMapping(value="/promjenidodatnu/{slanje}", 
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE)
-		public @ResponseBody Hotel changeDodatnu(@PathVariable String slanje){	
+		public ResponseEntity<Hotel> changeDodatnu(@PathVariable String slanje){	
 			System.out.println("dobio sam "+slanje);
 			
 			String[] parts = slanje.split("-");
@@ -335,14 +350,22 @@ public class HotelController {
  			
  			cijenovnik.setHotelski(pom);
  			pom.getCijenovnici().add(cijenovnik);
- 			servis.saveHotel(pom);
- 			return pom;
+ 			try {
+				servis.saveHotel(pom);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				 return  new ResponseEntity<>(HttpStatus.CONFLICT);
+					
+			}
+ 			 return new ResponseEntity<Hotel>(pom,HttpStatus.OK);
+			
 		}
 		//dodavanje popusta na dodatnu uslugu koja ga jos uvijek nema
 		@RequestMapping(value="/dodajPopust/{slanje}", 
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE)
-		public @ResponseBody Hotel dodajPopust(@PathVariable String slanje){	
+		public ResponseEntity<Hotel> dodajPopust(@PathVariable String slanje){	
 			System.out.println("dobio sam "+slanje);
 			//idUsluga+"-"+vr+"-"+id;
 
@@ -379,15 +402,24 @@ public class HotelController {
  			aktivni.getUsluge().add(usluga);
  			
  			pom.getCijenovnici().add(aktivni); 	
- 			servis.saveHotel(pom);
- 			return pom;
+ 			try {
+				servis.saveHotel(pom);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				 return  new ResponseEntity<>(HttpStatus.CONFLICT);
+					
+			}
+ 		
+ 			 return new ResponseEntity<Hotel>(pom,HttpStatus.OK);
+ 			
 		}
 		
 		
 		@RequestMapping(value="/promjeniPopust/{slanje}", 
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE)
-		public @ResponseBody Hotel changePopust(@PathVariable String slanje){	
+		public ResponseEntity<Hotel> changePopust(@PathVariable String slanje){	
 			System.out.println("dobio sam "+slanje);
 			
 			String[] parts = slanje.split("-");
@@ -423,15 +455,23 @@ public class HotelController {
  			aktivni.getUsluge().add(usluga);
  			
  			pom.getCijenovnici().add(aktivni);
- 			servis.saveHotel(pom);
- 			return pom;
+ 			try {
+				servis.saveHotel(pom);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				 return  new ResponseEntity<>(HttpStatus.CONFLICT);
+					
+			}
+ 			return new ResponseEntity<Hotel>(pom,HttpStatus.OK);
+			
 		}
 
 		
 		@RequestMapping(value="/changePrice/{slanje}", 
 				method = RequestMethod.GET,
 				produces = MediaType.APPLICATION_JSON_VALUE)
-		public @ResponseBody Hotel changePrice(@PathVariable String slanje){		
+		public ResponseEntity<Hotel> changePrice(@PathVariable String slanje){		
 			
 			System.out.println("dobio sam string" + slanje);
 			String[] parts = slanje.split("-");
@@ -488,9 +528,17 @@ public class HotelController {
 			 	//update hotela
 
 				System.out.println("dobio sam dosao do 3");
-			 servis.saveHotel(pom);
+			 try {
+				servis.saveHotel(pom);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				 return  new ResponseEntity<>(HttpStatus.CONFLICT);
+					
+			}
 			
-			return pom;
+			 return new ResponseEntity<Hotel>(pom,HttpStatus.OK);
+				
 				 
 		}
 	
@@ -498,7 +546,7 @@ public class HotelController {
 				method = RequestMethod.POST,
 				consumes = MediaType.APPLICATION_JSON_VALUE,
 				produces = MediaType.APPLICATION_JSON_VALUE)
-		public @ResponseBody Category dodajKat(@RequestBody Category kat,@PathVariable Long id){		
+		public ResponseEntity<Category> dodajKat(@RequestBody Category kat,@PathVariable Long id){		
 			 Hotel pom = servis.findHotelById(id);	 
 			 if(pom == null) {
 				 System.out.println(" ne postoji ti taj hotel ");
@@ -506,8 +554,16 @@ public class HotelController {
 			 }
 			 	kat.setHotelKat(pom);
 			 	pom.getKategorije().add(kat);
-			 	servis.saveHotel(pom);
-			 return kat;
+			 	try {
+					servis.saveHotel(pom);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					//e.printStackTrace();
+					 return  new ResponseEntity<>(HttpStatus.CONFLICT);
+						
+				}
+			 return new ResponseEntity<>(kat,HttpStatus.OK);
+				
 		}
 		
 		
@@ -515,7 +571,7 @@ public class HotelController {
 				method = RequestMethod.POST,
 				consumes = MediaType.APPLICATION_JSON_VALUE,
 				produces = MediaType.APPLICATION_JSON_VALUE)
-		public @ResponseBody Hotel dodajDodatnuUslugu(@RequestBody Usluga u,@PathVariable Long id){		
+		public ResponseEntity<Hotel> dodajDodatnuUslugu(@RequestBody Usluga u,@PathVariable Long id){		
 			 	Hotel pom = servis.findHotelById(id);
 			 	System.out.println("dosao da doda dodantu uslugu");
 			 	
@@ -536,7 +592,8 @@ public class HotelController {
 			 				//postoji vec usluga sa datim nazivom za gresku
 			 				System.out.println("postoji vec ta usluga");
 			 				pom.setOpis("Usluga");
-			 				return pom;
+			 				return new ResponseEntity<Hotel>(pom,HttpStatus.OK);
+			 				
 			 			}
 			 		}
 			 		u.setKonfiguracija("ne");
@@ -546,8 +603,16 @@ public class HotelController {
 			 		//izmjeni cijenovnik kod hotela
 			 		pom.getCijenovnici().remove(aktivni);
 			 		pom.getCijenovnici().add(aktivni);
-			 		servis.saveHotel(pom);
-			 		return pom;
+			 		try {
+						servis.saveHotel(pom);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						//e.printStackTrace();
+						 return  new ResponseEntity<>(HttpStatus.CONFLICT);
+							
+					}
+			 		 return new ResponseEntity<Hotel>(pom,HttpStatus.OK);
+						
 			 		}else{
 			 			//ne postoje cijenovnici
 				 		PricelistHotel aktivni = new PricelistHotel();
@@ -567,9 +632,16 @@ public class HotelController {
 				 		cijenovnici.add(aktivni);
 				 		
 				 		pom.setCijenovnici(cijenovnici);
-				 		servis.saveHotel(pom);
-				 		return pom;
-
+				 		try {
+							servis.saveHotel(pom);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+						//	e.printStackTrace();
+							 return  new ResponseEntity<>(HttpStatus.CONFLICT);
+								
+						}
+				 		 return new ResponseEntity<Hotel>(pom,HttpStatus.OK);
+							
 			 			
 			 		}
 			 	}else {
@@ -591,8 +663,17 @@ public class HotelController {
 			 		Set<PricelistHotel> cijenovnici = new HashSet<PricelistHotel>();
 			 		cijenovnici.add(aktivni);
 			 		pom.setCijenovnici(cijenovnici);
-			 		servis.saveHotel(pom);
-			 		return pom;
+			 		try {
+						servis.saveHotel(pom);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						//e.printStackTrace();
+						 return  new ResponseEntity<>(HttpStatus.CONFLICT);
+							
+					}
+			 	
+			 		 return new ResponseEntity<Hotel>(pom,HttpStatus.OK);
+						
 			 	}
 			 	
 		}
@@ -676,7 +757,7 @@ public class HotelController {
 				method = RequestMethod.POST,
 				consumes = MediaType.APPLICATION_JSON_VALUE,
 				produces = MediaType.APPLICATION_JSON_VALUE)
-		public @ResponseBody Hotel changeHotel(@RequestBody Hotel hotel,@PathVariable Long id){		
+		public ResponseEntity<Hotel> changeHotel(@RequestBody Hotel hotel,@PathVariable Long id){		
 			Hotel old = servis.findHotelById(id);
 			System.out.println("dosao da izmjeni hotel");
 			List<Hotel> hoteli = servis.findAll();
@@ -685,8 +766,9 @@ public class HotelController {
 				if(hh.getId() != old.getId()) {
 					if(hh.getNaziv().equals(hotel.getNaziv())) {
 						old.setOpis("naziv");
-						return old;
-					}
+						 return new ResponseEntity<Hotel>(old,HttpStatus.OK);
+							
+						}
 				}
 				
 			}
@@ -694,9 +776,17 @@ public class HotelController {
 			old.setAdresa(hotel.getAdresa());
 			old.setGrad(hotel.getGrad());
 			old.setOpis(hotel.getOpis());
-			servis.saveHotel(old);
+			try {
+				servis.saveHotel(old);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				 return  new ResponseEntity<>(HttpStatus.CONFLICT);
+					
+			}
 			System.out.println("sacuvao hotel");
-			return old;
+			 return new ResponseEntity<Hotel>(old,HttpStatus.OK);
+				
 		}	
 		
 		
@@ -848,7 +938,7 @@ public class HotelController {
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE
 				)
-		public @ResponseBody RezervacijaHotel rezervacija(@PathVariable("info") String info,
+		public ResponseEntity<RezervacijaHotel> rezervacija(@PathVariable("info") String info,
 	            @PathVariable("nizSoba") String nizSoba,@PathVariable("listaUsl") String listaUsl,@PathVariable("id") Long id,@PathVariable("idRez") Long idRez,@Context HttpServletRequest request){
 			System.out.println("uusao u rezervisi u rezervaciji");
 			System.out.println("info "+info);
@@ -1029,10 +1119,18 @@ public class HotelController {
 				}
 				hotel.getCijenovnici().add(aktivni);
 			}
-			servis.saveHotel(hotel);
+			try {
+				servis.saveHotel(hotel);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				 return  new ResponseEntity<>(HttpStatus.CONFLICT);
+					
+			}
 			System.out.println("cijena je "+povratna.getCijena());
 		
-			return povratna;
+			 return new ResponseEntity<>(povratna,HttpStatus.OK);
+			
 		
 		}
 		
@@ -1100,7 +1198,7 @@ public ArrayList<Hotel> pronadjiHotele(@RequestBody ReservationHotelDTO rez,@Pat
 	@RequestMapping(value="/oceniHotel/{podatak}", 
 					method = RequestMethod.POST,
 					produces = MediaType.APPLICATION_JSON_VALUE )
-	public Hotel oceniHotel(@PathVariable String podatak){
+	public ResponseEntity<Hotel> oceniHotel(@PathVariable String podatak){
 		 System.out.println("Usao u oceni hotel");
 		String[] niz = podatak.split("=");
 		Integer ocena = Integer.parseInt(niz[1]);
@@ -1167,19 +1265,29 @@ public ArrayList<Hotel> pronadjiHotele(@RequestBody ReservationHotelDTO rez,@Pat
 									hotel.getSobe().add(room);
 								}
 					}
-					servis.saveHotel(hotel);
+					try {
+						servis.saveHotel(hotel);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						//e.printStackTrace();
+						 return  new ResponseEntity<>(HttpStatus.CONFLICT);
+							
+					}
 					
-					return hotel;
+					 return new ResponseEntity<Hotel>(hotel,HttpStatus.OK);
+						
 
 		}else {
-			return null;
+			Hotel h = null;
+			return new ResponseEntity<Hotel>(h,HttpStatus.OK);
+			
 		}
 		 
 	}
 		@RequestMapping(value="/oceniSobu/{podatak}", 
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE )
-	public Hotel oceniSobu(@PathVariable String podatak){
+	public ResponseEntity<Hotel> oceniSobu(@PathVariable String podatak){
 	 System.out.println("Usao u oceni sobu");
 	 //podatak sadrzi idRez = idSobe = ocena
 	String[] niz = podatak.split("=");
@@ -1239,12 +1347,22 @@ public ArrayList<Hotel> pronadjiHotele(@RequestBody ReservationHotelDTO rez,@Pat
 		soba.getOcenjeneRezervacije().add(rezervacija);
 		hotel.getSobe().add(soba);
 
-		servis.saveHotel(hotel);
+		try {
+			servis.saveHotel(hotel);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			 return  new ResponseEntity<>(HttpStatus.CONFLICT);
 				
-		return hotel;
+		}
+				
+		 return new ResponseEntity<Hotel>(hotel,HttpStatus.OK);
+		
 	
 	}else {
-		return null;
+		hotel =  null;
+		 return new ResponseEntity<Hotel>(hotel,HttpStatus.OK);
+			
 	}
 	 
 	}
@@ -1252,7 +1370,7 @@ public ArrayList<Hotel> pronadjiHotele(@RequestBody ReservationHotelDTO rez,@Pat
 		@RequestMapping(value="/otkaziHotel/{idRez}", 
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE )
-public Hotel otkaziHotel(@PathVariable String idRez){
+public ResponseEntity<Hotel> otkaziHotel(@PathVariable String idRez){
 	System.out.println("Usao u otkazi hotel");
 	
 	List<Hotel> sviHoteli = servis.findAll();
@@ -1301,12 +1419,22 @@ public Hotel otkaziHotel(@PathVariable String idRez){
 								hotel.getSobe().add(room);
 							}
 				}
-				servis.saveHotel(hotel);
+				try {
+					servis.saveHotel(hotel);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					//e.printStackTrace();
+					 return  new ResponseEntity<>(HttpStatus.CONFLICT);
+						
+				}
 				
-				return hotel;
+				 return new ResponseEntity<Hotel>(hotel,HttpStatus.OK);
+					
 
 	}else {
-		return null;
+		hotel  = null;
+		 return new ResponseEntity<Hotel>(hotel,HttpStatus.OK);
+			
 	}
 	 
 }
@@ -1316,7 +1444,7 @@ public Hotel otkaziHotel(@PathVariable String idRez){
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE
 				)
-		public @ResponseBody Room popustZaSobu(@PathVariable("id") Long id,
+		public ResponseEntity<Room> popustZaSobu(@PathVariable("id") Long id,
 	            @PathVariable("idRoom") Long idRoom,@PathVariable("pocetak") String pocetak,@PathVariable("kraj") String kraj,@PathVariable("bodovi") String bodovi,@PathVariable("procenat") String procenat){
 			System.out.println("dosao u fu dobio"+id+" id sobe "+idRoom+" pocetak "+pocetak+" kraj "+kraj+" bodovi "+bodovi+" procenti "+procenat);
 
@@ -1391,8 +1519,16 @@ public Hotel otkaziHotel(@PathVariable String idRez){
 			 }
 			 
 			 pronadjeni.getSobe().add(room);
-			 servis.saveHotel(pronadjeni);
-			return room;
+			 try {
+				servis.saveHotel(pronadjeni);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				 return  new ResponseEntity<>(HttpStatus.CONFLICT);
+					
+			}
+			 return new ResponseEntity<>(room,HttpStatus.OK);
+				
 		}
 
 		//url: "/api/hoteli/getRoomDiscount/"+id+"/idRoom/"+idRoom,
