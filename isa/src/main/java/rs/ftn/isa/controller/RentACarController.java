@@ -33,6 +33,7 @@ import rs.ftn.isa.model.Filijala;
 import rs.ftn.isa.model.PricelistRentCar;
 import rs.ftn.isa.model.RentACar;
 import rs.ftn.isa.model.RezervacijaRentCar;
+import rs.ftn.isa.model.StatusRezervacije;
 import rs.ftn.isa.model.User;
 import rs.ftn.isa.model.Usluga;
 import rs.ftn.isa.model.Vehicle;
@@ -165,17 +166,21 @@ public class RentACarController {
 						
 						//prolazimo kroz sve rezervacije koje su napravljene za ovo vozilo
 						for(RezervacijaRentCar rez : rezervacije) {	
-							//ako je datum preuzimanja vozila pre datuma vracanja iz rezervacije
-							if(datPreuzimanja.compareTo(rez.getDatumVracanja())<0) {
-								 //datum vracanja auta posle datuma preuzimanja iz rezervacije, preklapaju se termini, vozilo nam ne odgovara
-									if(datVracanje.compareTo(rez.getDatumPreuzimanja())>0){
-										System.out.println("provera2--> Datum vracanja je posle datuma preuzimanja iz rezervacije");
-									}else {
-										postojiVozilo=true;
-									}
-							}else {
-								postojiVozilo=true;
+							if(rez.getStatus()==StatusRezervacije.AKTIVNA) {
+								
+								//ako je datum preuzimanja vozila pre datuma vracanja iz rezervacije
+								if(datPreuzimanja.compareTo(rez.getDatumVracanja())<0) {
+									 //datum vracanja auta posle datuma preuzimanja iz rezervacije, preklapaju se termini, vozilo nam ne odgovara
+										if(datVracanje.compareTo(rez.getDatumPreuzimanja())>0){
+											System.out.println("provera2--> Datum vracanja je posle datuma preuzimanja iz rezervacije");
+										}else {
+											postojiVozilo=true;
+										}
+								}else {
+									postojiVozilo=true;
+								}	
 							}
+							
 							
 						}
 						
@@ -663,14 +668,17 @@ public class RentACarController {
 				boolean dozvolaPickUp = true;
 				//prolazimo kroz sve rezervacije koje su napravljene za ovo vozilo
 				for(RezervacijaRentCar R : rezervacije) {	
-					//ako je datum preuzimanja vozila pre datuma vracanja iz rezervacije
-					if(rezervacija.getPickUp().compareTo(R.getDatumVracanja())<0) {
-						 //datum vracanja auta posle datuma preuzimanja iz rezervacije, preklapaju se termini, vozilo nam ne odgovara
-							if(rezervacija.getDropOff().compareTo(R.getDatumPreuzimanja())>0){
-								dozvolaPickUp = false;
-								System.out.println("provera2--> Datum vracanja je posle datuma preuzimanja iz rezervacije");
-							}
+					if(R.getStatus()==StatusRezervacije.AKTIVNA) {
+						//ako je datum preuzimanja vozila pre datuma vracanja iz rezervacije
+						if(rezervacija.getPickUp().compareTo(R.getDatumVracanja())<0) {
+							 //datum vracanja auta posle datuma preuzimanja iz rezervacije, preklapaju se termini, vozilo nam ne odgovara
+								if(rezervacija.getDropOff().compareTo(R.getDatumPreuzimanja())>0){
+									dozvolaPickUp = false;
+									System.out.println("provera2--> Datum vracanja je posle datuma preuzimanja iz rezervacije");
+								}
+						}
 					}
+					
 					
 				}
 				
