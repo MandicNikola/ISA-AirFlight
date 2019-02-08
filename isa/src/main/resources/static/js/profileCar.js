@@ -6,6 +6,7 @@ $(document).ready(function($) {
 	var podatak = window.location.search.substring(1);
 	console.log("Usao u showGraf");
 	var niz= podatak.split("=");
+	var id= niz[1];
 	
 	if(niz.length > 2){
 		console.log('ima rezervacija');
@@ -16,7 +17,6 @@ $(document).ready(function($) {
 		$("#res").hide();
 		$("#fastRes").hide();
 	}
-	var id= niz[1];
 	
 	if(user!=null && user!="null" && user!="undefined") {
 			console.log('ima korisnika');
@@ -27,6 +27,15 @@ $(document).ready(function($) {
 				 $("#sistemPopust").hide();
 				 $(".side").hide();
 			}
+			if(korisnik.tip == 'ADMIN_RENT'){
+				if(korisnik.servis!=id){
+					$("#business").hide();
+					 $("#sistemPopust").hide();
+					 $(".side").hide();
+		
+				} 
+			}
+			
 			if(korisnik.tip != 'ADMIN_SISTEM'){
 				$("#admini").hide();
 				 
@@ -428,19 +437,22 @@ function dodajCen(){
 				console.log('Prazne usluga');
 			}else{
 				console.log('Ima usluga u cenovniku');
-				dodajDel();
+				dodajDel(data);
 			}
 		}
 	});
 	
 
 }
-function dodajDel(){
+function dodajDel(data){
+	var podatak = window.location.search.substring(1);
+	var niz= podatak.split("=");
+	var id=niz[1];
 	var user = sessionStorage.getItem("ulogovan");
 
 	if(user!=null && user!="null" && user!="undefined") {
 		var korisnik = JSON.parse(user);
-		if(korisnik.tip == 'ADMIN_RENT' ){
+		if(korisnik.tip == 'ADMIN_RENT' && korisnik.servis == id ){
 			$("#obrisiCen").append("<button class=\"btn btn-info\" onclick=\"obrisiCenovnik('"+data.id+"')\">Delete</button>")
 
 		}
@@ -491,7 +503,11 @@ function obrisiCenovnik(id){
 	});
 }
 function ispisiCenovnik(skup){
-		var user = sessionStorage.getItem("ulogovan");
+	var podatak = window.location.search.substring(1);
+	var niz= podatak.split("=");
+	var id= niz[1]; 
+	
+	    var user = sessionStorage.getItem("ulogovan");
 
 		console.log('usao u ispisiCenovnik');
 		
@@ -509,7 +525,7 @@ function ispisiCenovnik(skup){
 			
 			if(user!=null && user!="null" && user!="undefined") {
 				var korisnik = JSON.parse(user);
-				if(korisnik.tip == 'ADMIN_RENT' ){
+				if(korisnik.tip == 'ADMIN_RENT' && korisnik.servis==id ){
 					$("#tabelaCenovnik").append("<tr class=\"thead-light \"><td class=\"hoverName\">1</td><td>-</td><td ><input class=\"form-control\" type = \"number\"  id=\""+pod.id+"\"  value=\""+pod.cena+"\"></td><td><button class=\"btn btn-info\" onclick=\"izmeniUslugu('"+a+"')\">Change price</button></td></tr>");
 					
 				}else{
@@ -526,7 +542,7 @@ function ispisiCenovnik(skup){
 			var vrednost = lista[1];
 			if(user!=null && user!="null" && user!="undefined") {
 				var korisnik = JSON.parse(user);
-				if(korisnik.tip == 'ADMIN_RENT' ){
+				if(korisnik.tip == 'ADMIN_RENT' && korisnik.servis == id ){
 					$("#tabelaCenovnik").append("<tr class=\"thead-light \"><td class=\"hoverName\">1</td><td>"+vrednost.prekoTrajanja+"</td><td ><input class=\"form-control\" type = \"number\"  id=\""+pod.id+"\"  value=\""+pod.cena+"\"></td><td><button class=\"btn btn-info\" onclick=\"izmeniUslugu('"+a+"')\">Change price</button></td></tr>");
 					
 				}else{
@@ -550,7 +566,7 @@ function ispisiCenovnik(skup){
 						var naredni = lista[index+1];
 						if(user!=null && user!="null" && user!="undefined") {
 							var korisnik = JSON.parse(user);
-							if(korisnik.tip == 'ADMIN_RENT' ){
+							if(korisnik.tip == 'ADMIN_RENT' && korisnik.servis == id ){
 								$("#tabelaCenovnik").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+clan.prekoTrajanja+"</td><td> "+naredni.prekoTrajanja+"</td><td ><input class=\"form-control\" type = \"number\"  id=\""+clan.id+"\"  value=\""+clan.cena+"\"></td><td><button class=\"btn btn-info\" onclick=\"izmeniUslugu('"+pomocna+"')\">Change price</button></td></tr>");
 								
 							}else{
@@ -571,7 +587,7 @@ function ispisiCenovnik(skup){
 			
 			if(user!=null && user!="null" && user!="undefined") {
 				var korisnik = JSON.parse(user);
-				if(korisnik.tip == 'ADMIN_RENT' ){
+				if(korisnik.tip == 'ADMIN_RENT' && korisnik.servis == id){
 					$("#tabelaCenovnik").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+podd.prekoTrajanja+"</td><td>-</td><td ><input class=\"form-control\" type = \"number\"  id=\""+podd.id+"\"  value=\""+podd.cena+"\"></td><td><button class=\"btn btn-info\" onclick=\"izmeniUslugu('"+b+"')\">Change price</button></td></tr>");
 						
 				}else{
@@ -672,7 +688,9 @@ function ispisiAdminuVozila(skup){
 }
 function ispisiFilijale(skup){
 	var user = sessionStorage.getItem("ulogovan");
-	
+	var podatak = window.location.search.substring(1);
+	var urlDelovi= podatak.split("=");
+	var id=urlDelovi[1];
 
 var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 	
@@ -684,7 +702,7 @@ var lista = skup == null ? [] : (skup instanceof Array ? skup : [ skup ]);
 			$("#" + index).append("<div class=\"panel-body\">"+fil.ulica+"</div>");
 			if(user!=null && user!="null" && user!="undefined") {
 				var korisnik=JSON.parse(user);
-				if(korisnik.tip == 'ADMIN_RENT'){
+				if(korisnik.tip == 'ADMIN_RENT' && korisnik.servis == id){
 					$("#" + index).append("<div class=\"panel-footer\"><button  class=\"btn btn-info\" onclick=\"izmeniFilijalu('"+fil.id+"')\">Izmeni</button> <button  class=\"btn btn-info\" onclick=\"obrisiFilijalu('"+fil.id+"')\">Obrisi</button></div>");
 				}
 			
@@ -739,6 +757,10 @@ function obrisiFilijalu(id){
 
 function ispisiVozila(skup){
 	var user = sessionStorage.getItem("ulogovan");
+	var podatak = window.location.search.substring(1);
+	console.log("Usao u showGraf");
+	var niz= podatak.split("=");
+	var id= niz[1];
 	
 	$("#pregledVozila").empty();
 	console.log('usao u ispisivozila');
@@ -753,7 +775,7 @@ function ispisiVozila(skup){
 		console.log(filpom);
 		if(user!=null && user!="null" && user!="undefined") {
 			var korisnik=JSON.parse(user);
-			if(korisnik.tip == 'ADMIN_RENT'){
+			if(korisnik.tip == 'ADMIN_RENT' && korisnik.servis == id){
 				if(vozilo.broj == 0){
 					$("#tabelaVozilo").append("<tr class=\"thead-light \"><td class=\"hoverName\">"+vozilo.marka+"</td><td > "+vozilo.model+"</td><td > "+vozilo.godiste+"</td><td > "+vozilo.sedista+"</td><td > "+vozilo.kategorija+"</td><td> "+adresa+"</td><td> "+vozilo.ocena+"</td><td><button  class=\"btn btn-info\" onclick=\"izmeniVozilo('"+vozilo.id+"')\">Change</button></td><td><button class=\"btn btn-info\"  onclick=\"obrisiVozilo('"+vozilo.id+"')\">Delete</button></td></tr>");
 				}else{
