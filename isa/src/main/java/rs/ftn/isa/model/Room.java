@@ -37,7 +37,7 @@ public class Room {
 	@Column(name = "ocena", nullable = false)	
 	private double ocjena;
 	
-	@Column(name = "kreveti", nullable = false)	
+	@Column(name = "kreveti", nullable = true)	
 	private int kreveti;
 	
 	@Column(name = "sprat", nullable = false)	
