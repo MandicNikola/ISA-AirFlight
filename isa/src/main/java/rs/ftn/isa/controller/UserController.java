@@ -666,10 +666,10 @@ public class UserController {
 	return kor;
 	}
 	
-	@RequestMapping(value="/changePass/{id}/",
+	@RequestMapping(value="/changePass/{oldPass}/lozinka1/{lozinka1}/lozinka2/{lozinka2}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-public @ResponseBody User changePassAdmin(@RequestParam String oldPass,@RequestParam String lozinka1,@RequestParam String lozinka2 ,@Context HttpServletRequest request){
+public @ResponseBody User changePassAdmin(@PathVariable String oldPass,@PathVariable String lozinka1,@PathVariable String lozinka2 ,@Context HttpServletRequest request){
 		User user = (User) request.getSession().getAttribute("ulogovan");
 		System.out.println("ulogovan je "+user.getIme()+" a tip mu je "+user.getTip());
 		
