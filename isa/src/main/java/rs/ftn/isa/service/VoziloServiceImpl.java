@@ -2,6 +2,7 @@ package rs.ftn.isa.service;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +29,9 @@ public class VoziloServiceImpl implements VoziloService{
 		return repozitorijum.findAll();
 	}
 
+	@Transactional
 	@Override
-	public Vehicle saveVehicle(Vehicle vehicle) {
+	public Vehicle saveVehicle(Vehicle vehicle) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("Sacuvano vozilo");
 		return repozitorijum.save(vehicle);

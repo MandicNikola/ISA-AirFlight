@@ -16,8 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
-import org.codehaus.jackson.annotate.JsonManagedReference;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -78,6 +78,8 @@ public class Vehicle {
     @JsonIgnore
 	private Set<RezervacijaRentCar> rezervacije = new HashSet<RezervacijaRentCar>();
 
+	@Version
+	Long Version;
 	
 	public Vehicle() {
 		broj=0;

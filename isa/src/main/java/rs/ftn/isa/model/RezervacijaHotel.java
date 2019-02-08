@@ -16,13 +16,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-
+import javax.persistence.Version;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
@@ -66,16 +63,15 @@ public class RezervacijaHotel {
 	@ManyToOne( fetch = FetchType.EAGER)
     @JoinColumn(name = "korisnik_id")
 	private User userHotel;
-	
-	/*//jedna rezervicija pripada tacno jednom hotelu
-	@ManyToOne( fetch = FetchType.EAGER)
-	private Hotel rezHotel;
-	*/
+
 	
 	//jedna rezervicija moze da sadrzi vise dodatnih usluga
 	@ManyToMany(mappedBy = "rezHotela") 
 	private Set<Usluga>  usluge = new HashSet<Usluga>();
 
+	@Version 
+	private Long Version;
+	
 	public RezervacijaHotel() {
 		super();
 		this.status=StatusRezervacije.AKTIVNA;
@@ -188,6 +184,14 @@ public class RezervacijaHotel {
 
 	public void setRezavion(Long rezavion) {
 		this.rezavion = rezavion;
+	}
+
+	public Long getVersion() {
+		return Version;
+	}
+
+	public void setVersion(Long version) {
+		Version = version;
 	}
 
 

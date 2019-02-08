@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -64,6 +65,10 @@ public class RezervacijaRentCar implements Comparable<RezervacijaRentCar>{
 	
 	@Column(name="glavna_Rezervacija",nullable = true)
 	private Long glavnRez;
+	
+    @Version
+	private Long Version;
+	
 	
 	public RezervacijaRentCar() {
 		this.status=StatusRezervacije.AKTIVNA;
@@ -213,6 +218,16 @@ public class RezervacijaRentCar implements Comparable<RezervacijaRentCar>{
 
 	public void setGlavnRez(Long glavnRez) {
 		this.glavnRez = glavnRez;
+	}
+
+
+	public Long getVersion() {
+		return Version;
+	}
+
+
+	public void setVersion(Long version) {
+		Version = version;
 	}
 
 

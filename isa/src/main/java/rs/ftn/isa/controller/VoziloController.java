@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -102,7 +104,7 @@ public class VoziloController {
 				method = RequestMethod.POST,
 				consumes = MediaType.APPLICATION_JSON_VALUE,
 				produces = MediaType.APPLICATION_JSON_VALUE)
-		public @ResponseBody Vehicle izmeniVozilo(@RequestBody Vehicle nova){		
+		public ResponseEntity<Vehicle> izmeniVozilo(@RequestBody Vehicle nova){		
 			
 			System.out.println("Usao u izmeniVozilo");
 			Long id=nova.getId();
@@ -113,7 +115,7 @@ public class VoziloController {
 			if(vozilo.equals(nova)) {
 				System.out.println("Nista nije izmenjeno");
 				vozilo.setModel(vozilo.getFilijala().getServis().getId().toString());
-				return vozilo;
+				return new ResponseEntity<>(vozilo, HttpStatus.OK);
 			}
 			
 			vozilo.setGodiste(nova.getGodiste());
@@ -123,17 +125,23 @@ public class VoziloController {
 			vozilo.setSedista(nova.getSedista());
 			
 			
-			servis.saveVehicle(vozilo);
+			try {
+				servis.saveVehicle(vozilo);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				System.out.println();
+				return new ResponseEntity<>(HttpStatus.CONFLICT);
+			}
 			Long idRent = vozilo.getFilijala().getServis().getId();
 			
 			vozilo.setModel(idRent.toString());
-			return vozilo;
+			return new ResponseEntity<>(vozilo, HttpStatus.OK);
 
 		}	
 		@RequestMapping(value="/dodajRezervaciju/{podatak}", 
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE)
-		public @ResponseBody RezervacijaRentCar dodajRezervaciju(@PathVariable String podatak, @Context HttpServletRequest request){		
+		public ResponseEntity<RezervacijaRentCar> dodajRezervaciju(@PathVariable String podatak, @Context HttpServletRequest request){		
 			System.out.println("usao u dodajRezervaciju "+podatak);
 			
 			User korisnik = (User)request.getSession().getAttribute("ulogovan");		
@@ -209,8 +217,15 @@ public class VoziloController {
 			vozilo.getRezervacije().add(rezervacija);
 			vozilo.setBroj(vozilo.getBroj()+1);
 			System.out.println("Id od vozila je "+vozilo.getId());
-			servis.saveVehicle(vozilo);
-			return rezervacija;
+			try {
+				servis.saveVehicle(vozilo);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				return new ResponseEntity<>( HttpStatus.CONFLICT);
+
+			}
+			return new ResponseEntity<>(rezervacija, HttpStatus.OK);
+
 
 		}
 		
@@ -218,7 +233,7 @@ public class VoziloController {
 		@RequestMapping(value="/oceniVozilo/{podatak}", 
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE)
-		public @ResponseBody Vehicle oceniVozilo(@PathVariable String podatak){		
+		public ResponseEntity<Vehicle> oceniVozilo(@PathVariable String podatak){		
 		  System.out.println("Usao u oceni vozilo");
 			String[] niz = podatak.split("=");
 		    String idVoz=niz[0];
@@ -258,18 +273,23 @@ public class VoziloController {
 					rezervacija.setOcenjenVozilo(true);
 					vozilo.getRezervacije().add(rezervacija);
 					
-					servis.saveVehicle(vozilo);
+					try {
+						servis.saveVehicle(vozilo);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						return new ResponseEntity<>( HttpStatus.CONFLICT);
+					}
 					
-					return vozilo;
+					return new ResponseEntity<>(vozilo, HttpStatus.OK);
 			}else {
-				return vozilo;
+				return new ResponseEntity<>(HttpStatus.OK);
 			}
 		
 		}		
 		@RequestMapping(value="/cekirajOcenu/{podatak}", 
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE)
-		public @ResponseBody Vehicle cekirajOcenu(@PathVariable String podatak){		
+		public ResponseEntity<Vehicle> cekirajOcenu(@PathVariable String podatak){		
 		  System.out.println("Usao u oceni vozilo");
 		  String[] niz = podatak.split("=");
 		    String idVoz=niz[0];
@@ -297,18 +317,23 @@ public class VoziloController {
 					res.setOcenjenRent(true);;
 					vozilo.getRezervacije().add(res);
 					
-					servis.saveVehicle(vozilo);
+					try {
+						servis.saveVehicle(vozilo);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						return new ResponseEntity<>( HttpStatus.CONFLICT);
+					}
 					vozilo.setOcena((double)novaOcena);
-					return vozilo;
+					return new ResponseEntity<>(vozilo, HttpStatus.OK);
 			}else {
-				return vozilo;
+				return new ResponseEntity<>(vozilo, HttpStatus.OK);
 			}
 		
 		}
 		@RequestMapping(value="/otkaziVozilo/{podatak}", 
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE)
-		public @ResponseBody Vehicle otkaziVozilo(@PathVariable String podatak){		
+		public ResponseEntity<Vehicle> otkaziVozilo(@PathVariable String podatak){		
 		  System.out.println("Usao u otkazi vozilo");
 			String[] niz = podatak.split("=");
 		    String idVoz=niz[0];
@@ -334,11 +359,17 @@ public class VoziloController {
 					rezervacija.setStatus(StatusRezervacije.OTKAZANA);
 					vozilo.getRezervacije().add(rezervacija);
 					
-					servis.saveVehicle(vozilo);
+					try {
+						servis.saveVehicle(vozilo);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						return new ResponseEntity<>(HttpStatus.CONFLICT);
+					}
 					
-					return vozilo;
+					return new ResponseEntity<>(vozilo,HttpStatus.OK);
 			}else {
-				return vozilo;
+
+				return new ResponseEntity<>(vozilo,HttpStatus.OK);
 			}
 		
 		}	
@@ -348,7 +379,7 @@ public class VoziloController {
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE
 				)
-		public @ResponseBody Vehicle popustZaVozilo(@PathVariable("id") Long id,
+		public ResponseEntity<Vehicle> popustZaVozilo(@PathVariable("id") Long id,
 	            @PathVariable("pocetak") String pocetak,@PathVariable("kraj") String kraj,@PathVariable("bodovi") String bodovi,@PathVariable("procenat") String procenat){
 			System.out.println("dosao u fu dobio"+id+" pocetak "+pocetak+" kraj "+kraj+" bodovi "+bodovi+" procenti "+procenat);
 			int bod = Integer.parseInt(bodovi);
@@ -406,8 +437,14 @@ public class VoziloController {
 				 vozilo.setImapopusta(true);
 			 }
 			 
-			 servis.saveVehicle(vozilo);
-			return vozilo;
+			 try {
+				servis.saveVehicle(vozilo);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				return new ResponseEntity<>(HttpStatus.CONFLICT);
+			}
+
+				return new ResponseEntity<>(vozilo,HttpStatus.OK);
 		}
 
 		@RequestMapping(value="/getVoziloDiscount/{id}", 
@@ -427,7 +464,7 @@ public class VoziloController {
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE
 				)
-		public @ResponseBody Vehicle ukloniPopust(@PathVariable("slanje") String slanje){
+		public ResponseEntity<Vehicle> ukloniPopust(@PathVariable("slanje") String slanje){
 			System.out.println("Dosao da ukloni popust");
 			String[] pom = slanje.split("\\.");
 			String voziloId = pom[1];
@@ -443,8 +480,14 @@ public class VoziloController {
 				}
 			}
 			
-			servis.saveVehicle(vozilo);
-			return vozilo;
+			try {
+				servis.saveVehicle(vozilo);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				return new ResponseEntity<>(HttpStatus.CONFLICT);
+						
+			}
+			return new ResponseEntity<>(vozilo,HttpStatus.OK);
 		}
 		
 		@RequestMapping(value="/getFast/{id}/start/{start}/end/{end}/grad/{grad}", 
