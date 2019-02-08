@@ -1264,6 +1264,10 @@ function findFlights()
 										text += '</tr>';
 									});
 							text += '</tbody></table>';
+							
+							alert('maxCena' + maxCena);
+							alert('maxDuration' + maxDuration);
+							
 							$('#pretragaLetova').html(text);
 							$("#pretragaDiv").show();
 							
@@ -1411,15 +1415,21 @@ $(document).on("mouseleave", ".hoverName",function(){
 //proveriti zasto mi ne radi filter funckija
 function filter(data)
 {
+	var letovi = data;
+	alert(letovi);
 	var klasa = $('#selectKlasaFilter').val();
 	var price = $('#rangePrice').val();
 	var duration = $('#rangeDuration').val();
 	var kompanija = $('#selectKompanijaFilter').val();
+	
+	
 	$('#pretragaLetova').empty();
 	var text = '<table class="table table-striped">';
 	text += '<thead><tr><th>Vreme poletanja/sletanja</th><th>Broj presedanja: </th><th>Trajanje leta</th><th>Kompanija</th><th>Klasa</th><th>Cena</th></tr></thead><tbody>';
-	$.each(data,function(index,value)
+	$.each(letovi,function(index,value)
 			{
+				
+				
 				
 				if(klasa == value.klasa && value.duzina <= duration && value.cena <= price && value.nazivKompanije == kompanija)
 				{
