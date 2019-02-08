@@ -1352,7 +1352,7 @@ function findFlights()
 					success : function(data)
 					{
 						
-						alert(data);
+						
 						if(data.length > 0)
 						{	
 							var maxCena = 0;
@@ -1383,8 +1383,7 @@ function findFlights()
 									});
 							text += '</tbody></table>';
 							
-							alert('maxCena' + maxCena);
-							alert('maxDuration' + maxDuration);
+							
 							
 							$('#pretragaLetova').html(text);
 							$("#pretragaDiv").show();
@@ -1534,7 +1533,7 @@ $(document).on("mouseleave", ".hoverName",function(){
 function filter(data)
 {
 	var letovi = data;
-	alert(letovi);
+	
 	var klasa = $('#selectKlasaFilter').val();
 	var price = $('#rangePrice').val();
 	var duration = $('#rangeDuration').val();
