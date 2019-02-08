@@ -89,7 +89,7 @@ public class HotelControllerTest {
 	}
 	
 	
-	/*@Test
+	@Test
 	@Transactional
 	@Rollback(true)
 	public void testGetHotelRooms() throws Exception {
@@ -100,5 +100,12 @@ public class HotelControllerTest {
 		.andExpect(jsonPath("$.[*].balkon").value(hasItem(RoomConstants.DB_BALKON)))
 		.andExpect(jsonPath("$.[*].sprat").value(hasItem(RoomConstants.DB_SPRAT)));
 	}
-*/
+	
+	@Test
+	@Transactional
+	@Rollback(true)
+	public void testAddRoom() throws Exception{
+		
+	}
+
 }

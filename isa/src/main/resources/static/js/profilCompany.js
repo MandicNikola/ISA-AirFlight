@@ -319,6 +319,21 @@ $(document).ready(function($) {
         }
     });
 	
+	$('.filterableServices .btn-filter').click(function(){
+        var $panel = $(this).parents('.filterableServices'),
+        $filters = $panel.find('.filters input'),
+        $tbody = $panel.find('.table tbody');
+        if ($filters.prop('disabled') == true) {
+            $filters.prop('disabled', false);
+            $filters.first().focus();
+        } else {
+            $filters.val('').prop('disabled', true);
+            $tbody.find('.no-result').remove();
+            $tbody.find('tr').show();
+        }
+    });
+	
+	
 	
 	
 });
@@ -703,8 +718,80 @@ function showAdministrators()
 
 function priceList()
 {
+	$("#adminStrana").show();
+	$("#fastTicketsStrana").hide();
+	$("#informacije").hide();
+	$("#planesStrana").hide();
+	$("#flightsStrana").hide();
+	$("#izvestaj").hide();
+	$("#discountStrana").hide();
+	$("#divLozinka").hide();
+	$("#divPopust").hide();
 	
 	
+	$.ajax
+	({
+		type : 'GET',
+		url : 'api/kompanije//flight/'+id,
+		dataType : 'json',
+		success : function(data)
+		{
+			if(data == null || data.length == 0)
+			{
+				
+			}
+			else
+			{
+				
+				$('#tabelaServices').empty();
+				
+				
+				var text = "";				    
+				$.each(data,function(index,value)
+						{
+							text += "<tr><td class=\"hoverName\" >"+value.naziv+"</td><td>"+value.cena+'</td><td>'+value.klasa+'</td><td>'+value.opis+'</td><td><button type="button" class="btn btn-danger" onclick="removeUsluga('+value.id+')">Remove</button>' +'</td></tr>';                  
+						});
+				$('#tabelaServices').append(text);
+				 $('.filterableServices .filters input').unbind().keyup(function(e){
+				        /* Ignore tab key */
+					 	
+					   
+				        var code = e.keyCode || e.which;
+				        if (code == '9') return;
+				        /* Useful DOM data and selectors */
+				        var $input = $(this),
+				        inputContent = $input.val().toLowerCase(),
+				        $panel = $input.parents('.filterableServices'),
+				        column = $panel.find('.filters th').index($input.parents('th')),
+				        $table = $panel.find('.table'),
+				        $rows = $table.find('tbody tr');
+				        /* Dirtiest filter function ever ;) */
+				        var $filteredRows = $rows.filter(function(){
+				            var value = $(this).find('td').eq(column).text().toLowerCase();
+				            return value.indexOf(inputContent) === -1;
+				        });
+				        /* Clean previous no-result if exist */
+				        $table.find('tbody .no-result').remove();
+				        /* Show all rows, hide filtered ones (never do that outside of a demo ! xD) */
+				        $rows.show();
+				        $filteredRows.hide();
+				        /* Prepend no-result row if all rows are filtered */
+				        if ($filteredRows.length === $rows.length) {
+				            $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="'+ $table.find('.filters th').length +'">No result found</td></tr>'));
+				        }
+				    });
+				
+				
+			}
+			
+		}
+		
+		
+	});
+	
+	
+	
+	$("#priceListStrana").show();
 
 }
 

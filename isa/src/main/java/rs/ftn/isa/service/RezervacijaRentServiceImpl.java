@@ -45,4 +45,9 @@ public class RezervacijaRentServiceImpl implements RezervacijaRentService {
 		repozitorijum.deleteById(id);
 	}
 
+	@Override
+	public RezervacijaRentCar findByAvion(Long id) {
+		return repozitorijum.findByAvion(id);
+	}
+
 }
