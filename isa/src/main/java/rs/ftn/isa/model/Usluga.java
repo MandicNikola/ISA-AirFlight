@@ -17,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -51,6 +52,8 @@ public class Usluga {
 	
 	@Column(name="popust", nullable= true)
 	private int popust;
+	@Version 
+	private Long Version;
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "lista_id")
@@ -235,6 +238,16 @@ public class Usluga {
 
 	public void setRezHotela(Set<RezervacijaHotel> rezHotela) {
 		this.rezHotela = rezHotela;
+	}
+
+
+	public Long getVersion() {
+		return Version;
+	}
+
+
+	public void setVersion(Long version) {
+		Version = version;
 	}
 	
 	

@@ -152,6 +152,8 @@ public class VoziloController {
 				glavnaRez=Long.parseLong(niz[5]);
 			}
 			Long idVozilo=Long.parseLong(niz[0]);
+			Vehicle vozilo = servis.findVehicleById(idVozilo);
+			
 			
 			String startDatum=niz[1];
 			String[] datP=startDatum.split("-");
@@ -178,6 +180,37 @@ public class VoziloController {
 			 calendar.set(year, month, day);
 			 Date datVracanje = calendar.getTime();
 			 System.out.println("Daatum je "+datVracanje);
+			
+			 
+			 Set<RezervacijaRentCar> rezervacije = vozilo.getRezervacije(); 
+				boolean dozvolaPickUp = true;
+				//prolazimo kroz sve rezervacije koje su napravljene za ovo vozilo
+				for(RezervacijaRentCar R : rezervacije) {	
+					//ako je datum preuzimanja vozila pre datuma vracanja iz rezervacije
+					if(datPreuzimanja.compareTo(R.getDatumVracanja())<0) {
+						System.out.println("provera1-> Datum preuzimanja je pre datuma vracanja iz liste rezervacije");
+						 //datum vracanja auta posle datuma preuzimanja iz rezervacije, preklapaju se termini, vozilo nam ne odgovara
+							if(datVracanje.compareTo(R.getDatumPreuzimanja())>0){
+								dozvolaPickUp = false;
+								System.out.println("provera2--> Datum vracanja je posle datuma preuzimanja iz rezervacije");
+							
+							}
+					}
+					
+				}
+				
+			System.out.println("dozvola jee"+dozvolaPickUp);
+			
+			if(dozvolaPickUp==false) {
+				System.out.println("False je pick up");
+					RezervacijaRentCar povr=null;
+					return null;
+			}
+			System.out.println("ispod jee");	
+				
+				
+				
+			 
 			 double cenaVozila=0;
 			 String flag = niz[4];
 			 if(flag.equals("0")) {
@@ -211,7 +244,6 @@ public class VoziloController {
 			rezervacija.setDatumVracanja(datVracanje);
 			System.out.println(rezervacija);
 	        			
-			Vehicle vozilo = servis.findVehicleById(idVozilo);
 			System.out.println("Nasao je vozilo ");
 			rezervacija.setVozilo(vozilo);
 			vozilo.getRezervacije().add(rezervacija);

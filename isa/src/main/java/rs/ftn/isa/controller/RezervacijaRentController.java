@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.ChartDTO;
 import rs.ftn.isa.model.RentACar;
+import rs.ftn.isa.model.RezervacijaHotel;
 import rs.ftn.isa.model.RezervacijaRentCar;
+import rs.ftn.isa.model.StatusRezervacije;
 import rs.ftn.isa.model.User;
 import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.service.RezervacijaRentServiceImpl;
@@ -62,6 +64,7 @@ public class RezervacijaRentController {
 						System.out.println("Ima rezervacija");
 						System.out.println("Dodata rezervacija sa check in"+rezervacija.getDatumPreuzimanja());
 						System.out.println("Id je "+rezervacija.getId());
+						rezervacija.setMestoVracanja(rezervacija.getVozilo().getFilijala().getServis().getNaziv());
 						rezervacije.add(rezervacija);
 					}
 				}
@@ -395,4 +398,37 @@ public class RezervacijaRentController {
 		}
 		return suma;
 	}
+	@RequestMapping(value="/refreshResCar",
+			method = RequestMethod.POST)
+	public void refreshReservation(@Context HttpServletRequest request){		
+	System.out.println("Usao u refreshRez Hotel");
+		User korisnik = (User)request.getSession().getAttribute("ulogovan");
+		Calendar cal = Calendar.getInstance();
+			if(korisnik!=null) {
+				Long idKor=korisnik.getId();
+				String idKorS=idKor.toString();
+				List<RezervacijaRentCar> pomRez=servis.findAll();
+			
+				for(RezervacijaRentCar rezervacija : pomRez) {
+					Long idRezKor=rezervacija.getKorisnik().getId();
+					String idRezS=idRezKor.toString();
+	
+						if(idKorS.equals(idRezS)) {
+							Date today = new Date();
+							Date datZavrsetka= rezervacija.getDatumVracanja();
+							//cal.setTime(today);
+							//cal.add(Calendar.DATE,2);
+							//today=cal.getTime();
+							System.out.println("dat");
+							System.out.println(today.toString());
+							if(datZavrsetka.compareTo(today)<=0) {
+								rezervacija.setStatus(StatusRezervacije.ZAVRSENA);
+								servis.saveRezervacijaRentCar(rezervacija);
+							}
+						}
+					}
+			}
+		
+	}
+
 }

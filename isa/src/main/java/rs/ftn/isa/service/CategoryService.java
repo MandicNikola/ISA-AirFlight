@@ -9,4 +9,5 @@ public interface CategoryService {
 	List<Category> findAll();
 	Category findByNaziv(String name);
 	void removeById(Long id);
+	
 }

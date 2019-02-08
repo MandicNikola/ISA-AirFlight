@@ -108,10 +108,13 @@
   } 
  	 #jumb{
  	 background-color: #d6d6d6;
- 	 	padding:140px 25px !important;
+ 	 	padding:90px 25px !important;
  	 }
- 	 #historyRent, #historyAirplane, #historyHotel{
+ 	 #historyRent, #historyAirplane, #historyHotel,#ratingRooms, #friendsList{
  	 	padding:10px;
+ 	    border: 2px solid #C3C3C3;
+ 	 	border-radius: 5px;
+ 	 
  	 }
  	 #ratingRooms{
  	 	padding: 0px;
@@ -163,7 +166,7 @@ input[type="date"]:valid::before { display: none }
    	<div class="row">
    	<div class="booking-form">
    		<div class="form-header">
-   			<h1>Make your reservation</h1>
+   			<h1>Find flight</h1>
    		</div>
    		<form>
    			<div class="row">
@@ -291,7 +294,7 @@ input[type="date"]:valid::before { display: none }
    	<div class="row">
    	<div class="booking-form">
    		<div class="form-header">
-   			<h1>Make your reservation</h1>
+   			<h1>Find hotel</h1>
    		</div>
    		<form>
    			<div class="row">
@@ -490,14 +493,16 @@ input[type="date"]:valid::before { display: none }
  	</div>
 	<div class="container" id="historyAirplane">
 	</div>
-	<div class="container" id="historyHotel">
-	</div>
+	<div class="container" id="historyHotel">	
+	</div>	
 	<div class="container" id="ratingRooms">
 	</div>
 	<div class="container" id="historyRent">
 	</div>
 </div>
-
+<div class="container" id = "friendsList">
+  <a href="profileUser.html">See list of friends</a>
+</div>
 <div>
 <!-- Footer -->
 <footer class="container-fluid bg-4 text-center">

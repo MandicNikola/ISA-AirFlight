@@ -105,6 +105,41 @@ public class UserController {
 		
 		return retVal;
 	}
+	@RequestMapping(value="/friendsAccepted", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ArrayList<User> getUserFriendsAccepted(@Context HttpServletRequest request){		
+		
+		User user = (User) request.getSession().getAttribute("ulogovan");
+	    ArrayList<User> lista=new ArrayList<User>();
+		
+	    if(user == null)
+			return null;
+		ArrayList<String> retVal = new ArrayList<String>();
+		Set<Relation> relations = user.getRelatingRel();
+		if(relations.size() > 0)
+		{
+			
+			
+			for(Relation relation : relations)
+			{
+				if(relation.getTip().equals("FRIENDS"))
+				{
+					String friendName = relation.getRelated().getIme();
+					String friendLastName = relation.getRelated().getPrezime();
+					Long friendID = relation.getRelated().getId();					
+					
+					User kor = new User();
+					kor.setId(friendID);
+					kor.setIme(friendName);
+					kor.setPrezime(friendLastName);
+					lista.add(kor);
+				}
+			}
+			return lista;
+		}
+		
+		return lista;
+	}
+	
 	
 	@RequestMapping(value="/requests", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
 	public ArrayList<String> getUserRequests(@Context HttpServletRequest request){		
@@ -666,12 +701,10 @@ public class UserController {
 	return kor;
 	}
 	
-	
-	
-	@RequestMapping(value="/changePass/{id}/",
+	@RequestMapping(value="/changePass/{oldPass}/lozinka1/{lozinka1}/lozinka2/{lozinka2}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-public @ResponseBody User changePassAdmin(@RequestParam String oldPass,@RequestParam String lozinka1,@RequestParam String lozinka2 ,@Context HttpServletRequest request){
+public @ResponseBody User changePassAdmin(@PathVariable String oldPass,@PathVariable String lozinka1,@PathVariable String lozinka2 ,@Context HttpServletRequest request){
 		User user = (User) request.getSession().getAttribute("ulogovan");
 		System.out.println("ulogovan je "+user.getIme()+" a tip mu je "+user.getTip());
 		

@@ -31,7 +31,4 @@ public class CategoryServiceImpl implements CategoryService {
 		repozitorijum.deleteById(id);
 	}
 	
-	
-	
-		
 }
