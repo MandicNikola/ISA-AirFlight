@@ -353,8 +353,12 @@ function ispisiSobe(lista){
 			console.log('ima korisnika');
 			var korisnik=JSON.parse(user);
 			console.log(korisnik.tip);
+			var adresa = window.location.search.substring(1);
+			var id = adresa.split('=')[1];
+			
 		if(korisnik.tip == 'ADMIN_HOTEL'){
-
+			if(korisnik.servis==id){
+				
 			console.log(' ADMIN DOSAO DA VIDI SOBE');
 			adminhotela = true;
 	 
@@ -383,7 +387,8 @@ function ispisiSobe(lista){
 		
 	 $("#sobe").append("</table>");
 			}
-	 }		
+		}		
+	 }
 	 if(adminhotela == false){
 		 console.log('NIJE ADMIN DOSAO DA VIDI SOBE');
 		 var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
@@ -421,7 +426,6 @@ function ispisiTipove(list){
 
 function changeRoom(sobaID){
 	var adresa = window.location.search.substring(1);
-	console.log('adesa je '+adresa);
 	var id = adresa.split('=')[1];
 	
 	window.location = "changeRoom.html?"+sobaID+"-"+id;
@@ -1225,6 +1229,10 @@ function ispisiDodatne(data){
 			var korisnik=JSON.parse(user);
 			console.log(korisnik.tip);
 		if(korisnik.tip == 'ADMIN_HOTEL'){
+			var adresa = window.location.search.substring(1);
+			var id = adresa.split('=')[1];			
+			if(korisnik.servis==id){
+				
 				adminhotela = true;
 			$("#cijeneDodatne").append("<table class=\"table table-hover\" id=\"tblDodatne\" ><tr><th>Service</th><th>Price</th><th></th><th>Discount</th><th></th></tr>");
 			console.log(lista.length);
@@ -1244,7 +1252,8 @@ function ispisiDodatne(data){
 			});
 			$("#cijeneDodatne").append("</table>");
 			} 
-	} 
+		} 
+		}
 	 if(adminhotela == false){
 		 $("#cijeneDodatne").append("<table class=\"table table-hover\" id=\"tblDodatne\" ><tr><th>Service</th><th>Price</th><th>Discount</th></tr>");
 			
