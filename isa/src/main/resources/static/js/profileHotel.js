@@ -1657,7 +1657,7 @@ function korak4bezUsluga(niz){
 		$("#korak").hide();
 	    $("#reserveHotel").hide();
 	    $("#korakDodatne").append("<p id = \"korak4css\">Unfortunately, we don't have any additional services rigth now.</p>");			                                                                                                    
-	    $("#korakDodatne").append("<p><button type=\"button\" onclick = \"povratakSobe()\" class=\"btn btn-outline-secondary\">Back</button><button onclick = \"zavrsiRezBezUsluga("+niz+")\" type=\"button\" class=\"btn btn-success\">Finish</button></p>")
+	    $("#korakDodatne").append("<p><button type=\"button\" onclick = \"povratakSobe()\" class=\"btn btn-outline-secondary\">Back</button><button onclick = \"odustaniRez("+niz+")\" type=\"button\" class=\"btn btn-success\">Cancel</button><button onclick = \"zavrsiRezBezUsluga("+niz+")\" type=\"button\" class=\"btn btn-success\">Finish</button></p>")
 }
 //nudi se mogucnost korisniku da izabere dodatne usluge
 function korak4ispis(data,niz){
@@ -1679,7 +1679,7 @@ function korak4ispis(data,niz){
 			}
 		});
 	    $("#korakDodatne").append("</table>");                                                                                                     
-	    $("#korakDodatne").append("<p><button type=\"button\" onclick = \"povratakSobe()\" class=\"btn btn-outline-secondary\">Back</button><button onclick = \"zavrsiRez("+niz+")\" type=\"button\" class=\"btn btn-success\">Finish</button></p>")
+	    $("#korakDodatne").append("<p><button type=\"button\" onclick = \"povratakSobe()\" class=\"btn btn-outline-secondary\">Back</button><button onclick = \"odustaniRez("+niz+")\" type=\"button\" class=\"btn btn-success\">Cancel</button><button onclick = \"zavrsiRez("+niz+")\" type=\"button\" class=\"btn btn-success\">Finish</button></p>")
 	   
 	   
 }
@@ -1806,18 +1806,28 @@ function ispisiUspjesno(data){
 	
 	$("#korakDodatne").empty();
 	$("#korakDodatne").append("<div id= \"obavj\"><p>You have successfully made a reservation.</p><p>Total price:"+data.cijena+"</p><p>We are looking forward to have you as our guests</p></div>");
+	setTimeout(redirekcija, 1500);
+	
+}
+function redirekcija(){
 	var adresa = window.location.search.substring(1);
 	// da li ide da rezervise rent a car
+	
 	var flagdalje  = adresa.split('=')[5];	
+	var id = adresa.split('=')[1];
 	if(flagdalje == 1){
 		var idRezervacije = adresa.split('=')[2];
 		var  datumSletanja = adresa.split('=')[3];
 		var lokacija = adresa.split('=')[4];
 		var brojKarata = adresa.split('=')[6];
 		window.location = "redirekcija.html?id="+"rent"+'='+idRezervacije+"="+lokacija+"="+datumSletanja+"="+"0"+"="+brojKarata;
+	}else{
+		window.location = "profileHotel.html?id="+id;
+
 	}
 
 }
+
 function changePass(){
 	 $("#tabovi").hide();
 	 $("#sobe").hide();
@@ -2109,6 +2119,22 @@ function promjeniPrihod(iznos){
 	
 	$('#vrijednostPrihoda').val(iznos);
 }
-
+function odustaniRez(){
+	var adresa = window.location.search.substring(1);
+	// da li ide da rezervise rent a car
+	var flagdalje  = adresa.split('=')[5];	
+	var id = adresa.split('=')[1];
+	if(flagdalje == 1){
+		var idRezervacije = adresa.split('=')[2];
+		var  datumSletanja = adresa.split('=')[3];
+		var lokacija = adresa.split('=')[4];
+		var brojKarata = adresa.split('=')[6];
+		window.location = "redirekcija.html?id="+"rent"+'='+idRezervacije+"="+lokacija+"="+datumSletanja+"="+"0"+"="+brojKarata;
+	}else{
+		//treba da posalje mandi podatke
+		window.location = "profileHotel.html?id="+id;
+	}
+	
+}
 
 

@@ -75,7 +75,7 @@ public class User {
 	private Set<Pozivnica> pozivnice = new HashSet<Pozivnica>();
 	
 	//rez karata
-	@OneToMany(mappedBy = "korisnik", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "korisnik", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JsonIgnore
 	private Set<ReservationTicket> resTicket = new HashSet<ReservationTicket>();
 	

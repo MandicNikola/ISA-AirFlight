@@ -50,7 +50,7 @@ function onLoad(){
 }
 function ispisiIstoriju(){
 	console.log('Usao u ispisiIstoriju');
-		//dodajIstorijuPlane();
+		dodajIstorijuPlane();
 		dodajIstorijuHotel();	
 		dodajIstorijuRent();
 	
@@ -500,12 +500,202 @@ function cekirajOcenuRent(vozilo){
 	});	
 
 }
+function dodajIstorijuPlane(){
+	console.log('Usao u dodajistoriju avion');
+	$.ajax({
+		method:'GET',
+		url: "/api/reservationTickets/istorijaAvion",
+		success: function(lista){
+			if(lista == null){
+				console.log('Istorija je prazna');
+				istorijaPrazna(3);
+			}else if(lista.length == 0){
+				console.log('Istorija je prazna');
+				istorijaPrazna(3);
+			}else{
+				ispisiIstorijuLetova(lista);
+			}
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+	});
+
+	
+}	
+
+function ispisiIstorijuLetova(lista){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	$("#historyAirplane").empty();
+		
+	$("#historyAirplane").append("<table class=\"table table-striped\" id=\"histTableLet\"><tr><th>Company</th><th>From</th><th>To</th><th>Departure date</th><th>Arrival date</th><th>Status</th><th></th><th></th><th></th><th></th></tr>");
+		console.log(pom);
+		$.each(pom, function(index, clan) {
+			var datDol=clan.datumPoletanja;
+			var datOdl=clan.datumSletanja;
+			var date1=datDol.split('T')[0];
+			var date2=datOdl.split('T')[0];
+			var endDest=clan.mestoSletanja;
+			var startDest=clan.mestoPoletanja;
+			var status=clan.status;
+			var idRez=clan.id;
+			var kompanija= clan.nazivKompanije;
+			
+			var nazKomp = "oceniAv"+idRez;
+			var nazLet = "oceniLet"+idRez;
+			var btnKomp = "kompB"+idRez;
+			var btnLet = "letB"+idRez;
+			var statId="statPlane"+idRez
+			console.log(clan.status);
+			var today = new Date().toISOString().split('T')[0];
+		
+			const timeDiff  = (new Date(date1)) - (new Date(today));
+			const numberDays = timeDiff / (1000 * 60 * 60 * 24)
+			if(status == "OTKAZANA"){
+				$("#histTableLet").append("<tr><td class=\"hoverName\">"+kompanija+"</td><td> "+startDest+"</td><td> "+endDest+"</td><td> "+date1+"</td><td> "+date2+"</td><td id=\""+statId+"\"> "+status+"</td></tr>");
+					
+			}else if(status == "ZAVRSENA"){
+				if(clan.ocenjenaKompanija==false && clan.ocenjenLet==false){
+					$("#histTableLet").append("<tr><td class=\"hoverName\">"+kompanija+"</td><td> "+startDest+"</td><td> "+endDest+"</td><td> "+date1+"</td><td> "+date2+"</td><td id=\""+statId+"\"> "+status+"</td><td> <input type=\"number\" id="+nazKomp+" min=\"1\" max=\"5\"></td><td><button  class=\"btn btn-info\" id="+btnKomp+" onclick=\"oceniKompaniju("+clan.idKompanije+","+idRez+")\">Rate company</button></td><td> <input type=\"number\" id="+nazLet+" min=\"1\" max=\"5\"></td><td><button  class=\"btn btn-info\" id="+btnLet+" onclick=\"oceniLet("+clan.idLet+","+idRez+")\">Rate Flight</button></td></tr>");
+						
+				}else if(clan.ocenjenaKompanija==false){
+					$("#histTableLet").append("<tr><td class=\"hoverName\">"+kompanija+"</td><td> "+startDest+"</td><td> "+endDest+"</td><td> "+date1+"</td><td> "+date2+"</td><td id=\""+statId+"\"> "+status+"</td><td> <input type=\"number\" id="+nazKomp+" min=\"1\" max=\"5\"></td><td><button  class=\"btn btn-info\" id="+btnKomp+" onclick=\"oceniKompaniju("+clan.idKompanije+","+idRez+")\">Rate company</button></td></tr>");
+					
+				}else if(clan.ocenjenLet==false){
+					$("#histTableLet").append("<tr><td class=\"hoverName\">"+kompanija+"</td><td> "+startDest+"</td><td> "+endDest+"</td><td> "+date1+"</td><td> "+date2+"</td><td id=\""+statId+"\"> "+status+"</td><td> <input type=\"number\" id="+nazLet+" min=\"1\" max=\"5\"></td><td><button  class=\"btn btn-info\" id="+btnLet+" onclick=\"oceniLet("+clan.idLet+","+idRez+")\">Rate Flight</button></td></tr>");
+					
+				}else{
+					$("#histTableLet").append("<tr><td class=\"hoverName\">"+kompanija+"</td><td> "+startDest+"</td><td> "+endDest+"</td><td> "+date1+"</td><td> "+date2+"</td><td id=\""+statId+"\"> "+status+"</td></tr>");
+
+				} 
+				
+			}else{
+				//aktivna je ovde ide otkazivanje
+				$("#histTableLet").append("<tr><td class=\"hoverName\">"+kompanija+"</td><td> "+startDest+"</td><td> "+endDest+"</td><td> "+date1+"</td><td> "+date2+"</td><td id=\""+statId+"\"> "+status+"</td></tr>");
+				
+			}
+			
+			});
+	 $("#historyAirplane").append("</table>");
+
+}
+function oceniKompaniju(idKompanije, idRez){
+	console.log('Usao u oceniKompaniju');
+	console.log(idKompanije);
+	console.log(idRez);
+
+	var nazKomp = "oceniAv"+idRez;
+	var btnKomp = "kompB"+idRez;
+	var ocena =  $("#"+nazKomp).val();
+
+	if(ocena<1 || ocena>5){
+		
+		alert('Grade must be between 1 and 5');
+	
+	}else{
+		var parametar=idKompanije+"="+ocena;
+		console.log(ocena);
+		var broj=1;
+		$.ajax({
+			type : 'POST',
+			url : "/api/kompanije/oceniKompaniju/"+parametar,
+			success : function(pov) {
+				if( pov == null){	
+					alert('Prazno');
+				}else{
+					console.log('uspehh');
+					cekirajOcenuAviona(idRez , broj);
+					
+				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				alert('greska');
+			}
+		});
+	}
+}
+function cekirajOcenuAviona(idRez,broj){
+console.log('usao u cekiraj');
+console.log(idRez);
+console.log(broj);
+var nazKomp = "oceniAv"+idRez;
+var btnKomp = "kompB"+idRez;
+var nazLet = "oceniLet"+idRez;
+var btnLet = "letB"+idRez;
+
+	var parametar=idRez+"="+broj;
+	$.ajax({
+		method:'POST',
+		url: "/api/korisnici/cekirajOcenu/"+parametar,
+		success: function(pov){
+			if(pov == null){
+				console.log('Prazno');
+				
+			}else {
+				if(broj==2){
+					$("#"+btnLet).prop('disabled', true);
+					$("#"+nazLet).prop('disabled',true);
+					alert('You have successfully rated the flight.')
+					
+				}else{
+					$("#"+btnKomp).prop('disabled', true);
+					$("#"+nazKomp).prop('disabled',true);
+					alert('You have successfully rated the company.')
+					
+				}
+				
+				console.log('Uspesno');
+			}
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+	});
+	
+}
+function oceniLet(idLet,idRez){
+	console.log(idLet);
+	console.log(idRez);
+	var nazLet = "oceniLet"+idRez;
+	var btnLet = "letB"+idRez;
+	var ocena =  $("#"+nazLet).val();	
+	if(ocena<1 || ocena>5){
+		
+		alert('Grade must be between 1 and 5');
+	
+	}else{
+		console.log(ocena);
+		var parametar=idLet+"="+ocena;
+		console.log(ocena);
+		var broj=2;
+		$.ajax({
+			type : 'POST',
+			url : "/api/letovi/oceniLet/"+parametar,
+			success : function(pov) {
+				if( pov == null){	
+					alert('Prazno');
+				}else{
+					console.log('uspeeh');
+					cekirajOcenuAviona(idRez,broj);
+				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				alert('greska');
+			}
+		});
+	}
+}
+
 function istorijaPrazna(broj){
 	if(broj==1){
 		$("#historyHotel").append("<h3>There is no any record in your history.</h3>");
 			
-	}else{
+	}else if(broj == 2){
 		$("#historyRent").append("<h3>There is no any record in your history.</h3>");
+		
+	}else{
+		//historyAirplane
+		$("#historyAirplane").append("<h3>There is no any record in your history.</h3>");
 		
 	}
 	

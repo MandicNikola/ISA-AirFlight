@@ -41,6 +41,13 @@ public class AirplaneCompany {
 	@Column(name = "opis", nullable = false)
 	private String opis;
 
+	@Column(name="ocena", nullable = true)
+	private double ocena;
+
+	@Column(name="brojac", nullable = true)
+	private Integer brojac;
+
+
 	//avioni koji mu pripadaju aviokompaniji
 	@OneToMany(mappedBy = "airComp",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore
@@ -128,7 +135,21 @@ public class AirplaneCompany {
 	}
 
 
-	 public static Comparator<AirplaneCompany> AirplaneNameComparator = new Comparator<AirplaneCompany>() {
+	 public double getOcena() {
+		return ocena;
+	}
+	public void setOcena(double ocena) {
+		this.ocena = ocena;
+	}
+	public Integer getBrojac() {
+		return brojac;
+	}
+	public void setBrojac(Integer brojac) {
+		this.brojac = brojac;
+	}
+
+
+	public static Comparator<AirplaneCompany> AirplaneNameComparator = new Comparator<AirplaneCompany>() {
 
 			public int compare(AirplaneCompany A1, AirplaneCompany A2) {
 			   String name1 = A1.getNaziv().toUpperCase();

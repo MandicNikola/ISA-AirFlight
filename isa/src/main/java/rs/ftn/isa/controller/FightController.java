@@ -30,6 +30,7 @@ import rs.ftn.isa.dto.FlightDTO;
 import rs.ftn.isa.dto.PassengerDTO;
 import rs.ftn.isa.dto.PozivnicaDTO;
 import rs.ftn.isa.dto.SeatDTO;
+import rs.ftn.isa.model.AirplaneCompany;
 import rs.ftn.isa.model.Destination;
 import rs.ftn.isa.model.Flight;
 import rs.ftn.isa.model.PassengerInfo;
@@ -544,6 +545,41 @@ public class FightController {
 		return new ResponseEntity<FlightDTO>(retDto, HttpStatus.OK);
 	}
 	
+
+	@RequestMapping(value="/oceniLet/{parametar}", 
+			method = RequestMethod.POST,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody Flight oceniLet(@PathVariable String parametar){		
+	  System.out.println("Usao u oceni let");
+	 String[] niz = parametar.split("=");
+	 Long id= Long.parseLong(niz[0]);
+	 int ocena =Integer.parseInt(niz[1]);
+	 Flight let =servis.findOneFlightById(id);
+	    
+	if(let!=null) {
+			System.out.println("Brojac jee"+ let.getBrOcena());
+				int brojOcena=let.getBrOcena();
+				System.out.println("Broj ocena je "+brojOcena+ " trenutna ocena je "+let.getOcena());
+				double ukOcena = let.getOcena()*brojOcena;
+				System.out.println("Pomnozena ocena "+ukOcena);
+				ukOcena = ukOcena+ocena;
+				System.out.println("Dodata ocena "+ukOcena);
+				brojOcena++;
+				ukOcena=(double)ukOcena/brojOcena;
+				System.out.println("Podeljena ocena je "+ukOcena);
+				
+				let.setBrOcena(brojOcena);
+				let.setOcena(ukOcena);
+				
+				servis.saveFlight(let);
+				
+				return let;
+		}else {
+			return null;
+		}
+	
+	}	
+
 	
 	@RequestMapping(value="/fastReservation/{id}", 
 			method = RequestMethod.POST)
@@ -586,6 +622,8 @@ public class FightController {
 	
 	
 	
+	
+
 	
 	
 }
