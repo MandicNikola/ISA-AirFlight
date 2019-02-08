@@ -30,7 +30,9 @@ import org.springframework.web.context.WebApplicationContext;
 import rs.ftn.isa.TestUtil;
 import rs.ftn.isa.constants.*;
 import rs.ftn.isa.dto.HotelDTO;
+import rs.ftn.isa.model.Category;
 import rs.ftn.isa.model.Hotel;
+import rs.ftn.isa.model.Room;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class HotelControllerTest {
@@ -105,6 +107,31 @@ public class HotelControllerTest {
 	@Transactional
 	@Rollback(true)
 	public void testAddRoom() throws Exception{
+		Room room = new Room();
+		room.setBalkon(RoomConstants.NEW_BALKON);
+		room.setCijena(RoomConstants.NEW_CIJENA);
+		room.setTip(RoomConstants.NEW_TIP);
+		String json = TestUtil.json(room);
+		
+		this.mockMvc.perform(post(URL_PREFIX + "/addRoom/" + HotelConstants.DB_ID_UPDATE).contentType(contentType).content(json))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.naziv").value(HotelConstants.DB_NAZIV))
+		.andExpect(jsonPath("$.opis").value(HotelConstants.DB_OPIS));
+		
+	}
+
+	@Test
+	@Transactional
+	@Rollback(true)
+	public void testAddKat() throws Exception{
+		
+		Category kat = new Category();
+		kat.setNaziv(CatConstants.NEW_NAZIV);
+		String json = TestUtil.json(kat);
+		
+		this.mockMvc.perform(post(URL_PREFIX + "/sacuvajKat/" + HotelConstants.DB_ID_UPDATE).contentType(contentType).content(json))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.naziv").value(CatConstants.NEW_NAZIV));
 		
 	}
 
