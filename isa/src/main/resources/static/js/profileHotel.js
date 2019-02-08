@@ -897,7 +897,7 @@ function nemaFast(){
 }
 function ispisiFast(lista){
 	console.log('stigao u ispisiFast');
-	 $("#fastPonuda").empty();
+	//$("#fastPonuda").empty();
 		
 	$("#fastPonuda").show();
 		
@@ -983,8 +983,10 @@ function rezervisiFast(sobapopust){
 			type : 'POST',
 			url : "/api/rooms/rezervisiFast/"+info+"/sobapopust/"+sobapopust+"/idhotel/"+id+"/idRez/"+idRez,
 			success : function(povratna) {
-						if(povratna==null){
+						if(povratna==""){
 							console.log('neuspjesno');
+							alert('Room is not more available. Please choose again.');
+							ponoviFast();
 						}else{
 							dodajUseruBrzu(povratna,bodovi);		
 							console.log('uspjesno');
@@ -994,7 +996,11 @@ function rezervisiFast(sobapopust){
 				alert('greska');
 			}
 			});
-
+	
+}
+function ponoviFast(){
+	$("#fastDiv").show();
+	$("#fastPonuda").empty();
 	
 }
 function dodajUseruBrzu(data,bodovi){

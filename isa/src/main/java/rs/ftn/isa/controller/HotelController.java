@@ -1042,7 +1042,6 @@ public class HotelController {
 			}
 			if(nijeOkRez) {
 				 return null;
-
 			}
 			
 			for(int i =0;i<indexSoba.size();i++) {

@@ -3,6 +3,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import rs.ftn.isa.model.Room;
 import rs.ftn.isa.repository.RoomRepository;
@@ -22,9 +23,9 @@ public class RoomServiceImp implements RoomService{
 		// TODO Auto-generated method stub
 		return repozitorijum.findAll();
 	}
-
+	@Transactional	
 	@Override
-	public Room saveRoom(Room soba) {
+	public Room saveRoom(Room soba) throws Exception{
 		// TODO Auto-generated method stub
 		return repozitorijum.save(soba);
 	}
