@@ -6,7 +6,7 @@ public class RentACarConstants {
     public static final String DB_NAZIV = "Fast car";
     public static final String DB_GRAD = "Novi Sad";
     public static final String DB_ADRESA = "Kisacka 10";
-    public static final String DB_OPIS = "Dobrodosli";
+    public static final String DB_OPIS = "Podedujemo veliki asortiman auta";
     
     public static final String DB_NEW_NAZIV = "NS Rent";
     public static final String DB_NEW_GRAD = "Novi Sad";
