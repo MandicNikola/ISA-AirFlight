@@ -856,16 +856,39 @@ function hotelShow(){
 }
 
 function ispisiAviokompanije(lista){
-	console.log('usao u ispisi aviokompanije');
-	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	 $("#ispisiTabelu").empty();
 		
-	$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaAvion\" ><tr><th> Name </th><th> Promotional description</th><th>Address</th><th></th><th></th></tr>");
+	console.log('usao u ispisi aviokompanije');
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	
+	 var user = sessionStorage.getItem("ulogovan");
+		var adminsistem = false; 
 		
-		$.each(pom, function(index, avio) {
-			$("#tabelaAvion").append("<tr><td class=\"hoverName\" >"+avio.naziv+"</td><td > "+avio.opis+"</td><td > "+avio.adresa+"</td><td><button  class=\"btn btn-info\" onclick=\"profileCompany('"+avio.id+"')\">Profile</button></td><td><button  class=\"btn btn-info\" onclick=\"deleteCompany('"+avio.id+"')\">Delete</button></td></tr>");
-		});
-	 $("#ispisiTabelu").append("</table>");
+		if(user!=null && user!="null" && user!="undefined") {
+				console.log('ima korisnika');
+				var korisnik=JSON.parse(user);
+				console.log(korisnik.tip);
+			if(korisnik.tip == 'ADMIN_SISTEM'){
+				adminsistem = true;
+			$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaAvion\" ><tr><th> Name </th><th> Promotional description</th><th>Address</th><th></th><th></th></tr>");
+				
+				$.each(pom, function(index, avio) {
+					$("#tabelaAvion").append("<tr><td class=\"hoverName\" >"+avio.naziv+"</td><td > "+avio.opis+"</td><td > "+avio.adresa+"</td><td><button  class=\"btn btn-info\" onclick=\"profileCompany('"+avio.id+"')\">Profile</button></td><td><button  class=\"btn btn-info\" onclick=\"deleteCompany('"+avio.id+"')\">Delete</button></td></tr>");
+				});
+			 $("#ispisiTabelu").append("</table>");
+		
+				}
+			}
+		if(adminsistem == false){
+			$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaAvion\" ><tr><th> Name </th><th> Promotional description</th><th>Address</th><th></th></tr>");
+			
+			$.each(pom, function(index, avio) {
+				$("#tabelaAvion").append("<tr><td class=\"hoverName\" >"+avio.naziv+"</td><td > "+avio.opis+"</td><td > "+avio.adresa+"</td><td><button  class=\"btn btn-info\" onclick=\"profileCompany('"+avio.id+"')\">Profile</button></td></tr>");
+			});
+		 $("#ispisiTabelu").append("</table>");
+	
+			
+		}
 }
 
 
@@ -952,7 +975,7 @@ function iscrtajHotele(lista){
 			console.log(korisnik.tip);
 		if(korisnik.tip == 'ADMIN_SISTEM'){
 	
-		
+			adminsistem = true;
 			$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaHotel\" ><tr><th> Name </th><th> City </th><th> Address </th><th>Grade</th><th></th><th></th></tr>");
 				
 				$.each(pom, function(index, servis) {
