@@ -130,7 +130,14 @@ public class ReservationTicket {
 		this.cena = cena;
 	}
 	
-	
+	public double getUkupno()
+	{
+		double suma = 0;
+		for(Ticket karta : getKarte())
+			suma += karta.getCena();
+		
+		return suma;
+	}
 	
 	
 }

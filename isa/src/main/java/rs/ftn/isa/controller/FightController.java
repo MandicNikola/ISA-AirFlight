@@ -423,6 +423,13 @@ public class FightController {
 		rezervation.getKarte().add(karta);
 		karta.setReservationTicket(rezervation);
 		
+		int bodovi = 0;
+		
+		for(int i = 0; i < karta.getLet().getDuzina(); i=i+100)
+				bodovi++;
+		
+		user.setBodovi(user.getBodovi()+bodovi);
+		
 		servisKorisnik.saveUser(user);
 		System.out.println(rezervation.getId());
 		
