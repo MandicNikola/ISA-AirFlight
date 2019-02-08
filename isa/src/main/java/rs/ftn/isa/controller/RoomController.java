@@ -229,31 +229,24 @@ public class RoomController {
 				
 				break;
 			}
-			//moram provjeriti prvi slucaj: da li je check in > od krajeva svih rezervacija koje postoje za tu sobu
-			boolean odobrenCheckIN = true;
+			boolean nijeOdobrena= false;
+			
 			for(RezervacijaHotel pom:rezervacije) {	
 				
-				if(datumCheckIn.compareTo(pom.getDatumOdlaska())<=0) {
-					System.out.println("nije odobren check in");
-					odobrenCheckIN = false;
-					break;
-				}
-			}
-			//odobren check in,provjeravam check out ..da li je check out < od pocetaka svih rezervacija koje postoje za datu sobu
-			boolean odobrenCheckOUT= true;
-			
-				for(RezervacijaHotel pom:rezervacije) {	
+				if(datumCheckIn.compareTo(pom.getDatumOdlaska())<0) {
 					
-					if(datumCheckOut.compareTo(pom.getDatumDolaska())>=0) {
-						System.out.println("nije odobren check out");
-						odobrenCheckOUT = false;
+					if(datumCheckOut.compareTo(pom.getDatumDolaska())>0) {
+						System.out.println("nije odobren check out i check out");
+						nijeOdobrena= true;
 						break;
 					}
 				}
-				
+			}
+			//odobren check in,provjeravam check out ..da li je check out < od pocetaka svih rezervacija koje postoje za datu sobu
+		
 			
 			//odobrena je soba
-			if(odobrenCheckIN == true || odobrenCheckOUT == true) {
+			if(!nijeOdobrena) {
 				System.out.println("odobrena soba");
 				RoomDTO sobaDTO = new RoomDTO(room.getId(),room.getTip(),room.getOcjena(),room.getSprat(),room.getKapacitet(),room.getCijena(),room.getBalkon());
 				sobaDTO.setBodoviPopusta(odgovarajuciPopust.getBodovi());
