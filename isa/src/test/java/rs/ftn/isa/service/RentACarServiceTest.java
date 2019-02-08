@@ -51,7 +51,7 @@ public class RentACarServiceTest {
 	
 	@Test
     @Transactional
-    @Rollback(true) //it can be omitted because it is true by default
+    @Rollback(true) 
 	public void testAddRent() {
 		
 		when(rentRepositoryMock.findAll()).thenReturn(Arrays.asList(new RentACar(RentACarConstants.DB_ID, RentACarConstants.DB_NAZIV, RentACarConstants.DB_ADRESA, RentACarConstants.DB_OPIS)));

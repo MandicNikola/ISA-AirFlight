@@ -180,7 +180,7 @@ $(document).ready(function($) {
 	});
 
 	$("#findFast").click(function() {
-		
+		$("#errorFast").text('');
 		var urlDelovi= podatak.split("=");
 		//http://localhost:8080/profileHotel.html?id=1115=254=2019-02-06=Novi%20Sad=1
 		var idRez = urlDelovi[2];
