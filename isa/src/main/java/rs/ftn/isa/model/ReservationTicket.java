@@ -35,6 +35,8 @@ public class ReservationTicket {
 	@Column(name="status")
 	private StatusRezervacije status;
 	
+	@Column(name = "cena", nullable = true)
+	private int cena;
 
 	@Column(name = "ocenjenaKompanija", nullable = true)
 	private boolean ocenjenaKompanija;
@@ -118,6 +120,14 @@ public class ReservationTicket {
 
 	public void setOcenjenLet(boolean ocenjenLet) {
 		this.ocenjenLet = ocenjenLet;
+	}
+
+	public int getCena() {
+		return cena;
+	}
+
+	public void setCena(int cena) {
+		this.cena = cena;
 	}
 	
 	

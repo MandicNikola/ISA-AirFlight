@@ -230,7 +230,37 @@
 			  		<div id="planesStrana">
 			  		</div>	
 			  		
-			  		<div id="fastTicketsStrana">
+			  		
+			  		
+			  		<!-- JOS IMAM OVU TABELU DA DORADIM STA MI FALI -->
+			  		<div id="fastTicketsStrana" class="container-fluid">
+			  				
+				  			<div class="panel panel-primary filterableTicketFast"  style="width:75%;">
+					            <div class="panel-heading">
+					                <h3 class="panel-title">Brze karte</h3>
+					                <div class="pull-right">
+					                    <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+					                </div>
+					            </div>
+					            <table class="table table-filtered" >
+					                <thead>
+					                    <tr class="filters">
+					                        <th><input type="text" class="form-control" placeholder="#" disabled></th>
+					                        <th><input type="text" class="form-control" placeholder="FROM/TO" disabled></th>
+					                        <th><input type="text" class="form-control" placeholder="Date" disabled></th>
+					                         <th><input type="text" class="form-control" placeholder="Seat" disabled></th>
+					                        <th><input type="text" class="form-control" placeholder="Class" disabled></th>
+					                        <th><input type="text" class="form-control" placeholder="Price" disabled></th>
+					                   		<th><input type="text" class="form-control" placeholder="Popust" disabled></th>
+					                    </tr>
+					                </thead>
+					    			<tbody id="tabelaBrzeKarte">
+					    			
+									</tbody >
+					            </table>
+						      </div>
+			  		
+			  		
 			  		</div>	
 			  		
 			  		<div id="priceListStrana">
@@ -267,6 +297,36 @@
 						      </div>
 					      
 			  		</div>
+			  		
+			  <div id = "divPopust" class="container"> 
+			 	<section>
+			 	<div class="container" id="KartePopusti"></div>
+			 	<div class="container" id="postojeciPopusti"></div>
+			 	<div class="container" id = "poruka">
+			 		<p id = "porukaCSS">There is no any defined discount</p>
+			 	</div>
+			 	<div class="container" id="dodajPopust">
+				      <div class="row">
+				   		 
+						 <div class="col-md-6" >
+								<div class="form-group" id="labelaBroj">
+										<label for="points">Number of user points:</label>			
+						 		</div>													 		
+						 		<div class="form-group">
+										<div  id="ispisiSelectBodovi">	
+										<select class="form-control" id="selectBodove"></select>	
+										</div>					
+						
+						 		</div> 
+						</div> 			  	  
+				    	  <div class="col-md-6">
+						 		<div id="dugmePopust"><button id="btnPopust" type="button" class="btn btn-primary">Add</button></div>
+						 </div> 	  	  
+					
+			 		</div>
+			 		</div>			
+			 	</section>
+			 </div>
 			  		
 			  		
 			  	   <div id="izvestaj" class="container-fluid">
@@ -430,6 +490,8 @@
 						  </form>
 				</div>
 			 </div>	
+			 
+			 
 			  	
 			  				  			  		
 				</div>

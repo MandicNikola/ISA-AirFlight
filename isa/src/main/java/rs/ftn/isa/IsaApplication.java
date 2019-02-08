@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import rs.ftn.isa.model.PricelistRentCar;
 import rs.ftn.isa.model.RentACar;
@@ -41,7 +42,7 @@ import rs.ftn.isa.repository.*;
 import rs.ftn.isa.service.*;
 import rs.ftn.isa.controller.*;
 
-
+@EnableTransactionManagement
 @SpringBootApplication
 public class IsaApplication {
 

@@ -69,7 +69,7 @@ public class TicketController {
 			return new ResponseEntity<String>("Popust vec postoji!", HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="/getDicounts/{id}", method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/getDiscounts/{id}", method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<DiscountDTO>>  getDiscounts(@PathVariable Long id){
 			
 		Ticket karta = servis.findOneById(id);
@@ -92,12 +92,12 @@ public class TicketController {
 	
 	
 	@RequestMapping(value="/removeDiscount/{id}", method = RequestMethod.POST)
-	public ResponseEntity<String> removeDiscount(@PathVariable Long id){
+	public ResponseEntity<Long> removeDiscount(@PathVariable Long id){
 			
 			//specijalni popusti
 			DiscountTicket discount = servisPopustAvion.findOneById(id);
 			if(discount == null)
-				return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<Long>(HttpStatus.BAD_REQUEST);
 			
 			Ticket karta = discount.getKartaPopust();
 			discount.setKartaPopust(null);
@@ -106,7 +106,7 @@ public class TicketController {
 			servisPopustAvion.removeDiscount(discount);
 			servis.saveTicket(karta);
 			
-			return new ResponseEntity<String>("uspesno obrisano!", HttpStatus.OK);
+			return new ResponseEntity<Long>(karta.getId(), HttpStatus.OK);
 	}
 	
 	

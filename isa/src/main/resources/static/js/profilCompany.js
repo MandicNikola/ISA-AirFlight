@@ -35,8 +35,7 @@ $(document).ready(function($) {
 				 $("#discount").hide();
 				 $("#admini").hide();
 				 $("#divLozinka").hide();
-				 
-				 
+				 $("#divPopust").hide();
 			}
 			else
 			{
@@ -52,6 +51,7 @@ $(document).ready(function($) {
 		 $("#report").hide();
 		 $("#admini").hide();
 		 $("#divLozinka").hide();
+		 $("#divPopust").hide();
 	}	
 	
 	
@@ -305,6 +305,20 @@ $(document).ready(function($) {
         }
     });
 	
+	$('.filterableTicketFast .btn-filter').click(function(){
+        var $panel = $(this).parents('.filterableTicketFast'),
+        $filters = $panel.find('.filters input'),
+        $tbody = $panel.find('.table tbody');
+        if ($filters.prop('disabled') == true) {
+            $filters.prop('disabled', false);
+            $filters.first().focus();
+        } else {
+            $filters.val('').prop('disabled', true);
+            $tbody.find('.no-result').remove();
+            $tbody.find('tr').show();
+        }
+    });
+	
 	
 	
 });
@@ -332,7 +346,7 @@ function onLoad(){
  	$('#izvestaj').hide();
  	$("#divLozinka").hide();
  	$("#discountStrana").hide();
-	
+ 	 $("#divPopust").hide();
 	
 	var adresa = window.location.search.substring(1);
 	console.log('adesa je '+adresa);
@@ -361,7 +375,7 @@ function info()
 	$("#priceListStrana").hide();
 	$("#adminStrana").hide();
 	$("#divLozinka").hide();
-	
+	 $("#divPopust").hide();
 }
 
 function ispisiProfilKompanije(kompanija){
@@ -411,6 +425,7 @@ function showPlanes()
 	$("#priceListStrana").hide();
 	$("#adminStrana").hide();
 	$("#divLozinka").hide();
+	 $("#divPopust").hide();
 	
 	var adresa = window.location.search.substring(1);
 	var id = adresa.split('=')[1];
@@ -474,7 +489,7 @@ function showFlights()
 	$("#izvestaj").hide();
 	$("#discountStrana").hide();
 	$("#divLozinka").hide();
-	
+	 $("#divPopust").hide();
 	
 	$.ajax
 	({
@@ -563,6 +578,24 @@ function showFastTickets()
 	$("#izvestaj").hide();
 	$("#discountStrana").hide();
 	$("#divLozinka").hide();
+	$("#divPopust").hide();
+	
+	
+	
+	$.ajax
+	({
+		type : 'GET',
+		url : 'api/kompanije/fastTickets/'+id,
+		dataType : 'json',
+		success : function(data)
+		{
+			
+		}
+		
+		
+	});
+	
+	
 	
 	$("#fastTicketsStrana").show();
 	
@@ -580,6 +613,7 @@ function showAdministrators()
 	$("#izvestaj").hide();
 	$("#discountStrana").hide();
 	$("#divLozinka").hide();
+	 $("#divPopust").hide();
 	
 	$("#adminStrana").show();
 
@@ -717,6 +751,7 @@ function discount()
 	$("#adminStrana").hide();
 	$("#izvestaj").hide();
 	$("#divLozinka").hide();
+	 $("#divPopust").hide();
 	
 	$.ajax
 	({
@@ -782,10 +817,135 @@ function discount()
 
 function viewDiscount(id)
 {
+	var idKarte = id;
+	$("#fastTicketsStrana").hide();
+	$("#informacije").hide();
+	$("#planesStrana").hide();
+	$("#flightsStrana").hide();
+	$("#priceListStrana").hide();
+	$("#adminStrana").hide();
+	$("#discountStrana").hide();
+	$("#divLozinka").hide();
+	$('#izvestaj').hide();
+	
+	
+	$.ajax
+	({
+		type : 'GET',
+		url : 'api/karte/getDiscounts/'+idKarte,
+		dataType : 'json',
+		success : function(data)
+		{
+			$('#postojeciPopusti').empty();
+			var text = '<table class="table table-striped"><tr><th>#</th><th>Broj bodova</th><th>Popust</th></tr>'
+			
+			if(data == null || data.length > 0)
+			{
+				$.each(data,function(index,popusti)
+						{
+							text += '<tr><td>'+popusti.idPopusta+'</td><td>'+popusti.bodovi+'</td><td>'+popusti.popust+'</td>';
+							text += '<td><button id="'+popusti.idPopusta+'" type="button" onclick="removePopust(this)" class="btn btn-warning">Remove</button></td></tr>';
+						
+						});
+			}
+				
+			text += '</table>';
+			$('#postojeciPopusti').html(text);
+			pokupiPostojecePopuste();
+			
+			$("#btnPopust").unbind().click(function() {
+				var idPopust = $('#selectBodove').val();
+				alert(idPopust);
+				
+				$.ajax
+				({
+					type : 'POST',
+					url : 'api/karte/addDiscount/'+idKarte+'/'+idPopust,
+					success : function(data)
+					{
+						alert(data);
+						viewDiscount(idKarte);
+					}
+					
+				});
+				
+			});
+			
+		}
+		
+		
+	});
+	
+	
+	
+	$("#divPopust").show();
+	
 	
 
 }
 
+function removePopust(btn)
+{
+	var ida = btn.id;
+	$.ajax
+	({
+		type : 'POST',
+		url : 'api/karte/removeDiscount/'+ida,
+		success : function(data)
+		{
+			if(data == null)
+			{
+				alert('Ne valja!')
+			}
+			else
+			{
+				alert(data);
+				viewDiscount(data);
+			}
+		}
+		
+		
+	});
+	
+}
+
+
+function pokupiPostojecePopuste(){
+	$.ajax({
+		method:'GET',
+		url: "/api/special/all",
+		success: function(lista){
+			if(lista == null){
+				nemaBonusPopusta();
+			}else if(lista.length==0){
+				nemaBonusPopusta();
+			}else{
+				dodajProcente(lista);
+				
+			}
+		}
+	});
+	
+}
+
+function nemaBonusPopusta(){
+	 $("#dodajPopust").hide();
+	 $("#poruka").show();
+		
+}
+function dodajProcente(lista){
+	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
+	console.log('dosao u izbor procenata')
+	$("#selectBodove").empty();
+	 $.each(pom, function(index, data) {
+		 	
+		 $("#selectBodove").append("<option value=\""+data.id+"\" >"+data.bodovi+"</option>");	 
+		 
+	 });
+	 $("#dodajPopust").show();
+		
+	
+}
 
 
 function report()
@@ -799,6 +959,7 @@ function report()
 	$("#adminStrana").hide();
 	$("#discountStrana").hide();
 	$("#divLozinka").hide();
+	 $("#divPopust").hide();
 	
 	
 	$('#izvestaj').show();
@@ -815,6 +976,7 @@ function changePassword()
 	$("#adminStrana").hide();
 	$("#discountStrana").hide();
 	$('#izvestaj').hide();
+	 $("#divPopust").hide();
 	
 
 	$("#divLozinka").show();

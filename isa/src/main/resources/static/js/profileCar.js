@@ -1106,17 +1106,24 @@ function rezervisi(){
 		
 	var ispravno = true;
 	
+	var today = new Date().toISOString().split('T')[0];
 	
 	var pocetak=$("#pickDate").val();
 	if(pocetak == ""){
 		ispravno = false;
 		$("#error1").text(" Fill out this field").css('color', 'red');
 	}
+	if(pocetak < today){
+		$("#error1").text("You can not select the date that passed").css('color', 'red');
+		ispravno=false;
+		
+	}
 	var kraj=$("#dropDate").val();
 	if(kraj == ""){
 		ispravno=false;
 		$("#error2").text(" Fill out this field").css('color', 'red');
 	}
+	
 	var date1 = Date.parse(pocetak);
 	var date2 = Date.parse(kraj);
 	if (date1 > date2) {
