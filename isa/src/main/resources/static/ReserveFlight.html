@@ -17,6 +17,9 @@
 .container {
   display: flex;
   justify-content: center;
+  border: 2px solid green;
+   border-collapse: collapse;
+  padding: 10px;
 }
 .center {
   width: 800px;
@@ -48,6 +51,14 @@ td, th {
 form{
 	 	 		text-align: center;
 	 	 	}
+	 	 	
+	 	 	
+	 	 	.center {
+  margin: auto;
+  width: 50%;
+  border: 3px solid green;
+  padding: 10px;
+}
 
 </style>
 </head>
@@ -146,10 +157,10 @@ form{
   		</div>
 	</div>
 	
-	<div class="container" id="finishReservation">
+	<div id="finishReservation" class="center">
 		<div class = "row">
 			<div class="col-md-6">
-				<h3>Do you want to reserve hotel ?</h3>
+				<h2>Do you want to reserve hotel ?</h2>
 			</div>
 			<div class="col-md-6">
 				<button type="button" class="btn btn-link" onclick="hotels()">Hotels</button>
@@ -157,7 +168,7 @@ form{
 		</div>
 		<div class = "row">
 			<div class="col-md-6">
-				<h3>Do you want to reserve rent-a-car ?</h3>
+				<h2>Do you want to reserve rent-a-car ?</h2>
 			</div>
 			<div class="col-md-6">
 				<button type="button" class="btn btn-link" id = "rc" onclick="rentAcar()">Cars</button>
@@ -165,7 +176,7 @@ form{
 		</div>
 		<div class = "row">
 			<div class="col-md-6">
-				<h3>Do you want to reserve hotel and rent-a-car ?</h3>
+				<h2>Do you want to reserve hotel and rent-a-car ?</h2>
 			</div>
 			<div class="col-md-6">
 				<button type="button" class="btn btn-link" id="both" onclick="both()">Hotels and Rent-a-car</button>
@@ -177,11 +188,8 @@ form{
 	<div class="container" id="buttons">
 		<div class = "row">
 			<div  class= "col-md-3">
-				
 			</div>
 			<div class= "col-md-3">
-				<button type="button" id="cancelBtn" class="btn btn-default">Cancel</button>
-			
 			</div>
 			<div class= "col-md-3">
 				<button type="button" id="backBtn" class="btn btn-default" onclick="back()">Back</button>

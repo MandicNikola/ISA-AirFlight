@@ -620,11 +620,10 @@ function showFastTickets()
         					text += '<td>'+karta.lokPoletanja+'/'+karta.lokSletanja+'</td>';
         					text += '<td>'+karta.datumPoletanja+'</td>';
         					text += '<td>'+karta.red+'-'+karta.kolona+'</td>';
-        					text += '<td>'+karta.datumPoletanja+'</td>';
+        					text += '<td>'+karta.klasa+'</td>';
         					text += '<td>'+karta.cena+'</td>';
         					text += '<td>'+karta.popust+'</td>';
-        					text += '<td>'+karta.popust*karta.cena+'</td>';
-        					text += '<td>'+karta.popust*karta.cena+'</td>';
+        					text += '<td>'+(karta.popust*karta.cena)/100+'</td>';
         					text += '<td><button type="button" class="btn btn-primary" id="'+karta.id+'-'+karta.idPopusta+'" onclick="bookFast(this)">Book</button></td></tr>';
         					
         				});

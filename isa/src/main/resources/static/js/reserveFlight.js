@@ -229,7 +229,7 @@ function dodajSediste(sediste)
  */
 function dalje()
 {
-	alert('usao');
+	
 	if(status == "izborSedista")
 	{
 		if(selectedSeats.length == 1)
@@ -244,11 +244,14 @@ function dalje()
 			if(imaPrijatelje)
 			{
 				$('#pregledSedista').hide();
+				$('#finishReservation').hide();
+				
 				$('#pregledPrijatelja').show();
 				status = "pozivanjePrijatelja";
 			}
 			else
 			{
+				$('#finishReservation').hide();
 				$('#pregledSedista').hide();
 				$('#passengers').show();
 				brojPrijatelja = selectedSeats.length  - 1;

@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 //fale mi jos dorade za tabele i sve ostalo
 @Entity
@@ -37,14 +38,14 @@ public class Ticket {
 	private boolean rezervisano;
 	
 	//da znamo kom letu pripada kada mi treba
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE,CascadeType.PERSIST})
 	private Flight let;
 	
 	@OneToOne(mappedBy = "ticket", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
 	private Pozivnica pozivnica;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE,CascadeType.PERSIST})
 	private ReservationTicket reservationTicket;
 	
 	 @OneToOne(fetch = FetchType.LAZY,
@@ -55,8 +56,13 @@ public class Ticket {
 	@OneToMany(mappedBy="kartaPopust",fetch = FetchType.EAGER,cascade=CascadeType.ALL)
 	private Set<DiscountTicket> popustiKarte = new HashSet<DiscountTicket>();
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE,CascadeType.PERSIST})
 	private Seat sediste;
+	
+	
+	@Version
+	Long version;
+	
 	
 	public Ticket()
 	{
