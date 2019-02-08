@@ -59,9 +59,36 @@ function onLoad(){
 	
 	
 	planeShow();
-
+	refreshHotel();
+	refreshCar();
 }
 
+function refreshHotel(){
+	
+	$.ajax({
+		method:'POST',
+		url: "/api/rezervacijehotel/refreshResHotel",
+		success: function(){
+			console.log('Zavrseno');
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+	});
+}
+function refreshCar(){
+	
+	$.ajax({
+		method:'POST',
+		url: "/api/rezervacijerent/refreshResCar",
+		success: function(){
+			console.log('Zavrseno');
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+	});
+}
 function ispisiIstoriju(){
 	console.log('Usao u ispisiIstoriju');
 		dodajIstorijuPlane();

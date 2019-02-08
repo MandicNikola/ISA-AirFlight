@@ -25,6 +25,7 @@ import rs.ftn.isa.dto.RoomDTO;
 import rs.ftn.isa.model.RezervacijaHotel;
 import rs.ftn.isa.model.RezervacijaRentCar;
 import rs.ftn.isa.model.Room;
+import rs.ftn.isa.model.StatusRezervacije;
 import rs.ftn.isa.model.User;
 import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.service.RezervacijaHotelServiceImp;
@@ -469,6 +470,40 @@ public class RezervacijaHotelController {
 				return podaci;
 
 	}
+
+	@RequestMapping(value="/refreshResHotel",
+			method = RequestMethod.POST)
+	public void refreshReservation(@Context HttpServletRequest request){		
+	System.out.println("Usao u refreshRez Hotel");
+		User korisnik = (User)request.getSession().getAttribute("ulogovan");
+		Calendar cal = Calendar.getInstance();
+			if(korisnik!=null) {
+				Long idKor=korisnik.getId();
+				String idKorS=idKor.toString();
+				List<RezervacijaHotel> pomRez=servis.findAll();
+			
+				for(RezervacijaHotel rezervacija : pomRez) {
+					Long idRezKor=rezervacija.getUserHotel().getId();
+					String idRezS=idRezKor.toString();
+	
+						if(idKorS.equals(idRezS)) {
+							Date today = new Date();
+							Date datZavrsetka= rezervacija.getDatumOdlaska();
+							//cal.setTime(today);
+							//cal.add(Calendar.DATE,2);
+							//today=cal.getTime();
+							System.out.println("dat");
+							System.out.println(today.toString());
+							if(datZavrsetka.compareTo(today)<=0) {
+								rezervacija.setStatus(StatusRezervacije.ZAVRSENA);
+								servis.saveRezervacijaHotel(rezervacija);
+							}
+						}
+					}
+			}
+		
+	}
+
 
 
 }
