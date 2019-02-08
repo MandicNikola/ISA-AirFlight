@@ -1005,7 +1005,7 @@ function iscrtajHotele(lista){
 	if(user!=null && user!="null" && user!="undefined") {
 			console.log('ima korisnika');
 			var korisnik=JSON.parse(user);
-			console.log(korisnik.tip);
+			console.log(korisnik.tip);	
 		if(korisnik.tip == 'ADMIN_SISTEM'){
 	
 			adminsistem = true;
