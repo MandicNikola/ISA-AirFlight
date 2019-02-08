@@ -52,7 +52,7 @@ public class Ticket {
 	            mappedBy = "karta")
 	 private PassengerInfo passengerInfo;
 	
-	@OneToMany(mappedBy="kartaPopust",fetch = FetchType.LAZY,cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="kartaPopust",fetch = FetchType.EAGER,cascade=CascadeType.ALL)
 	private Set<DiscountTicket> popustiKarte = new HashSet<DiscountTicket>();
 	
 	@ManyToOne(fetch = FetchType.EAGER)
