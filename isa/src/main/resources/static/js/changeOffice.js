@@ -21,6 +21,7 @@ function iscrtajStranicu(filijala){
 }
 
 $(document).on('submit','.izmeni',function(e){
+	e.preventDefault();
 	console.log('Pritisnuo izmeni');
 	var podatak = window.location.search.substring(1);
 	var niz= podatak.split("=");
@@ -43,7 +44,7 @@ $(document).on('submit','.izmeni',function(e){
 		data: sendoffice,
 		dataType : 'json',
 		success : function(pov) {
-			if( pov == null){	
+			if( pov.ulica == 'ne'){	
 				alert('Vec postoji filijala sa datom adresom');
 			}else{
 				//alert('Uspesno ste dodali filijalu');

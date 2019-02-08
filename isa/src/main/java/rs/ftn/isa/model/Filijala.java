@@ -42,7 +42,9 @@ public class Filijala {
 
     	
     	    	
-		public Filijala() {}
+		public Filijala() {
+			super();
+		}
 		
 		public Filijala( String grad, String ulica) {
 			super();

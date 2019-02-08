@@ -139,9 +139,11 @@ public @ResponseBody Filijala registrujFilijalu( @RequestBody Filijala nova){
 				break;
 			}
 		}
+		Filijala f= new Filijala();
 		if(postoji) {
 			//ulica+grad mora biti jedinstven
-			return null;
+			f.setUlica("NE");
+			return f;
 		}
 		
 		System.out.println("Menjaj filijalu sve je ispunjeno");
