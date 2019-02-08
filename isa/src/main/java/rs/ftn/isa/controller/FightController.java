@@ -406,8 +406,13 @@ public class FightController {
 				ticket.setRezervisano(true);
 				rezervation.getKarte().add(ticket);
 				ticket.setReservationTicket(rezervation);
-							
 				
+				try {
+					servisKarata.saveTicket(ticket);
+					
+				} catch (Exception e) {
+					return new ResponseEntity<Long>(HttpStatus.CONFLICT);
+				}
 			}		
 		}
 		//ostaje mi jos da podesim pasos sto mi fali kod karte
@@ -429,6 +434,13 @@ public class FightController {
 				bodovi++;
 		
 		user.setBodovi(user.getBodovi()+bodovi);
+		
+		try {
+			servisKarata.saveTicket(karta);
+			
+		} catch (Exception e) {
+			return new ResponseEntity<Long>(HttpStatus.CONFLICT);
+		}
 		
 		servisKorisnik.saveUser(user);
 		System.out.println(rezervation.getId());
@@ -500,8 +512,15 @@ public class FightController {
 		info.setKarta(ticket);
 		ticket.setRezervisano(true);
 		ticket.setReservationTicket(rezervacija);
+		
+		
 		rezervacija.getKarte().add(ticket);
 		
+		try {
+			servisKarata.saveTicket(ticket);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
 		
 		korisnik.getPozivnice().remove(pozivnica);
 		
@@ -603,7 +622,7 @@ public class FightController {
 	
 	@RequestMapping(value="/fastReservation/{id}/{idPopust}", 
 			method = RequestMethod.POST)
-	public ResponseEntity<Long> fastReservation(@PathVariable Long id,@PathVariable("idPopust") Long idPopust, @Context HttpServletRequest request)
+	public ResponseEntity<Long> fastReservation(@PathVariable Long id,@PathVariable("idPopust") Long idPopust, @Context HttpServletRequest request) throws MessagingException
 	{
 		User user = (User) request.getSession().getAttribute("ulogovan");
 		if(user == null)
@@ -643,8 +662,18 @@ public class FightController {
 		rezervation.getKarte().add(karta);
 		karta.setReservationTicket(rezervation);
 		
+		try {
+			servisKarata.saveTicket(karta);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
+		
+		
 		servisKorisnik.saveUser(user);
 		System.out.println(rezervation.getId());
+		
+		servisMail.sendReservationInfoAsync(user, rezervation, null, null);
+		
 		
 		karta = servisKarata.findOneById(id);
 		

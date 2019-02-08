@@ -42,8 +42,7 @@ function onLoad()
 					if(seats.length > 0)
 					{
 						var configuration = seats[0].konfiguracija;
-						alert(configuration);
-						alert(seats.length);
+						
 						
 						drawSeats(seats,configuration);
 						$.ajax(
@@ -229,7 +228,7 @@ function dodajSediste(sediste)
  */
 function dalje()
 {
-	alert('usao');
+	
 	if(status == "izborSedista")
 	{
 		if(selectedSeats.length == 1)
@@ -237,6 +236,7 @@ function dalje()
 			$('#pregledSedista').hide();
 			$('#finishReservation').show();
 			status = "finishRezervation-izborSedista";
+			$("#nextBtn").val('Finish');
 		}
 		
 		if(selectedSeats.length > 0)
@@ -244,11 +244,14 @@ function dalje()
 			if(imaPrijatelje)
 			{
 				$('#pregledSedista').hide();
+				$('#finishReservation').hide();
+				
 				$('#pregledPrijatelja').show();
 				status = "pozivanjePrijatelja";
 			}
 			else
 			{
+				$('#finishReservation').hide();
 				$('#pregledSedista').hide();
 				$('#passengers').show();
 				brojPrijatelja = selectedSeats.length  - 1;
@@ -267,6 +270,7 @@ function dalje()
 		{
 			$('#pregledPrijatelja').hide();
 			$('#finishReservation').show();
+			$("#nextBtn").val('Finish');
 			status = "finishRezervation-pozivanjePrijatelja";
 		}
 		else if(invitedFriends.length < (selectedSeats.length  - 1))
@@ -284,7 +288,9 @@ function dalje()
 		{
 			$('#passengers').hide();
 			$('#finishReservation').show();
+			$("#nextBtn").val('Finish');
 			status = "finishRezervation-passengers";
+			$("#nextBtn").val('Finish');
 		}
 		else
 		{
@@ -316,13 +322,14 @@ function back()
 		status = "pozivanjePrijatelja";
 		$('#pregledPrijatelja').show();
 		$('#finishReservation').hide();
+		$("#nextBtn").val('Next');
 	}
 	else if(status == "finishRezervation-izborSedista")
 	{
 		status = "izborSedista";
 		$('#finishReservation').hide();
 		$('#pregledSedista').show();
-		
+		$("#nextBtn").val('Next');
 	}
 	else if(status == "passengers")
 	{
@@ -358,8 +365,7 @@ function back()
  */
 function zavrsiRezervaciju(mode)
 {
-	alert(JSON.stringify(passengers));
-	alert(JSON.stringify(selectedSeats));
+	
 	
 	if(passengers.length >= 0)
 	{
@@ -385,7 +391,7 @@ function zavrsiRezervaciju(mode)
 			data : JSON.stringify(putnici),
 			success : function(data)
 			{
-				alert(data);
+				
 				idRezervacije = data;
 				
 				if(invitedFriends.length > 0)
@@ -409,7 +415,7 @@ function zavrsiRezervaciju(mode)
 						data : JSON.stringify(pozivnice),
 						success : function(data1)
 						{
-							alert("uspesno");	
+							alert("uspesno rezervacija");	
 												
 						}
 				
