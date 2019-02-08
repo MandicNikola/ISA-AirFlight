@@ -521,8 +521,8 @@ function showFlights()
 					alert(imaAdmina);
 					if(imaAdmina == "ima")
 					{
-						text += '<td><button type="button" class="btn btn-primary" updateFlight("'+value.idLeta+'")>Update flight</button></td>';
-						text += '<td><button type="button" class="btn btn-danger" removeFlight("'+value.idLeta+'")>Remove flight</button></td></tr>';
+						text += '<td><button type="button" class="btn btn-primary" onclick="updateFlight('+value.idLeta+')">Update flight</button></td>';
+						text += '<td><button type="button" class="btn btn-danger" onclick="removeFlight('+value.idLeta+')">Remove flight</button></td></tr>';
 					}
 					
 				});
@@ -590,6 +590,61 @@ function showFastTickets()
 		success : function(data)
 		{
 			
+		
+        	$('#tabelaBrzeKarte').empty();	
+        	if(data == null || data.length == 0)
+        	{
+        		alert('nema brzih karata!');
+        	}
+        	else
+        	{
+        		var text = "";
+        		$.each(data, function(index,karta)
+        				{
+        					text += '<tr><td>' + karta.id +'</td>';
+        					text += '<td>'+karta.lokPoletanja+'/'+karta.lokSletanja+'</td>';
+        					text += '<td>'+karta.datumPoletanja+'</td>';
+        					text += '<td>'+karta.red+'-'+karta.kolona+'</td>';
+        					text += '<td>'+karta.datumPoletanja+'</td>';
+        					text += '<td>'+karta.cena+'</td>';
+        					text += '<td>'+karta.popust+'</td>';
+        					text += '<td>'+karta.popust*karta.cena+'</td>';
+        					text += '<td>'+karta.popust*karta.cena+'</td>';
+        					text += '<td><button type="button" class="btn btn-primary" id="'+karta.id+'-'+karta.idPopusta+'" onclick="bookFast(this)">Book</button></td></tr>';
+        					
+        				});
+        		$('#tabelaBrzeKarte').append(text);
+        		$('.filterableTicketFast .filters input').unbind().keyup(function(e){
+			        /* Ignore tab key */
+				 	
+			        var code = e.keyCode || e.which;
+			        if (code == '9') return;
+			        /* Useful DOM data and selectors */
+			        var $input = $(this),
+			        inputContent = $input.val().toLowerCase(),
+			        $panel = $input.parents('.filterableTicketFast'),
+			        column = $panel.find('.filters th').index($input.parents('th')),
+			        $table = $panel.find('.table'),
+			        $rows = $table.find('tbody tr');
+			        /* Dirtiest filter function ever ;) */
+			        var $filteredRows = $rows.filter(function(){
+			            var value = $(this).find('td').eq(column).text().toLowerCase();
+			            return value.indexOf(inputContent) === -1;
+			        });
+			        /* Clean previous no-result if exist */
+			        $table.find('tbody .no-result').remove();
+			        /* Show all rows, hide filtered ones (never do that outside of a demo ! xD) */
+			        $rows.show();
+			        $filteredRows.hide();
+			        /* Prepend no-result row if all rows are filtered */
+			        if ($filteredRows.length === $rows.length) {
+			            $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="'+ $table.find('.filters th').length +'">No result found</td></tr>'));
+			        }
+			    });
+        		
+        		
+        		
+        	}
 		}
 		
 		
@@ -601,6 +656,32 @@ function showFastTickets()
 	
 	
 }
+
+function bookFast(btn)
+{
+	var podatak = btn.id;
+	alert(podatak);
+	
+	var id = podatak.split('-')[0];
+	var idPopust = podatak.split('-')[1];
+	
+	$.ajax
+	({
+		type : 'POST',
+		url : 'api/letovi/fastReservation/'+id+'/'+idPopust,
+		success : function(data)
+		{
+			alert('Uspesno ste rezervisali kartu!');
+			showFastTickets();
+		}
+		
+	});
+	
+	
+}
+
+
+
 
 function showAdministrators()
 {
@@ -771,8 +852,10 @@ function discount()
 				var text = ""
 				$.each(karte,function(index,karta)
 						{
+							
+					
 							text += '<tr><td>'+karta.id+'</td><td>'+karta.lokPoletanja+'/'+karta.lokSletanja+'</td><td>'+karta.datumPoletanja+'</td><td>'+karta.red+'-'+karta.kolona+'</td><td>'+karta.klasa+'</td><td>'+karta.cena+'</td>';
-							text += '<td><button type="button" class="btn btn-primary" viewDiscount("'+karta.id+'")> Discount</button></td></tr>';
+							text += '<td><button type="button" class="btn btn-primary" onclick="viewDiscount('+karta.id+')"> Discount</button></td></tr>';
 						});
 				$('#tabelaKarte').append(text);
 				 $('.filterableTicket .filters input').unbind().keyup(function(e){
@@ -818,6 +901,10 @@ function discount()
 function viewDiscount(id)
 {
 	var idKarte = id;
+	alert("nikola"+id);
+	
+	
+	
 	$("#fastTicketsStrana").hide();
 	$("#informacije").hide();
 	$("#planesStrana").hide();
@@ -836,10 +923,11 @@ function viewDiscount(id)
 		dataType : 'json',
 		success : function(data)
 		{
+			console.log(data);
 			$('#postojeciPopusti').empty();
 			var text = '<table class="table table-striped"><tr><th>#</th><th>Broj bodova</th><th>Popust</th></tr>'
 			
-			if(data == null || data.length > 0)
+			if(data.length > 0)
 			{
 				$.each(data,function(index,popusti)
 						{
@@ -876,10 +964,7 @@ function viewDiscount(id)
 		
 	});
 	
-	
-	
-	$("#divPopust").show();
-	
+	$('#divPopust').show();
 	
 
 }

@@ -36,10 +36,10 @@ public class RentACar {
 	@Column(name="opis",nullable = false)
 	private String opis;
 
-	@Column(name="ocena",nullable = false)
+	@Column(name="ocena",nullable = true)
 	private double ocena;
 
-	@Column(name="brojac")
+	@Column(name="brojac",nullable = true)
 	private Integer brojac;
 	
 	

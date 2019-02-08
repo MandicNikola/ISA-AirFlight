@@ -402,6 +402,8 @@ public class AirplaneCompanyController {
 						dto.setLokSletanja(let.getSletanje().getNaziv());
 						dto.setCena(ticket.getCena());
 						
+						System.out.println("ispis");
+						
 						retTicketDtos.add(dto);
 					}
 				}
@@ -527,6 +529,9 @@ public class AirplaneCompanyController {
 		
 		user = korisnikServis.findOneById(user.getId());
 		
+		if(user == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
 		int bodovi = user.getBodovi();
 		
 		Date currentDate = new Date();
@@ -544,6 +549,7 @@ public class AirplaneCompanyController {
 				{
 					if(!ticket.isRezervisano() && ticket.getPopustiKarte().size() > 0)
 					{
+						System.out.println("usao");
 						TicketDTO dto = new TicketDTO(ticket);
 						dto.setDatumPoletanja(formater.format(let.getDatumPoletanja()));
 						dto.setLokPoletanja(let.getPoletanje().getNaziv());
@@ -577,9 +583,11 @@ public class AirplaneCompanyController {
 		boolean pronasao = false;
 		Collections.sort(brojevi); 
 		
+		
 		int trenutni = 0;
 		for(int i : brojevi)
 		{
+			System.out.println(i);
 			if(i <= brojBodova)
 				trenutni = i;
 		}

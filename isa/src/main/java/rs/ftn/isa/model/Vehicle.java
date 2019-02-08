@@ -46,22 +46,22 @@ public class Vehicle {
 	@Column(name = "kategorija", nullable = false)
 	private CategoryCar kategorija;
 	
-	@Column(name = "cena", nullable = false)
+	@Column(name = "cena", nullable = true)
 	private double cena;
 
 	//brojac ocena
-	@Column(name = "brojac", nullable = false)
+	@Column(name = "brojac", nullable = true)
 	private int brojac;
 	
-	@Column(name = "ocena", nullable = false)
+	@Column(name = "ocena", nullable = true)
 	private double ocena;
 
 	//broj rezervacija
-	@Column(name = "broj", nullable = false)
+	@Column(name = "broj", nullable = true)
 	private int broj;
 
 	//bice true ukoliko ima definisan ijedan popust
-	@Column(name = "imapopusta")	
+	@Column(name = "imapopusta", nullable = true)	
     private boolean imapopusta; 
 	
 	//jedna vozilo moze da ima vise popusta 
