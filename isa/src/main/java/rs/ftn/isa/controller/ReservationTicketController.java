@@ -429,12 +429,10 @@ public class ReservationTicketController {
 							}
 							if(karta!=null) {
 								Date datZavrsetka= karta.getLet().getDatumSletanja();
-								cal.setTime(today);
-								cal.add(Calendar.DATE,2);
-								today=cal.getTime();
-								System.out.println("dat");
-								System.out.println(today.toString());
-							
+								//cal.setTime(today);
+								//cal.add(Calendar.DATE,2);
+								//today=cal.getTime();
+								
 								if(datZavrsetka.compareTo(today)<=0) {
 									rezervacija.setStatus(StatusRezervacije.ZAVRSENA);
 									servisKarata.saveReservation(rezervacija);
