@@ -19,4 +19,3 @@ insert into rentacar ( id, naziv, adresa, grad, opis, ocena, brojac) values (126
 
 
 
-

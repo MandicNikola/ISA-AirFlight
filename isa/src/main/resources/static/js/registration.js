@@ -8,7 +8,7 @@ console.log('mail korisnika je '+ mail);
 		type : 'GET',
 		url : "/api/korisnici/verifikacija/"+mail,
 		success : function(pov) {
-			alert('Uspesno');
+			window.location = "mainPage.html";
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			//alert("greskaa");
