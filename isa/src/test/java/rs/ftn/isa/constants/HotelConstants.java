@@ -14,6 +14,7 @@ public class HotelConstants {
     public static final Long DB_ID_REFERENCED = (long)1245; 
     public static final Long DB_ID_TO_DELETE = (long)1245;
     public static final int DB_COUNT = 2;
-  
+    public static final Long DB_ID_UPDATE = (long)1245;
+	
     
 }
