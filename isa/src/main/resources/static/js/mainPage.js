@@ -8,6 +8,7 @@ function onLoad(){
 	$("#divBodPopust").hide();
 	$("#zaAdminaSistema").hide();
 	$("#history").hide();
+	$("#friendsList").hide();
 	
 	var user = sessionStorage.getItem("ulogovan");
 	console.log(user);
@@ -23,11 +24,7 @@ function onLoad(){
 			$("#reserveFlight").hide();
 			$("#reserveHotel").hide();
 			$("#reserveCar").hide();
-
 			$("#zaAdminaSistema").show();
-			//$("#reserveCar").hide();
-			//$("#reserveHotel").hide();
-			//$('#reserveFlight').hide();
 			
 		}
 		if(korisnik.tip == 'ADMIN_AVIO' ||korisnik.tip == 'ADMIN_HOTEL'||korisnik.tip == 'ADMIN_RENT' ){
@@ -38,6 +35,7 @@ function onLoad(){
 		}
 		if(korisnik.tip == 'REGISTROVAN'){
 			$("#history").show();
+			$("#friendsList").show();
 			  ispisiIstoriju();
 						
 		}
@@ -63,6 +61,7 @@ function onLoad(){
 	planeShow();
 
 }
+
 function ispisiIstoriju(){
 	console.log('Usao u ispisiIstoriju');
 		dodajIstorijuPlane();
