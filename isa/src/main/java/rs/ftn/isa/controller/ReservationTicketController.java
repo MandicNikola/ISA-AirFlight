@@ -1,17 +1,21 @@
 package rs.ftn.isa.controller;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +33,8 @@ import rs.ftn.isa.model.Ticket;
 import rs.ftn.isa.model.User;
 import rs.ftn.isa.service.ReservationTicketServiceImp;
 import rs.ftn.isa.service.RezervacijaHotelServiceImp;
+import rs.ftn.isa.service.RezervacijaRentServiceImpl;
+import rs.ftn.isa.service.TicketServiceImp;
 
 @RestController
 @RequestMapping(value="api/reservationTickets")
@@ -40,6 +46,13 @@ public class ReservationTicketController {
 	@Autowired
 	ReservationTicketServiceImp servisKarata;
 	
+	@Autowired
+	RezervacijaRentServiceImpl servisRent;
+	
+	
+	
+	@Autowired
+	TicketServiceImp servisCards;
 	
 	@RequestMapping(value="/dailychart/{podatak}",
 			method = RequestMethod.GET,
@@ -143,7 +156,7 @@ public class ReservationTicketController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody double getPrihode(@PathVariable String id,@PathVariable String pocetak){		
 			System.out.println("Usao u vrati prihode");
-			List<RezervacijaHotel> sveRez=servis.findAll();
+			List<ReservationTicket> sveRez=servisKarata.findAll();
 			
 			double prihod = 0;
 			
@@ -158,23 +171,23 @@ public class ReservationTicketController {
 			calendar.add(Calendar.DATE,-1);
 			Date datumOd = calendar.getTime();
 			
-			for(RezervacijaHotel rezervacija:sveRez) {
-				Long idHotela = 0L;
-				for(Room sobe:rezervacija.getSobe()) {
-					idHotela = sobe.getHotel().getId();
+			for(ReservationTicket rezervacija:sveRez) {
+				Long idKomp = 0L;
+				for(Ticket karte:rezervacija.getKarte()) {
+					idKomp = karte.getLet().getAvioKomp().getId();
 					break;
 				}
 				
-				if(idHotela.toString().equals(id)) {
+				if(idKomp.toString().equals(id)) {
 					//dodajemo u listu
 					
-					Date datumRez  = rezervacija.getDatumDolaska();
+					Date datumRez  = rezervacija.getDatumRezervacije();
 					datumRez.setHours(0);
 					datumRez.setMinutes(0);
 					datumRez.setSeconds(0);
 					
 					if(datumOd.before(datumRez)) {
-						prihod += rezervacija.getCijena();
+						prihod += rezervacija.getUkupno();
 					}
 				}
 			}
@@ -444,5 +457,87 @@ public class ReservationTicketController {
 			}
 		
 	}
-
+	@RequestMapping(value="/otkaziRezervaciju/{id}",
+			method = RequestMethod.POST)
+	public ResponseEntity<Long> otkaziRezervaciju(@Context HttpServletRequest request,@PathVariable Long id) throws ParseException{		
+	System.out.println("Usao u otkazi Rezervaciju");
+		User korisnik = (User)request.getSession().getAttribute("ulogovan");
+		Calendar cal = Calendar.getInstance();
+		
+		if(korisnik != null)
+		{
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date date = new Date();
+			
+			ReservationTicket rezervacija = servisKarata.findOneById(id);
+			if(rezervacija == null)
+				return new ResponseEntity<Long>(HttpStatus.BAD_REQUEST);
+			
+			Date datum = new Date();
+			for(Ticket karta : rezervacija.getKarte())
+			{
+				datum = karta.getLet().getDatumPoletanja();
+				break;
+			}
+			
+			
+			long diffInHours = Math.abs(datum.getTime() - date.getTime())/(1000*60*60);
+		 
+			//ako je razlika veca od 4
+			if(diffInHours >= 3)
+			{
+				rezervacija.setStatus(StatusRezervacije.OTKAZANA);
+				for(Ticket karta : rezervacija.getKarte())
+				{
+					karta.setReservationTicket(null);
+					karta.setRezervisano(false);
+					karta.setPassengerInfo(null);
+					servisCards.saveTicket(karta);
+				}
+				
+				rezervacija.setKarte(new HashSet<Ticket>());
+				servisKarata.saveReservation(rezervacija);
+				obrisiHotelRez(rezervacija.getId());
+				obrisiRentRez(rezervacija.getId());
+				return new ResponseEntity<Long>(rezervacija.getId(), HttpStatus.OK);
+				
+			}
+			
+		}
+		else
+		{
+			return new ResponseEntity<Long>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<Long>(HttpStatus.OK);
+		
+				
+	}
+	
+	private void obrisiRentRez(Long id)
+	{
+		RezervacijaRentCar rent = servisRent.findByAvion(id);
+		if(rent == null)
+			return;
+		
+		rent.setStatus(StatusRezervacije.OTKAZANA);
+		servisRent.saveRezervacijaRentCar(rent);
+	}
+	
+	private void obrisiHotelRez(Long id)
+	{
+		RezervacijaHotel rezHotel = servis.findHotelByRezAvion(id);
+		if(rezHotel == null)
+			return;
+		
+		rezHotel.setStatus(StatusRezervacije.OTKAZANA);
+		servis.saveRezervacijaHotel(rezHotel);
+		
+	}
+	
+	
+	
+	
+	
+	
+	
 }

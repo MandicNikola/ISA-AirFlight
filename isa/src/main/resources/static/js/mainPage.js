@@ -1,6 +1,8 @@
 
 
 var filterData = [];
+var imaKorisnika = "nema";
+
 
 function onLoad(){
 	
@@ -39,7 +41,7 @@ function onLoad(){
 			  ispisiIstoriju();
 						
 		}
-		
+		imaKorisnika = "ima";
 		
 	}else{
 		$("#prikazKorisnika").hide();
@@ -601,13 +603,14 @@ function ispisiIstorijuLetova(lista){
 			var nazKomp = "oceniAv"+idRez;
 			var nazLet = "oceniLet"+idRez;
 			var btnKomp = "kompB"+idRez;
+			var btnOtk = "otkBP"+idRez;
 			var btnLet = "letB"+idRez;
 			var statId="statPlane"+idRez
 			console.log(clan.status);
 			var today = new Date().toISOString().split('T')[0];
 		
 			const timeDiff  = (new Date(date1)) - (new Date(today));
-			const numberDays = timeDiff / (1000 * 60 * 60 * 24)
+			const numberHours = timeDiff / (1000 * 60 * 60 )
 			if(status == "OTKAZANA"){
 				$("#histTableLet").append("<tr><td class=\"hoverName\">"+kompanija+"</td><td> "+startDest+"</td><td> "+endDest+"</td><td> "+date1+"</td><td> "+date2+"</td><td id=\""+statId+"\"> "+status+"</td></tr>");
 					
@@ -628,14 +631,44 @@ function ispisiIstorijuLetova(lista){
 				
 			}else{
 				//aktivna je ovde ide otkazivanje
-				$("#histTableLet").append("<tr><td class=\"hoverName\">"+kompanija+"</td><td> "+startDest+"</td><td> "+endDest+"</td><td> "+date1+"</td><td> "+date2+"</td><td id=\""+statId+"\"> "+status+"</td></tr>");
-				
+				if(numberHours >= 3)
+				{
+					$("#histTableLet").append("<tr><td class=\"hoverName\">"+kompanija+"</td><td> "+startDest+"</td><td> "+endDest+"</td><td> "+date1+"</td><td> "+date2+"</td><td id=\""+statId+"\"> "+status+"</td><td><button  class=\"btn btn-info\" id="+btnOtk+" onclick=\"otkaziRezervaciju('"+idRez+"')\">Cancel</button></td></tr>");
+				}
+				else
+				{
+					$("#histTableLet").append("<tr><td class=\"hoverName\">"+kompanija+"</td><td> "+startDest+"</td><td> "+endDest+"</td><td> "+date1+"</td><td> "+date2+"</td><td id=\""+statId+"\"> "+status+"</td></tr>");
+				}			
 			}
 			
 			});
 	 $("#historyAirplane").append("</table>");
 
 }
+
+function otkaziRezervaciju(id)
+{
+	var idRezervacije = id;
+	$.ajax
+	({
+		type : 'POST',
+		url : 'api/reservationTickets/otkaziRezervaciju/'+idRezervacije,
+		success : function(data)
+		{
+			alert('Uspesno otkazano!');
+			window.location = "mainPage.html";
+		}
+		
+	});
+	
+	
+	
+	
+}
+
+
+
+
 function oceniKompaniju(idKompanije, idRez){
 	console.log('Usao u oceniKompaniju');
 	console.log(idKompanije);
@@ -1330,7 +1363,7 @@ function findFlights()
 							var filterData = data;
 							$('#pretragaLetova').empty();
 							var text = '<table class="table table-striped">';
-							text += '<thead><tr><th>Vreme poletanja/sletanja</th><th>Broj presedanja: </th><th>Trajanje leta</th><th>Kompanija</th><th>Klasa</th><th>Cena</th></tr></thead><tbody>';
+							text += '<thead><tr><th>#IDLeta</th><th>Vreme poletanja/sletanja</th><th>Broj presedanja: </th><th>Trajanje leta</th><th>Kompanija</th><th>Klasa</th><th>Cena</th></tr></thead><tbody>';
 							$.each(letovi,function(index,value)
 									{
 										
@@ -1340,8 +1373,12 @@ function findFlights()
 										if(maxDuration < value.duzina)
 											maxDuration = value.duzina;
 								
-										text += '<tr><td>'+value.vremePoletanja+'/'+value.vremeSletanja+'</td>';
-										text += '<td>'+value.brojPresedanja+'</td><td>'+value.duzina+'</td><td>'+value.nazivKompanije+'</td><td>'+value.klasa+'</td><td>'+value.cena+'</td><td><button type="button" id="'+value.idLeta+'='+value.klasa+'='+value.datumSletanja+'" onclick="book(this)" class="btn btn-primary">Book</button></td>';
+										text += '<tr><td>'+value.idLeta+'</td><td>'+value.vremePoletanja+'/'+value.vremeSletanja+'</td>';
+										text += '<td>'+value.brojPresedanja+'</td><td>'+value.duzina+'</td><td>'+value.nazivKompanije+'</td><td>'+value.klasa+'</td><td>'+value.cena+'</td>';
+										if(imaKorisnika == "ima")
+										{
+											text += '<td><button type="button" id="'+value.idLeta+'='+value.klasa+'='+value.datumSletanja+'" onclick="book(this)" class="btn btn-primary">Book</button></td>';
+										}
 										text += '</tr>';
 									});
 							text += '</tbody></table>';
@@ -1524,7 +1561,7 @@ function filter(data)
 	$('#pretragaLetova').html(text);
 	
 
-}	   
+}	    
    
 
 

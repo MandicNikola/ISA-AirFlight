@@ -30,6 +30,7 @@ import rs.ftn.isa.dto.DestinationDTO;
 import rs.ftn.isa.dto.FlightDTO;
 import rs.ftn.isa.dto.HotelDTO;
 import rs.ftn.isa.dto.TicketDTO;
+import rs.ftn.isa.dto.UslugaAvionDTO;
 import rs.ftn.isa.model.AirPlane;
 import rs.ftn.isa.model.AirplaneCompany;
 import rs.ftn.isa.model.CijenovnikSoba;
@@ -44,6 +45,7 @@ import rs.ftn.isa.model.Segment;
 import rs.ftn.isa.model.Ticket;
 import rs.ftn.isa.model.User;
 import rs.ftn.isa.model.Usluga;
+import rs.ftn.isa.model.UslugaAvion;
 import rs.ftn.isa.model.Vehicle;
 import rs.ftn.isa.service.AirPlaneServiceImpl;
 import rs.ftn.isa.service.AirplaneServiceCompanyImpl;
@@ -595,6 +597,34 @@ public class AirplaneCompanyController {
 		dto.setIdPopusta(mapa.get(trenutni).getId());
 		dto.setPopust(mapa.get(trenutni).getVrednost());
 	}
+	
+	@RequestMapping(value="/usluge/{id}",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<UslugaAvionDTO>> getUsluge(@PathVariable Long id){	
+		
+		AirplaneCompany company = service.findAirplaneCompanyById(id);
+		if(company == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		ArrayList<UslugaAvionDTO> uslugaAvionDTOs = new ArrayList<UslugaAvionDTO>();
+		
+		for(AirPlane plane : company.getAvioni())
+		{
+			for(Segment segment : plane.getSegmenti())
+			{
+				for(UslugaAvion usluga : segment.getUsluge())
+				{
+					UslugaAvionDTO dto = new UslugaAvionDTO(usluga);
+					uslugaAvionDTOs.add(dto);
+				}
+			}
+		}
+		
+		
+			
+		return new ResponseEntity<List<UslugaAvionDTO>>(uslugaAvionDTOs, HttpStatus.OK);
+	}
+	
 	
 	
 }

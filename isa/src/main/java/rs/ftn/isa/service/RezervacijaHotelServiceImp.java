@@ -35,4 +35,10 @@ public class RezervacijaHotelServiceImp implements RezervacijaHotelService {
 		repozitorijum.deleteById(id);
 	}
 
+	@Override
+	public RezervacijaHotel findHotelByRezAvion(Long id) {
+		// TODO Auto-generated method stub
+		return repozitorijum.findPoAvionu(id);
+	}
+
 }

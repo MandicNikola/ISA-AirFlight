@@ -11,5 +11,9 @@ public interface RezervacijaHotelService {
 	List<RezervacijaHotel> findAll();
 	
 	RezervacijaHotel saveRezervacijaHotel(RezervacijaHotel rezervacija);
+	
+	RezervacijaHotel findHotelByRezAvion(Long id);
+	
+	
 	void removeRezervacijaHotel(Long id);
 }
