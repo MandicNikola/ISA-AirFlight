@@ -18,6 +18,9 @@
 		    border-bottom: 2px solid #C3C3C3;
 		    padding: 4px;
  	}
+ 	#headquarter{
+ 		padding-bottom: 10px;
+ 	}
  	.look, #incomeResult{
  		padding:5px;
  		font-weight: bold;
@@ -87,7 +90,7 @@
  	 	padding-left:12px;
  	 	padding-right:12px;
  	 }
- 	 #polje{
+ 	 .polje{
  	 	background-color: white;
  	 	padding:5px;
  	 	width:70%;
@@ -301,6 +304,7 @@
 			
 		
 		 <div id = "divLozinka" class="container-fluid">
+			  	<div class="polje">
 			  				<form method="post" class="changePassword" >  					
 							     <div class="form-group row">
 							        <div class="col-xs-6">	
@@ -330,7 +334,7 @@
 						  </form>
 			 </div>
 			
-		
+		</div>
 			   
 			    <div id="adminStrana" class="container-fluid">
 			  		<section >
@@ -345,10 +349,12 @@
 			   <div id="informacije" class="container-fluid">
 			  		<section >
 						<p id="opis"> </p>
-						<p id="adresa"><i class="glyphicon glyphicon-home"></i>Headquarters of company is in </p>
+						<p id="ratingServis"></p>
+						<h4 id="headquarter"><i class="glyphicon glyphicon-home"></i>Headquarters of company is in </h4>
+						<p id="adresa"></p>
 				    </section>
 				    <section >
-				    	<p>You can find us in these cities <i class="glyphicon glyphicon-arrow-down"> </i></p>
+				    	<h3>You can find us in these cities <i class="glyphicon glyphicon-arrow-down"> </i></h3>
 						<div class="panel-group" id="filijale">
 						    
   						</div>
@@ -497,7 +503,7 @@
 				
 			  </div>
 			  <div id="addUsluge" class="container-fluid">
-			 	<div  id="polje" >
+			 	<div  class="polje" >
 			 		<form method="post" class="dodavanje">
 			 		<h2>Add a service</h2>
 			 			<div class="row">

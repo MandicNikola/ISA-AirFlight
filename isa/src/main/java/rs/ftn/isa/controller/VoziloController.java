@@ -166,9 +166,8 @@ public class VoziloController {
 			Calendar calendar = Calendar.getInstance();
 			calendar.set(year, month, day);
 			Date datPreuzimanja = calendar.getTime();
-				
 			
-			System.out.println("Daatum je "+datPreuzimanja);
+			System.out.println("Daatum preuzimanja je "+datPreuzimanja);
 			String krajDatum=niz[2];
 			String[] krajP=krajDatum.split("-");
 			
@@ -179,18 +178,24 @@ public class VoziloController {
 			
 			 calendar.set(year, month, day);
 			 Date datVracanje = calendar.getTime();
-			 System.out.println("Daatum je "+datVracanje);
+			 System.out.println("Daatum vracanja je "+datVracanje);
 			
 			 
 			 Set<RezervacijaRentCar> rezervacije = vozilo.getRezervacije(); 
 				boolean dozvolaPickUp = true;
 				//prolazimo kroz sve rezervacije koje su napravljene za ovo vozilo
 				for(RezervacijaRentCar R : rezervacije) {	
-					//ako je datum preuzimanja vozila pre datuma vracanja iz rezervacije
-					if(datPreuzimanja.compareTo(R.getDatumVracanja())<0) {
+			Date rezDatPreuzimanje= R.getDatumPreuzimanja();
+            Date rezDatVracanja= R.getDatumVracanja();
+            
+            System.out.println(rezDatPreuzimanje.toString());
+			System.out.println(rezDatVracanja.toString());
+			
+			//ako je datum preuzimanja vozila pre datuma vracanja iz rezervacije
+					if(datPreuzimanja.compareTo(rezDatVracanja)<0) {
 						System.out.println("provera1-> Datum preuzimanja je pre datuma vracanja iz liste rezervacije");
 						 //datum vracanja auta posle datuma preuzimanja iz rezervacije, preklapaju se termini, vozilo nam ne odgovara
-							if(datVracanje.compareTo(R.getDatumPreuzimanja())>0){
+							if(datVracanje.compareTo(rezDatPreuzimanje)>0){
 								dozvolaPickUp = false;
 								System.out.println("provera2--> Datum vracanja je posle datuma preuzimanja iz rezervacije");
 							

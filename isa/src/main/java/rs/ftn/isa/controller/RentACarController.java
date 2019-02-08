@@ -658,13 +658,14 @@ public class RentACarController {
 				//Provera 2 --> 
 				//onda gledamo da li je i datum vracanja naseg vozila nakon datuma preuzimanja iz
 				//rezervacije
+				 System.out.println("rezerv"+rezervacija.getPickUp().toString());
+				 System.out.println("rezerv"+rezervacija.getDropOff().toString());
 				
 				boolean dozvolaPickUp = true;
 				//prolazimo kroz sve rezervacije koje su napravljene za ovo vozilo
 				for(RezervacijaRentCar R : rezervacije) {	
 					//ako je datum preuzimanja vozila pre datuma vracanja iz rezervacije
 					if(rezervacija.getPickUp().compareTo(R.getDatumVracanja())<0) {
-						System.out.println("provera1-> Datum preuzimanja je pre datuma vracanja iz liste rezervacije");
 						 //datum vracanja auta posle datuma preuzimanja iz rezervacije, preklapaju se termini, vozilo nam ne odgovara
 							if(rezervacija.getDropOff().compareTo(R.getDatumPreuzimanja())>0){
 								dozvolaPickUp = false;
