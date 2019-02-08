@@ -18,8 +18,5 @@ insert into rentacar ( id, naziv, adresa, grad, opis, ocena, brojac) values (126
 
 
 
-insert into room (id, balkon,broj_rezervacija,brojac,cijena,imapopusta,kapacitet,ocena,sprat,tip, hotel_id,version,kreveti,rezervisana) values (150,'da',0,0,3000,false,4,0,2,'Apartman',1245,0,4,false);
-insert into room (id, balkon,broj_rezervacija,brojac,cijena,imapopusta,kapacitet,ocena,sprat,tip, hotel_id,version,kreveti,rezervisana) values (137,'ne',0,0,2000,false,2,0,2,'Apartman',1245,0,2,false);
-
 
 
