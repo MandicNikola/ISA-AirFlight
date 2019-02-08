@@ -291,7 +291,7 @@ public class HotelController {
 				servis.saveHotel(pom);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//e.printStackTrace();
 				// TODO Auto-generated catch block
 				 return  new ResponseEntity<>(HttpStatus.CONFLICT);
 			

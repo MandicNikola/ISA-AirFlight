@@ -666,8 +666,6 @@ public class UserController {
 	return kor;
 	}
 	
-	
-	
 	@RequestMapping(value="/changePass/{id}/",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)

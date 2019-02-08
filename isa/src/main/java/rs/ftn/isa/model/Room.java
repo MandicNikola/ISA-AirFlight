@@ -17,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -62,7 +63,8 @@ public class Room {
     
 	@Column(name = "broj_rezervacija")	
 	private int brojRezervacija; 
-    
+   
+	
     //jedna soba pripada jednog hotelu.
 	@ManyToOne( fetch = FetchType.EAGER)
 	 private Hotel hotel;
@@ -279,7 +281,6 @@ public class Room {
 	}
 
 
-	
 	
 
 }

@@ -1,5 +1,7 @@
 package rs.ftn.isa.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,20 +19,31 @@ public class CategoryController {
 	@Autowired
 	private CategoryServiceImpl servis;
 	
-	@RequestMapping(value="/kat", 
+	@RequestMapping(value="/kat/{id}", 
 			method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody Category newCat(@RequestBody Category kat){		
+	public @ResponseBody Category newCat(@RequestBody Category kat,@PathVariable String id){		
 	//jedinstven po nazivu
-		 Category pom = servis.findByNaziv(kat.getNaziv());
+		 List<Category> pom = servis.findAll();
 		 //provjera da li postoji vec takva kategorija
-		 if(pom == null) {
-			 pom = new Category("null");
+		 boolean flag = true;
+		 for(Category cat:pom) {
+			 if(cat.getNaziv().equals(kat.getNaziv())) {
+				 if(cat.getHotelKat().getId().toString().equals(id)) {
+					 flag = false;
+					 break;
+				 }
+			 }
+			 
+		 }
+		 Category povratna = new Category();
+		 if(flag) {
+			 povratna.setNaziv("null");
 		
 		 }
 		 System.out.println("dosao da provjeri kategoriju");
-		  return pom;
+		  return povratna;
 		
 	}
 	
