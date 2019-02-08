@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -94,15 +96,22 @@ public class RoomController {
 			method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody Room izmjeniSobu(@RequestBody Room soba,@PathVariable Long id){		
+	public ResponseEntity<Room> izmjeniSobu(@RequestBody Room soba,@PathVariable Long id){		
 		Room stara = servis.findRoomById(id);
 		stara.setBalkon(soba.getBalkon());
 		stara.setKapacitet(soba.getKapacitet());
 		stara.setSprat(soba.getSprat());
 		stara.setTip(soba.getTip());
 		//automatski radi update po id sobe
-		servis.saveRoom(stara);
-		return stara;
+		try {
+			servis.saveRoom(stara);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			return  new ResponseEntity<>(HttpStatus.CONFLICT);	
+		}
+		 return new ResponseEntity<>(stara,HttpStatus.OK);
+			
 	}
 
 
@@ -110,7 +119,7 @@ public class RoomController {
 			method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_VALUE
 			)
-	public @ResponseBody Room ukloniPopust(@PathVariable("slanje") String slanje){
+	public ResponseEntity<Room> ukloniPopust(@PathVariable("slanje") String slanje){
 		System.out.println("Dosao da ukloni popust");
 		String[] pom = slanje.split("\\.");
 		String sobaId = pom[1];
@@ -127,8 +136,16 @@ public class RoomController {
 			}
 		}
 		
-		servis.saveRoom(room);
-		return room;
+		try {
+			servis.saveRoom(room);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			return  new ResponseEntity<>(HttpStatus.CONFLICT);	
+			
+		}
+		 return new ResponseEntity<>(room,HttpStatus.OK);
+			
 	}
 
 	
@@ -340,7 +357,7 @@ public class RoomController {
 					method = RequestMethod.POST,
 					produces = MediaType.APPLICATION_JSON_VALUE
 					)
-			public @ResponseBody RezervacijaHotel brzaRez(@PathVariable("info") String info,
+			public ResponseEntity<RezervacijaHotel> brzaRez(@PathVariable("info") String info,
 		            @PathVariable("sobapopust") String sobapopust,@PathVariable("idhotel") Long idhotel,@PathVariable("idRez") Long idRez,@Context HttpServletRequest request){
 				RezervacijaHotel povratna = new RezervacijaHotel();
 				User korisnik = (User)request.getSession().getAttribute("ulogovan");	
@@ -358,13 +375,6 @@ public class RoomController {
 				String popustVrijednost = pom[2];
 				int popustVr = Integer.parseInt(popustVrijednost);
 				Room izabranaSoba = null;
-				for(Room soba:sobe) {
-					if(soba.getId().toString().equals(sobaID)) {
-						izabranaSoba = soba;
-						break;
-					}
-				}
-				
 				String[] datIN=checkIN.split("-");
 				
 				int godina=Integer.parseInt(datIN[0]);
@@ -389,6 +399,43 @@ public class RoomController {
 				povratna.setDatumDolaska(datumCheckIn);
 				povratna.setDatumOdlaska(datumCheckOut);
 				
+				
+				
+				boolean nijeOkRez = false;
+				
+				for(Room soba:sobe) {
+					if(soba.getId().toString().equals(sobaID)) {
+						izabranaSoba = soba;
+						
+						for(RezervacijaHotel rez:izabranaSoba.getRezervacije()) {	
+							
+							if(datumCheckIn.compareTo(rez.getDatumOdlaska())<0) {
+								System.out.println("nije odobren check in");
+								if(datumCheckOut.compareTo(rez.getDatumDolaska())>0) {
+									System.out.println("nije odobren check out");
+									//odobrenCheckOUT = false;
+									nijeOkRez = true;
+									break;
+								}
+							}
+							
+						}
+						break;
+					}
+				}
+				
+				if(nijeOkRez) {
+					 return null;
+				}
+
+				
+				for(Room soba:sobe) {
+					if(soba.getId().toString().equals(sobaID)) {
+						izabranaSoba = soba;
+						break;
+					}
+				}
+				
 				int dani = daysBetween(datumCheckIn, datumCheckOut);
 				double cijena = dani*izabranaSoba.getCijena();
 				//uracunajpopust
@@ -404,9 +451,17 @@ public class RoomController {
 				izabranaSoba.setRezervisana(true);
 				int broj = izabranaSoba.getBrojRezervacija();
 				izabranaSoba.setBrojRezervacija(broj+1);
-				servis.saveRoom(izabranaSoba);
+				try {
+					servis.saveRoom(izabranaSoba);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					//e.printStackTrace();
+					return  new ResponseEntity<>(HttpStatus.CONFLICT);	
+					
+				}
 			
-				return povratna;
+				 return new ResponseEntity<>(povratna,HttpStatus.OK);
+					
 			
 			}
 			
