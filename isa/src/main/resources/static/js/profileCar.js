@@ -250,7 +250,7 @@ $(document).ready(function($) {
 		console.log(loz2);
 					$.ajax({
 						type : 'GET',
-						url : "/api/korisnici/changePass?oldPass="+oldLoz+ "&lozinka1="+loz1+"&lozinka2="+loz2,
+						url : "/api/korisnici/changePass/"+oldLoz+"/lozinka1/"+loz1+"/lozinka2/"+loz2,
 						success : function(pov) {
 							if( pov.verifikovan == "stara"){	
 								 alert("Old password is not valid");
@@ -1245,9 +1245,32 @@ function rezervisiVozilo(param){
 		type : 'POST',
 		url : "/api/vozila/dodajRezervaciju/"+podatak,
 		success : function(povratna) {
-			console.log('zavrsena rezervacija');
-			poveziKorisnika(povratna, bodovi);
-		//	ispisiUspesno();
+			console.log(povratna);
+			if(povratna == null){
+				console.log('Nije uspesno');
+			    alert('This car is no more available. You can choose another car.');
+			    $("#rezultat").empty();
+			    $("#rezultat").hide();
+			    
+			    $("#anketa").show();
+		    	resetFormu();
+		    
+			}else if(povratna==""){
+				console.log('Prazno je');
+			    alert('This car is no more available. You can choose another car.');
+			    $("#rezultat").empty();
+			    $("#rezultat").hide();
+			    
+			    $("#anketa").show();
+		    	resetFormu();
+		    
+				
+			}else if(povratna!=null){
+				console.log('zavrsena rezervacija');
+				poveziKorisnika(povratna, bodovi);
+				
+			}
+			//	ispisiUspesno();
 			//pozoviProfil(povratna.model);
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
