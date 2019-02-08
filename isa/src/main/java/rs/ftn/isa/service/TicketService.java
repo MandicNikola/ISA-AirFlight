@@ -8,5 +8,5 @@ import rs.ftn.isa.model.Ticket;
 public interface TicketService {
 
 	Ticket findOneById(Long id);
-	
+	void saveTicket(Ticket ticket);
 }

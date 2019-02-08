@@ -581,6 +581,47 @@ public class FightController {
 	}	
 
 	
+	@RequestMapping(value="/fastReservation/{id}", 
+			method = RequestMethod.POST)
+	public ResponseEntity<String> fastReservation(@PathVariable Long id, @Context HttpServletRequest request)
+	{
+		User user = (User) request.getSession().getAttribute("ulogovan");
+		if(user == null)
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		ReservationTicket rezervation = new ReservationTicket();
+		user = servisKorisnik.findOneById(user.getId());
+		
+		rezervation.setKorisnik(user);
+		rezervation.setStatus(StatusRezervacije.AKTIVNA);
+		user.getResTicket().add(rezervation);
+		
+		
+		Date date = new Date();
+		rezervation.setDatumRezervacije(date);
+		
+		Ticket karta = servisKarata.findOneById(id);
+		PassengerInfo info = new PassengerInfo();
+		info.setIme(user.getIme());
+		info.setMail(user.getMail());
+		info.setPrezime(user.getPrezime());
+		karta.setPassengerInfo(info);
+		info.setKarta(karta);
+		karta.setRezervisano(true);
+		rezervation.getKarte().add(karta);
+		karta.setReservationTicket(rezervation);
+		
+		servisKorisnik.saveUser(user);
+		System.out.println(rezervation.getId());
+		
+		karta = servisKarata.findOneById(id);
+		
+		return new ResponseEntity<String>("uspesno ste rezervisali kartu!", HttpStatus.OK);
+	}
+	
+	
+	
+	
+	
 	
 
 	
