@@ -9,6 +9,6 @@ public interface VoziloService {
 	Vehicle findVehicleById(Long id);
 	
 	List<Vehicle> findAll();
-	Vehicle saveVehicle(Vehicle Vehicle);
+	Vehicle saveVehicle(Vehicle Vehicle) throws Exception;
 	void removeVehicle(Long id);
 }

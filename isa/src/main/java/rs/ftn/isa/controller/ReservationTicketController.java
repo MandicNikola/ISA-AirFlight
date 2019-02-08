@@ -1,7 +1,5 @@
 package rs.ftn.isa.controller;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,7 +22,6 @@ import rs.ftn.isa.dto.ChartDTO;
 import rs.ftn.isa.dto.ReservationTicketDTO;
 import rs.ftn.isa.model.ReservationTicket;
 import rs.ftn.isa.model.RezervacijaHotel;
-import rs.ftn.isa.model.RezervacijaRentCar;
 import rs.ftn.isa.model.Room;
 import rs.ftn.isa.model.Ticket;
 import rs.ftn.isa.model.User;

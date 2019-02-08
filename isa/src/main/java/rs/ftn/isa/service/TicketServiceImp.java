@@ -17,6 +17,12 @@ public class TicketServiceImp  implements TicketService{
 		// TODO Auto-generated method stub
 		return repozitorijum.findOneById(id);
 	}
+
+	@Override
+	public void saveTicket(Ticket ticket) {
+		// TODO Auto-generated method stub
+		repozitorijum.save(ticket);
+	}
 	
 	
 	

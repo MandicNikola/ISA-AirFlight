@@ -530,26 +530,39 @@ function izmeniUslugu(data){
 	var kategorija = niz2[1];
 	
 	var vrednost= $("#"+idUsluge).val();
+	var ispravno=true;
 	
-	var slanje=idUsluge+"="+vrednost+"="+id; //saljemo id usluge,kategoriju,novu vrednost i id servisa
-	console.log('id servisa je '+ id + " id usluge je "+idUsluge + " kategorija je "+kategorija+" vrednost je"+ vrednost);
-	
-	
-	$.ajax({
-		type : 'POST',
-		url : "/api/rents/izmeniUslugu/"+slanje,
-		success : function(pov) {
-			if( pov == null){	
-				alert('Neispravna cena');
-			}else{
-				alert('Uspesno ste izmenili uslugu');
+	if(!vrednost){
+	  ispravno=false;	
+	}
+	if(isNaN(vrednost)){
+		ispravno=false;
+	}
+	if(vrednost<=0){
+		ispravno=false;
+	}
+	if(ispravno){
+		var slanje=idUsluge+"="+vrednost+"="+id; //saljemo id usluge,kategoriju,novu vrednost i id servisa
+		console.log('id servisa je '+ id + " id usluge je "+idUsluge + " kategorija je "+kategorija+" vrednost je"+ vrednost);
+		
+		
+		$.ajax({
+			type : 'POST',
+			url : "/api/rents/izmeniUslugu/"+slanje,
+			success : function(pov) {
+				if( pov == null){	
+					alert('Neispravna cena');
+				}else{
+					alert('Uspesno ste izmenili uslugu');
+				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				alert('greska');
 			}
-		},
-		error: function(XMLHttpRequest, textStatus, errorThrown){
-			alert('greska');
-		}
-	});
-	
+		});
+	}else{
+		alert('Enter price which is greater than 0.');
+	}	
 	
 }
 function popuniVozila(){
@@ -920,6 +933,7 @@ $(document).ready(function(){
     	console.log('usao u dodajUslugu');
     	var pom=window.location.search.substring(1);
     	var id= pom.split('=')[1];
+    	var ispravno = true;
     	
     	trajanje = $('#days').val();
         katA = $('#catA').val();
@@ -927,8 +941,25 @@ $(document).ready(function(){
     	katC = $('#catC').val();
     	katD =  $('#catD').val();
     	katE = $('#catE').val();
-    	pom= id+"="+trajanje+"="+katA+"="+katB+"="+katC+"="+katD+"="+katE;
     	
+    	if(!trajanje || isNaN(trajanje)){
+    		ispravno=false;
+    	}
+    	if(trajanje<=0){
+    		ispravno=false;
+    	}
+    	if(!katA || !katB || !katC || !katD || !katE){
+    		ispravno=false;
+    	}
+    	if(isNaN(katA) || isNaN(katB)||isNaN(katC)||isNaN(katD)||isNaN(katE)){
+    		ispravno=false;
+    	}
+    	if(katA<=0 || katB<=0 || katC<=0 || katD<=0 || katE<=0){
+    		ispravno=false;
+    	}
+    	if(ispravno){
+    		pom= id+"="+trajanje+"="+katA+"="+katB+"="+katC+"="+katD+"="+katE;
+        	
     		$.ajax({
     			type : 'POST',
     			url : "/api/rents/dodajUslugu/"+pom,
@@ -944,7 +975,12 @@ $(document).ready(function(){
     				alert('greska');
     			}
     		});
-    });
+	
+    	}else{
+    		alert('You need to fill out all fields and values must be greater than 0.');
+    	}
+    	
+    	    });
 
     
 });

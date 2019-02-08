@@ -40,7 +40,7 @@ $(document).ready(function($) {
 			}
 			else
 			{
-				var imaAdmina = "ima";
+				 imaAdmina = "ima";
 			}
 	
 	}else{
@@ -292,7 +292,7 @@ $(document).ready(function($) {
         }
     });
 	$('.filterableFlights .btn-filter').click(function(){
-        var $panel = $(this).parents('.filterableTicket'),
+        var $panel = $(this).parents('.filterableFlights'),
         $filters = $panel.find('.filters input'),
         $tbody = $panel.find('.table tbody');
         if ($filters.prop('disabled') == true) {
@@ -503,10 +503,11 @@ function showFlights()
 					text += '<td>' + value.presedanja.length + '</td>';
 					text += '<td>' + value.duzina + '</td>';
 					
+					alert(imaAdmina);
 					if(imaAdmina == "ima")
 					{
 						text += '<td><button type="button" class="btn btn-primary" updateFlight("'+value.idLeta+'")>Update flight</button></td>';
-						text += '<td><button type="button" class="btn btn-danger" removeFlight("'+value.idLeta+'")>Remove flight</button></td></tr>'
+						text += '<td><button type="button" class="btn btn-danger" removeFlight("'+value.idLeta+'")>Remove flight</button></td></tr>';
 					}
 					
 				});
@@ -736,7 +737,7 @@ function discount()
 				$.each(karte,function(index,karta)
 						{
 							text += '<tr><td>'+karta.id+'</td><td>'+karta.lokPoletanja+'/'+karta.lokSletanja+'</td><td>'+karta.datumPoletanja+'</td><td>'+karta.red+'-'+karta.kolona+'</td><td>'+karta.klasa+'</td><td>'+karta.cena+'</td>';
-							text += '<td><button type="button" class="btn btn-primary" addDiscount("'+karta.id+'")>Add discount</button></td></tr>';
+							text += '<td><button type="button" class="btn btn-primary" viewDiscount("'+karta.id+'")> Discount</button></td></tr>';
 						});
 				$('#tabelaKarte').append(text);
 				 $('.filterableTicket .filters input').unbind().keyup(function(e){
@@ -777,6 +778,15 @@ function discount()
 	
 	
 }
+
+
+function viewDiscount(id)
+{
+	
+
+}
+
+
 
 function report()
 {
