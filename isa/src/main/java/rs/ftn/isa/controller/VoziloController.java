@@ -185,23 +185,27 @@ public class VoziloController {
 				boolean dozvolaPickUp = true;
 				//prolazimo kroz sve rezervacije koje su napravljene za ovo vozilo
 				for(RezervacijaRentCar R : rezervacije) {	
-			Date rezDatPreuzimanje= R.getDatumPreuzimanja();
-            Date rezDatVracanja= R.getDatumVracanja();
-            
-            System.out.println(rezDatPreuzimanje.toString());
-			System.out.println(rezDatVracanja.toString());
-			
-			//ako je datum preuzimanja vozila pre datuma vracanja iz rezervacije
-					if(datPreuzimanja.compareTo(rezDatVracanja)<0) {
-						System.out.println("provera1-> Datum preuzimanja je pre datuma vracanja iz liste rezervacije");
-						 //datum vracanja auta posle datuma preuzimanja iz rezervacije, preklapaju se termini, vozilo nam ne odgovara
-							if(datVracanje.compareTo(rezDatPreuzimanje)>0){
-								dozvolaPickUp = false;
-								System.out.println("provera2--> Datum vracanja je posle datuma preuzimanja iz rezervacije");
-							
-							}
+					if(R.getStatus()==StatusRezervacije.AKTIVNA) {
+					
+						Date rezDatPreuzimanje= R.getDatumPreuzimanja();
+			            Date rezDatVracanja= R.getDatumVracanja();
+			            
+			            System.out.println(rezDatPreuzimanje.toString());
+						System.out.println(rezDatVracanja.toString());
+						
+						//ako je datum preuzimanja vozila pre datuma vracanja iz rezervacije
+								if(datPreuzimanja.compareTo(rezDatVracanja)<0) {
+									System.out.println("provera1-> Datum preuzimanja je pre datuma vracanja iz liste rezervacije");
+									 //datum vracanja auta posle datuma preuzimanja iz rezervacije, preklapaju se termini, vozilo nam ne odgovara
+										if(datVracanje.compareTo(rezDatPreuzimanje)>0){
+											dozvolaPickUp = false;
+											System.out.println("provera2--> Datum vracanja je posle datuma preuzimanja iz rezervacije");
+										
+										}
+								}
 					}
 					
+							
 				}
 				
 			System.out.println("dozvola jee"+dozvolaPickUp);
@@ -597,15 +601,18 @@ public @ResponseBody ArrayList<VehicleDTO> nadjiVozilaPopust(@PathVariable Strin
 					boolean dozvolaPickUp = true;
 					//prolazimo kroz sve rezervacije koje su napravljene za ovo vozilo
 					for(RezervacijaRentCar R : rezervacije) {	
-						//ako je datum preuzimanja vozila pre datuma vracanja iz rezervacije
-						if(pocetak.before(R.getDatumVracanja())) {
-							System.out.println("provera1-> Datum preuzimanja je pre datuma vracanja iz liste rezervacije");
-							 //datum vracanja auta posle datuma preuzimanja iz rezervacije, preklapaju se termini, vozilo nam ne odgovara
-								if(kraj.after(R.getDatumPreuzimanja())){
-									dozvolaPickUp = false;
-									System.out.println("provera2--> Datum vracanja je posle datuma preuzimanja iz rezervacije");
-								}
+						if(R.getStatus()==StatusRezervacije.AKTIVNA) {
+							//ako je datum preuzimanja vozila pre datuma vracanja iz rezervacije
+							if(pocetak.before(R.getDatumVracanja())) {
+								System.out.println("provera1-> Datum preuzimanja je pre datuma vracanja iz liste rezervacije");
+								 //datum vracanja auta posle datuma preuzimanja iz rezervacije, preklapaju se termini, vozilo nam ne odgovara
+									if(kraj.after(R.getDatumPreuzimanja())){
+										dozvolaPickUp = false;
+										System.out.println("provera2--> Datum vracanja je posle datuma preuzimanja iz rezervacije");
+									}
+							}	
 						}
+						
 						
 					}
 					
