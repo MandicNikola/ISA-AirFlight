@@ -22,7 +22,9 @@ import rs.ftn.isa.dto.ChartDTO;
 import rs.ftn.isa.dto.ReservationTicketDTO;
 import rs.ftn.isa.model.ReservationTicket;
 import rs.ftn.isa.model.RezervacijaHotel;
+import rs.ftn.isa.model.RezervacijaRentCar;
 import rs.ftn.isa.model.Room;
+import rs.ftn.isa.model.StatusRezervacije;
 import rs.ftn.isa.model.Ticket;
 import rs.ftn.isa.model.User;
 import rs.ftn.isa.service.ReservationTicketServiceImp;
@@ -403,6 +405,44 @@ public class ReservationTicketController {
 				
 		return rezervacijeDTO;
 	}
-
+	@RequestMapping(value="/refreshResFlight",
+			method = RequestMethod.POST)
+	public void refreshReservation(@Context HttpServletRequest request){		
+	System.out.println("Usao u refreshRez Plane");
+		User korisnik = (User)request.getSession().getAttribute("ulogovan");
+		Calendar cal = Calendar.getInstance();
+			if(korisnik!=null) {
+				Long idKor=korisnik.getId();
+				String idKorS=idKor.toString();
+				List<ReservationTicket> pomRez=servisKarata.findAll();
+			
+				for(ReservationTicket rezervacija : pomRez) {
+					Long idRezKor=rezervacija.getKorisnik().getId();
+					String idRezS=idRezKor.toString();
+	
+						if(idKorS.equals(idRezS)) {
+							Date today = new Date();
+							Ticket karta=null;
+							for(Ticket t: rezervacija.getKarte()) {
+								karta=t;
+								break;
+							}
+							if(karta!=null) {
+								Date datZavrsetka= karta.getLet().getDatumSletanja();
+								//cal.setTime(today);
+								//cal.add(Calendar.DATE,2);
+								//today=cal.getTime();
+								
+								if(datZavrsetka.compareTo(today)<=0) {
+									rezervacija.setStatus(StatusRezervacije.ZAVRSENA);
+									servisKarata.saveReservation(rezervacija);
+								}
+									
+							}		
+						}
+					}
+			}
+		
+	}
 
 }

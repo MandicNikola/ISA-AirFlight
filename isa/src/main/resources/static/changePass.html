@@ -19,7 +19,6 @@
  	  #polje{
  	 		padding: 3%;
  	 		margin-top: 3%;
- 	 		max-width: 400px;
  			background-color: rgba(255,255,255,0.8);
  	 	 	border: 3px solid #C3C3C3;
    		     border-radius: 8px;
@@ -27,7 +26,7 @@
  	 #pass{
  	        padding: 3%;
  	 		margin-top: 3%;
- 	 		max-width: 400px;
+ 	 		width:50%;
  			background-color: rgba(255,255,255,0.8);
  	 	 	border: 3px solid #C3C3C3;
    		    border-radius: 8px;
@@ -37,7 +36,6 @@
  	 #lozinkaOld{
  			padding: 3%;
  	 		margin-top: 3%;
- 	 		max-width: 600px;
  			background-color: rgba(255,255,255,0.8);
  	 	 
  	 }
@@ -45,14 +43,12 @@
  	  #lozinka1{
  			padding: 3%;
  	 		margin-top: 3%;
- 	 		max-width: 600px;
  			background-color: rgba(255,255,255,0.8);
  	 	 
  	 }
  	 #lozinka2{
 	        padding: 3%;
 	 		margin-top: 3%;
-	 		max-width: 600px;
 			background-color: rgba(255,255,255,0.8);
 	 	 	
  	 }
@@ -80,17 +76,21 @@
  </style>
 </head>
 <body>
-		<div class="container" id="pass">
+		<div class="container-fluid" id="pass">
   				<form method="post" class="changePassword" >  					
 				     <div class="form-group row">
+				        <div class="col-xs-3"></div>
 				        <div class="col-xs-6">	
 				            <i class="glyphicon glyphicon-eye-close"></i>
 				            <label for="pwd">Old password:</label>
 					        <input type="password"  required class="form-control" id="lozinkaOld" placeholder="Enter your password" name="loz1">
 					  	    <div id= "lozinkaError"></div>
 				        </div>
+				        
 				    </div>
 					<div class="form-group row">
+					    <div class="col-xs-3"></div>
+				        
 					      <div class="col-xs-6">
 						      <i class="glyphicon glyphicon-eye-close"></i>
 				              <label for="pwd">New password:</label>
@@ -99,6 +99,8 @@
 						  </div>			      
 				    </div>
 				    <div class="form-group row">
+					    <div class="col-xs-3"></div>
+				        
 					      <div class="col-xs-6">
 						      <i class="glyphicon glyphicon-eye-close"></i>
 				              <label for="pwd">Repeat new password:</label>

@@ -9,6 +9,9 @@ function sakrijAdminovo(){
 	$("#adminDisc").hide();
 	$("#adminPersonal").hide();
 	$("#adminPass").hide();
+	$("#config").hide();
+	$("#sistemPopust").hide();
+	$("#business").hide();
 	
 }
 function prikaziAdminovo(){
@@ -18,6 +21,13 @@ function prikaziAdminovo(){
 	$("#adminDisc").show();
 	$("#adminPersonal").show();
 	$("#adminPass").show();
+	$("#price").show();
+	$("#config").show();
+	$("#sistemPopust").show();
+	$("#business").show();
+	$("#reservation").hide();
+	$("#fast").hide();
+	$("#rooms").show();	
 	
 }
 function prikaziAdminaSistema(){
@@ -25,7 +35,15 @@ function prikaziAdminaSistema(){
 }
 function sakrijAdminaSistema(){
 	$("#admini").hide();	
+	$("#rooms").hide();	
+
 }
+function prikaziOstalima(){
+	$("#rooms").show();	
+	$("#price").show();
+	
+}
+
 $(document).ready(function($) {
 	var user = sessionStorage.getItem("ulogovan");
 	console.log('dosao u gornji ready');
@@ -39,13 +57,18 @@ $(document).ready(function($) {
 			var korisnik=JSON.parse(user);
 			console.log(korisnik.tip);
 			if(korisnik.tip == 'ADMIN_HOTEL'){
-				prikaziAdminovo();;
+				prikaziAdminovo();
 			}else if(korisnik.tip == 'ADMIN_SISTEM'){
 				prikaziAdminaSistema();
+			}else{
+				prikaziOstalima();
 			}
 	
+	}else{
+		prikaziOstalima();
+		
 	}	
-
+	
 	$( "#dnevniDugme" ).click(function() {
 		var podatak = window.location.search.substring(1);
 		console.log("Usao u showGraf");
@@ -282,7 +305,10 @@ function ispisiProfilHotela(hotel){
 	var adr = hotel.adresa;
 	var grad = hotel.grad;
 	$("#naziv").text('Welcome to '+hotel.naziv);
-	$("#opis").text(hotel.opis);
+	$("#opis").empty();
+	$("#opis").append(hotel.opis);
+	$("#ocijenaHotela").text('Rating of hotel is:' + hotel.ocena);
+	
 	$("#adresa").append(hotel.adresa+", "+grad);
 	
 	var adresa=	adr.replace(" ","%20");
@@ -320,6 +346,8 @@ function ispisiSobe(lista){
 			var korisnik=JSON.parse(user);
 			console.log(korisnik.tip);
 		if(korisnik.tip == 'ADMIN_HOTEL'){
+
+			console.log(' ADMIN DOSAO DA VIDI SOBE');
 			adminhotela = true;
 	 
 	 $("#sobe").append("<table class=\"table table-hover\" id=\"tabelaSoba\" ><tr><th>Room type </th><th>Capacity</th><th>Price per night</th><th>Floor</th><th>Balcony</th><th></th><th></th><th></th></tr>");
@@ -349,9 +377,10 @@ function ispisiSobe(lista){
 			}
 	 }		
 	 if(adminhotela == false){
+		 console.log('NIJE ADMIN DOSAO DA VIDI SOBE');
 		 var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 		 $("#sobe").append("<table class=\"table table-hover\" id=\"tabelaSoba\" ><tr><th>Room type </th><th>Capacity</th><th>Price for night</th><th>Floor</th><th>Grade</th><th>Balcony</th></tr>");
-			
+			console.log('dosao ovdje'+pom.length);
 			$.each(pom, function(index, data) {
 				if(data.balkon == 'da'){
 					
@@ -365,6 +394,8 @@ function ispisiSobe(lista){
 		
 		 
 	 }
+	 $("#sobe").show();
+	 
 }
 //dodaje u select tipove soba
 function ispisiTipove(list){
@@ -806,9 +837,7 @@ $(document).ready(function(){
     	$("#informacije").hide();
     	$("#divPopust").show();
     	$("#poruka").hide();
-    		
     	$("#postojeciPopust").hide();
-		
     	$("#ispisiTabelu").hide();
 		$("#sobe").hide(); 
 		$("#cijene").hide();
@@ -1176,29 +1205,55 @@ function showPrices(){
 
 function ispisiDodatne(data){
 	
-		console.log('usao u ispisiCenovnik dodatnih usluga');
+	$("#cijeneDodatne").empty();
+	var lista = data == null ? [] : (data instanceof Array ? data : [ data ]);
 		
-		$("#cijeneDodatne").empty();
-		var lista = data == null ? [] : (data instanceof Array ? data : [ data ]);
+
+	var user = sessionStorage.getItem("ulogovan");
+	
+	 var adminhotela = false;
+	 if(user!=null && user!="null" && user!="undefined") {
+		 	console.log('ima korisnika');
+			var korisnik=JSON.parse(user);
+			console.log(korisnik.tip);
+		if(korisnik.tip == 'ADMIN_HOTEL'){
+				adminhotela = true;
+			$("#cijeneDodatne").append("<table class=\"table table-hover\" id=\"tblDodatne\" ><tr><th>Service</th><th>Price</th><th></th><th>Discount</th><th></th></tr>");
+			console.log(lista.length);
 			
-		$("#cijeneDodatne").append("<table class=\"table table-hover\" id=\"tblDodatne\" ><tr><th>Service</th><th>Price</th><th></th><th>Discount</th><th></th></tr>");
-		console.log(lista.length);
-		
-		$.each(lista, function(index, usluga) {
-			
+			$.each(lista, function(index, usluga) {
+				
 				console.log(usluga.konfiguracija);
-			if(usluga.konfiguracija == 'da'){
+				if(usluga.konfiguracija == 'da'){
 				console.log('dosao u dodavanje za uslugu');
 				$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td ><input class=\"form-control\" type = \"number\"  id=\""+usluga.id+"\" value=\""+usluga.cena+"\"></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"promjeniDodatnu("+usluga.id+")\">Change</button></td><td ><input class=\"form-control\" type = \"number\"  id=\"pop"+usluga.id+"\" value=\""+usluga.popust+"\"></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"promjeniPopust("+usluga.id+")\">Change</button></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"izbrisiDodatnu("+usluga.id+")\">Delete</button></td>");
-
+			
 			}else{
 				$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td ><input class=\"form-control\" type = \"number\"  id=\""+usluga.id+"\" value=\""+usluga.cena+"\"></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"promjeniDodatnu("+usluga.id+")\">Change</button></td><td></td><td></td></td><td><button id=\"buttonID\" class=\"btn btn-info\" onclick=\"izbrisiDodatnu("+usluga.id+")\">Delete</button></td>");
 					
 			}
 			$("#tblDodatne").append("</tr>");
-		});
-	    $("#cijeneDodatne").append("</table>");
-	    console.log("Zavrsio sa tabelom dodatnih");
+			});
+			$("#cijeneDodatne").append("</table>");
+			} 
+	} 
+	 if(adminhotela == false){
+		 $("#cijeneDodatne").append("<table class=\"table table-hover\" id=\"tblDodatne\" ><tr><th>Service</th><th>Price</th><th>Discount</th></tr>");
+			
+			$.each(lista, function(index, usluga) {
+				
+					console.log(usluga.konfiguracija);
+				if(usluga.konfiguracija == 'da'){
+					console.log('dosao u dodavanje za uslugu');
+					$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td class=\"hoverName\">"+usluga.cena+"</td><td class=\"hoverName\">"+usluga.popust+"</td></tr>");
+				}else{
+					$("#tblDodatne").append("<tr class=\"thead-light\"><td class=\"hoverName\">"+usluga.naziv+"</td><td class=\"hoverName\">"+usluga.cena+"</td><td class=\"hoverName\"></td></tr>");
+						
+				}
+			});
+			$("#cijeneDodatne").append("</table>");
+		 
+	 }
 	    dodajDatum();
 	    
 }
@@ -1873,6 +1928,7 @@ function changePass(){
      $("#rezervacije").hide();
      $("#adminStrana").hide();
      $("#informacije").hide();
+     $("#ispisiTabelu").hide();
 
  	 $('#lozinkaOld').html('');
  	 $('#lozinka1').html('');

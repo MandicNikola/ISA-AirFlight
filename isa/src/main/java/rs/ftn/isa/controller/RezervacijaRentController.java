@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ftn.isa.dto.ChartDTO;
 import rs.ftn.isa.model.RentACar;
-import rs.ftn.isa.model.RezervacijaHotel;
 import rs.ftn.isa.model.RezervacijaRentCar;
 import rs.ftn.isa.model.StatusRezervacije;
 import rs.ftn.isa.model.User;
@@ -401,7 +400,7 @@ public class RezervacijaRentController {
 	@RequestMapping(value="/refreshResCar",
 			method = RequestMethod.POST)
 	public void refreshReservation(@Context HttpServletRequest request){		
-	System.out.println("Usao u refreshRez Hotel");
+	System.out.println("Usao u refreshRez Rent");
 		User korisnik = (User)request.getSession().getAttribute("ulogovan");
 		Calendar cal = Calendar.getInstance();
 			if(korisnik!=null) {

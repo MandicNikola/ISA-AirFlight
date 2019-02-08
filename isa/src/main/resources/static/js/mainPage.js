@@ -61,8 +61,23 @@ function onLoad(){
 	planeShow();
 	refreshHotel();
 	refreshCar();
+	refreshFlight();
+
 }
 
+function refreshFlight(){
+	
+	$.ajax({
+		method:'POST',
+		url: "/api/reservationTickets/refreshResFlight",
+		success: function(){
+			console.log('Zavrseno');
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert('greska');
+		}
+	});
+}
 function refreshHotel(){
 	
 	$.ajax({
@@ -927,13 +942,34 @@ function iscrtajHotele(lista){
 	console.log('usao u ispisi hotele u js');
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
 	$("#ispisiTabelu").empty();
-
-	$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaHotel\" ><tr><th> Name </th><th> City </th><th> Address </th><th>Grade</th><th></th><th></th></tr>");
+	
+	var user = sessionStorage.getItem("ulogovan");
+	var adminsistem = false; 
+	
+	if(user!=null && user!="null" && user!="undefined") {
+			console.log('ima korisnika');
+			var korisnik=JSON.parse(user);
+			console.log(korisnik.tip);
+		if(korisnik.tip == 'ADMIN_SISTEM'){
+	
+		
+			$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaHotel\" ><tr><th> Name </th><th> City </th><th> Address </th><th>Grade</th><th></th><th></th></tr>");
+				
+				$.each(pom, function(index, servis) {
+					$("#tabelaHotel").append("<tr><td class=\"hoverName\" onclick=\"hotelProfil('"+servis.id+"')\">"+servis.naziv+"</td><td > "+servis.grad+"</td><td > "+servis.adresa+"</td><td > "+servis.ocena+"</td><td><button  class=\"btn btn-dark\" onclick=\"changeHotel('"+servis.id+"')\">Change</button></td><td><button  class=\"btn btn-dark\" onclick=\"deleteHotel('"+servis.id+"')\">Delete</button></td></tr>");
+				});
+			 $("#ispisiTabelu").append("</table>");
+			 }
+		}
+	if(adminsistem == false){
+		$("#ispisiTabelu").append("<table class=\"table table-striped\" id=\"tabelaHotel\" ><tr><th> Name </th><th> City </th><th> Address </th><th>Rating</th></tr>");
 		
 		$.each(pom, function(index, servis) {
-			$("#tabelaHotel").append("<tr><td class=\"hoverName\" onclick=\"hotelProfil('"+servis.id+"')\">"+servis.naziv+"</td><td > "+servis.grad+"</td><td > "+servis.adresa+"</td><td > "+servis.ocena+"</td><td><button  class=\"btn btn-dark\" onclick=\"changeHotel('"+servis.id+"')\">Change</button></td><td><button  class=\"btn btn-dark\" onclick=\"deleteHotel('"+servis.id+"')\">Delete</button></td></tr>");
+			$("#tabelaHotel").append("<tr><td class=\"hoverName\" onclick=\"hotelProfil('"+servis.id+"')\">"+servis.naziv+"</td><td > "+servis.grad+"</td><td > "+servis.adresa+"</td><td > "+servis.ocena+"</td></tr>");
 		});
 	 $("#ispisiTabelu").append("</table>");
+	
+	}
 }
 function changeHotel(id){
 	window.location = "changeHotel.html?id="+id;
@@ -1000,15 +1036,37 @@ function carShow(){
 }
 function ispisiAutoservise(lista){
 	var pom = lista == null ? [] : (lista instanceof Array ? lista : [ lista ]);
-	 $("#ispisiTabelu").empty();
-	 $("#ispisiTabelu").append("<table class=\"table table-striped table-hover\" id=\"tabelaRent\" ><tr><th> Name </th><th> City </th><th>Address</th><th></th><th></th></tr>");
+	$("#ispisiTabelu").empty();
+
+	var user = sessionStorage.getItem("ulogovan");
+	var adminsistem = false; 
+	
+	if(user!=null && user!="null" && user!="undefined") {
+			console.log('ima korisnika');
+			var korisnik=JSON.parse(user);
+			console.log(korisnik.tip);
+		if(korisnik.tip == 'ADMIN_SISTEM'){
+			adminsistem = true;
+			$("#ispisiTabelu").append("<table class=\"table table-striped table-hover\" id=\"tabelaRent\" ><tr><th> Name </th><th> City </th><th>Address</th><th></th><th></th></tr>");
 		
-		$.each(pom, function(index, servis) {
+			$.each(pom, function(index, servis) {
 			$("#tabelaRent").append("<tr><td class=\"hoverName\" onclick=\"visitCar('"+servis.id+"')\">"+servis.naziv+"</td><td > "+servis.grad+"</td><td > "+servis.adresa+"</td><td><button  class=\"btn btn-info\" onclick=\"izmeniRent('"+servis.id+"')\">Izmeni</button><td><button  class=\"btn btn-info\" onclick=\"obrisiRent('"+servis.id+"')\">Obrisi</button></td></tr>");
 			
+			});
+			$("#ispisiTabelu").append("</table>");
+		}
+	 }
+	if(adminsistem == false){
+		$("#ispisiTabelu").append("<table class=\"table table-striped table-hover\" id=\"tabelaRent\" ><tr><th> Name </th><th> City </th><th>Address</th></tr>");
+		
+		$.each(pom, function(index, servis) {
+		$("#tabelaRent").append("<tr><td class=\"hoverName\" onclick=\"visitCar('"+servis.id+"')\">"+servis.naziv+"</td><td > "+servis.grad+"</td><td > "+servis.adresa+"</td></tr>");
+		
 		});
-	 $("#ispisiTabelu").append("</table>");
-	 
+		$("#ispisiTabelu").append("</table>");
+	
+		
+	}
 	
 }
 function sortirajRent(){
