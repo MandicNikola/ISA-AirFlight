@@ -62,6 +62,7 @@ public class RezervacijaRentController {
 						System.out.println("Ima rezervacija");
 						System.out.println("Dodata rezervacija sa check in"+rezervacija.getDatumPreuzimanja());
 						System.out.println("Id je "+rezervacija.getId());
+						rezervacija.setMestoVracanja(rezervacija.getVozilo().getFilijala().getServis().getNaziv());
 						rezervacije.add(rezervacija);
 					}
 				}
