@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.ftn.isa.dto.HotelDTO;
 import rs.ftn.isa.dto.ReservationHotelDTO;
 import rs.ftn.isa.dto.RoomDTO;
-import rs.ftn.isa.dto.RoomReservationDTO;
+
 import rs.ftn.isa.model.Category;
 import rs.ftn.isa.model.CijenovnikSoba;
 import rs.ftn.isa.model.Discount;
